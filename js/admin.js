@@ -2,9 +2,9 @@
 let adminFilter = { status: '', cat: '' };
 
 function doAdminLogin() {
-  const e = document.getElementById('admin-email').value;
-  const p = document.getElementById('admin-pass').value;
-  if (e === 'admin@ecowarrior.org' && p === 'password') {
+  const e = document.getElementById('admin-email').value.trim();
+  const p = document.getElementById('admin-pass').value.trim();
+  if (e === 'admin@surakshasetu.org' && p === 'password') {
     adminLoggedIn = true;
     document.getElementById('admin-login-wrap').style.display = 'none';
     document.getElementById('admin-dashboard').classList.add('active');
@@ -211,7 +211,7 @@ async function exportPremiumPDF() {
   container.innerHTML = `
     <div class="pdf-header">
       <div class="pdf-title-area">
-        <h1>🌿 EcoWarrior Reports</h1>
+        <h1>🌿 SurakshaSetu Reports</h1>
         <p>Premium Environmental Action Dashboard Export</p>
       </div>
       <div class="pdf-meta">
@@ -265,13 +265,13 @@ async function exportPremiumPDF() {
     </div>
 
     <div class="pdf-footer">
-      Eco Warrior Civic Action Platform • Confidential & Internal Use Only • Printed via NGO Dashboard
+      Suraksha Setu Civic Action Platform • Confidential & Internal Use Only • Printed via NGO Dashboard
     </div>
   `;
 
   const opt = {
     margin:       [0, 0, 0, 0],
-    filename:     'ecowarrior_premium_report.pdf',
+    filename:     'surakshasetu_premium_report.pdf',
     image:        { type: 'jpeg', quality: 0.98 },
     html2canvas:  { scale: 2, useCORS: true },
     jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }

@@ -1,5 +1,5 @@
-<div align="center">
-  <h1>🌿 Eco Warrior </h1>
+﻿<div align="center">
+  <h1>🌿 Suraksha Setu </h1>
   <p>
     <b>Community-Powered Citizen Environmental Reporting Platform</b>
   </p>
@@ -13,7 +13,7 @@
 
 <hr />
 
-Eco Warrior is a high-fidelity, privacy-first civic tech platform that bridges the gap between citizens spotting environmental issues and green organizations taking action. Built on a modular, decoupled architecture, it leverages interactive GIS spatial layers, Canvas-based 3D trigonometry, localized AI diagnostic scanners, and a real-time NGO analytics dashboard.
+Suraksha Setu is a high-fidelity, privacy-first civic tech platform that bridges the gap between citizens spotting environmental issues and green organizations taking action. Built on a modular, decoupled architecture, it leverages interactive GIS spatial layers, Canvas-based 3D trigonometry, localized AI diagnostic scanners, and a real-time NGO analytics dashboard.
 
 ---
 
@@ -40,7 +40,7 @@ The visual layer features a curated dark-mode forest scheme combined with soft p
 ## 📂 Codebase Directory Mapping
 
 ```text
-eco-warrior/
+suraksha-setu/
 ├── index.html             # High-Fidelity Main Dashboard SPA (Home, Map, Feed, Admin)
 ├── organisation.html      # Isolated Info Hub (About, Impact Metrics, Privacy, Contact Forms)
 ├── backend/               # Backend modules & configurations
@@ -73,7 +73,7 @@ eco-warrior/
 
 ## 📊 Live Metrics & Ecological Ledger
 
-Eco Warrior tracks and compiles ecological progress across the following core metrics:
+Suraksha Setu tracks and compiles ecological progress across the following core metrics:
 1.  **Trash Diverted**: Ton-level tracking of household, industrial, and roadside waste.
 2.  **Trees Planted**: Citizen plantation coordinate logs with calculated survival indicators.
 3.  **Plastics Recycled**: Single-use plastics captured and sent to industrial recycling partners.
@@ -137,10 +137,10 @@ Reports logged on the frontend map conform to the following schema within `js/da
 
 ## 💚 Contributing & Swachh India Core Team
 
-Eco Warrior is built with love for a cleaner, greener India. We collaborate actively with environmental NGOs, student volunteers, and municipal teams.
+Suraksha Setu is built with love for a cleaner, greener India. We collaborate actively with environmental NGOs, student volunteers, and municipal teams.
 
-- **NGO Partnerships**: [partners@ecowarrior.org](mailto:partners@ecowarrior.org)
-- **General Inquiries**: [support@ecowarrior.org](mailto:support@ecowarrior.org)
+- **NGO Partnerships**: [partners@surakshasetu.org](mailto:partners@surakshasetu.org)
+- **General Inquiries**: [support@surakshasetu.org](mailto:support@surakshasetu.org)
 - **Citizen Helpline**: +91 562 284 3922
 
 <br>

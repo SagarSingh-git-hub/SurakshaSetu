@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eco Warrior – Community Environmental Reporting</title>
+  <title>Suraksha Setu – Community Environmental Reporting</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -18,16 +18,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js" defer></script>
   <script src="https://unpkg.com/scrollreveal" defer></script>
 
-  <script src="js/data.js" defer></script>
-  <script src="js/globe.js" defer></script>
-  <script src="js/map.js" defer></script>
-  <script src="js/report.js" defer></script>
-  <script src="js/feed.js" defer></script>
-  <script src="js/admin.js" defer></script>
-  <script src="js/app.js" defer></script>
+  <script src="js/data.js?v=2" defer></script>
+  <script src="js/globe.js?v=2" defer></script>
+  <script src="js/map.js?v=2" defer></script>
+  <script src="js/report.js?v=2" defer></script>
+  <script src="js/feed.js?v=2" defer></script>
+  <script src="js/admin.js?v=2" defer></script>
+  <script src="js/app.js?v=2" defer></script>
   <!-- Real-time WebSockets -->
   <script src="https://js.pusher.com/8.0/pusher.min.js" defer></script>
-  <script src="js/realtime.js" defer></script>
+  <script src="js/realtime.js?v=2" defer></script>
   <!-- PDF Export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
 </head>
@@ -36,7 +36,7 @@
 
   <!-- ── NAV ── -->
   <nav>
-    <a class="nav-logo" href="#" onclick="showPage('home');return false">🌿 Eco<span>Warrior</span></a>
+    <a class="nav-logo" href="#" onclick="showPage('home');return false">🌿 Suraksha<span>Setu</span></a>
     <div class="nav-spacer"></div>
     <div class="nav-tabs" id="nav-tabs">
       <div class="nav-indicator" id="nav-indicator"></div>
@@ -107,7 +107,7 @@
           Three steps to cleaner communities</h2>
         <p
           style="font-family:'Nunito',sans-serif;font-size:16px;color:var(--text3);max-width:600px;line-height:1.6;font-weight:500">
-          From spotting an issue to full resolution — Eco Warrior makes civic action effortless.</p>
+          From spotting an issue to full resolution — Suraksha Setu makes civic action effortless.</p>
       </div>
 
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px">
@@ -358,7 +358,7 @@
           What people are saying</h2>
         <p
           style="font-family:'Nunito',sans-serif;font-size:16px;color:var(--text3);max-width:600px;line-height:1.6;font-weight:500">
-          From citizens to NGO coordinators — hear how Eco Warrior is making a difference.</p>
+          From citizens to NGO coordinators — hear how Suraksha Setu is making a difference.</p>
       </div>
 
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px">
@@ -398,7 +398,7 @@
               “</div>
             <p
               style="font-family:'Nunito',sans-serif;font-size:14px;color:var(--text2);line-height:1.6;font-style:normal;margin-top:0">
-              As an NGO coordinator, Eco Warrior replaced our chaotic WhatsApp groups. Now we have structured data,
+              As an NGO coordinator, Suraksha Setu replaced our chaotic WhatsApp groups. Now we have structured data,
               maps, and priorities — game changer.</p>
           </div>
           <div style="display:flex;gap:12px;align-items:center;margin-top:8px">
@@ -492,7 +492,7 @@
         <div style="grid-column: span 1.5;min-width:240px;text-align:left">
           <div
             style="font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;color:#ffffff;display:flex;align-items:center;gap:8px;margin-bottom:16px">
-            🌿 EcoWarrior</div>
+            🌿 SurakshaSetu</div>
           <p style="font-size:14px;line-height:1.6;color:#64748b;margin-bottom:20px">A community-powered environmental
             reporting platform connecting citizens with NGOs and volunteers to create cleaner, healthier cities — one
             report at a time.</p>
@@ -596,7 +596,7 @@
       <!-- Footer Bottom -->
       <div
         style="max-width:1100px;margin:0 auto;padding-top:30px;border-top:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;font-size:13px;color:#475569">
-        <div>© 2026 Eco Warrior. Made with 💚 for a cleaner India.</div>
+        <div>© 2026 Suraksha Setu. Made with 💚 for a cleaner India.</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <span
             style="background:#1e293b;color:#94a3b8;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700">🇮🇳
@@ -687,12 +687,12 @@
     <!-- Login -->
     <div class="admin-login" id="admin-login-wrap">
       <div class="admin-card">
-        <div class="admin-logo">🌿 Eco Warrior</div>
+        <div class="admin-logo">🌿 Suraksha Setu</div>
         <div class="admin-logo-sub">NGO Admin Dashboard</div>
         <div class="form-group">
           <label class="form-label">Email</label>
           <input type="email" class="form-input" id="admin-email" placeholder="admin@ngo.org"
-            value="admin@ecowarrior.org">
+            value="admin@surakshasetu.org">
         </div>
         <div class="form-group">
           <label class="form-label">Password</label>
@@ -700,7 +700,7 @@
         </div>
         <button class="btn-primary" style="width:100%;padding:13px" onclick="doAdminLogin()">Sign In to Dashboard
           →</button>
-        <p style="text-align:center;font-size:12px;color:var(--text3);margin-top:16px">Demo: admin@ecowarrior.org /
+        <p style="text-align:center;font-size:12px;color:var(--text3);margin-top:16px">Demo: admin@surakshasetu.org /
           password</p>
       </div>
     </div>

@@ -1,4 +1,4 @@
-// ── SUB-PAGES INTERACTIVE LOGIC ──
+﻿// ── SUB-PAGES INTERACTIVE LOGIC ──
 
 // 1. PDF Download Simulator
 function simulatePdfDownload() {
@@ -43,11 +43,11 @@ function simulatePdfDownload() {
             btn.style.color = '#fff';
 
             // Simulate file download trigger
-            const dummyFile = new Blob(["Eco Warrior Q2 2026 Impact Report\n\nVerified Tons of Trash Diverted: 142 Tons\nTrees Planted: 480\nPlastic Recycled: 88,400+ Units\nDirty Areas Sanitized: 89\nNGO Partners: 12\nVolunteers Active: 1,200+\n\nCompiled on June 1, 2026.\nThis is a simulation of the dynamic PDF generator."], { type: 'text/plain' });
+            const dummyFile = new Blob(["Suraksha Setu Q2 2026 Impact Report\n\nVerified Tons of Trash Diverted: 142 Tons\nTrees Planted: 480\nPlastic Recycled: 88,400+ Units\nDirty Areas Sanitized: 89\nNGO Partners: 12\nVolunteers Active: 1,200+\n\nCompiled on June 1, 2026.\nThis is a simulation of the dynamic PDF generator."], { type: 'text/plain' });
             const dummyUrl = URL.createObjectURL(dummyFile);
             const dummyLink = document.createElement('a');
             dummyLink.href = dummyUrl;
-            dummyLink.download = 'EcoWarrior_Q2_2026_Impact_Report.txt';
+            dummyLink.download = 'SurakshaSetu_Q2_2026_Impact_Report.txt';
             document.body.appendChild(dummyLink);
             dummyLink.click();
             document.body.removeChild(dummyLink);
