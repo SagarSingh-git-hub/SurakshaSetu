@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suraksha Setu – Community Environmental Reporting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Nunito:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="../css/style.css">
+  <!-- Premium Animations & 3D -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js" defer></script>
+  <script src="https://unpkg.com/scrollreveal" defer></script>
+
+  <script src="../js/data.js?v=2" defer></script>
+  <script src="../js/globe.js?v=2" defer></script>
+  <script src="../js/map.js?v=2" defer></script>
+  <script src="../js/report.js?v=2" defer></script>
+  <script src="../js/feed.js?v=2" defer></script>
+  <script src="../js/admin.js?v=2" defer></script>
+  <script src="../js/app.js?v=2" defer></script>
+  <!-- Real-time WebSockets -->
+  <script src="https://js.pusher.com/8.0/pusher.min.js" defer></script>
+  <script src="../js/realtime.js?v=2" defer></script>
+  <!-- PDF Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+</head>
+
+<body>
+
+  <!-- ── NAV ── -->
+  <nav>
+    <a class="nav-logo" href="#" onclick="showPage('home');return false">🌿 Suraksha<span>Setu</span></a>
+    <div class="nav-spacer"></div>
+    <div class="nav-tabs" id="nav-tabs">
+      <div class="nav-indicator" id="nav-indicator"></div>
+      <button class="nav-tab active" onclick="showPage('home')">Home</button>
+      <button class="nav-tab" onclick="showPage('map')">Live Map</button>
+      <button class="nav-tab" onclick="showPage('feed')">Community Feed</button>
+      <button class="nav-tab" onclick="showPage('admin')">Admin</button>
+    </div>
+    <button class="btn-report-nav" onclick="showPage('report')">+ Report Issue</button>
+  </nav>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ══════════════════ HOME PAGE ══════════════════ -->
+  <div class="page active" id="page-home">
+    <section class="hero">
+      <div class="hero-bg-orb o1"></div>
+      <div class="hero-bg-orb o2"></div>
+      <div class="hero-content fade-in-up">
+        <div class="hero-badge">Civic Environmental Action Platform</div>
+        <h1 class="hero-h1">See It.<br><em>Report It.</em><br>Improve It.</h1>
+        <p class="hero-tagline">Help your city breathe. Report garbage, pollution, and dirty spaces on a live community
+          map — so NGOs and volunteers can take action.</p>
+        <div class="hero-cta">
+          <button class="btn-primary" onclick="showPage('report')">🌿 Report an Issue</button>
+          <button class="btn-secondary" onclick="showPage('map')">🗺 View Map</button>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat-card">
+            <div class="hero-stat-val" id="stat-total">0</div>
+            <div class="hero-stat-label">Issues<br>Reported</div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="hero-stat-val" id="stat-resolved">0</div>
+            <div class="hero-stat-label">Resolved</div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="hero-stat-val" id="stat-rate">0%</div>
+            <div class="hero-stat-label">Resolution<br>Rate</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <canvas id="globe-canvas"></canvas>
+      </div>
+    </section>
+
+    <!-- Categories Strip -->
+    <div class="categories-strip">
+      <div class="cat-pill" style="color:#ef4444;border-color:#fca5a5;background:#fff1f2">🗑 Garbage</div>
+      <div class="cat-pill" style="color:#f97316;border-color:#fdba74;background:#fff7ed">🧴 Plastic Waste</div>
+      <div class="cat-pill" style="color:#eab308;border-color:#fde047;background:#fefce8">🪣 Dirty Area</div>
+      <div class="cat-pill" style="color:#92400e;border-color:#d97706;background:#fffbeb">🔧 Junkyard</div>
+      <div class="cat-pill" style="color:#2563eb;border-color:#93c5fd;background:#eff6ff">💧 Water Pollution</div>
+      <div class="cat-pill" style="color:#16a34a;border-color:#86efac;background:#f0fdf4">🌱 Plantation Opp.</div>
+      <div class="cat-pill" style="color:#7c3aed;border-color:#c4b5fd;background:#faf5ff">✦ Other</div>
+    </div>
+
+    <!-- How it Works -->
+    <section style="padding:80px 24px;max-width:1100px;margin:0 auto">
+      <div style="margin-bottom:48px;text-align:left">
+        <span
+          style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;background:#e8faf0;color:#16a34a;border:1px solid #d1fae5;border-radius:99px;padding:6px 14px;display:inline-block;margin-bottom:16px;letter-spacing:0.5px;text-transform:uppercase">How
+          It Works</span>
+        <h2
+          style="font-family:'Outfit',sans-serif;font-size:clamp(32px,4.5vw,44px);font-weight:800;color:var(--g900);line-height:1.15;margin-bottom:16px;letter-spacing:-1px">
+          Three steps to cleaner communities</h2>
+        <p
+          style="font-family:'Nunito',sans-serif;font-size:16px;color:var(--text3);max-width:600px;line-height:1.6;font-weight:500">
+          From spotting an issue to full resolution — Suraksha Setu makes civic action effortless.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px">
+        <!-- Step 1 -->
+        <div class="step-card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true"
+          data-tilt-max-glare="0.2"
+          style="background:#fff;border-radius:24px;border:1px solid var(--border);border-top:4px solid var(--g500);padding:36px 32px;box-shadow:var(--shadow2);display:flex;flex-direction:column;gap:20px;transition:all 0.3s">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div
+              style="width:48px;height:48px;background:#e8faf0;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px">
+              📍</div>
+            <div style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g200);line-height:1">
+              01</div>
+          </div>
+          <div>
+            <h3
+              style="font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin-bottom:12px">
+              Spot & Locate</h3>
+            <p style="font-family:'Nunito',sans-serif;font-size:14px;color:var(--text3);line-height:1.6">Notice a
+              problem nearby? Your GPS auto-captures the exact location instantly. No manual entry — or drop a pin on
+              the interactive map if GPS is unavailable.</p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true"
+          data-tilt-max-glare="0.2"
+          style="background:#fff;border-radius:24px;border:1px solid var(--border);border-top:4px solid var(--g500);padding:36px 32px;box-shadow:var(--shadow2);display:flex;flex-direction:column;gap:20px;transition:all 0.3s">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div
+              style="width:48px;height:48px;background:#eff6ff;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px">
+              📸</div>
+            <div style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g200);line-height:1">
+              02</div>
+          </div>
+          <div>
+            <h3
+              style="font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin-bottom:12px">
+              Snap & Submit</h3>
+            <p style="font-family:'Nunito',sans-serif;font-size:14px;color:var(--text3);line-height:1.6">Upload photos
+              directly from your camera or gallery. Our AI instantly analyses your images — auto-tagging the issue type
+              and assigning a priority score. No account needed.</p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true"
+          data-tilt-max-glare="0.2"
+          style="background:#fff;border-radius:24px;border:1px solid var(--border);border-top:4px solid var(--g500);padding:36px 32px;box-shadow:var(--shadow2);display:flex;flex-direction:column;gap:20px;transition:all 0.3s">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div
+              style="width:48px;height:48px;background:#f0fdf4;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px">
+              🤝</div>
+            <div style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g200);line-height:1">
+              03</div>
+          </div>
+          <div>
+            <h3
+              style="font-family:'Outfit',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin-bottom:12px">
+              NGOs Take Action</h3>
+            <p style="font-family:'Nunito',sans-serif;font-size:14px;color:var(--text3);line-height:1.6">Partner NGOs
+              and volunteers see all reports in real-time on their dashboard. They plan drives, dispatch teams, and
+              update the community as issues get resolved.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Issue Categories -->
+    <section style="padding:60px 24px 80px;max-width:1100px;margin:0 auto">
+      <div style="margin-bottom:48px;text-align:left">
+        <span
+          style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;background:#e8faf0;color:#16a34a;border:1px solid #d1fae5;border-radius:99px;padding:6px 14px;display:inline-block;margin-bottom:16px;letter-spacing:0.5px;text-transform:uppercase">Issue
+          Categories</span>
+        <h2
+          style="font-family:'Outfit',sans-serif;font-size:clamp(32px,4.5vw,44px);font-weight:800;color:var(--g900);line-height:1.15;margin-bottom:16px;letter-spacing:-1px">
+          What can you report?</h2>
+        <p
+          style="font-family:'Nunito',sans-serif;font-size:16px;color:var(--text3);max-width:600px;line-height:1.6;font-weight:500">
+          Seven categories covering every type of urban and environmental issue in your community.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px">
+        <!-- Garbage -->
+        <div class="cat-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-scale="1.05"
+          onclick="showPage('map')"
+          style="background:#fff;border-radius:20px;border:1px solid #fca5a5;padding:28px 20px;text-align:center;box-shadow:var(--shadow2);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+          <div style="font-size:32px;margin-bottom:4px">🗑</div>
+          <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#ef4444">Garbage</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span id="cat-count-Garbage">98</span> reports • Most common</div>
+        </div>
+
+        <!-- Plastic Waste -->
+        <div class="cat-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-scale="1.05"
+          onclick="showPage('map')"
+          style="background:#fff;border-radius:20px;border:1px solid #fdba74;padding:28px 20px;text-align:center;box-shadow:var(--shadow2);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+          <div style="font-size:32px;margin-bottom:4px">🧴</div>
+          <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#f97316">Plastic Waste</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span id="cat-count-Plastic-Waste">61</span> reports</div>
+        </div>
+
+        <!-- Dirty Area -->
+        <div class="cat-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-scale="1.05"
+          onclick="showPage('map')"
+          style="background:#fff;border-radius:20px;border:1px solid #fde047;padding:28px 20px;text-align:center;box-shadow:var(--shadow2);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+          <div style="font-size:32px;margin-bottom:4px">🪣</div>
+          <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#eab308">Dirty Area</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span id="cat-count-Dirty-Area">44</span> reports</div>
+        </div>
+
+        <!-- Junkyard -->
+        <div class="cat-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-scale="1.05"
+          onclick="showPage('map')"
+          style="background:#fff;border-radius:20px;border:1px solid #fdba74;padding:28px 20px;text-align:center;box-shadow:var(--shadow2);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+          <div style="font-size:32px;margin-bottom:4px">🔧</div>
+          <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#92400e">Junkyard</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span id="cat-count-Junkyard">22</span> reports</div>
+        </div>
+
+        <!-- Water Pollution -->
+        <div class="cat-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-scale="1.05"
+          onclick="showPage('map')"
+          style="background:#fff;border-radius:20px;border:1px solid #93c5fd;padding:28px 20px;text-align:center;box-shadow:var(--shadow2);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+          <div style="font-size:32px;margin-bottom:4px">💧</div>
+          <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#2563eb">Water Pollution
+          </div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span id="cat-count-Water-Pollution">31</span> reports</div>
+        </div>
+
+        <!-- Plantation Opp. -->
+        <div class="cat-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-scale="1.05"
+          onclick="showPage('map')"
+          style="background:#fff;border-radius:20px;border:1px solid #86efac;padding:28px 20px;text-align:center;box-shadow:var(--shadow2);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+          <div style="font-size:32px;margin-bottom:4px">🌱</div>
+          <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#16a34a">Plantation Opp.
+          </div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span id="cat-count-Plantation-Opportunity">18</span> reports</div>
+        </div>
+
+        <!-- Other Issues -->
+        <div class="cat-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-scale="1.05"
+          onclick="showPage('map')"
+          style="background:#fff;border-radius:20px;border:1px solid #c4b5fd;padding:28px 20px;text-align:center;box-shadow:var(--shadow2);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+          <div style="font-size:32px;margin-bottom:4px">✦</div>
+          <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#7c3aed">Other Issues</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span id="cat-count-Other">0</span> reports</div>
+        </div>
+
+        <!-- Report Now -->
+        <div class="cat-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-scale="1.05"
+          onclick="showPage('report')"
+          style="background:#e8faf0;border-radius:20px;border:1px solid #86efac;padding:28px 20px;text-align:center;box-shadow:var(--shadow2);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+          <div style="font-size:32px;margin-bottom:4px;color:#16a34a;font-weight:800">➕</div>
+          <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#16a34a">Report Now</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#15803d;font-weight:600">No login needed
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Impact -->
+    <section style="padding:60px 24px 80px;max-width:1100px;margin:0 auto">
+      <div style="display:flex;gap:64px;align-items:center;flex-wrap:wrap">
+        <!-- Left Content Column -->
+        <div style="flex:1;min-width:300px;text-align:left">
+          <span
+            style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;background:#e8faf0;color:#16a34a;border:1px solid #d1fae5;border-radius:99px;padding:6px 14px;display:inline-block;margin-bottom:16px;letter-spacing:0.5px;text-transform:uppercase">Our
+            Impact</span>
+          <h2
+            style="font-family:'Outfit',sans-serif;font-size:clamp(32px,4.5vw,44px);font-weight:800;color:var(--g900);line-height:1.15;margin-bottom:16px;letter-spacing:-1px">
+            Real change, powered by citizens</h2>
+          <p
+            style="font-family:'Nunito',sans-serif;font-size:16px;color:var(--text3);line-height:1.6;margin-bottom:32px;font-weight:500">
+            Every report is a step toward a cleaner, healthier community. Here's what we've achieved together so far.
+          </p>
+          <button onclick="showPage('feed')" class="btn-primary"
+            style="background:var(--g700);color:#fff;border:none;padding:12px 28px;border-radius:99px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(20, 122, 61, 0.25);transition:all .2s"
+            onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(20, 122, 61, 0.35)'"
+            onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 16px rgba(20, 122, 61, 0.25)'">Explore
+            All Reports →</button>
+        </div>
+
+        <!-- Right Stats Grid Column -->
+        <div style="flex:1.2;min-width:300px;display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <!-- Reports Submitted -->
+          <div
+            style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:24px;box-shadow:var(--shadow2);text-align:left">
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px"
+              id="impact-total">0</div>
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
+              Reports Submitted</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">
+              Live Data</div>
+          </div>
+
+          <!-- Issues Resolved -->
+          <div
+            style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:24px;box-shadow:var(--shadow2);text-align:left">
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px"
+              id="impact-resolved">0</div>
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
+              Issues Resolved</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">
+              Community Action</div>
+          </div>
+
+          <!-- NGO Partners -->
+          <div
+            style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:24px;box-shadow:var(--shadow2);text-align:left">
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
+              12</div>
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
+              NGO Partners</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">
+              Across Uttarakhand</div>
+          </div>
+
+          <!-- Volunteers Mobilised -->
+          <div
+            style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:24px;box-shadow:var(--shadow2);text-align:left">
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
+              1,200+</div>
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
+              Volunteers Mobilised</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">↑
+              Growing fast</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section style="padding:60px 24px 80px;max-width:1100px;margin:0 auto">
+      <div style="margin-bottom:48px;text-align:left">
+        <span
+          style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;background:#e8faf0;color:#16a34a;border:1px solid #d1fae5;border-radius:99px;padding:6px 14px;display:inline-block;margin-bottom:16px;letter-spacing:0.5px;text-transform:uppercase">Community
+          Voices</span>
+        <h2
+          style="font-family:'Outfit',sans-serif;font-size:clamp(32px,4.5vw,44px);font-weight:800;color:var(--g900);line-height:1.15;margin-bottom:16px;letter-spacing:-1px">
+          What people are saying</h2>
+        <p
+          style="font-family:'Nunito',sans-serif;font-size:16px;color:var(--text3);max-width:600px;line-height:1.6;font-weight:500">
+          From citizens to NGO coordinators — hear how Suraksha Setu is making a difference.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px">
+        <!-- Testimonial 1 -->
+        <div class="testimonial-card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true"
+          data-tilt-max-glare="0.1"
+          style="background:#fff;border-radius:24px;border:1px solid var(--border);padding:36px 32px;box-shadow:var(--shadow2);display:flex;flex-direction:column;justify-content:space-between;gap:24px;text-align:left">
+          <div>
+            <div
+              style="font-family:'Georgia',serif;font-size:48px;font-weight:bold;color:var(--g400);line-height:1;margin-bottom:-10px;opacity:0.8">
+              “</div>
+            <p
+              style="font-family:'Nunito',sans-serif;font-size:14px;color:var(--text2);line-height:1.6;font-style:normal;margin-top:0">
+              I reported a garbage dump near my kids' school in under a minute. The NGO had it cleared within a week.
+              This platform actually works!</p>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;margin-top:8px">
+            <div
+              style="width:40px;height:40px;background:#fef9c3;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">
+              👩</div>
+            <div>
+              <div style="font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:var(--text)">Priya Sharma
+              </div>
+              <div style="font-family:'Nunito',sans-serif;font-size:11px;color:var(--text3);margin-top:2px">Teacher,
+                Agra</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="testimonial-card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true"
+          data-tilt-max-glare="0.1"
+          style="background:#fff;border-radius:24px;border:1px solid var(--border);padding:36px 32px;box-shadow:var(--shadow2);display:flex;flex-direction:column;justify-content:space-between;gap:24px;text-align:left">
+          <div>
+            <div
+              style="font-family:'Georgia',serif;font-size:48px;font-weight:bold;color:var(--g400);line-height:1;margin-bottom:-10px;opacity:0.8">
+              “</div>
+            <p
+              style="font-family:'Nunito',sans-serif;font-size:14px;color:var(--text2);line-height:1.6;font-style:normal;margin-top:0">
+              As an NGO coordinator, Suraksha Setu replaced our chaotic WhatsApp groups. Now we have structured data,
+              maps, and priorities — game changer.</p>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;margin-top:8px">
+            <div
+              style="width:40px;height:40px;background:#dbeafe;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">
+              👨‍💼</div>
+            <div>
+              <div style="font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:var(--text)">Arvind Mehta
+              </div>
+              <div style="font-family:'Nunito',sans-serif;font-size:11px;color:var(--text3);margin-top:2px">NGO
+                Coordinator, GreenAgra</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="testimonial-card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true"
+          data-tilt-max-glare="0.1"
+          style="background:#fff;border-radius:24px;border:1px solid var(--border);padding:36px 32px;box-shadow:var(--shadow2);display:flex;flex-direction:column;justify-content:space-between;gap:24px;text-align:left">
+          <div>
+            <div
+              style="font-family:'Georgia',serif;font-size:48px;font-weight:bold;color:var(--g400);line-height:1;margin-bottom:-10px;opacity:0.8">
+              “</div>
+            <p
+              style="font-family:'Nunito',sans-serif;font-size:14px;color:var(--text2);line-height:1.6;font-style:normal;margin-top:0">
+              I'm a weekend volunteer and this map shows me exactly where help is needed near me. I've joined 6 cleanup
+              drives this month alone!</p>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;margin-top:8px">
+            <div
+              style="width:40px;height:40px;background:#ffedd5;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">
+              🧑‍🎓</div>
+            <div>
+              <div style="font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:var(--text)">Rahul Verma
+              </div>
+              <div style="font-family:'Nunito',sans-serif;font-size:11px;color:var(--text3);margin-top:2px">Student &
+                Volunteer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trusted by NGOs Partners Stripe -->
+    <div
+      style="background:#042614;padding:32px 24px;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06)">
+      <div
+        style="max-width:1100px;margin:0 auto;display:flex;gap:24px 40px;align-items:center;justify-content:center;flex-wrap:wrap;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:#aef2d1">
+        <span
+          style="color:#2ecc71;font-size:11px;text-transform:uppercase;letter-spacing:1px;opacity:0.8;margin-right:8px">Trusted
+          by NGOs</span>
+        <span style="display:flex;align-items:center;gap:6px">🌿 GreenAgra Foundation</span>
+        <span style="display:flex;align-items:center;gap:6px">♻️ CleanCity India</span>
+        <span style="display:flex;align-items:center;gap:6px">🌊 Yamuna Bachao</span>
+        <span style="display:flex;align-items:center;gap:6px">🌳 Ped Lagao Agra</span>
+        <span style="display:flex;align-items:center;gap:6px">🗺️ Urban Eco Alliance</span>
+        <span style="display:flex;align-items:center;gap:6px">🤝 SwachhBharat Volunteers</span>
+      </div>
+    </div>
+
+    <!-- Ready to Make a Difference CTA Section -->
+    <div
+      style="background-color:#16a34a;background-image:radial-gradient(rgba(255,255,255,0.15) 2px,transparent 0);background-size:24px 24px;padding:90px 24px;text-align:center;color:#fff;position:relative">
+      <div style="max-width:800px;margin:0 auto">
+        <h2
+          style="font-family:'Outfit',sans-serif;font-size:clamp(32px,5vw,48px);font-weight:800;color:#ffffff;line-height:1.15;margin-bottom:16px;letter-spacing:-1px">
+          Ready to make a difference?</h2>
+        <p
+          style="font-family:'Nunito',sans-serif;font-size:16px;color:#e8faf0;max-width:640px;margin:0 auto 36px;line-height:1.6;font-weight:500">
+          Join thousands of citizens who are actively reporting and resolving environmental issues in their communities
+          — no login, no hassle.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <button onclick="showPage('report')"
+            style="background:#ffffff;color:#16a34a;border:none;padding:14px 32px;border-radius:99px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,0.1);transition:transform .2s"
+            onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">🌿
+            Report an Issue Now</button>
+          <button onclick="showPage('map')"
+            style="background:transparent;color:#ffffff;border:1.5px solid #ffffff;padding:14px 32px;border-radius:99px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .2s"
+            onmouseover="this.style.background='rgba(255,255,255,0.08)'"
+            onmouseout="this.style.background='transparent'">🗺️ Explore the Map</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer
+      style="background:#0b0f19;padding:80px 24px 40px;color:#94a3b8;font-family:'Nunito',sans-serif;border-top:1px solid rgba(255,255,255,0.05)">
+      <div
+        style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:48px 32px;margin-bottom:60px">
+        <!-- Brand Column -->
+        <div style="grid-column: span 1.5;min-width:240px;text-align:left">
+          <div
+            style="font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;color:#ffffff;display:flex;align-items:center;gap:8px;margin-bottom:16px">
+            🌿 SurakshaSetu</div>
+          <p style="font-size:14px;line-height:1.6;color:#64748b;margin-bottom:20px">A community-powered environmental
+            reporting platform connecting citizens with NGOs and volunteers to create cleaner, healthier cities — one
+            report at a time.</p>
+          <div
+            style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--g400);letter-spacing:1px;text-transform:uppercase;margin-bottom:16px">
+            See It. Report It. Improve It.</div>
+          <!-- Social Icons -->
+          <div style="display:flex;gap:10px">
+            <a href="#"
+              style="width:36px;height:36px;border-radius:50%;background:#1e293b;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;transition:background .2s"
+              onmouseover="this.style.background='var(--g600)';this.style.color='#fff'"
+              onmouseout="this.style.background='#1e293b';this.style.color='#94a3b8'">𝕏</a>
+            <a href="#"
+              style="width:36px;height:36px;border-radius:50%;background:#1e293b;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;transition:background .2s"
+              onmouseover="this.style.background='var(--g600)';this.style.color='#fff'"
+              onmouseout="this.style.background='#1e293b';this.style.color='#94a3b8'">🅵</a>
+            <a href="#"
+              style="width:36px;height:36px;border-radius:50%;background:#1e293b;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;transition:background .2s"
+              onmouseover="this.style.background='var(--g600)';this.style.color='#fff'"
+              onmouseout="this.style.background='#1e293b';this.style.color='#94a3b8'">🅸</a>
+            <a href="#"
+              style="width:36px;height:36px;border-radius:50%;background:#1e293b;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;transition:background .2s"
+              onmouseover="this.style.background='var(--g600)';this.style.color='#fff'"
+              onmouseout="this.style.background='#1e293b';this.style.color='#94a3b8'">🐙</a>
+          </div>
+        </div>
+
+        <!-- Platform Links -->
+        <div style="text-align:left">
+          <h4
+            style="font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:#ffffff;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:20px">
+            Platform</h4>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:14px">
+            <li><a href="#" onclick="showPage('report');return false"
+                style="color:#64748b;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#ffffff'"
+                onmouseout="this.style.color='#64748b'">Report an Issue</a></li>
+            <li><a href="#" onclick="showPage('map');return false"
+                style="color:#64748b;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#ffffff'"
+                onmouseout="this.style.color='#64748b'">Live Map</a></li>
+            <li><a href="#" onclick="showPage('feed');return false"
+                style="color:#64748b;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#ffffff'"
+                onmouseout="this.style.color='#64748b'">Community Feed</a></li>
+            <li><a href="#" onclick="showPage('admin');return false"
+                style="color:#64748b;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#ffffff'"
+                onmouseout="this.style.color='#64748b'">Admin Login</a></li>
+            <li style="color:#334155;cursor:not-allowed">Mobile App (Soon)</li>
+          </ul>
+        </div>
+
+        <!-- Issue Types Links -->
+        <div style="text-align:left">
+          <h4
+            style="font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:#ffffff;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:20px">
+            Issue Types</h4>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:14px">
+            <li><a href="#" onclick="showPage('map');return false"
+                style="color:#64748b;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#ffffff'"
+                onmouseout="this.style.color='#64748b'">🗑 Garbage Dumps</a></li>
+            <li><a href="#" onclick="showPage('map');return false"
+                style="color:#64748b;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#ffffff'"
+                onmouseout="this.style.color='#64748b'">🧴 Plastic Waste</a></li>
+            <li><a href="#" onclick="showPage('map');return false"
+                style="color:#64748b;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#ffffff'"
+                onmouseout="this.style.color='#64748b'">💧 Water Pollution</a></li>
+            <li><a href="#" onclick="showPage('map');return false"
+                style="color:#64748b;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#ffffff'"
+                onmouseout="this.style.color='#64748b'">🌱 Plantation Areas</a></li>
+            <li><a href="#" onclick="showPage('map');return false"
+                style="color:#64748b;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#ffffff'"
+                onmouseout="this.style.color='#64748b'">🔧 Junkyards</a></li>
+            <li><a href="#" onclick="showPage('map');return false"
+                style="color:#64748b;text-decoration:none;transition:color .2s" onmouseover="this.style.color='#ffffff'"
+                onmouseout="this.style.color='#64748b'">🪣 Dirty Spaces</a></li>
+          </ul>
+        </div>
+
+        <!-- Organisation Links -->
+        <div style="text-align:left">
+          <h4
+            style="font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:#ffffff;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:20px">
+            Organisation</h4>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:14px">
+            <li><a href="organisation.html#about" style="color:#64748b;text-decoration:none;transition:color .2s"
+                onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">About Us</a></li>
+            <li><a href="organisation.html#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
+                onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">NGO Partnership</a>
+            </li>
+            <li><a href="organisation.html#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
+                onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Volunteer Program</a>
+            </li>
+            <li><a href="organisation.html#impact" style="color:#64748b;text-decoration:none;transition:color .2s"
+                onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Impact Reports</a></li>
+            <li><a href="organisation.html#privacy" style="color:#64748b;text-decoration:none;transition:color .2s"
+                onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Privacy Policy</a></li>
+            <li><a href="organisation.html#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
+                onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div
+        style="max-width:1100px;margin:0 auto;padding-top:30px;border-top:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;font-size:13px;color:#475569">
+        <div>© 2026 Suraksha Setu. Made with 💚 for a cleaner India.</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <span
+            style="background:#1e293b;color:#94a3b8;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700">🇮🇳
+            Made in India</span>
+          <span
+            style="background:#1e293b;color:#94a3b8;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700">♻️
+            Carbon Neutral</span>
+          <span
+            style="background:#1e293b;color:#94a3b8;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700">🔒
+            Privacy First</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ══════════════════ REPORT PAGE ══════════════════ -->
+  <div class="page" id="page-report">
+    <div class="report-page">
+      <div class="report-card">
+        <div class="report-header">
+          <h2>🌿 Report an Environmental Issue</h2>
+          <p>No signup needed — your report goes live instantly on the community map.</p>
+        </div>
+        <!-- Steps Indicator -->
+        <div class="report-steps" id="step-indicator">
+          <div class="step-item active" id="si-1">
+            <div class="step-dot active" id="sd-1">1</div>
+            <div class="step-label">Location</div>
+          </div>
+          <div class="step-item" id="si-2">
+            <div class="step-dot" id="sd-2">2</div>
+            <div class="step-label">Photos</div>
+          </div>
+          <div class="step-item" id="si-3">
+            <div class="step-dot" id="sd-3">3</div>
+            <div class="step-label">Category</div>
+          </div>
+          <div class="step-item" id="si-4">
+            <div class="step-dot" id="sd-4">4</div>
+            <div class="step-label">Details</div>
+          </div>
+        </div>
+        <div class="report-body" id="report-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ MAP PAGE ══════════════════ -->
+  <div class="page" id="page-map">
+    <div class="map-page-wrap">
+      <div class="map-filters">
+        <span
+          style="font-size:12px;font-weight:800;color:var(--text3);font-family:'Outfit',sans-serif;white-space:nowrap">Filter:</span>
+        <button class="filter-pill active" onclick="filterMap('All',this)">All</button>
+        <button class="filter-pill" onclick="filterMap('Garbage',this)">🗑 Garbage</button>
+        <button class="filter-pill" onclick="filterMap('Plastic Waste',this)">🧴 Plastic</button>
+        <button class="filter-pill" onclick="filterMap('Dirty Area',this)">🪣 Dirty Area</button>
+        <button class="filter-pill" onclick="filterMap('Junkyard',this)">🔧 Junkyard</button>
+        <button class="filter-pill" onclick="filterMap('Water Pollution',this)">💧 Water</button>
+        <button class="filter-pill" onclick="filterMap('Plantation Opportunity',this)">🌱 Plantation</button>
+        <button class="filter-pill" onclick="filterMap('Resolved',this)" style="color:var(--g700)">✅ Resolved</button>
+      </div>
+      <div id="main-map"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ FEED PAGE ══════════════════ -->
+  <div class="page" id="page-feed">
+    <div class="feed-page">
+      <div class="feed-header">
+        <h2>Community Reports</h2>
+        <div class="search-box">
+          <span style="color:var(--text3)">🔍</span>
+          <input type="text" placeholder="Search by location..."
+            oninput="filterFeed(this.value); document.getElementById('clear-search').style.display = this.value ? 'block' : 'none';"
+            id="feed-search">
+          <button id="clear-search"
+            onclick="document.getElementById('feed-search').value=''; filterFeed(''); this.style.display='none'"
+            style="display:none; background:none; border:none; cursor:pointer; color:var(--text3); font-size:16px; padding: 0 4px;">✕</button>
+        </div>
+      </div>
+      <div class="feed-grid" id="feed-grid"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ ADMIN PAGE ══════════════════ -->
+  <div class="page" id="page-admin">
+    <!-- Login -->
+    <div class="admin-login" id="admin-login-wrap">
+      <div class="admin-card">
+        <div class="admin-logo">🌿 Suraksha Setu</div>
+        <div class="admin-logo-sub">NGO Admin Dashboard</div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" id="admin-email" placeholder="admin@ngo.org"
+            value="admin@surakshasetu.org">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-input" id="admin-pass" placeholder="••••••••" value="password">
+        </div>
+        <button class="btn-primary" style="width:100%;padding:13px" onclick="doAdminLogin()">Sign In to Dashboard
+          →</button>
+        <p style="text-align:center;font-size:12px;color:var(--text3);margin-top:16px">Demo: admin@surakshasetu.org /
+          password</p>
+      </div>
+    </div>
+    <!-- Dashboard -->
+    <div class="admin-page" id="admin-dashboard">
+      <div class="dashboard-header">
+        <h2>Admin Dashboard</h2>
+        <div style="display:flex;gap:12px;margin-left:auto">
+          <button class="btn-primary"
+            style="padding:8px 16px;border-radius:8px;font-size:13px;display:inline-flex;align-items:center;gap:6px"
+            onclick="exportPremiumPDF()">📄 Export PDF</button>
+          <button class="logout-btn" onclick="adminLogout()">Logout</button>
+        </div>
+      </div>
+      <div class="stat-cards" id="admin-stats"></div>
+      <!-- Analytics chart -->
+      <div
+        style="background:#fff;border-radius:var(--radius-sm);border:1px solid var(--border);padding:20px;margin-bottom:24px;box-shadow:var(--shadow2)">
+        <h3 style="font-size:15px;font-weight:800;margin-bottom:4px;font-family:'Outfit',sans-serif">Reports by Category
+        </h3>
+        <p style="font-size:12px;color:var(--text3)">All-time distribution across issue types</p>
+        <div class="chart-bars" id="admin-chart"></div>
+      </div>
+      <div class="admin-table-wrap">
+        <div class="admin-table-header">
+          <h3>Recent Reports</h3>
+          <select class="filter-select" onchange="filterAdminTable(this.value,'status')">
+            <option value="">All Status</option>
+            <option>Reported</option>
+            <option>Verified</option>
+            <option>Action Planned</option>
+            <option>In Progress</option>
+            <option>Resolved</option>
+          </select>
+          <select class="filter-select" onchange="filterAdminTable(this.value,'cat')">
+            <option value="">All Categories</option>
+            <option>Garbage</option>
+            <option>Plastic Waste</option>
+            <option>Dirty Area</option>
+            <option>Junkyard</option>
+            <option>Water Pollution</option>
+            <option>Plantation Opportunity</option>
+          </select>
+          <button class="action-btn"
+            style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif"
+            onclick="exportCSV()">⬇ Export CSV</button>
+        </div>
+        <div style="overflow-x:auto; overflow-y:auto; max-height: 580px;">
+          <table class="admin-table" id="admin-table">
+            <thead>
+              <tr>
+                <th>Report ID</th>
+                <th>Category</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- ── REPORT DETAIL MODAL ── -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <div>
+          <div id="modal-title" style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif"></div>
+          <div id="modal-sub" style="font-size:12px;color:var(--text3);margin-top:3px"></div>
+        </div>
+        <button class="modal-close"
+          onclick="document.getElementById('modal-overlay').classList.remove('open')">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+</body>
+
+</html>

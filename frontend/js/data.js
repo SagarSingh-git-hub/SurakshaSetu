@@ -18,7 +18,7 @@ const STATUS_CLASS = {
 
 async function fetchReports() {
     try {
-        const response = await fetch('backend/api/get_reports.php');
+        const response = await fetch('../../backend/api/get_reports.php');
         const data = await response.json();
         currentReports = data;
         return data;

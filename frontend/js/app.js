@@ -321,5 +321,45 @@ function updateHeroStats() {
   if (statRate) statRate.textContent = rate + '%';
   if (impactTotal) impactTotal.textContent = total;
   if (impactResolved) impactResolved.textContent = resolved;
+  
+  updateCategoryCounts();
+}
+
+function updateCategoryCounts() {
+  if (typeof currentReports === 'undefined') return;
+  
+  const counts = {
+    'Garbage': 0, 'Plastic Waste': 0, 'Dirty Area': 0,
+    'Junkyard': 0, 'Water Pollution': 0, 'Plantation Opportunity': 0, 'Other': 0
+  };
+  
+  currentReports.forEach(r => {
+    if (counts[r.cat] !== undefined) counts[r.cat]++;
+    else counts['Other']++;
+  });
+
+  const cards = document.querySelectorAll('.cat-card');
+  cards.forEach(card => {
+    const titleEl = card.querySelector('div:nth-child(2)');
+    const countEl = card.querySelector('div:nth-child(3)');
+    if (!titleEl || !countEl) return;
+    
+    const title = titleEl.textContent.trim();
+    if (title === 'Garbage') {
+      countEl.innerHTML = `<span id="cat-count-Garbage">${counts['Garbage']}</span> reports • Most common`;
+    } else if (title === 'Plastic Waste') {
+      countEl.innerHTML = `<span id="cat-count-Plastic-Waste">${counts['Plastic Waste']}</span> reports`;
+    } else if (title === 'Dirty Area') {
+      countEl.innerHTML = `<span id="cat-count-Dirty-Area">${counts['Dirty Area']}</span> reports`;
+    } else if (title === 'Junkyard') {
+      countEl.innerHTML = `<span id="cat-count-Junkyard">${counts['Junkyard']}</span> reports`;
+    } else if (title === 'Water Pollution') {
+      countEl.innerHTML = `<span id="cat-count-Water-Pollution">${counts['Water Pollution']}</span> reports`;
+    } else if (title === 'Plantation Opp.') {
+      countEl.innerHTML = `<span id="cat-count-Plantation-Opportunity">${counts['Plantation Opportunity']}</span> reports`;
+    } else if (title === 'Other Issues') {
+      countEl.innerHTML = `<span id="cat-count-Other">${counts['Other']}</span> reports`;
+    }
+  });
 }
 

@@ -36,6 +36,7 @@ if (PUSHER_KEY !== 'YOUR_APP_KEY') {
         } else if (currentPage === 'admin' && typeof adminLoggedIn !== 'undefined' && adminLoggedIn) {
             renderAdminDashboard();
         }
+        if (typeof updateHeroStats === 'function') updateHeroStats();
     });
 
     channel.bind('update-status', function(data) {
@@ -55,6 +56,7 @@ if (PUSHER_KEY !== 'YOUR_APP_KEY') {
             } else if (currentPage === 'admin' && typeof adminLoggedIn !== 'undefined' && adminLoggedIn) {
                 renderAdminDashboard();
             }
+            if (typeof updateHeroStats === 'function') updateHeroStats();
             
             if (typeof mainMap !== 'undefined' && mapInit) {
                 // Update marker popup content and icon
