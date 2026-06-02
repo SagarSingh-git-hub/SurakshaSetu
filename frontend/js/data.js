@@ -18,8 +18,18 @@ const STATUS_CLASS = {
 
 async function fetchReports() {
     try {
-        const response = await fetch('../../backend/api/get_reports.php');
+        const response = await fetch(`${API_URL}/backend/api/get_reports.php`);
         const data = await response.json();
+        
+        // Fix relative image paths to use the backend API URL
+        data.forEach(report => {
+            if (report.photo_urls && Array.isArray(report.photo_urls)) {
+                report.photo_urls = report.photo_urls.map(url => {
+                    return url.startsWith('http') ? url : `${API_URL}/${url}`;
+                });
+            }
+        });
+
         currentReports = data;
         return data;
     } catch (e) {

@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "rewrites": [
+    { "source": "/css/(.*)", "destination": "/frontend/css/$1" },
+    { "source": "/js/(.*)", "destination": "/frontend/js/$1" },
+    { "source": "/organisation", "destination": "/frontend/template/organisation.html" },
+    { "source": "/(.*)", "destination": "/frontend/template/index.html" }
+  ]
+}

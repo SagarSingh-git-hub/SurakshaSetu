@@ -291,7 +291,7 @@ async function submitReport() {
   formData.photos.forEach(p => fd.append('photos[]', p));
 
   try {
-    const response = await fetch('../../backend/api/submit_report.php', {
+    const response = await fetch(`${API_URL}/backend/api/submit_report.php`, {
       method: 'POST',
       body: fd
     });

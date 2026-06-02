@@ -2,11 +2,11 @@
 require_once __DIR__ . '/../config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $category = $conn->real_escape_string($_POST['category'] ?? '');
-    $desc = $conn->real_escape_string($_POST['desc'] ?? '');
+    $category = $_POST['category'] ?? '';
+    $desc = $_POST['desc'] ?? '';
     $lat = (float)($_POST['lat'] ?? 0);
     $lng = (float)($_POST['lng'] ?? 0);
-    $locStr = $conn->real_escape_string($_POST['locStr'] ?? '');
+    $locStr = $_POST['locStr'] ?? '';
     
     // Generate Unique ID
     $report_id = 'ECO-' . rand(100, 999) . time();
@@ -22,10 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // -------------------------------------------------
 
     // Insert Report into Database
-    $sql = "INSERT INTO reports (report_id, category, location_str, lat, lng, description) 
-            VALUES ('$report_id', '$category', '$locStr', $lat, $lng, '$desc')";
+    $stmt = $conn->prepare("INSERT INTO reports (report_id, category, location_str, lat, lng, description) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssdss", $report_id, $category, $locStr, $lat, $lng, $desc);
             
-    if ($conn->query($sql) === TRUE) {
+    if ($stmt->execute()) {
         
         // Generate some basic tags based on category
         $tags = ['new'];
@@ -38,10 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         elseif (strpos($cat_lower, 'plantation') !== false) { $tags[] = 'greenery'; $tags[] = 'tree-planting'; }
         
         // Insert Tags
+        $tag_stmt = $conn->prepare("INSERT INTO report_tags (report_id, tag_name) VALUES (?, ?)");
         foreach ($tags as $tag) {
-            $db_tag = $conn->real_escape_string($tag);
-            $conn->query("INSERT INTO report_tags (report_id, tag_name) VALUES ('$report_id', '$db_tag')");
+            $tag_stmt->bind_param("ss", $report_id, $tag);
+            $tag_stmt->execute();
         }
+        $tag_stmt->close();
         
         $saved_photos = [];
         
@@ -66,8 +68,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if(file_put_contents($filepath, $data)) {
                     $saved_photos[] = 'backend/uploads/' . $filename;
                     // Save to DB
-                    $db_filepath = $conn->real_escape_string('backend/uploads/' . $filename);
-                    $conn->query("INSERT INTO report_photos (report_id, photo_path) VALUES ('$report_id', '$db_filepath')");
+                    $db_filepath = 'backend/uploads/' . $filename;
+                    $photo_stmt = $conn->prepare("INSERT INTO report_photos (report_id, photo_path) VALUES (?, ?)");
+                    $photo_stmt->bind_param("ss", $report_id, $db_filepath);
+                    $photo_stmt->execute();
+                    $photo_stmt->close();
                 }
             }
         }

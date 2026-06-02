@@ -27,19 +27,19 @@ if ($result && $result->num_rows > 0) {
         
         // Structure to match frontend expectations
         $reports[] = [
-            'id' => $row['report_id'],
-            'cat' => $row['category'],
-            'loc' => $row['location_str'],
+            'id' => htmlspecialchars($row['report_id']),
+            'cat' => htmlspecialchars($row['category']),
+            'loc' => htmlspecialchars($row['location_str']),
             'lat' => (float)$row['lat'],
             'lng' => (float)$row['lng'],
-            'desc' => $row['description'],
-            'status' => $row['status'],
-            'priority' => $row['priority'],
+            'desc' => htmlspecialchars($row['description']),
+            'status' => htmlspecialchars($row['status']),
+            'priority' => htmlspecialchars($row['priority']),
             'date' => date('Y-m-d', strtotime($row['created_at'])),
             'photos' => count($photos),
             'photo_urls' => $photos,
-            'tags' => $tags,
-            'reporter' => $row['reporter']
+            'tags' => array_map('htmlspecialchars', $tags),
+            'reporter' => htmlspecialchars($row['reporter'] ?? 'Anonymous')
         ];
     }
 }

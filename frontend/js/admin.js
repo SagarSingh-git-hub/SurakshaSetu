@@ -1,17 +1,31 @@
 // ── ADMIN PANEL AND DASHBOARD OPERATIONS ──
 let adminFilter = { status: '', cat: '' };
+let currentAdminPassword = '';
+
+function togglePasswordVisibility() {
+  const passInput = document.getElementById('admin-pass');
+  const eyeIcon = document.getElementById('eye-icon');
+  if (passInput.type === 'password') {
+    passInput.type = 'text';
+    eyeIcon.textContent = '🙈'; // Closed eye/different icon to indicate hide
+  } else {
+    passInput.type = 'password';
+    eyeIcon.textContent = '👁️';
+  }
+}
 
 function doAdminLogin() {
   const e = document.getElementById('admin-email').value.trim();
   const p = document.getElementById('admin-pass').value.trim();
-  if (e === 'admin@surakshasetu.org' && p === 'password') {
+  if (e === 'admin@surakshasetu.org' && p !== '') {
     adminLoggedIn = true;
+    currentAdminPassword = p; // Store the entered password for API calls
     document.getElementById('admin-login-wrap').style.display = 'none';
     document.getElementById('admin-dashboard').classList.add('active');
     renderAdminDashboard();
     showToast('Welcome back, Admin!');
   } else {
-    showToast('Invalid credentials. Try demo credentials.');
+    showToast('Invalid credentials. Please enter email and password.');
   }
 }
 
@@ -23,6 +37,7 @@ function adminLogout() {
     'Cancel',
     () => {
       adminLoggedIn = false;
+      currentAdminPassword = '';
       const loginWrap = document.getElementById('admin-login-wrap');
       const dashboard = document.getElementById('admin-dashboard');
       if (loginWrap) loginWrap.style.display = '';
@@ -119,8 +134,9 @@ async function updateStatus(id, status) {
     const formData = new FormData();
     formData.append('report_id', id);
     formData.append('status', status);
+    formData.append('admin_password', currentAdminPassword);
 
-    const res = await fetch('../../backend/api/update_status.php', {
+    const res = await fetch(`${API_URL}/backend/api/update_status.php`, {
       method: 'POST',
       body: formData
     });

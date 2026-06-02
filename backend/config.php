@@ -1,7 +1,27 @@
 <?php
 // Configuration File
-header('Access-Control-Allow-Origin: *'); // Allow requests from any origin during development
+$frontend_url = getenv('FRONTEND_URL') ?: '*';
+if (getenv('APP_ENV') === 'development' && isset($_SERVER['HTTP_ORIGIN'])) {
+    $frontend_url = $_SERVER['HTTP_ORIGIN']; // Auto-allow local origins for testing
+}
+header('Access-Control-Allow-Origin: ' . $frontend_url); // Restrict origins in production
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// Error Reporting based on Environment
+if (getenv('APP_ENV') === 'production') {
+    error_reporting(0);
+    ini_set('display_errors', '0');
+} else {
+    error_reporting(E_ALL);
+    ini_set('display_errors', '1');
+}
 
 // Load .env variables manually (Simple custom loader)
 $env_path = __DIR__ . '/.env';
@@ -21,11 +41,14 @@ if (file_exists($env_path)) {
 }
 
 // --- DATABASE CREDENTIALS ---
-define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
-define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') ?: '');
-define('DB_NAME', getenv('DB_NAME') ?: 'eco_warrior');
-define('DB_PORT', getenv('DB_PORT') ?: 3307); // Added Port 3307 based on my.ini
+define('DB_HOST', getenv('DB_HOST') ?: (getenv('MYSQLHOST') ?: 'localhost'));
+define('DB_USER', getenv('DB_USER') ?: (getenv('MYSQLUSER') ?: 'root'));
+define('DB_PASS', getenv('DB_PASS') ?: (getenv('MYSQLPASSWORD') ?: ''));
+define('DB_NAME', getenv('DB_NAME') ?: (getenv('MYSQLDATABASE') ?: 'eco_warrior'));
+define('DB_PORT', getenv('DB_PORT') ?: (getenv('MYSQLPORT') ?: 3307));
+
+// --- ADMIN CREDENTIALS ---
+define('ADMIN_PASSWORD', getenv('ADMIN_PASSWORD') ?: 'password');
 
 // --- PUSHER CREDENTIALS ---
 define('PUSHER_APP_ID', getenv('PUSHER_APP_ID'));
@@ -35,15 +58,21 @@ define('PUSHER_CLUSTER', getenv('PUSHER_CLUSTER'));
 
 // Connect to Database
 mysqli_report(MYSQLI_REPORT_OFF); // Disable exceptions so we can return JSON errors gracefully
-$conn = @new mysqli(DB_HOST, DB_USER, DB_PASS, '', DB_PORT);
+
+$conn = @new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
+
+// If DB doesn't exist, try connecting without it to create it (Localhost automation)
+if ($conn->connect_errno == 1049) {
+    $conn = @new mysqli(DB_HOST, DB_USER, DB_PASS, '', DB_PORT);
+    if (!$conn->connect_error) {
+        $conn->query("CREATE DATABASE IF NOT EXISTS " . DB_NAME);
+        $conn->select_db(DB_NAME);
+    }
+}
 
 if ($conn->connect_error) {
     die(json_encode(['success' => false, 'error' => 'Database Connection Failed: ' . $conn->connect_error]));
 }
-
-// Auto-create database and tables if they don't exist (Automation)
-$conn->query("CREATE DATABASE IF NOT EXISTS " . DB_NAME);
-$conn->select_db(DB_NAME);
 
 // Check if reports table exists
 $table_check = $conn->query("SHOW TABLES LIKE 'reports'");
@@ -61,7 +90,7 @@ if ($table_check && $table_check->num_rows == 0) {
 /**
  * Helper function to trigger a Pusher event using cURL (No Composer required)
  */
-function triggerPusherEvent($channel, $event, $data) {
+function triggerPusherEvent(string $channel, string $event, array $data): void {
     if (PUSHER_APP_ID === 'YOUR_APP_ID') return; // Skip if credentials are not set
 
     $payload = json_encode([
@@ -95,6 +124,6 @@ function triggerPusherEvent($channel, $event, $data) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
     curl_exec($ch);
-    curl_close($ch);
+    unset($ch); // curl_close is deprecated in PHP 8.5+
 }
 ?>
