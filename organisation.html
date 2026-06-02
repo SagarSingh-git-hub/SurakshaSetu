@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eco Warrior – Organisation &amp; Info</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Nunito:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+
+  <script src="js/data.js" defer></script>
+  <script src="js/subpages.js" defer></script>
+
+  <style>
+    /* Custom styling to keep active tabs in navbar aligned with hash */
+    .nav-tab-link {
+      text-decoration: none;
+      display: inline-block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── NAV ── -->
+  <nav>
+    <a class="nav-logo" href="index.html">🌿 Eco<span>Warrior</span></a>
+    <div class="nav-spacer"></div>
+    <div class="nav-tabs">
+      <a class="nav-tab nav-tab-link" href="index.html">Home</a>
+      <a class="nav-tab nav-tab-link" href="index.html?page=map">Live Map</a>
+      <a class="nav-tab nav-tab-link" href="index.html?page=feed">Community Feed</a>
+      <a class="nav-tab nav-tab-link" href="index.html?page=admin">Admin</a>
+    </div>
+    <a class="btn-report-nav" href="index.html?page=report"
+      style="text-decoration:none;display:inline-flex;align-items:center;line-height:1">+ Report Issue</a>
+  </nav>
+
+  <!-- TOAST (Required for PDF simulator and Contact forms) -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ══════════════════ ABOUT US PAGE ══════════════════ -->
+  <div class="page" id="page-about">
+    <div class="subpage-layout">
+      <!-- Subpage Navigation Header -->
+      <div class="subpage-nav-header">
+        <button class="btn-subpage-back" onclick="goBack()">← Go Back</button>
+        <span style="font-family:'Outfit';font-size:13px;font-weight:700;color:var(--text3)">Platform / About Us</span>
+      </div>
+
+      <!-- Subpage Hero -->
+      <div class="subpage-hero">
+        <div class="hero-bg-orb o1" style="width:300px;height:300px;top:-50px;right:-50px"></div>
+        <div class="subpage-hero-title">Pioneering Civic Climate Action</div>
+        <div class="subpage-hero-tagline">
+          Eco Warrior is an open-source, community-driven citizen reporting system built to bridge the gap between
+          people who see environmental problems and teams who can fix them.
+        </div>
+      </div>
+
+      <!-- Section Title -->
+      <h2 class="subpage-section-title">Our Three Core Pillars</h2>
+
+      <!-- Pillars Grid -->
+      <div class="pillars-grid">
+        <!-- Pillar 1 -->
+        <div class="pillar-card">
+          <div class="pillar-card-icon">📍</div>
+          <h3 style="font-size:18px;font-weight:800;color:var(--text)">Civic Empowerment</h3>
+          <p style="font-size:14px;color:var(--text3);line-height:1.6">
+            We believe every citizen is an active guardian of their city. Our anonymous one-click reporting puts the
+            power of change directly in your pocket — making civic action simple and seamless.
+          </p>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="pillar-card">
+          <div class="pillar-card-icon">🤖</div>
+          <h3 style="font-size:18px;font-weight:800;color:var(--text)">AI Diagnostics</h3>
+          <p style="font-size:14px;color:var(--text3);line-height:1.6">
+            No manual categorization needed. Our integrated neural network tags the issue type, estimates severity, and
+            routes it to the nearest NGO automatically, reducing administrative delay to zero.
+          </p>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="pillar-card">
+          <div class="pillar-card-icon">🌳</div>
+          <h3 style="font-size:18px;font-weight:800;color:var(--text)">Volunteer Mobilization</h3>
+          <p style="font-size:14px;color:var(--text3);line-height:1.6">
+            We coordinate in real-time with over 12 green NGOs and 1,200 local volunteers to convert reports into
+            physical cleanup drives. We turn data into physical green outcomes.
+          </p>
+        </div>
+      </div>
+
+      <!-- Section Title -->
+      <h2 class="subpage-section-title">Meet the Core Team</h2>
+
+      <!-- Team Grid -->
+      <div class="team-grid">
+        <!-- Team Member 1 -->
+        <div class="team-card">
+          <div class="team-avatar">👨‍💻</div>
+          <div class="team-name">Aarav Goel</div>
+          <div class="team-role">Founder &amp; Lead Architect</div>
+          <div class="team-bio">Visionary software engineer building digital tools for public good. Believes code can
+            heal communities.</div>
+          <div class="team-socials">
+            <a href="#" class="team-social-a">🐙</a>
+            <a href="#" class="team-social-a">𝕏</a>
+            <a href="#" class="team-social-a">💼</a>
+          </div>
+        </div>
+
+        <!-- Team Member 2 -->
+        <div class="team-card">
+          <div class="team-avatar">👩‍🔬</div>
+          <div class="team-name">Meera Patel</div>
+          <div class="team-role">Head of NGO Operations</div>
+          <div class="team-bio">Environmental scientist coordinating local green networks. Keeps the platform grounded
+            in physical action.</div>
+          <div class="team-socials">
+            <a href="#" class="team-social-a">🐙</a>
+            <a href="#" class="team-social-a">𝕏</a>
+            <a href="#" class="team-social-a">💼</a>
+          </div>
+        </div>
+
+        <!-- Team Member 3 -->
+        <div class="team-card">
+          <div class="team-avatar">👩‍💻</div>
+          <div class="team-name">Sanya Sen</div>
+          <div class="team-role">Lead AI Researcher</div>
+          <div class="team-bio">Machine learning engineer specializing in computer vision for real-time environmental
+            diagnostics.</div>
+          <div class="team-socials">
+            <a href="#" class="team-social-a">🐙</a>
+            <a href="#" class="team-social-a">𝕏</a>
+            <a href="#" class="team-social-a">💼</a>
+          </div>
+        </div>
+
+        <!-- Team Member 4 -->
+        <div class="team-card">
+          <div class="team-avatar">🧑‍💼</div>
+          <div class="team-name">Kabir Das</div>
+          <div class="team-role">Community Growth Lead</div>
+          <div class="team-bio">Activist mobilizing youth clusters and student volunteers for environmental hygiene
+            drives.</div>
+          <div class="team-socials">
+            <a href="#" class="team-social-a">🐙</a>
+            <a href="#" class="team-social-a">𝕏</a>
+            <a href="#" class="team-social-a">💼</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Floating Back Button -->
+    <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
+  </div>
+
+  <!-- ══════════════════ IMPACT REPORTS PAGE ══════════════════ -->
+  <div class="page" id="page-impact">
+    <div class="subpage-layout">
+      <!-- Subpage Navigation Header -->
+      <div class="subpage-nav-header">
+        <button class="btn-subpage-back" onclick="goBack()">← Go Back</button>
+        <span style="font-family:'Outfit';font-size:13px;font-weight:700;color:var(--text3)">Platform / Impact
+          Reports</span>
+      </div>
+
+      <!-- Subpage Hero -->
+      <div class="subpage-hero">
+        <div class="hero-bg-orb o2" style="width:300px;height:300px;bottom:-50px;left:-50px"></div>
+        <div class="subpage-hero-title">Real Change, Quantified</div>
+        <div class="subpage-hero-tagline">
+          Every report is a step toward a healthier city. We translate citizen reports into measurable ecological
+          outcomes. Here is our live ledger of impact across Agra.
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-bottom:56px">
+        <!-- Stat Card 1 -->
+        <div
+          style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
+          <div style="font-size:32px;margin-bottom:12px">🗑️</div>
+          <div
+            style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
+            142 Tons</div>
+          <div
+            style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
+            Trash Diverted</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">↑
+            12.4T this week</div>
+        </div>
+
+        <!-- Stat Card 2 -->
+        <div
+          style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
+          <div style="font-size:32px;margin-bottom:12px">🌳</div>
+          <div
+            style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
+            480 Trees</div>
+          <div
+            style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
+            Planted &amp; Nurtured</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">↑ 94%
+            Survival Rate</div>
+        </div>
+
+        <!-- Stat Card 3 -->
+        <div
+          style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
+          <div style="font-size:32px;margin-bottom:12px">🧴</div>
+          <div
+            style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
+            88,400+</div>
+          <div
+            style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
+            Plastics Recycled</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">
+            Partnered with local recyclers</div>
+        </div>
+
+        <!-- Stat Card 4 -->
+        <div
+          style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
+          <div style="font-size:32px;margin-bottom:12px">✨</div>
+          <div
+            style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
+            89 Areas</div>
+          <div
+            style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
+            Dirty Spaces Sanitized</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">~4.8
+            days avg. resolution</div>
+        </div>
+      </div>
+
+      <!-- PDF Download Area -->
+      <div class="download-pdf-box">
+        <h3 style="font-family:'Outfit';font-size:24px;font-weight:800;margin-bottom:12px;color:#fff">Download Full Q2
+          2026 Impact Audit Report</h3>
+        <p style="font-size:14px;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 28px;line-height:1.6">
+          Get the comprehensive, verified environmental data audit, including spatial analysis maps of hot-spots,
+          volunteer timesheet logs, and government response comparisons.
+        </p>
+        <button id="btn-download-pdf" class="btn-primary" onclick="simulatePdfDownload()">📥 Download Q2 Report
+          PDF</button>
+
+        <!-- Progress Bar Container -->
+        <div class="download-progress-container" id="download-progress-container">
+          <div class="download-progress-bar" id="download-progress-bar"></div>
+          <span class="download-progress-text" id="download-progress-text">0%</span>
+        </div>
+      </div>
+
+      <!-- Section Title -->
+      <h2 class="subpage-section-title">Case Study Success Stories</h2>
+
+      <!-- Success Case Grid -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px">
+        <!-- Story 1 -->
+        <div
+          style="background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow2)">
+          <div
+            style="padding:16px;background:var(--g50);border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center">
+            <span class="badge-summary" style="margin:0">✓ Resolved</span>
+            <span style="font-size:11px;font-weight:700;color:var(--text3)">May 2026</span>
+          </div>
+          <div style="padding:24px;text-align:left">
+            <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Sadar
+              Market Oasis</h3>
+            <p style="font-size:13px;color:var(--text2);line-height:1.6">
+              A massive, 2-ton commercial garbage dump that blocked the entrance of Sadar Market for over two years was
+              reported on Eco Warrior. In partnership with GreenAgra, volunteers cleared the space in 3 days, sanitised
+              the soil, and planted native bushes, transforming it into a micro green zone.
+            </p>
+          </div>
+        </div>
+
+        <!-- Story 2 -->
+        <div
+          style="background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow2)">
+          <div
+            style="padding:16px;background:var(--g50);border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center">
+            <span class="badge-summary" style="margin:0">✓ Cleaned</span>
+            <span style="font-size:11px;font-weight:700;color:var(--text3)">April 2026</span>
+          </div>
+          <div style="padding:24px;text-align:left">
+            <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Yamuna
+              Ghat Restoration</h3>
+            <p style="font-size:13px;color:var(--text2);line-height:1.6">
+              A high-priority water pollution report flagged a toxic plastic and foam barrier building up along Yamuna
+              riverbanks. Within 48 hours, over 120 volunteer students were mobilised. Using safety gear, they removed
+              1,800kg of plastic bottles, restoring local river flow.
+            </p>
+          </div>
+        </div>
+
+        <!-- Story 3 -->
+        <div
+          style="background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow2)">
+          <div
+            style="padding:16px;background:var(--g50);border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center">
+            <span class="badge-summary" style="margin:0">✓ Segregated</span>
+            <span style="font-size:11px;font-weight:700;color:var(--text3)">March 2026</span>
+          </div>
+          <div style="padding:24px;text-align:left">
+            <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Taj
+              Nagri Segment B Drive</h3>
+            <p style="font-size:13px;color:var(--text2);line-height:1.6">
+              A neighborhood report highlighted scattered plastic packets that filled local children parks. In response,
+              SwachhBharat volunteers helped setup colored segregation bins across the park, training children on active
+              sorting while clearing the existing playground trash.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Floating Back Button -->
+    <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
+  </div>
+
+  <!-- ══════════════════ PRIVACY POLICY PAGE ══════════════════ -->
+  <div class="page" id="page-privacy">
+    <div class="subpage-layout">
+      <!-- Subpage Navigation Header -->
+      <div class="subpage-nav-header">
+        <button class="btn-subpage-back" onclick="goBack()">← Go Back</button>
+        <span style="font-family:'Outfit';font-size:13px;font-weight:700;color:var(--text3)">Platform / Privacy
+          Policy</span>
+      </div>
+
+      <!-- Subpage Hero -->
+      <div class="subpage-hero">
+        <div class="hero-bg-orb o1" style="width:300px;height:300px;top:-50px;right:-50px"></div>
+        <div class="subpage-hero-title">Privacy First, Always</div>
+        <div class="subpage-hero-tagline">
+          Eco Warrior is designed with citizen safety and data autonomy at its center. Read how we secure your data
+          while maintaining completely open, action-oriented transparency.
+        </div>
+      </div>
+
+      <!-- Highlight tags -->
+      <div style="text-align:center;margin-bottom:36px">
+        <span class="badge-summary">🔒 Zero Login Required</span>
+        <span class="badge-summary">📍 Location Anonymisation</span>
+        <span class="badge-summary">🤖 Face Blur Technology</span>
+        <span class="badge-summary">🍪 Cookie-Free Platform</span>
+      </div>
+
+      <!-- Accordion Container -->
+      <div class="accordion-container">
+        <!-- Accordion Item 1 -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="togglePrivacyAccordion(this)">
+            1. What data does Eco Warrior collect?
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              We are built on a strict privacy-first philosophy. We do not require accounts, phone numbers, email
+              registration, or social sign-ins. When you report an issue, we only store:
+              <br><br>
+              • The text description you write<br>
+              • The selected issue category<br>
+              • The latitude and longitude of the issue<br>
+              • The uploaded photo(s)
+              <br><br>
+              No user browser metadata, session cookies, tracking pixels, or device fingerprints are compiled or
+              recorded.
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Item 2 -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="togglePrivacyAccordion(this)">
+            2. How is my GPS location used?
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              When you snap a photo or request coordinates, the platform prompts for standard browser GPS coordinates to
+              place the issue pin accurately on the Live Map.
+              <br><br>
+              This spatial data is used solely to route reports to local NGOs. We never run background location
+              services, track your movement, or store personal coordinates outside the specific, visible reported issue
+              area.
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Item 3 -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="togglePrivacyAccordion(this)">
+            3. How does the AI image scanner protect my identity?
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              Your uploaded images are processed by our localized computer vision module to classify categories (e.g.
+              plastic waste, water discoloration) and score priorities.
+              <br><br>
+              To protect public identity, our AI automatically blurs any detected human faces, license plates, or
+              legible resident address numbers before they are saved to our public community database.
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Item 4 -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="togglePrivacyAccordion(this)">
+            4. How is data shared with NGOs and Municipalities?
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              All submitted reports are displayed on the public Live Map and Community Feed. Partner NGOs and green
+              municipalities receive access to these coordinates and photos so they can plan cleanup logistics.
+              <br><br>
+              We are non-commercial and open source. We never sell, lease, or rent any reported data to advertising
+              networks, corporate agencies, or third-party data hubs.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Floating Back Button -->
+    <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
+  </div>
+
+  <!-- ══════════════════ CONTACT US PAGE ══════════════════ -->
+  <div class="page" id="page-contact">
+    <div class="subpage-layout">
+      <!-- Subpage Navigation Header -->
+      <div class="subpage-nav-header">
+        <button class="btn-subpage-back" onclick="goBack()">← Go Back</button>
+        <span style="font-family:'Outfit';font-size:13px;font-weight:700;color:var(--text3)">Platform / Contact</span>
+      </div>
+
+      <!-- Contact Two Column Grid -->
+      <div class="contact-grid">
+
+        <!-- Left Column: Dynamic Interactive Form -->
+        <div class="contact-card">
+          <div id="contact-form-wrap">
+            <h2 style="font-family:'Outfit';font-size:24px;font-weight:800;color:var(--g900);margin-bottom:6px">Send Us
+              a Message</h2>
+            <p style="font-size:13px;color:var(--text3);margin-bottom:28px">Have any questions, partnership proposals,
+              or feedback? Drop us a line.</p>
+
+            <form id="contact-form" onsubmit="handleContactSubmit(event)">
+              <!-- Subject Field -->
+              <div class="form-group">
+                <label class="form-label" for="contact-subject">Subject *</label>
+                <input type="text" class="form-input" id="contact-subject" placeholder="What is this regarding?">
+                <div class="error-feedback" id="contact-subject-error"></div>
+              </div>
+
+              <!-- Flex Name & Email -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                <!-- Name -->
+                <div class="form-group">
+                  <label class="form-label" for="contact-name">Full Name *</label>
+                  <input type="text" class="form-input" id="contact-name" placeholder="Aarav Sharma">
+                  <div class="error-feedback" id="contact-name-error"></div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                  <label class="form-label" for="contact-email">Email Address *</label>
+                  <input type="email" class="form-input" id="contact-email" placeholder="aarav@gmail.com">
+                  <div class="error-feedback" id="contact-email-error"></div>
+                </div>
+              </div>
+
+              <!-- Role Selector -->
+              <div class="form-group">
+                <label class="form-label" for="contact-role">Who are you? *</label>
+                <select class="form-input" id="contact-role" style="cursor:pointer">
+                  <option value="" disabled selected>Select your relationship...</option>
+                  <option value="Concerned Citizen">Concerned Citizen</option>
+                  <option value="Volunteer">Volunteer looking to join</option>
+                  <option value="NGO Representative">NGO representative</option>
+                  <option value="Municipal Officer">Municipal / Govt. officer</option>
+                  <option value="Other">Other</option>
+                </select>
+                <div class="error-feedback" id="contact-role-error"></div>
+              </div>
+
+              <!-- Message -->
+              <div class="form-group" style="margin-bottom:28px">
+                <label class="form-label" for="contact-msg">Message *</label>
+                <textarea class="form-input" id="contact-msg" placeholder="Write your message here..."></textarea>
+                <div class="error-feedback" id="contact-msg-error"></div>
+              </div>
+
+              <!-- Submit Button -->
+              <button type="submit" id="btn-contact-submit" class="btn-primary" style="width:100%;padding:14px">
+                Send Secure Message →
+              </button>
+            </form>
+          </div>
+
+          <!-- Thank You Panel (Initially Hidden) -->
+          <div class="thankyou-panel" id="contact-thankyou">
+            <div style="font-size:64px;margin-bottom:16px;animation:bounce 0.6s ease">✉️</div>
+            <h2 style="font-family:'Outfit';font-size:26px;font-weight:800;color:var(--g700);margin-bottom:8px">Message
+              Sent Successfully!</h2>
+            <p style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:24px">
+              Thank you, <strong id="thankyou-name"></strong>. We have received your query. A community coordinator will
+              reach out to your email address (<span id="thankyou-email"
+                style="font-weight:600;color:var(--g800)"></span>) within 12 hours.
+            </p>
+            <button class="btn-secondary" onclick="resetContactForm()">Send Another Message</button>
+          </div>
+        </div>
+
+        <!-- Right Column: Support Details & Sidebar -->
+        <div class="sidebar-card">
+          <!-- Item 1 -->
+          <div>
+            <h3>Connect Directly</h3>
+            <p style="font-size:12px;color:#a3b8cc;margin-top:4px">We support decentralised localized community
+              response.</p>
+          </div>
+
+          <!-- Item 2: HQ -->
+          <div class="sidebar-item">
+            <div class="sidebar-icon">📍</div>
+            <div class="sidebar-text">
+              <strong>Agra Headquarters</strong>
+              Eco Warrior Center, Fatehabad Road,<br>Tajganj, Agra, UP - 282001
+            </div>
+          </div>
+
+          <!-- Item 3: Support Emails -->
+          <div class="sidebar-item">
+            <div class="sidebar-icon">✉️</div>
+            <div class="sidebar-text">
+              <strong>Support Channels</strong>
+              General queries: <a href="mailto:support@ecowarrior.org"
+                style="color:var(--g300);text-decoration:none">support@ecowarrior.org</a><br>
+              NGO partnerships: <a href="mailto:partners@ecowarrior.org"
+                style="color:var(--g300);text-decoration:none">partners@ecowarrior.org</a>
+            </div>
+          </div>
+
+          <!-- Item 4: Helpline -->
+          <div class="sidebar-item">
+            <div class="sidebar-icon">📞</div>
+            <div class="sidebar-text">
+              <strong>Citizen Helpline</strong>
+              Tel: +91 562 284 3922<br>
+              Hours: Mon - Sat, 9:00 AM - 6:00 PM IST
+            </div>
+          </div>
+
+          <!-- Social networks -->
+          <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:24px">
+            <strong style="display:block;font-size:13px;color:#fff;margin-bottom:12px;font-family:'Outfit'">Follow Our
+              Journey</strong>
+            <div style="display:flex;gap:12px">
+              <a href="#"
+                style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;transition:background 0.2s"
+                onmouseover="this.style.background='var(--g600)'"
+                onmouseout="this.style.background='rgba(255,255,255,0.06)'">𝕏</a>
+              <a href="#"
+                style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;transition:background 0.2s"
+                onmouseover="this.style.background='var(--g600)'"
+                onmouseout="this.style.background='rgba(255,255,255,0.06)'">🅵</a>
+              <a href="#"
+                style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;transition:background 0.2s"
+                onmouseover="this.style.background='var(--g600)'"
+                onmouseout="this.style.background='rgba(255,255,255,0.06)'">🅸</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- Floating Back Button -->
+    <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
+  </div>
+
+  <!-- ── LIGHTWEIGHT ROUTER FOR STANDALONE SUB-PAGES ── -->
+  <script>
+    // Standalone Toast notification
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      if (t) {
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2500);
+      }
+    }
+
+    // Referrer-safe back navigation
+    function goBack() {
+      if (document.referrer && document.referrer.includes('index.html')) {
+        window.history.back();
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    // Toggle showing standard subpages active status based on URL hash
+    function handleHashChange() {
+      const hash = window.location.hash.substring(1) || 'about';
+      const validPages = ['about', 'impact', 'privacy', 'contact'];
+
+      let targetPage = hash;
+      // Map helper links
+      if (hash === 'ngo-partnership' || hash === 'volunteer-program') {
+        targetPage = 'contact';
+      }
+
+      if (!validPages.includes(targetPage)) {
+        targetPage = 'about';
+      }
+
+      // Deactivate all page modules
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+      // Activate correct page
+      const el = document.getElementById('page-' + targetPage);
+      if (el) {
+        el.classList.add('active');
+      }
+
+      // Reset contact forms if changing tabs
+      if (targetPage !== 'contact' && typeof resetContactForm === 'function') {
+        resetContactForm();
+      }
+
+      window.scrollTo(0, 0);
+    }
+
+    // Run on hash changes or initial page load
+    window.addEventListener('hashchange', handleHashChange);
+    window.addEventListener('DOMContentLoaded', handleHashChange);
+  </script>
+
+</body>
+
+</html>

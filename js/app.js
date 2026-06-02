@@ -1,0 +1,325 @@
+// ── MAIN APPLICATION CONTROLLER & ROUTER ──
+let currentPage = 'home';
+let mapInit = false, feedInit = false, adminLoggedIn = false;
+let pageHistory = [];
+
+function showPage(id, pushHistory = true) {
+  // Push the previous page onto the history stack
+  if (pushHistory && currentPage !== id && currentPage !== '') {
+    pageHistory.push(currentPage);
+  }
+
+  // Persist the route state
+  if (window.location.hash !== '#' + id) {
+    if (pushHistory) {
+      window.history.pushState({page: id}, '', '#' + id);
+    } else {
+      window.history.replaceState({page: id}, '', '#' + id);
+    }
+  }
+  localStorage.setItem('eco_warrior_last_page', id);
+
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  
+  const targetPage = document.getElementById('page-'+id);
+  if(targetPage) {
+    targetPage.classList.add('active');
+  }
+  
+  const tabMap = {home:0,map:1,feed:2,admin:3};
+  const tabs = document.querySelectorAll('.nav-tab');
+  if(tabMap[id]!==undefined && tabs.length > tabMap[id]) {
+    tabs[tabMap[id]].classList.add('active');
+  }
+  
+  updateNavIndicator();
+  
+  currentPage = id;
+  
+  if(id==='map') {
+    if (!mapInit) {
+      initMap();
+      mapInit=true;
+    } else {
+      setTimeout(() => { if(typeof mainMap !== 'undefined') mainMap.invalidateSize(); }, 100);
+    }
+  }
+  if(id==='feed' && !feedInit) {
+    fetchReports().then(() => {
+        renderFeed(currentReports);
+        if (typeof updateGlobeMarkers === 'function') {
+          updateGlobeMarkers(currentReports);
+        }
+        feedInit=true;
+    });
+  }
+  if(id==='home') {
+    if (typeof initAnimations === 'function') {
+      setTimeout(initAnimations, 50);
+    }
+  }
+  if(id==='report') {
+    initReportForm();
+  }
+  if(id==='admin') { 
+    if(adminLoggedIn) {
+      const loginWrap = document.getElementById('admin-login-wrap');
+      const dashboard = document.getElementById('admin-dashboard');
+      if(loginWrap) loginWrap.style.display='none';
+      if(dashboard) dashboard.classList.add('active');
+      renderAdminDashboard();
+    }
+  }
+  window.scrollTo(0,0);
+}
+
+function updateNavIndicator() {
+  const activeTab = document.querySelector('.nav-tab.active');
+  const indicator = document.getElementById('nav-indicator');
+  if (activeTab && indicator) {
+    indicator.style.width = activeTab.offsetWidth + 'px';
+    indicator.style.left = activeTab.offsetLeft + 'px';
+  }
+}
+
+// Navigates to the previous page in history
+function goBack() {
+  if (pageHistory.length > 0) {
+    const prev = pageHistory.pop();
+    showPage(prev, false);
+  } else {
+    showPage('home');
+  }
+}
+
+// ── CUSTOM SELECT INITIALIZATION ──
+function initCustomSelects() {
+  const selects = document.querySelectorAll('select.filter-select, select.status-select');
+  selects.forEach(select => {
+    // Check if already initialized
+    if (select.nextElementSibling && select.nextElementSibling.classList.contains('custom-select-wrapper')) {
+      return;
+    }
+    
+    select.classList.add('custom-select-hidden');
+    
+    const wrapper = document.createElement('div');
+    wrapper.className = 'custom-select-wrapper';
+    
+    const trigger = document.createElement('div');
+    trigger.className = 'custom-select-trigger';
+    
+    const selectedOption = select.options[select.selectedIndex];
+    const triggerText = document.createElement('span');
+    triggerText.textContent = selectedOption ? selectedOption.text : 'Select...';
+    
+    const arrow = document.createElement('div');
+    arrow.className = 'custom-select-arrow';
+    arrow.innerHTML = `<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+    
+    trigger.appendChild(triggerText);
+    trigger.appendChild(arrow);
+    wrapper.appendChild(trigger);
+    
+    const optionsContainer = document.createElement('div');
+    optionsContainer.className = 'custom-select-options';
+    
+    Array.from(select.options).forEach((option, index) => {
+      const optionDiv = document.createElement('div');
+      optionDiv.className = 'custom-select-option';
+      if (option.selected) optionDiv.classList.add('selected');
+      optionDiv.textContent = option.text;
+      
+      optionDiv.addEventListener('click', () => {
+        // Update native select
+        select.selectedIndex = index;
+        // Dispatch change event to trigger original onchange handler
+        select.dispatchEvent(new Event('change'));
+        
+        // Update custom UI
+        triggerText.textContent = option.text;
+        optionsContainer.querySelectorAll('.custom-select-option').forEach(el => el.classList.remove('selected'));
+        optionDiv.classList.add('selected');
+        wrapper.classList.remove('open');
+      });
+      optionsContainer.appendChild(optionDiv);
+    });
+    
+    wrapper.appendChild(optionsContainer);
+    
+    // Toggle dropdown
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.querySelectorAll('.custom-select-wrapper').forEach(w => {
+        if (w !== wrapper) w.classList.remove('open');
+      });
+      wrapper.classList.toggle('open');
+    });
+    
+    select.parentNode.insertBefore(wrapper, select.nextSibling);
+  });
+}
+
+// Close custom selects on click outside
+document.addEventListener('click', () => {
+  document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
+});
+
+// ── CONFIRM MODAL ──
+function showConfirmModal(title, text, confirmText, cancelText, onConfirm) {
+  let overlay = document.getElementById('confirm-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'confirm-overlay';
+    overlay.className = 'confirm-overlay';
+    document.body.appendChild(overlay);
+  }
+  
+  overlay.innerHTML = `
+    <div class="confirm-modal">
+      <div class="confirm-icon-wrap">⚠️</div>
+      <div class="confirm-title">${title}</div>
+      <div class="confirm-text">${text}</div>
+      <button class="confirm-btn-primary" id="confirm-btn-yes">${confirmText}</button>
+      <button class="confirm-btn-secondary" id="confirm-btn-no">${cancelText}</button>
+    </div>
+  `;
+  
+  // Show
+  requestAnimationFrame(() => overlay.classList.add('open'));
+  
+  // Handlers
+  const close = () => {
+    overlay.classList.remove('open');
+    setTimeout(() => {
+      if(overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    }, 300);
+  };
+  
+  document.getElementById('confirm-btn-yes').onclick = () => {
+    close();
+    if(onConfirm) onConfirm();
+  };
+  
+  document.getElementById('confirm-btn-no').onclick = close;
+}
+
+// ── TOAST NOTIFICATIONS ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if(t) {
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2500);
+  }
+}
+
+// ── PARSE INCOMING ROUTE ON INITIAL LOAD ──
+window.addEventListener('DOMContentLoaded', async () => {
+  // Fetch reports on load to ensure stats are real data
+  await fetchReports();
+  updateHeroStats();
+  if (typeof updateGlobeMarkers === 'function' && typeof currentReports !== 'undefined') {
+    updateGlobeMarkers(currentReports);
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const pageParam = params.get('page');
+  const validPages = ['home', 'map', 'feed', 'admin', 'report'];
+  
+  let targetPage = 'home';
+  if (pageParam && validPages.includes(pageParam)) {
+    targetPage = pageParam;
+  } else {
+    // Check hash as fallback
+    const hash = window.location.hash.substring(1);
+    if (hash && validPages.includes(hash)) {
+      targetPage = hash;
+    } else {
+      // Check localStorage as last resort for persistence
+      const lastPage = localStorage.getItem('eco_warrior_last_page');
+      if (lastPage && validPages.includes(lastPage)) {
+        targetPage = lastPage;
+      }
+    }
+  }
+  
+  if (targetPage !== 'home') {
+    showPage(targetPage, false);
+  } else {
+    showPage('home', false);
+  }
+  
+  // Wait a bit for font loading and initial layout before setting indicator
+  setTimeout(updateNavIndicator, 100);
+});
+
+let animationsInitialized = false;
+function initAnimations() {
+  if (typeof ScrollReveal === 'undefined') return;
+  if (!animationsInitialized) {
+    window.sr = ScrollReveal({
+      distance: '60px',
+      duration: 1000,
+      easing: 'cubic-bezier(0.25, 0.8, 0.25, 1)',
+      opacity: 0,
+      scale: 0.95
+    });
+    
+    // Hero section
+    window.sr.reveal('.hero h1', { delay: 100, origin: 'bottom' });
+    window.sr.reveal('.hero > p', { delay: 200, origin: 'bottom' });
+    window.sr.reveal('.hero .hero-stats', { delay: 300, origin: 'bottom' });
+    window.sr.reveal('.hero .btn', { delay: 400, origin: 'bottom' });
+    window.sr.reveal('#globe-canvas', { delay: 500, origin: 'right', distance: '100px' });
+    
+    // Sections
+    window.sr.reveal('section h2', { origin: 'left', viewFactor: 0.2 });
+    window.sr.reveal('section > p', { delay: 100, origin: 'left', viewFactor: 0.2 });
+    
+    // Cards stagger
+    window.sr.reveal('.step-card', { interval: 150, origin: 'bottom', viewFactor: 0.2 });
+    window.sr.reveal('.cat-card', { interval: 100, origin: 'bottom', viewFactor: 0.2, scale: 0.9 });
+    window.sr.reveal('.testimonial-card', { interval: 150, origin: 'bottom', viewFactor: 0.2 });
+    
+    animationsInitialized = true;
+  } else if (window.sr) {
+    window.sr.sync();
+  }
+}
+window.addEventListener('resize', updateNavIndicator);
+
+// Listen for browser Back/Forward navigation
+window.addEventListener('popstate', (e) => {
+  if (e.state && e.state.page) {
+    showPage(e.state.page, false);
+  } else {
+    const hash = window.location.hash.substring(1);
+    if (hash && ['home', 'map', 'feed', 'admin', 'report'].includes(hash)) {
+      showPage(hash, false);
+    } else {
+      showPage('home', false);
+    }
+  }
+});
+
+function updateHeroStats() {
+  if (typeof currentReports === 'undefined') return;
+  const total = currentReports.length;
+  const resolved = currentReports.filter(r => r.status === 'Resolved').length;
+  const rate = total > 0 ? Math.round((resolved / total) * 100) : 0;
+  
+  const statTotal = document.getElementById('stat-total');
+  const statResolved = document.getElementById('stat-resolved');
+  const statRate = document.getElementById('stat-rate');
+  const impactTotal = document.getElementById('impact-total');
+  const impactResolved = document.getElementById('impact-resolved');
+  
+  if (statTotal) statTotal.textContent = total;
+  if (statResolved) statResolved.textContent = resolved;
+  if (statRate) statRate.textContent = rate + '%';
+  if (impactTotal) impactTotal.textContent = total;
+  if (impactResolved) impactResolved.textContent = resolved;
+}
+
