@@ -12,8 +12,8 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/backend
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Copy everything into the backend directory
-COPY . /var/www/html/backend/
+# Copy everything from the backend folder into the backend directory
+COPY backend/ /var/www/html/backend/
 
 # Create uploads directory and give it write permissions so users can upload photos
 RUN mkdir -p /var/www/html/backend/uploads && chmod 777 /var/www/html/backend/uploads
