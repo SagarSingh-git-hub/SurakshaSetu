@@ -12,17 +12,14 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/backend
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Disable conflicting MPMs and strictly enable prefork (fixes "More than one MPM loaded" error)
-RUN a2dismod mpm_event mpm_worker || true
-RUN a2enmod mpm_prefork
-
 # Copy everything into the backend directory
 COPY . /var/www/html/backend/
 
 # Create uploads directory and give it write permissions so users can upload photos
 RUN mkdir -p /var/www/html/backend/uploads && chmod 777 /var/www/html/backend/uploads
 
-# Configure Apache to use the dynamic PORT assigned by Railway at runtime
-CMD sed -i "s/Listen 80/Listen ${PORT:-80}/g" /etc/apache2/ports.conf && \
-    sed -i "s/:80/:${PORT:-80}/g" /etc/apache2/sites-available/000-default.conf && \
-    apache2-foreground
+# Make the start script executable and fix Windows line endings
+RUN sed -i 's/\r$//' /var/www/html/backend/start.sh && chmod +x /var/www/html/backend/start.sh
+
+# Configure Apache and start it using the script
+CMD ["/var/www/html/backend/start.sh"]
