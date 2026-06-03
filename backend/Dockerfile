@@ -12,11 +12,6 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/backend
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Configure Apache to listen on the port specified by Railway's PORT environment variable
-ENV PORT=80
-RUN sed -s -i -e "s/80/\$\{PORT\}/" /etc/apache2/ports.conf
-RUN sed -s -i -e "s/80/\$\{PORT\}/" /etc/apache2/sites-available/*.conf
-
 # Disable conflicting MPMs and strictly enable prefork (fixes "More than one MPM loaded" error)
 RUN a2dismod mpm_event mpm_worker || true
 RUN a2enmod mpm_prefork
@@ -27,4 +22,7 @@ COPY . /var/www/html/backend/
 # Create uploads directory and give it write permissions so users can upload photos
 RUN mkdir -p /var/www/html/backend/uploads && chmod 777 /var/www/html/backend/uploads
 
-EXPOSE 80
+# Configure Apache to use the dynamic PORT assigned by Railway at runtime
+CMD sed -i "s/Listen 80/Listen ${PORT:-80}/g" /etc/apache2/ports.conf && \
+    sed -i "s/:80/:${PORT:-80}/g" /etc/apache2/sites-available/000-default.conf && \
+    apache2-foreground
