@@ -12,6 +12,11 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/backend
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
+# Configure Apache to listen on the port specified by Railway's PORT environment variable
+ENV PORT=80
+RUN sed -s -i -e "s/80/\$\{PORT\}/" /etc/apache2/ports.conf
+RUN sed -s -i -e "s/80/\$\{PORT\}/" /etc/apache2/sites-available/*.conf
+
 # Disable conflicting MPMs and strictly enable prefork (fixes "More than one MPM loaded" error)
 RUN a2dismod mpm_event mpm_worker || true
 RUN a2enmod mpm_prefork
