@@ -12,14 +12,14 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/backend
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Copy everything from the backend folder into the backend directory
-COPY backend/ /var/www/html/backend/
+# Disable conflicting MPMs and strictly enable prefork (fixes "More than one MPM loaded" error)
+RUN a2dismod mpm_event mpm_worker || true
+RUN a2enmod mpm_prefork
+
+# Copy everything into the backend directory
+COPY . /var/www/html/backend/
 
 # Create uploads directory and give it write permissions so users can upload photos
 RUN mkdir -p /var/www/html/backend/uploads && chmod 777 /var/www/html/backend/uploads
 
-# Make the start script executable and fix Windows line endings
-RUN sed -i 's/\r$//' /var/www/html/backend/start.sh && chmod +x /var/www/html/backend/start.sh
-
-# Configure Apache and start it using the script
-CMD ["/var/www/html/backend/start.sh"]
+EXPOSE 80
