@@ -1,7 +1,31 @@
 services:
   - type: web
-    name: eco-warrior-api
+    name: surakshasetu-api
     env: docker
-    plan: free
     rootDir: backend
-    dockerfilePath: Dockerfile
+    plan: free
+    envVars:
+      - key: DB_HOST
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASS
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: PUSHER_APP_ID
+        sync: false
+      - key: PUSHER_KEY
+        sync: false
+      - key: PUSHER_SECRET
+        sync: false
+      - key: PUSHER_CLUSTER
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: APP_ENV
+        value: production

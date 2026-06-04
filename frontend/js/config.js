@@ -4,5 +4,5 @@ if (window.location.hostname.includes("localhost") || window.location.hostname =
     API_URL = window.location.origin + "/eco-warrior";
 } else {
     // Render Production URL (Replace with your actual Render URL if different)
-    API_URL = "https://eco-warrior-api.onrender.com";
+    API_URL = "https://surakshasetu-api.onrender.com";
 }
