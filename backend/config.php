@@ -45,7 +45,7 @@ define('DB_HOST', getenv('DB_HOST') ?: (getenv('MYSQLHOST') ?: 'localhost'));
 define('DB_USER', getenv('DB_USERNAME') ?: (getenv('DB_USER') ?: (getenv('MYSQLUSER') ?: 'root')));
 define('DB_PASS', getenv('DB_PASSWORD') ?: (getenv('DB_PASS') ?: (getenv('MYSQLPASSWORD') ?: '')));
 define('DB_NAME', getenv('DB_DATABASE') ?: (getenv('DB_NAME') ?: (getenv('MYSQLDATABASE') ?: 'eco_warrior')));
-define('DB_PORT', getenv('DB_PORT') ?: (getenv('MYSQLPORT') ?: 3306));
+define('DB_PORT', getenv('DB_PORT') ?: (getenv('MYSQLPORT') ?: 3307));
 
 // --- ADMIN CREDENTIALS ---
 define('ADMIN_PASSWORD', getenv('ADMIN_PASSWORD') ?: 'password');
