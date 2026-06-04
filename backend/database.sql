@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS report_tags (
 
 -- Insert dummy data for initial map load
 INSERT IGNORE INTO reports (report_id, category, location_str, lat, lng, description, status, priority) VALUES 
-('ECO-001', 'Garbage', 'Sadar Bazaar, Agra', 27.195, 78.006, 'Large pile of household waste.', 'Verified', 'High'),
-('ECO-002', 'Water Pollution', 'Yamuna Ghat, Agra', 27.173, 78.042, 'Industrial discharge turning water dark.', 'In Progress', 'High');
+('ECO-001', 'Garbage', 'Nainital Road, Haldwani', 29.2183, 79.5130, 'Large pile of household waste.', 'Verified', 'High'),
+('ECO-002', 'Water Pollution', 'Gaula River Ghat, Haldwani', 29.2100, 79.5250, 'Industrial discharge turning water dark.', 'In Progress', 'High');
 
 INSERT IGNORE INTO report_tags (report_id, tag_name) VALUES
 ('ECO-001', 'waste'), ('ECO-001', 'cleanup'),

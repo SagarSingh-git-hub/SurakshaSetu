@@ -29,15 +29,15 @@
 
   <!-- ── NAV ── -->
   <nav>
-    <a class="nav-logo" href="index.html">🌿 Suraksha<span>Setu</span></a>
+    <a class="nav-logo" href="/">🌿 Suraksha<span>Setu</span></a>
     <div class="nav-spacer"></div>
     <div class="nav-tabs">
-      <a class="nav-tab nav-tab-link" href="index.html">Home</a>
-      <a class="nav-tab nav-tab-link" href="index.html?page=map">Live Map</a>
-      <a class="nav-tab nav-tab-link" href="index.html?page=feed">Community Feed</a>
-      <a class="nav-tab nav-tab-link" href="index.html?page=admin">Admin</a>
+      <a class="nav-tab nav-tab-link" href="/">Home</a>
+      <a class="nav-tab nav-tab-link" href="/#map">Live Map</a>
+      <a class="nav-tab nav-tab-link" href="/#feed">Community Feed</a>
+      <a class="nav-tab nav-tab-link" href="/#admin">Admin</a>
     </div>
-    <a class="btn-report-nav" href="index.html?page=report"
+    <a class="btn-report-nav" href="/#report"
       style="text-decoration:none;display:inline-flex;align-items:center;line-height:1">+ Report Issue</a>
   </nav>
 
@@ -181,7 +181,7 @@
         <div class="subpage-hero-title">Real Change, Quantified</div>
         <div class="subpage-hero-tagline">
           Every report is a step toward a healthier city. We translate citizen reports into measurable ecological
-          outcomes. Here is our live ledger of impact across Agra.
+          outcomes. Here is our live ledger of impact across Haldwani.
         </div>
       </div>
 
@@ -280,7 +280,7 @@
               Market Oasis</h3>
             <p style="font-size:13px;color:var(--text2);line-height:1.6">
               A massive, 2-ton commercial garbage dump that blocked the entrance of Sadar Market for over two years was
-              reported on Suraksha Setu. In partnership with GreenAgra, volunteers cleared the space in 3 days, sanitised
+              reported on Suraksha Setu. In partnership with GreenHaldwani, volunteers cleared the space in 3 days, sanitised
               the soil, and planted native bushes, transforming it into a micro green zone.
             </p>
           </div>
@@ -538,8 +538,8 @@
           <div class="sidebar-item">
             <div class="sidebar-icon">📍</div>
             <div class="sidebar-text">
-              <strong>Agra Headquarters</strong>
-              Suraksha Setu Center, Fatehabad Road,<br>Tajganj, Agra, UP - 282001
+              <strong>Haldwani Headquarters</strong>
+              Suraksha Setu Center, Nainital Road,<br>Haldwani, UK - 263139
             </div>
           </div>
 
@@ -606,10 +606,10 @@
 
     // Referrer-safe back navigation
     function goBack() {
-      if (document.referrer && document.referrer.includes('index.html')) {
+      if (document.referrer && document.referrer.includes(window.location.hostname)) {
         window.history.back();
       } else {
-        window.location.href = 'index.html';
+        window.location.href = '/';
       }
     }
 

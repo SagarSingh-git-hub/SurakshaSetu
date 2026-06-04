@@ -3,13 +3,22 @@ let mainMap, allMarkers=[], miniMap, miniMarker;
 let currentMapFilter = 'All';
 
 async function initMap(){
-  mainMap = L.map('main-map',{zoomControl:true}).setView([27.18,78.01],13);
+  // Default to Haldwani coordinates instead of Agra
+  mainMap = L.map('main-map',{zoomControl:true}).setView([29.2183, 79.5130], 13);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution:'© OpenStreetMap',maxZoom:19
   }).addTo(mainMap);
   
   await fetchReports();
-  currentReports.forEach(r=>addMapMarker(r));
+  if (currentReports.length > 0) {
+      let bounds = L.latLngBounds();
+      currentReports.forEach(r => {
+          addMapMarker(r);
+          bounds.extend([r.lat, r.lng]);
+      });
+      mainMap.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
+  }
+  
   setTimeout(() => { mainMap.invalidateSize(); }, 100);
 }
 

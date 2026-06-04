@@ -84,6 +84,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;backdrop-filter:blur(20px) 
   50% { transform: translateY(-20px) rotateX(-5deg); }
   100% { transform: translateY(0px) rotateX(5deg); }
 }
+@keyframes spin { 100% { transform: rotate(360deg); } }
 
 /* ── CATEGORIES STRIP ── */
 .categories-strip{background:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px 24px;display:flex;gap:10px;overflow-x:auto;scrollbar-width:none}

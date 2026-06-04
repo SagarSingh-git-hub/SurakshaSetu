@@ -1,5 +1,6 @@
 // ── DATA CONFIGURATIONS ──
 let currentReports = []; // Dynamically fetched reports
+let fetchReportsPromise = null;
 
 const CAT_COLORS = {
   'Garbage':       {bg:'#fee2e2',color:'#dc2626',pin:'#ef4444',emoji:'🗑'},
@@ -16,24 +17,43 @@ const STATUS_CLASS = {
   'Action Planned':'status-planned','In Progress':'status-inprogress','Resolved':'status-resolved'
 };
 
-async function fetchReports() {
-    try {
-        const response = await fetch(`${API_URL}/api/get_reports.php`);
-        const data = await response.json();
-        
-        // Fix relative image paths to use the backend API URL
-        data.forEach(report => {
-            if (report.photo_urls && Array.isArray(report.photo_urls)) {
-                report.photo_urls = report.photo_urls.map(url => {
-                    return url.startsWith('http') ? url : `${API_URL}/${url}`;
-                });
-            }
-        });
-
-        currentReports = data;
-        return data;
-    } catch (e) {
-        console.error("Failed to fetch reports from backend", e);
-        return [];
+async function fetchReports(forceRefresh = false) {
+    if (fetchReportsPromise && !forceRefresh) {
+        return fetchReportsPromise;
     }
+
+    fetchReportsPromise = (async () => {
+        try {
+            const response = await fetch(`${API_URL}/api/get_reports.php`);
+            const data = await response.json();
+            
+            // Fix relative image paths to use the backend API URL
+            data.forEach(report => {
+                if (report.photo_urls && Array.isArray(report.photo_urls)) {
+                    report.photo_urls = report.photo_urls.map(url => {
+                        return url.startsWith('http') ? url : `${API_URL}/${url}`;
+                    });
+                }
+            });
+
+            currentReports = data;
+            
+            // Update UI components if they exist
+            if (typeof updateHeroStats === 'function') updateHeroStats();
+            if (typeof updateGlobeMarkers === 'function') updateGlobeMarkers(currentReports);
+            if (typeof renderFeed === 'function' && document.getElementById('page-feed').classList.contains('active')) {
+                renderFeed(currentReports);
+            }
+            if (typeof renderAdminDashboard === 'function' && document.getElementById('page-admin').classList.contains('active') && typeof adminLoggedIn !== 'undefined' && adminLoggedIn) {
+                renderAdminDashboard();
+            }
+            
+            return data;
+        } catch (e) {
+            console.error("Failed to fetch reports from backend", e);
+            return [];
+        }
+    })();
+    
+    return fetchReportsPromise;
 }

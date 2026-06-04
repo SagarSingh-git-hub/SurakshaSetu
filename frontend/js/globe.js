@@ -191,9 +191,9 @@ function updateGlobeMarkers(reports) {
   const R = 100; // Surface of the core sphere
   
   reports.forEach(r => {
-    // Map Agra coordinates roughly to globe surface for visual effect
-    const lat = (r.lat - 27.18) * 35; // Spread them out more visually
-    const lng = (r.lng - 78.01) * 35;
+    // Map Haldwani coordinates roughly to globe surface for visual effect
+    const lat = (r.lat - 29.2183) * 35; // Spread them out more visually
+    const lng = (r.lng - 79.5130) * 35;
     
     const phi = (90 - lat) * (Math.PI / 180);
     const theta = (lng + 180) * (Math.PI / 180);

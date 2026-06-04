@@ -129,7 +129,7 @@ function initMiniMap() {
       miniMap.remove();
       miniMap = null;
     }
-    miniMap = L.map('mini-map').setView([27.18, 78.01], 13);
+    miniMap = L.map('mini-map').setView([29.2183, 79.5130], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OSM', maxZoom: 19 }).addTo(miniMap);
     if (formData.lat) {
       miniMarker = L.marker([formData.lat, formData.lng]).addTo(miniMap);

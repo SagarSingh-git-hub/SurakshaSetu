@@ -53,7 +53,7 @@
   <div class="toast" id="toast"></div>
 
   <!-- ══════════════════ HOME PAGE ══════════════════ -->
-  <div class="page active" id="page-home">
+  <div class="page" id="page-home">
     <section class="hero">
       <div class="hero-bg-orb o1"></div>
       <div class="hero-bg-orb o2"></div>
@@ -384,7 +384,7 @@
               <div style="font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:var(--text)">Priya Sharma
               </div>
               <div style="font-family:'Nunito',sans-serif;font-size:11px;color:var(--text3);margin-top:2px">Teacher,
-                Agra</div>
+                Haldwani</div>
             </div>
           </div>
         </div>
@@ -410,7 +410,7 @@
               <div style="font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:var(--text)">Arvind Mehta
               </div>
               <div style="font-family:'Nunito',sans-serif;font-size:11px;color:var(--text3);margin-top:2px">NGO
-                Coordinator, GreenAgra</div>
+                Coordinator, GreenHaldwani</div>
             </div>
           </div>
         </div>
@@ -451,10 +451,10 @@
         <span
           style="color:#2ecc71;font-size:11px;text-transform:uppercase;letter-spacing:1px;opacity:0.8;margin-right:8px">Trusted
           by NGOs</span>
-        <span style="display:flex;align-items:center;gap:6px">🌿 GreenAgra Foundation</span>
+        <span style="display:flex;align-items:center;gap:6px">🌿 GreenHaldwani Foundation</span>
         <span style="display:flex;align-items:center;gap:6px">♻️ CleanCity India</span>
         <span style="display:flex;align-items:center;gap:6px">🌊 Yamuna Bachao</span>
-        <span style="display:flex;align-items:center;gap:6px">🌳 Ped Lagao Agra</span>
+        <span style="display:flex;align-items:center;gap:6px">🌳 Ped Lagao Haldwani</span>
         <span style="display:flex;align-items:center;gap:6px">🗺️ Urban Eco Alliance</span>
         <span style="display:flex;align-items:center;gap:6px">🤝 SwachhBharat Volunteers</span>
       </div>
@@ -576,19 +576,19 @@
             style="font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:#ffffff;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:20px">
             Organisation</h4>
           <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:14px">
-            <li><a href="organisation.html#about" style="color:#64748b;text-decoration:none;transition:color .2s"
+            <li><a href="/organisation#about" style="color:#64748b;text-decoration:none;transition:color .2s"
                 onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">About Us</a></li>
-            <li><a href="organisation.html#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
+            <li><a href="/organisation#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
                 onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">NGO Partnership</a>
             </li>
-            <li><a href="organisation.html#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
+            <li><a href="/organisation#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
                 onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Volunteer Program</a>
             </li>
-            <li><a href="organisation.html#impact" style="color:#64748b;text-decoration:none;transition:color .2s"
+            <li><a href="/organisation#impact" style="color:#64748b;text-decoration:none;transition:color .2s"
                 onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Impact Reports</a></li>
-            <li><a href="organisation.html#privacy" style="color:#64748b;text-decoration:none;transition:color .2s"
+            <li><a href="/organisation#privacy" style="color:#64748b;text-decoration:none;transition:color .2s"
                 onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Privacy Policy</a></li>
-            <li><a href="organisation.html#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
+            <li><a href="/organisation#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
                 onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Contact</a></li>
           </ul>
         </div>
@@ -679,7 +679,12 @@
             style="display:none; background:none; border:none; cursor:pointer; color:var(--text3); font-size:16px; padding: 0 4px;">✕</button>
         </div>
       </div>
-      <div class="feed-grid" id="feed-grid"></div>
+      <div class="feed-grid" id="feed-grid">
+        <div style="text-align:center;padding:40px;color:var(--text3);width:100%;grid-column:1/-1">
+          <div style="font-size:24px;margin-bottom:12px;animation:spin 1s linear infinite;display:inline-block">⏳</div>
+          <div style="font-family:'Outfit';font-weight:700">Loading community reports...</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -764,7 +769,14 @@
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody id="admin-tbody"></tbody>
+            <tbody id="admin-tbody">
+              <tr>
+                <td colspan="7" style="text-align:center;padding:32px;color:var(--text3)">
+                  <div style="font-size:20px;margin-bottom:8px;animation:spin 1s linear infinite;display:inline-block">⏳</div>
+                  <div style="font-family:'Outfit';font-weight:700">Loading dashboard data...</div>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>

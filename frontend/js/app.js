@@ -1,7 +1,33 @@
 // ── MAIN APPLICATION CONTROLLER & ROUTER ──
-let currentPage = 'home';
+let currentPage = '';
 let mapInit = false, feedInit = false, adminLoggedIn = false;
 let pageHistory = [];
+
+// Determine initial page synchronously
+const validPages = ['home', 'map', 'feed', 'admin', 'report'];
+let initialPage = 'home';
+const hash = window.location.hash.substring(1);
+if (hash && validPages.includes(hash)) {
+  initialPage = hash;
+} else {
+  const params = new URLSearchParams(window.location.search);
+  const pageParam = params.get('page');
+  if (pageParam && validPages.includes(pageParam)) {
+    initialPage = pageParam;
+  } else {
+    const lastPage = localStorage.getItem('eco_warrior_last_page');
+    if (lastPage && validPages.includes(lastPage)) {
+      initialPage = lastPage;
+    }
+  }
+}
+
+// Ensure the right page is active before paint if DOM is ready, or wait for DOM
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => showPage(initialPage, false));
+} else {
+  showPage(initialPage, false);
+}
 
 function showPage(id, pushHistory = true) {
   // Push the previous page onto the history stack
@@ -217,40 +243,9 @@ function showToast(msg) {
 
 // ── PARSE INCOMING ROUTE ON INITIAL LOAD ──
 window.addEventListener('DOMContentLoaded', async () => {
-  // Fetch reports on load to ensure stats are real data
-  await fetchReports();
-  updateHeroStats();
-  if (typeof updateGlobeMarkers === 'function' && typeof currentReports !== 'undefined') {
-    updateGlobeMarkers(currentReports);
-  }
+  // Fetch reports immediately to prime the cache
+  fetchReports();
 
-  const params = new URLSearchParams(window.location.search);
-  const pageParam = params.get('page');
-  const validPages = ['home', 'map', 'feed', 'admin', 'report'];
-  
-  let targetPage = 'home';
-  if (pageParam && validPages.includes(pageParam)) {
-    targetPage = pageParam;
-  } else {
-    // Check hash as fallback
-    const hash = window.location.hash.substring(1);
-    if (hash && validPages.includes(hash)) {
-      targetPage = hash;
-    } else {
-      // Check localStorage as last resort for persistence
-      const lastPage = localStorage.getItem('eco_warrior_last_page');
-      if (lastPage && validPages.includes(lastPage)) {
-        targetPage = lastPage;
-      }
-    }
-  }
-  
-  if (targetPage !== 'home') {
-    showPage(targetPage, false);
-  } else {
-    showPage('home', false);
-  }
-  
   // Wait a bit for font loading and initial layout before setting indicator
   setTimeout(updateNavIndicator, 100);
 });
