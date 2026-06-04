@@ -59,18 +59,32 @@ define('PUSHER_CLUSTER', getenv('PUSHER_CLUSTER'));
 // Connect to Database
 mysqli_report(MYSQLI_REPORT_OFF); // Disable exceptions so we can return JSON errors gracefully
 
-$conn = @new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
+$conn = mysqli_init();
+
+// Aiven MySQL requires SSL. We must set the MYSQLI_CLIENT_SSL flag if we are in production.
+$flags = 0;
+if (getenv('APP_ENV') === 'production' || strpos(DB_HOST, 'aivencloud.com') !== false) {
+    $conn->ssl_set(NULL, NULL, NULL, NULL, NULL);
+    $flags = MYSQLI_CLIENT_SSL;
+    if (defined('MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT')) {
+        $flags |= MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT;
+    }
+}
+
+$connected = @$conn->real_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT, NULL, $flags);
 
 // If DB doesn't exist, try connecting without it to create it (Localhost automation)
-if ($conn->connect_errno == 1049) {
-    $conn = @new mysqli(DB_HOST, DB_USER, DB_PASS, '', DB_PORT);
-    if (!$conn->connect_error) {
+if (!$connected && $conn->connect_errno == 1049) {
+    $conn = mysqli_init();
+    if ($flags) $conn->ssl_set(NULL, NULL, NULL, NULL, NULL);
+    $connected = @$conn->real_connect(DB_HOST, DB_USER, DB_PASS, '', DB_PORT, NULL, $flags);
+    if ($connected) {
         $conn->query("CREATE DATABASE IF NOT EXISTS " . DB_NAME);
         $conn->select_db(DB_NAME);
     }
 }
 
-if ($conn->connect_error) {
+if (!$connected) {
     die(json_encode(['success' => false, 'error' => 'Database Connection Failed: ' . $conn->connect_error]));
 }
 

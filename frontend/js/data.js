@@ -18,7 +18,7 @@ const STATUS_CLASS = {
 
 async function fetchReports() {
     try {
-        const response = await fetch(`${API_URL}/backend/api/get_reports.php`);
+        const response = await fetch(`${API_URL}/api/get_reports.php`);
         const data = await response.json();
         
         // Fix relative image paths to use the backend API URL

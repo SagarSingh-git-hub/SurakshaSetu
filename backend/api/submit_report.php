@@ -66,9 +66,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 // Save physical file
                 if(file_put_contents($filepath, $data)) {
-                    $saved_photos[] = 'backend/uploads/' . $filename;
+                    $saved_photos[] = 'uploads/' . $filename;
                     // Save to DB
-                    $db_filepath = 'backend/uploads/' . $filename;
+                    $db_filepath = 'uploads/' . $filename;
                     $photo_stmt = $conn->prepare("INSERT INTO report_photos (report_id, photo_path) VALUES (?, ?)");
                     $photo_stmt->bind_param("ss", $report_id, $db_filepath);
                     $photo_stmt->execute();

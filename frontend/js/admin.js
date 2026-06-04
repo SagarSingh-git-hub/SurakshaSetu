@@ -136,7 +136,7 @@ async function updateStatus(id, status) {
     formData.append('status', status);
     formData.append('admin_password', currentAdminPassword);
 
-    const res = await fetch(`${API_URL}/backend/api/update_status.php`, {
+    const res = await fetch(`${API_URL}/api/update_status.php`, {
       method: 'POST',
       body: formData
     });
