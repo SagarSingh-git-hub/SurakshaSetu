@@ -1,7 +1,3 @@
--- Create database
-CREATE DATABASE IF NOT EXISTS eco_warrior;
-USE eco_warrior;
-
 -- Table for Reports
 CREATE TABLE IF NOT EXISTS reports (
     id INT AUTO_INCREMENT PRIMARY KEY,

@@ -1,6 +1,7 @@
 <?php
 // Configuration File
 $frontend_url = getenv('FRONTEND_URL') ?: '*';
+$frontend_url = rtrim(trim($frontend_url, "`'\" "), '/'); // Remove trailing slashes and quotes
 if (getenv('APP_ENV') === 'development' && isset($_SERVER['HTTP_ORIGIN'])) {
     $frontend_url = $_SERVER['HTTP_ORIGIN']; // Auto-allow local origins for testing
 }
@@ -78,8 +79,8 @@ if (!$connected && $conn->connect_errno == 1049) {
     $conn = mysqli_init();
     if ($flags) $conn->ssl_set(NULL, NULL, NULL, NULL, NULL);
     $connected = @$conn->real_connect(DB_HOST, DB_USER, DB_PASS, '', DB_PORT, NULL, $flags);
-    if ($connected) {
-        $conn->query("CREATE DATABASE IF NOT EXISTS " . DB_NAME);
+    if ($connected && !empty(DB_NAME)) {
+        $conn->query("CREATE DATABASE IF NOT EXISTS `" . DB_NAME . "`");
         $conn->select_db(DB_NAME);
     }
 }
