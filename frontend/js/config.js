@@ -3,6 +3,6 @@ if (window.location.hostname.includes("localhost") || window.location.hostname =
     // Localhost XAMPP URL (Handles www.localhost and local IPs)
     API_URL = window.location.origin + "/eco-warrior";
 } else {
-    // Railway Production URL
-    API_URL = "https://surakshasetu-production.up.railway.app";
+    // Render Production URL (Replace with your actual Render URL if different)
+    API_URL = "https://eco-warrior-api.onrender.com";
 }
