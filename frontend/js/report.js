@@ -2,7 +2,7 @@
 let formStep = 1, formData = {};
 
 function initReportForm() {
-  formStep = 1; formData = { photos: [], category: '', desc: '', lat: null, lng: null, locStr: 'Detecting...' };
+  formStep = 1; formData = { photos: [], category: '', desc: '', lat: null, lng: null, locStr: 'Detecting...', aiAnalysis: null, isAnalyzing: false };
   renderStep(1);
 }
 
@@ -63,16 +63,45 @@ function renderStep2() {
     <div class="photo-previews" id="photo-previews">${previews}</div>
   </div>
   ${formData.photos.length > 0 ? `<div class="ai-analysis-box">
-    <div style="font-size:12px;font-weight:800;color:#1d4ed8;margin-bottom:6px;font-family:Outfit,sans-serif">🤖 AI Analysis (Demo)</div>
-    <div id="ai-tags"><span class="ai-tag">Garbage accumulation</span><span class="ai-tag">Open dump</span><span class="ai-tag">Organic waste</span></div>
-    <div style="margin-top:8px;display:flex;align-items:center;gap:8px">
-      <span style="font-size:11px;color:#475569;font-family:Outfit,sans-serif;font-weight:700">Priority:</span>
-      <span class="priority-badge high">● High</span>
+    <div style="font-size:12px;font-weight:800;color:#1d4ed8;margin-bottom:6px;font-family:Outfit,sans-serif;display:flex;justify-content:space-between;align-items:center;">
+      <span>🤖 AI Analysis</span>
+      ${formData.isAnalyzing ? '<span style="font-size:10px;color:#64748b;font-weight:500">Analyzing image...</span>' : ''}
     </div>
+    ${formData.isAnalyzing ? `
+      <div style="display:flex;justify-content:center;padding:20px 0;">
+        <div class="loading-spinner" style="width:24px;height:24px;border:3px solid var(--g200);border-top:3px solid #1d4ed8;border-radius:50%;animation:spin 1s linear infinite;"></div>
+      </div>
+    ` : formData.aiAnalysis ? `
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;color:${formData.aiAnalysis.is_valid_issue ? 'var(--text1)' : '#ef4444'}">
+        ${formData.aiAnalysis.issue_detected}
+        ${!formData.aiAnalysis.is_valid_issue ? '<span style="font-size:10px;font-weight:600;margin-left:6px;color:#ef4444;background:#fee2e2;padding:2px 6px;border-radius:4px;">Action Required</span>' : ''}
+      </div>
+      <div id="ai-tags">
+        ${formData.aiAnalysis.tags.map(tag => `<span class="ai-tag">${tag}</span>`).join('')}
+      </div>
+      <div style="margin-top:8px;display:flex;align-items:center;gap:12px">
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="font-size:11px;color:#475569;font-family:Outfit,sans-serif;font-weight:700">Priority:</span>
+          <span class="priority-badge ${formData.aiAnalysis.priority.toLowerCase()}">● ${formData.aiAnalysis.priority}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <span style="font-size:11px;color:#475569;font-family:Outfit,sans-serif;font-weight:700">Confidence:</span>
+          <span style="font-size:12px;font-weight:600;color:var(--text2)">${formData.aiAnalysis.confidence}%</span>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:12px;color:var(--text2);line-height:1.4;background:var(--g50);padding:8px;border-radius:6px;border:1px solid var(--g100)">
+        ${formData.aiAnalysis.summary}
+        ${!formData.aiAnalysis.is_valid_issue ? '<div style="margin-top:6px;font-weight:700;color:#ef4444;">Please upload a clear image of an environmental issue to proceed.</div>' : ''}
+      </div>
+    ` : `
+      <div style="font-size:12px;color:var(--text3);text-align:center;padding:10px 0;">
+        Upload a photo to detect issues automatically.
+      </div>
+    `}
   </div>`: ''}
   <div class="form-nav">
     <button class="btn-back" onclick="prevStep(2)">← Back</button>
-    <button class="btn-next" onclick="nextStep(2)" ${formData.photos.length > 0 ? '' : 'disabled'} id="step2-next">Next: Category →</button>
+    <button class="btn-next" onclick="nextStep(2)" ${formData.photos.length > 0 && !formData.isAnalyzing && (formData.aiAnalysis ? formData.aiAnalysis.is_valid_issue : true) ? '' : 'disabled'} id="step2-next">Next: Category →</button>
   </div>`;
 }
 
@@ -257,14 +286,90 @@ function detectGPS() {
 
 function handlePhotos(input) {
   const files = Array.from(input.files).slice(0, 6 - formData.photos.length);
+  let loaded = 0;
+  if (files.length === 0) return;
+  
   files.forEach(f => {
     const r = new FileReader();
-    r.onload = e => { formData.photos.push(e.target.result); renderStep(formStep); }
+    r.onload = e => { 
+      formData.photos.push(e.target.result); 
+      loaded++;
+      if (loaded === files.length) {
+        analyzeImage(formData.photos[formData.photos.length - 1]);
+      }
+    };
     r.readAsDataURL(f);
   });
 }
 
-function removePhoto(i) { formData.photos.splice(i, 1); renderStep(formStep); }
+function removePhoto(i) { 
+  formData.photos.splice(i, 1); 
+  if (formData.photos.length > 0) {
+    analyzeImage(formData.photos[formData.photos.length - 1]);
+  } else {
+    formData.aiAnalysis = null;
+    formData.isAnalyzing = false;
+    renderStep(formStep);
+  }
+}
+
+let currentAnalysisAborter = null;
+
+async function analyzeImage(base64Image) {
+  if (currentAnalysisAborter) {
+    currentAnalysisAborter.abort();
+  }
+  currentAnalysisAborter = new AbortController();
+  const signal = currentAnalysisAborter.signal;
+
+  formData.isAnalyzing = true;
+  formData.aiAnalysis = null;
+  renderStep(formStep);
+  
+  try {
+    const res = await fetch(`${API_URL}/api/analyze_image.php`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: base64Image }),
+      signal
+    });
+    const data = await res.json();
+    if (signal.aborted) return;
+
+    if (data.success && data.analysis) {
+      formData.aiAnalysis = data.analysis;
+      // Auto-select category if valid
+      if (data.analysis.is_valid_issue && data.analysis.suggested_category) {
+        formData.category = data.analysis.suggested_category;
+      } else {
+        formData.category = '';
+      }
+    } else {
+      console.error('Analysis failed:', data.error);
+      formData.aiAnalysis = {
+        issue_detected: 'Analysis Failed',
+        tags: ['Error'],
+        priority: 'Low',
+        confidence: 0,
+        summary: 'Failed to analyze the image. You can still proceed manually.',
+        is_valid_issue: true // Allow proceeding on error
+      };
+    }
+  } catch (err) {
+    if (err.name === 'AbortError') return;
+    console.error('Error analyzing image:', err);
+    formData.aiAnalysis = {
+      issue_detected: 'Analysis Error',
+      tags: ['Error'],
+      priority: 'Low',
+      confidence: 0,
+      summary: 'Network error occurred during analysis. You can still proceed manually.',
+      is_valid_issue: true // Allow proceeding on error
+    };
+  }
+  formData.isAnalyzing = false;
+  renderStep(formStep);
+}
 
 function selectCat(id, el) {
   formData.category = id;

@@ -119,7 +119,7 @@ function renderAdminTable(reports) {
       <td>
         <div style="display:flex;gap:6px">
           <button class="action-btn action-btn-view" onclick="openModal('${r.id}')">View</button>
-          <button class="action-btn action-btn-edit" onclick="showToast('Notes editor (demo)')">Notes</button>
+          <button class="action-btn action-btn-edit" style="background:#fee2e2;color:#dc2626;border:1px solid #fca5a5;" onclick="deleteReport('${r.id}')">Delete</button>
         </div>
       </td>
     </tr>`;
@@ -155,6 +155,44 @@ async function updateStatus(id, status) {
     console.error("Status update error", e);
     showToast('❌ Failed to update status');
   }
+}
+
+async function deleteReport(id) {
+  showConfirmModal(
+    'Delete Report?',
+    `Are you sure you want to permanently delete report ${id}? This action cannot be undone.`,
+    'Yes, Delete',
+    'Cancel',
+    async () => {
+      try {
+        const formData = new FormData();
+        formData.append('report_id', id);
+        formData.append('admin_password', currentAdminPassword);
+
+        const res = await fetch(`${API_URL}/api/delete_report.php`, {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          showToast(`✅ Report ${id} deleted`);
+          
+          // Force refresh reports across the app
+          await fetchReports(true); 
+          
+          if (adminLoggedIn) {
+            renderAdminDashboard();
+          }
+        } else {
+          showToast('❌ Failed to delete: ' + data.message);
+        }
+      } catch (e) {
+        console.error("Delete error", e);
+        showToast('❌ Failed to delete report');
+      }
+    }
+  );
 }
 
 function exportCSV() {

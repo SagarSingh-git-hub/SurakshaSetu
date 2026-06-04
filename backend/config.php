@@ -57,6 +57,9 @@ define('PUSHER_KEY', getenv('PUSHER_KEY'));
 define('PUSHER_SECRET', getenv('PUSHER_SECRET'));
 define('PUSHER_CLUSTER', getenv('PUSHER_CLUSTER'));
 
+// --- GEMINI API ---
+define('GEMINI_API_KEY', getenv('GEMINI_API_KEY'));
+
 // Connect to Database
 mysqli_report(MYSQLI_REPORT_OFF); // Disable exceptions so we can return JSON errors gracefully
 
