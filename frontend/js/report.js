@@ -295,7 +295,7 @@ function handlePhotos(input) {
       formData.photos.push(e.target.result); 
       loaded++;
       if (loaded === files.length) {
-        analyzeImage(formData.photos[formData.photos.length - 1]);
+        analyzeImages(formData.photos);
       }
     };
     r.readAsDataURL(f);
@@ -305,7 +305,7 @@ function handlePhotos(input) {
 function removePhoto(i) { 
   formData.photos.splice(i, 1); 
   if (formData.photos.length > 0) {
-    analyzeImage(formData.photos[formData.photos.length - 1]);
+    analyzeImages(formData.photos);
   } else {
     formData.aiAnalysis = null;
     formData.isAnalyzing = false;
@@ -315,7 +315,7 @@ function removePhoto(i) {
 
 let currentAnalysisAborter = null;
 
-async function analyzeImage(base64Image) {
+async function analyzeImages(base64Images) {
   if (currentAnalysisAborter) {
     currentAnalysisAborter.abort();
   }
@@ -330,7 +330,7 @@ async function analyzeImage(base64Image) {
     const res = await fetch(`${API_URL}/api/analyze_image.php`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: base64Image }),
+      body: JSON.stringify({ images: base64Images }),
       signal
     });
     const data = await res.json();

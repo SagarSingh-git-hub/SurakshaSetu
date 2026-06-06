@@ -13,17 +13,17 @@
 
 <hr />
 
-Suraksha Setu is a high-fidelity, privacy-first civic tech platform that bridges the gap between citizens spotting environmental issues and green organizations taking action. Built on a modular, decoupled architecture, it leverages interactive GIS spatial layers, Canvas-based 3D trigonometry, localized AI diagnostic scanners, and a real-time NGO analytics dashboard.
+Suraksha Setu is a high-fidelity, privacy-first civic tech platform that bridges the gap between citizens spotting environmental issues and green organizations taking action. Built on a decoupled frontend and backend architecture, it leverages interactive GIS spatial layers, Canvas-based 3D trigonometry, real-time NGO analytics dashboards, and a RESTful PHP API.
 
 ---
 
 ## ✨ Core Value Propositions
 
 - **🔒 Zero-Friction Reporting**: Zero registration, zero cookies, zero background tracking. True anonymity ensures high civic reporting volume.
-- **🤖 Smart AI Diagnostic Classifier**: Auto-categorizes issues and computes dynamic priority rankings based on environmental severity and geographic hazard risk.
 - **🗺️ Live GIS Visualizations**: Renders reports in real-time onto an interactive Leaflet mapping coordinate layer with custom dynamic marker pins.
-- **📊 Enterprise-Grade NGO Dashboard**: Provides non-profits and municipal bodies with spatial tracking tables, priority metrics, active HSL charts, and CSV report export triggers.
+- **📊 Enterprise-Grade NGO Dashboard**: Provides non-profits and municipal bodies with spatial tracking tables, priority metrics, active HSL charts, and status controls.
 - **⚡ Real-time Updates**: Real-time integration powered by WebSockets (Pusher) ensures live synchronization of reports.
+- **🤖 Smart AI Image Analysis**: Analyzes user-submitted photos using Gemini AI to automatically categorize and extract tags for environmental hazards.
 
 ---
 
@@ -39,74 +39,79 @@ The visual layer features a curated dark-mode forest scheme combined with soft p
 
 ## 📂 Codebase Directory Mapping
 
+The project is structured into fully decoupled frontend and backend environments:
+
 ```text
 suraksha-setu/
-├── index.html             # High-Fidelity Main Dashboard SPA (Home, Map, Feed, Admin)
-├── organisation.html      # Isolated Info Hub (About, Impact Metrics, Privacy, Contact Forms)
-├── backend/               # Backend modules & configurations
-├── css/
-│   └── style.css          # Central Design Token System (Pastels HSL, variables, responsive breakpoints)
-└── js/
-    ├── app.js             # Core App Controller (Sequential initialization, cross-file hash parameter routers)
-    ├── data.js            # Unified Data Model Ledger (Coordinates, status mappings, color tokens)
-    ├── globe.js           # 3D Geographic Trigonometric Canvas Spinning Globe
-    ├── map.js             # GIS leaf marker layers and pill-filters rendering
-    ├── report.js          # Multi-step report wizard (Photo-readers, GPS trackers, miniature maps)
-    ├── feed.js            # Dynamic list render engines (Search and custom modals details mapping)
-    ├── admin.js           # Metrics aggregation, live HSL SVG charts, and status controls
-    ├── subpages.js        # Form validation scripts, PDF compilation loops, and accordion sliders
-    └── realtime.js        # Real-time WebSocket (Pusher) subscriptions & live UI updates
+├── frontend/              # Frontend Web Application (Vercel Ready)
+│   ├── template/
+│   │   ├── index.html       # Main Dashboard SPA (Home, Map, Feed, Admin, Report)
+│   │   └── organisation.html# Isolated Info Hub
+│   ├── css/
+│   │   └── style.css        # Central Design Token System
+│   ├── js/                  # Vanilla ES6 Modular Scripts
+│   │   ├── app.js           # Core App Controller & Router
+│   │   ├── api.js           # Backend API Communication Layer
+│   │   ├── globe.js         # 3D Geographic Trigonometric Canvas
+│   │   ├── map.js           # GIS leaf marker layers
+│   │   └── ...
+│   └── vercel.json          # Vercel deployment configuration
+├── backend/               # PHP RESTful API Backend (Render Ready)
+│   ├── api/                 # Endpoints for reports, statuses, AI
+│   ├── config.php           # Database, Pusher, and Gemini config
+│   ├── database.sql         # MySQL schema for tables
+│   ├── .env                 # Environment variables configuration
+│   └── Dockerfile           # Containerization configuration
+└── render.yaml            # Render full-stack deployment configuration
 ```
 
 ---
 
 ## 🛠️ Unified Tech Stack & Libraries
 
-- **UI Foundation**: HTML5 (Semantic Structure) & Vanilla CSS3 (Custom Grid, Flex, Variables)
+- **Frontend**: HTML5 (Semantic Structure), Vanilla CSS3 (Custom Grid, Flex, Variables), Vanilla ES6 JS
+- **Backend API**: PHP 8.x
+- **Database**: MySQL (Aiven/Local)
 - **GIS Engine**: LeafletJS v1.9.4 (OpenStreetMap coordinate mapping layers)
-- **Visualization**: HTML5 Canvas 2D Context (Geographical polar-coordinate mapping)
+- **Visualization**: HTML5 Canvas 2D Context
 - **Real-Time Integration**: Pusher WebSockets
-- **Typefaces**: Google Fonts (Outfit, Nunito, JetBrains Mono)
-- **Runtime Logic**: Vanilla ES6 Javascript (Decoupled modular architecture)
-
----
-
-## 📊 Live Metrics & Ecological Ledger
-
-Suraksha Setu tracks and compiles ecological progress across the following core metrics:
-1.  **Trash Diverted**: Ton-level tracking of household, industrial, and roadside waste.
-2.  **Trees Planted**: Citizen plantation coordinate logs with calculated survival indicators.
-3.  **Plastics Recycled**: Single-use plastics captured and sent to industrial recycling partners.
-4.  **Areas Sanitized**: Historical resolution timelines mapping community parks and ghat restorations.
+- **AI Integration**: Google Gemini API for image analysis
+- **Deployments**: Vercel (Frontend), Render / Docker (Backend)
 
 ---
 
 ## 🚀 Getting Started
 
-Since the platform is designed to be lightweight and ultra-performant, it has no heavy build pipelines or runtime compilation delays.
-
-### **Method 1: Dynamic Background Server (Recommended)**
-Start a lightweight development server using the pre-configured Node/Python environments to support AJAX and absolute anchor routing:
-
-**Using Python:**
+### **1. Backend Setup**
+Navigate to the backend directory and set up the environment:
 ```bash
-python -m http.server 8000
+cd backend
+cp .env.example .env
+```
+Fill in the `.env` file with your MySQL database credentials, Pusher keys, and Gemini API Key.
+Run the database schema in `database.sql` on your MySQL server.
+Start a local PHP development server:
+```bash
+php -S localhost:8080
 ```
 
+### **2. Frontend Setup**
+Navigate to the frontend directory:
+```bash
+cd frontend
+```
+Serve the frontend using a lightweight HTTP server to prevent CORS issues with local files:
 **Using Node.js:**
 ```bash
 npx http-server -p 8000
 ```
-Open **`http://localhost:8000/`** inside your web browser.
-
-### **Method 2: Standalone Local Launch**
-Simply double-click on `index.html` on your desktop environment. The internal chronological history states and URL query parsers are designed to execute directly within localized files.
+Open **`http://localhost:8000/template/`** inside your web browser.
 
 ---
 
 ## 💡 Dynamic NGO Partner Data Schema
 
-Reports logged on the frontend map conform to the following schema within `js/data.js` and can be pushed to any RESTful database:
+Reports logged on the frontend map conform to the following schema stored via the PHP backend API:
 
 ```json
 {
@@ -129,9 +134,9 @@ Reports logged on the frontend map conform to the following schema within `js/da
 
 ## 🔒 Security & Privacy Commitments
 
-1.  **Automated Face & Plate Blurring**: All camera uploads are routed through computer vision classification to sign-seal image anonymity.
+1.  **Strict Data Isolation**: Organizational files are fully partitioned from active GIS operations, leaving the main platform clean and performant.
 2.  **Zero Personal Identifiable Data (PII)**: The database is built on anonymous civic diagnostics. No emails, phone logins, or trackers are present.
-3.  **Strict Data Isolation**: Organizational files are fully partitioned from active GIS operations, leaving the main platform clean and performant.
+3.  **Environment Variables**: All sensitive API keys and database credentials are fully abstracted away using `.env` configurations.
 
 ---
 
