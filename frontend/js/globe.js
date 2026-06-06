@@ -5,8 +5,14 @@ function initGlobe() {
   const container = document.querySelector('.hero-visual');
   if (!container) return;
   
-  const oldCanvas = document.getElementById('globe-canvas');
-  if(oldCanvas) oldCanvas.remove();
+  let globeWrapper = document.getElementById('hero-globe-wrapper');
+  if (globeWrapper) {
+    const oldCanvas = globeWrapper.querySelector('canvas');
+    if(oldCanvas) oldCanvas.remove();
+  } else {
+    const oldCanvas = document.getElementById('globe-canvas');
+    if(oldCanvas) oldCanvas.remove();
+  }
 
   if (typeof THREE === 'undefined') return;
 
@@ -26,10 +32,13 @@ function initGlobe() {
   globeRenderer.setSize(W, H);
   globeRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // optimize performance
   
-  const globeWrapper = document.createElement('div');
-  globeWrapper.className = 'hero-globe';
+  if (!globeWrapper) {
+    globeWrapper = document.createElement('div');
+    globeWrapper.className = 'hero-globe';
+    globeWrapper.id = 'hero-globe-wrapper';
+    container.appendChild(globeWrapper);
+  }
   globeWrapper.appendChild(globeRenderer.domElement);
-  container.appendChild(globeWrapper);
   
   globeRenderer.domElement.style.animation = "floatGlobe 8s ease-in-out infinite";
 

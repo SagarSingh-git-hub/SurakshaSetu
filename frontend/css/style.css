@@ -915,11 +915,31 @@ textarea.form-input{resize:vertical;min-height:100px}
   display: none;
 }
 
+/* ── HOME PAGE GRIDS ── */
+.home-steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+.home-cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+.home-impact-wrap { display: flex; gap: 64px; align-items: center; flex-wrap: wrap; }
+.home-impact-content { flex: 1; min-width: 0; flex-basis: 300px; text-align: left; }
+.home-impact-stats { flex: 1.2; min-width: 0; flex-basis: 300px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.home-testimony-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+
+/* Global card constraints */
+.step-card, .cat-card, .testimonial-card, .stat-card {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow: hidden;
+}
+
 /* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .hero-h1 { font-size: clamp(36px, 5vw, 60px); }
+  .hero-content { max-width: 50%; }
+}
 @media(max-width:768px){
-  .hero-content{padding:40px 24px}
+  .hero-content{max-width: 100%; padding:40px 24px}
   .hero-visual{display:none}
   .categories-grid{grid-template-columns:1fr}
+  .home-impact-wrap { gap: 32px; }
   .admin-table{font-size:12px}
   .admin-table th:nth-child(4),.admin-table td:nth-child(4){display:none}
   .hero-stats{gap:20px}
@@ -933,6 +953,10 @@ textarea.form-input{resize:vertical;min-height:100px}
   .subpage-hero {
     padding: 32px 24px;
   }
+}
+@media(max-width:480px){
+  .home-impact-stats { grid-template-columns: 1fr; }
+  .home-steps-grid, .home-cat-grid, .home-testimony-grid { grid-template-columns: 1fr; }
 }
 
 /* ── PREMIUM PDF EXPORT THEME ── */

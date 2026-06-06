@@ -68,21 +68,23 @@
         </div>
         <div class="hero-stats">
           <div class="hero-stat-card">
-            <div class="hero-stat-val" id="stat-total">0</div>
+            <div class="hero-stat-val" id="stat-total" style="min-width: 3ch;">0</div>
             <div class="hero-stat-label">Issues<br>Reported</div>
           </div>
           <div class="hero-stat-card">
-            <div class="hero-stat-val" id="stat-resolved">0</div>
+            <div class="hero-stat-val" id="stat-resolved" style="min-width: 3ch;">0</div>
             <div class="hero-stat-label">Resolved</div>
           </div>
           <div class="hero-stat-card">
-            <div class="hero-stat-val" id="stat-rate">0%</div>
+            <div class="hero-stat-val" id="stat-rate" style="min-width: 4ch;">0%</div>
             <div class="hero-stat-label">Resolution<br>Rate</div>
           </div>
         </div>
       </div>
       <div class="hero-visual">
-        <canvas id="globe-canvas"></canvas>
+        <div class="hero-globe" id="hero-globe-wrapper">
+          <canvas id="globe-canvas"></canvas>
+        </div>
       </div>
     </section>
 
@@ -111,7 +113,7 @@
           From spotting an issue to full resolution — Suraksha Setu makes civic action effortless.</p>
       </div>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px">
+      <div class="home-steps-grid">
         <!-- Step 1 -->
         <div class="step-card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true"
           data-tilt-max-glare="0.2"
@@ -191,7 +193,7 @@
           Seven categories covering every type of urban and environmental issue in your community.</p>
       </div>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px">
+      <div class="home-cat-grid">
         <!-- Garbage -->
         <div class="cat-card" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-scale="1.05"
           onclick="showPage('map')"
@@ -271,9 +273,9 @@
 
     <!-- Our Impact -->
     <section style="padding:60px 24px 80px;max-width:1100px;margin:0 auto">
-      <div style="display:flex;gap:64px;align-items:center;flex-wrap:wrap">
+      <div class="home-impact-wrap">
         <!-- Left Content Column -->
-        <div style="flex:1;min-width:300px;text-align:left">
+        <div class="home-impact-content">
           <span
             style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;background:#e8faf0;color:#16a34a;border:1px solid #d1fae5;border-radius:99px;padding:6px 14px;display:inline-block;margin-bottom:16px;letter-spacing:0.5px;text-transform:uppercase">Our
             Impact</span>
@@ -292,7 +294,7 @@
         </div>
 
         <!-- Right Stats Grid Column -->
-        <div style="flex:1.2;min-width:300px;display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="home-impact-stats">
           <!-- Reports Submitted -->
           <div
             style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:24px;box-shadow:var(--shadow2);text-align:left">
@@ -362,7 +364,7 @@
           From citizens to NGO coordinators — hear how Suraksha Setu is making a difference.</p>
       </div>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px">
+      <div class="home-testimony-grid">
         <!-- Testimonial 1 -->
         <div class="testimonial-card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare="true"
           data-tilt-max-glare="0.1"
