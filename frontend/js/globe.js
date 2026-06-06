@@ -10,8 +10,13 @@ function initGlobe() {
 
   if (typeof THREE === 'undefined') return;
 
-  const W = container.clientWidth || 520;
-  const H = container.clientHeight || 520;
+  let W = container.clientWidth || 520;
+  let H = container.clientHeight || 520;
+  
+  // Prevent extreme aspect ratios causing the 3D globe to balloon in size
+  // especially in tall mobile "Desktop Site" views
+  if (H > W * 1.2) H = W * 1.2;
+  if (W > H * 1.5) W = H * 1.5;
 
   globeScene = new THREE.Scene();
   globeCamera = new THREE.PerspectiveCamera(45, W / H, 0.1, 1000);
@@ -170,8 +175,13 @@ function initGlobe() {
   // Handle Resize gracefully
   window.addEventListener('resize', () => {
     if(!container) return;
-    const newW = container.clientWidth || 520;
-    const newH = container.clientHeight || 520;
+    let newW = container.clientWidth || 520;
+    let newH = container.clientHeight || 520;
+    
+    // Maintain bounded aspect ratio on resize too
+    if (newH > newW * 1.2) newH = newW * 1.2;
+    if (newW > newH * 1.5) newW = newH * 1.5;
+
     globeCamera.aspect = newW / newH;
     globeCamera.updateProjectionMatrix();
     globeRenderer.setSize(newW, newH);
