@@ -17,7 +17,37 @@ const STATUS_CLASS = {
   'Action Planned':'status-planned','In Progress':'status-inprogress','Resolved':'status-resolved'
 };
 
+// Load cached reports from localStorage immediately on startup
+try {
+  const cached = localStorage.getItem('eco_warrior_reports_cache');
+  if (cached) {
+    currentReports = JSON.parse(cached);
+  }
+} catch (e) {
+  console.error("Failed to parse cached reports", e);
+}
+
 async function fetchReports(forceRefresh = false) {
+    // If we have cached reports and we haven't fetched yet, trigger UI updates with cached data first
+    if (currentReports.length > 0 && !fetchReportsPromise) {
+        setTimeout(() => {
+            if (typeof updateHeroStats === 'function') updateHeroStats();
+            if (typeof updateGlobeMarkers === 'function') updateGlobeMarkers(currentReports);
+            
+            const feedPage = document.getElementById('page-feed');
+            if (typeof renderFeed === 'function' && feedPage && feedPage.classList.contains('active')) {
+                renderFeed(currentReports);
+            }
+            
+            const adminPage = document.getElementById('page-admin');
+            if (typeof renderAdminDashboard === 'function' && adminPage && adminPage.classList.contains('active') && typeof adminLoggedIn !== 'undefined' && adminLoggedIn) {
+                const parts = window.location.hash.substring(1).split('/');
+                const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : 'overview';
+                renderAdminDashboard(sub);
+            }
+        }, 10);
+    }
+
     if (fetchReportsPromise && !forceRefresh) {
         return fetchReportsPromise;
     }
@@ -38,20 +68,28 @@ async function fetchReports(forceRefresh = false) {
 
             currentReports = data;
             
+            // Cache the reports
+            localStorage.setItem('eco_warrior_reports_cache', JSON.stringify(data));
+            
             // Update UI components if they exist
             if (typeof updateHeroStats === 'function') updateHeroStats();
             if (typeof updateGlobeMarkers === 'function') updateGlobeMarkers(currentReports);
-            if (typeof renderFeed === 'function' && document.getElementById('page-feed').classList.contains('active')) {
+            if (typeof renderFeed === 'function') {
                 renderFeed(currentReports);
             }
-            if (typeof renderAdminDashboard === 'function' && document.getElementById('page-admin').classList.contains('active') && typeof adminLoggedIn !== 'undefined' && adminLoggedIn) {
-                renderAdminDashboard();
+            if (typeof renderAdminDashboard === 'function' && typeof adminLoggedIn !== 'undefined' && adminLoggedIn) {
+                const adminPage = document.getElementById('page-admin');
+                if (adminPage && adminPage.classList.contains('active')) {
+                    const parts = window.location.hash.substring(1).split('/');
+                    const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : 'overview';
+                    renderAdminDashboard(sub);
+                }
             }
             
             return data;
         } catch (e) {
             console.error("Failed to fetch reports from backend", e);
-            return [];
+            return currentReports;
         }
     })();
     

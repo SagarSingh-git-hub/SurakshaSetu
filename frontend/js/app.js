@@ -1,15 +1,34 @@
 // ── MAIN APPLICATION CONTROLLER & ROUTER ──
 let currentPage = '';
-let mapInit = false, feedInit = false, adminLoggedIn = false;
+let mapInit = false, feedInit = false;
+let adminLoggedIn = sessionStorage.getItem('adminLoggedIn') === 'true';
+let currentAdminPassword = sessionStorage.getItem('adminPassword') || '';
 let pageHistory = [];
 
-// Determine initial page synchronously
+// Determine initial page and sub-view synchronously
 const validPages = ['home', 'map', 'feed', 'admin', 'report'];
 let initialPage = 'home';
-const hash = window.location.hash.substring(1);
-if (hash && validPages.includes(hash)) {
-  initialPage = hash;
-} else {
+let initialAdminSubView = 'overview';
+
+function getRouteFromHash() {
+  const hash = window.location.hash.substring(1);
+  if (!hash) return { page: 'home', subView: '' };
+  
+  const parts = hash.split('/');
+  const page = parts[0];
+  const subView = parts[1] || '';
+  
+  if (validPages.includes(page)) {
+    return { page, subView };
+  }
+  return { page: 'home', subView: '' };
+}
+
+const route = getRouteFromHash();
+initialPage = route.page;
+initialAdminSubView = route.subView || 'overview';
+
+if (!window.location.hash) {
   const params = new URLSearchParams(window.location.search);
   const pageParam = params.get('page');
   if (pageParam && validPages.includes(pageParam)) {
@@ -35,12 +54,25 @@ function showPage(id, pushHistory = true) {
     pageHistory.push(currentPage);
   }
 
-  // Persist the route state
-  if (window.location.hash !== '#' + id) {
+  // Get current subview if routing within admin
+  let routeHash = id;
+  if (id === 'admin') {
+    const currentHash = window.location.hash.substring(1);
+    const parts = currentHash.split('/');
+    const subView = (parts[0] === 'admin' && parts[1]) ? parts[1] : (initialAdminSubView || 'overview');
+    routeHash = `admin/${subView}`;
+  }
+
+  // Persist the route state with query parameters preserved
+  const queryParams = window.location.search;
+  const targetHash = '#' + routeHash;
+  
+  if (window.location.hash !== targetHash) {
+    const newUrl = window.location.pathname + queryParams + targetHash;
     if (pushHistory) {
-      window.history.pushState({page: id}, '', '#' + id);
+      window.history.pushState({page: id, hash: targetHash}, '', newUrl);
     } else {
-      window.history.replaceState({page: id}, '', '#' + id);
+      window.history.replaceState({page: id, hash: targetHash}, '', newUrl);
     }
   }
   localStorage.setItem('eco_warrior_last_page', id);
@@ -85,10 +117,36 @@ function showPage(id, pushHistory = true) {
     }
   }
   if(id==='home') {
+    // Fire premium GSAP Hero animations instantly
+    if (typeof animateHeroSection === 'function') {
+      animateHeroSection();
+    }
     if (typeof initAnimations === 'function') {
       setTimeout(initAnimations, 50);
     }
+    // Resume/initialize globe
+    if (typeof initGlobe === 'function') {
+      if (typeof globeScene === 'undefined' || !globeScene) {
+        initGlobe();
+      } else {
+        if (typeof triggerGlobeResize === 'function') triggerGlobeResize();
+        if (typeof resumeGlobeAnimation === 'function') resumeGlobeAnimation();
+      }
+    }
+  } else {
+    // Navigate away from home: stop globe animation
+    if (typeof stopGlobeAnimation === 'function') {
+      stopGlobeAnimation();
+    }
   }
+
+  // Handle Three.js Login Scene performance optimization
+  if (id === 'admin' && !adminLoggedIn) {
+    if (typeof resumeLoginAnimation === 'function') resumeLoginAnimation();
+  } else {
+    if (typeof stopLoginAnimation === 'function') stopLoginAnimation();
+  }
+
   if(id==='report') {
     initReportForm();
   }
@@ -98,7 +156,12 @@ function showPage(id, pushHistory = true) {
       const dashboard = document.getElementById('admin-dashboard');
       if(loginWrap) loginWrap.style.display='none';
       if(dashboard) dashboard.classList.add('active');
-      renderAdminDashboard();
+      
+      const parts = window.location.hash.substring(1).split('/');
+      const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : 'overview';
+      renderAdminDashboard(sub);
+    } else {
+      if (typeof initLoginAnimations === 'function') initLoginAnimations();
     }
   }
   window.scrollTo(0,0);
@@ -254,6 +317,58 @@ window.addEventListener('DOMContentLoaded', async () => {
   setTimeout(updateNavIndicator, 100);
 });
 
+function animateHeroSection() {
+  if (typeof gsap === 'undefined') return;
+  
+  // Set elements to zero/hidden states before animating to prevent flash of content
+  gsap.set(['.hero-h1', '.hero-tagline', '.hero-cta', '.hero-stats', '#hero-globe-wrapper'], { 
+    opacity: 0,
+    y: 30
+  });
+  
+  gsap.set('#hero-globe-wrapper', {
+    x: 50,
+    y: 0
+  });
+
+  // Run the premium animations
+  gsap.to('.hero-h1', {
+    y: 0,
+    opacity: 1,
+    duration: 0.8,
+    ease: 'power3.out',
+    delay: 0.1
+  });
+  gsap.to('.hero-tagline', {
+    y: 0,
+    opacity: 1,
+    duration: 0.8,
+    ease: 'power3.out',
+    delay: 0.2
+  });
+  gsap.to('.hero-cta', {
+    y: 0,
+    opacity: 1,
+    duration: 0.8,
+    ease: 'power3.out',
+    delay: 0.3
+  });
+  gsap.to('.hero-stats', {
+    y: 0,
+    opacity: 1,
+    duration: 0.8,
+    ease: 'power3.out',
+    delay: 0.4
+  });
+  gsap.to('#hero-globe-wrapper', {
+    x: 0,
+    opacity: 1,
+    duration: 1.0,
+    ease: 'power3.out',
+    delay: 0.3
+  });
+}
+
 let animationsInitialized = false;
 function initAnimations() {
   if (typeof ScrollReveal === 'undefined') return;
@@ -266,12 +381,12 @@ function initAnimations() {
       scale: 0.95
     });
     
-    // Hero section
-    window.sr.reveal('.hero h1', { delay: 100, origin: 'bottom' });
-    window.sr.reveal('.hero > p', { delay: 200, origin: 'bottom' });
-    window.sr.reveal('.hero .hero-stats', { delay: 300, origin: 'bottom' });
-    window.sr.reveal('.hero .btn', { delay: 400, origin: 'bottom' });
-    window.sr.reveal('#globe-canvas', { delay: 500, origin: 'right', distance: '100px' });
+    // Hero section (Disabled ScrollReveal on hero elements to avoid SPA visibility bugs. Handled by GSAP.)
+    // window.sr.reveal('.hero h1', { delay: 100, origin: 'bottom' });
+    // window.sr.reveal('.hero > p', { delay: 200, origin: 'bottom' });
+    // window.sr.reveal('.hero .hero-stats', { delay: 300, origin: 'bottom' });
+    // window.sr.reveal('.hero .btn', { delay: 400, origin: 'bottom' });
+    // window.sr.reveal('#globe-canvas', { delay: 500, origin: 'right', distance: '100px' });
     
     // Sections
     window.sr.reveal('section h2', { origin: 'left', viewFactor: 0.2 });
@@ -291,16 +406,8 @@ window.addEventListener('resize', updateNavIndicator);
 
 // Listen for browser Back/Forward navigation
 window.addEventListener('popstate', (e) => {
-  if (e.state && e.state.page) {
-    showPage(e.state.page, false);
-  } else {
-    const hash = window.location.hash.substring(1);
-    if (hash && ['home', 'map', 'feed', 'admin', 'report'].includes(hash)) {
-      showPage(hash, false);
-    } else {
-      showPage('home', false);
-    }
-  }
+  const route = getRouteFromHash();
+  showPage(route.page, false);
 });
 
 function updateHeroStats() {

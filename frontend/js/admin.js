@@ -1,6 +1,6 @@
 // ── ADMIN PANEL AND DASHBOARD OPERATIONS ──
 let adminFilter = { status: '', cat: '' };
-let currentAdminPassword = '';
+// currentAdminPassword is declared in app.js and shared globally
 
 function togglePasswordVisibility() {
   const passInput = document.getElementById('admin-pass');
@@ -20,9 +20,14 @@ function doAdminLogin() {
   if (e === 'admin@surakshasetu.org' && p !== '') {
     adminLoggedIn = true;
     currentAdminPassword = p; // Store the entered password for API calls
+    sessionStorage.setItem('adminLoggedIn', 'true');
+    sessionStorage.setItem('adminPassword', p);
     document.getElementById('admin-login-wrap').style.display = 'none';
     document.getElementById('admin-dashboard').classList.add('active');
-    renderAdminDashboard();
+    
+    const parts = window.location.hash.substring(1).split('/');
+    const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : 'overview';
+    renderAdminDashboard(sub);
     showToast('Welcome back, Admin!');
   } else {
     showToast('Invalid credentials. Please enter email and password.');
@@ -38,6 +43,8 @@ function adminLogout() {
     () => {
       adminLoggedIn = false;
       currentAdminPassword = '';
+      sessionStorage.removeItem('adminLoggedIn');
+      sessionStorage.removeItem('adminPassword');
       const loginWrap = document.getElementById('admin-login-wrap');
       const dashboard = document.getElementById('admin-dashboard');
       if (loginWrap) loginWrap.style.display = '';
@@ -48,17 +55,23 @@ function adminLogout() {
   );
 }
 
-async function renderAdminDashboard() {
+async function renderAdminDashboard(initialView = 'overview') {
   // Only fetch if empty, otherwise use currentReports to prevent slow UI
   if (currentReports.length === 0) await fetchReports();
   const total = currentReports.length;
   const resolved = currentReports.filter(r => r.status === 'Resolved').length;
   const inprog = currentReports.filter(r => r.status === 'In Progress').length;
   const high = currentReports.filter(r => r.priority === 'High').length;
-  renderDashboardOverview();
-  renderStatCharts();
-  renderAnalyticsCharts();
-  buildHeatmap();
+
+  // LAZY LOADING CHARTS: We do NOT render overview, stat, analytics, and heatmaps here.
+  // Instead, they are called inside switchAdminView when their tab is displayed.
+  const activeSubView = initialView || 'overview';
+  const linkElement = document.querySelector(`.admin-subnav-link[onclick*="'${activeSubView}'"]`) || 
+                      document.querySelector(`.admin-subnav-link[onclick*="${activeSubView}"]`);
+  
+  if (typeof switchAdminView === 'function') {
+    switchAdminView(activeSubView, linkElement);
+  }
 
   let filtered = currentReports;
   if (adminFilter.status) filtered = filtered.filter(r => r.status === adminFilter.status);

@@ -163,9 +163,12 @@ function initLogin3DScene() {
   
   // Animation Loop
   const clock = new THREE.Clock();
+  let loginAnimId = null;
+  let loginIsAnimating = false;
   
   function animate() {
-    requestAnimationFrame(animate);
+    if (!loginIsAnimating) return;
+    loginAnimId = requestAnimationFrame(animate);
     
     const elapsedTime = clock.getElapsedTime();
     
@@ -193,13 +196,34 @@ function initLogin3DScene() {
     renderer.render(scene, camera);
   }
   
-  animate();
+  window.resumeLoginAnimation = function() {
+    if (!loginIsAnimating) {
+      loginIsAnimating = true;
+      animate();
+    }
+  }
+  
+  window.stopLoginAnimation = function() {
+    loginIsAnimating = false;
+    if (loginAnimId) {
+      cancelAnimationFrame(loginAnimId);
+      loginAnimId = null;
+    }
+  }
   
   // Handle window resize gracefully
   window.addEventListener('resize', () => {
     if (!container) return;
-    camera.aspect = container.clientWidth / container.clientHeight;
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    if (w === 0 || h === 0) return;
+    camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setSize(w, h);
   });
+
+  // Start animation loop only if admin page is active and not logged in yet
+  if (typeof currentPage !== 'undefined' && currentPage === 'admin' && typeof adminLoggedIn !== 'undefined' && !adminLoggedIn) {
+    window.resumeLoginAnimation();
+  }
 }

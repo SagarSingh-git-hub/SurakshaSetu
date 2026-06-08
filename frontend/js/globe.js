@@ -31,6 +31,7 @@ function initGlobe() {
   globeRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
   globeRenderer.setSize(W, H);
   globeRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // optimize performance
+  globeRenderer.domElement.id = 'globe-canvas'; // Ensure styling from CSS applies correctly
   
   if (!globeWrapper) {
     globeWrapper = document.createElement('div');
@@ -157,9 +158,12 @@ function initGlobe() {
 
   // Animation Loop
   const clock = new THREE.Clock();
+  let globeAnimId = null;
+  let globeIsAnimating = false;
   
   function animate() {
-    requestAnimationFrame(animate);
+    if (!globeIsAnimating) return;
+    globeAnimId = requestAnimationFrame(animate);
     const time = clock.getElapsedTime();
 
     // Rotate core elements
@@ -179,13 +183,28 @@ function initGlobe() {
 
     globeRenderer.render(globeScene, globeCamera);
   }
-  animate();
 
-  // Handle Resize gracefully
-  window.addEventListener('resize', () => {
-    if(!container) return;
-    let newW = container.clientWidth || 520;
-    let newH = container.clientHeight || 520;
+  window.resumeGlobeAnimation = function() {
+    if (!globeIsAnimating) {
+      globeIsAnimating = true;
+      animate();
+    }
+  }
+
+  window.stopGlobeAnimation = function() {
+    globeIsAnimating = false;
+    if (globeAnimId) {
+      cancelAnimationFrame(globeAnimId);
+      globeAnimId = null;
+    }
+  }
+
+  window.triggerGlobeResize = function() {
+    if (!container || !globeRenderer || !globeCamera) return;
+    let newW = container.clientWidth;
+    let newH = container.clientHeight;
+    
+    if (newW === 0 || newH === 0) return; // Ignore hidden states
     
     // Maintain bounded aspect ratio on resize too
     if (newH > newW * 1.2) newH = newW * 1.2;
@@ -194,7 +213,15 @@ function initGlobe() {
     globeCamera.aspect = newW / newH;
     globeCamera.updateProjectionMatrix();
     globeRenderer.setSize(newW, newH);
-  });
+  }
+
+  // Handle Resize gracefully
+  window.addEventListener('resize', window.triggerGlobeResize);
+
+  // Auto-start if currentPage is home
+  if (typeof currentPage !== 'undefined' && currentPage === 'home') {
+    window.resumeGlobeAnimation();
+  }
 }
 
 function updateGlobeMarkers(reports) {

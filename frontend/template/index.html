@@ -69,10 +69,10 @@
     <div class="nav-spacer"></div>
     <div class="nav-tabs" id="nav-tabs">
       <div class="nav-indicator" id="nav-indicator"></div>
-      <button class="nav-tab active" onclick="showPage('home')">Home</button>
-      <button class="nav-tab" onclick="showPage('map')">Live Map</button>
-      <button class="nav-tab" onclick="showPage('feed')">Community Feed</button>
-      <button class="nav-tab" onclick="showPage('admin')">Admin</button>
+      <button class="nav-tab active" onclick="showPage('home')"><i class="ph-bold ph-house-line nav-tab-icon"></i><span>Home</span></button>
+      <button class="nav-tab" onclick="showPage('map')"><i class="ph-bold ph-map-trifold nav-tab-icon"></i><span>Live Map</span></button>
+      <button class="nav-tab" onclick="showPage('feed')"><i class="ph-bold ph-rss nav-tab-icon"></i><span>Community Feed</span></button>
+      <button class="nav-tab" onclick="showPage('admin')"><i class="ph-bold ph-shield-checkered nav-tab-icon"></i><span>Admin</span></button>
     </div>
     <button class="btn-report-nav" onclick="showPage('report')">+ Report Issue</button>
   </nav>
@@ -717,9 +717,35 @@
         </div>
       </div>
       <div class="feed-grid" id="feed-grid">
-        <div style="text-align:center;padding:40px;color:var(--text3);width:100%;grid-column:1/-1">
-          <div style="font-size:24px;margin-bottom:12px;animation:spin 1s linear infinite;display:inline-block">⏳</div>
-          <div style="font-family:'Outfit';font-weight:700">Loading community reports...</div>
+        <!-- Skeleton Card 1 -->
+        <div class="feed-card skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="feed-card-body">
+            <div class="skeleton-badge"></div>
+            <div class="skeleton-title"></div>
+            <div class="skeleton-text"></div>
+            <div class="skeleton-meta"></div>
+          </div>
+        </div>
+        <!-- Skeleton Card 2 -->
+        <div class="feed-card skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="feed-card-body">
+            <div class="skeleton-badge"></div>
+            <div class="skeleton-title"></div>
+            <div class="skeleton-text"></div>
+            <div class="skeleton-meta"></div>
+          </div>
+        </div>
+        <!-- Skeleton Card 3 -->
+        <div class="feed-card skeleton-card">
+          <div class="skeleton-img"></div>
+          <div class="feed-card-body">
+            <div class="skeleton-badge"></div>
+            <div class="skeleton-title"></div>
+            <div class="skeleton-text"></div>
+            <div class="skeleton-meta"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -819,6 +845,10 @@
     </div>
     <!-- Dashboard -->
     <div class="admin-page" id="admin-dashboard">
+      <!-- Floating mobile sidebar toggle -->
+      <button class="sidebar-mobile-toggle" onclick="toggleMobileSidebar()" title="Toggle Sidebar">
+        <i class="ph-bold ph-list"></i>
+      </button>
       <!-- SIDEBAR -->
       <aside class="admin-sidebar" id="admin-sidebar">
         <!-- Edge Collapse Toggle -->
@@ -3958,6 +3988,13 @@
   <script>
     // Sidebar View Routing
     function switchAdminView(viewName, linkElement) {
+      // Update hash silently in the URL to preserve route on refresh
+      const queryParams = window.location.search;
+      const targetHash = '#admin/' + viewName;
+      if (window.location.hash !== targetHash) {
+        window.history.replaceState({page: 'admin', hash: targetHash}, '', window.location.pathname + queryParams + targetHash);
+      }
+
       document.getElementById('admin-view-overview').style.display = 'none';
       document.getElementById('admin-view-statistics').style.display = 'none';
       document.getElementById('admin-view-analytics').style.display = 'none';
@@ -4052,6 +4089,11 @@
     function toggleSidebar() {
       const sidebar = document.getElementById('admin-sidebar');
       sidebar.classList.toggle('collapsed');
+    }
+
+    function toggleMobileSidebar() {
+      const sidebar = document.getElementById('admin-sidebar');
+      if (sidebar) sidebar.classList.toggle('open-mobile');
     }
 
     function expandSidebarIfCollapsed() {

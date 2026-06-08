@@ -85,7 +85,7 @@ function updatePreviewId() {
 
 async function loadMembers() {
     try {
-        const res = await fetch('/backend/api/certificates/get_members.php');
+        const res = await fetch(API_URL + '/api/certificates/get_members.php');
         const data = await res.json();
         if (data.success) {
             certMembers = data.data;
@@ -102,7 +102,7 @@ async function loadMembers() {
 
 async function loadTemplates() {
     try {
-        const res = await fetch('/backend/api/certificates/get_templates.php');
+        const res = await fetch(API_URL + '/api/certificates/get_templates.php');
         const data = await res.json();
         if (data.success) {
             certTemplates = data.data;
@@ -226,7 +226,7 @@ async function issueCertificate() {
     btn.innerHTML = '<i class="ph-duotone ph-spinner animate-spin"></i> Issuing...';
 
     try {
-        const res = await fetch('/backend/api/certificates/issue_certificate.php', {
+        const res = await fetch(API_URL + '/api/certificates/issue_certificate.php', {
             method: 'POST',
             body: JSON.stringify(payload)
         });
@@ -297,7 +297,7 @@ async function loadCertificates(page = 1) {
     const status = document.getElementById('cert-filter-status')?.value || 'All';
     
     try {
-        const res = await fetch(`/backend/api/certificates/list_certificates.php?page=${page}&search=${encodeURIComponent(search)}&type=${encodeURIComponent(type)}&status=${encodeURIComponent(status)}`);
+        const res = await fetch(API_URL + `/api/certificates/list_certificates.php?page=${page}&search=${encodeURIComponent(search)}&type=${encodeURIComponent(type)}&status=${encodeURIComponent(status)}`);
         const data = await res.json();
         
         if (data.success) {
@@ -391,7 +391,7 @@ async function updateCertStatus(certId, action) {
     if(!confirm(`Are you sure you want to ${action} certificate ${certId}?`)) return;
     
     try {
-        const res = await fetch('/backend/api/certificates/update_certificate.php', {
+        const res = await fetch(API_URL + '/api/certificates/update_certificate.php', {
             method: 'POST',
             body: JSON.stringify({ cert_id: certId, action: action })
         });
@@ -435,5 +435,5 @@ function exportCertsCSV() {
     const search = document.getElementById('cert-search-input')?.value || '';
     const type = document.getElementById('cert-filter-type')?.value || 'All';
     const status = document.getElementById('cert-filter-status')?.value || 'All';
-    window.open(`/backend/api/certificates/list_certificates.php?export=1&search=${encodeURIComponent(search)}&type=${encodeURIComponent(type)}&status=${encodeURIComponent(status)}`, '_blank');
+    window.open(API_URL + `/api/certificates/list_certificates.php?export=1&search=${encodeURIComponent(search)}&type=${encodeURIComponent(type)}&status=${encodeURIComponent(status)}`, '_blank');
 }
