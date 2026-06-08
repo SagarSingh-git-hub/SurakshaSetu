@@ -1000,16 +1000,8 @@
                 style="font-size:16px;font-weight:800;font-family:'Outfit',sans-serif;margin-bottom:20px;color:var(--text);">
                 Active Zones — Uttarakhand</h3>
 
-              <!-- Abstract Map Grid (Light Theme) -->
               <div id="admin-active-zones-map"
-                style="position:relative;width:100%;height:200px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;background-image:linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);background-size:25px 25px;">
-                <!-- Scattered Dots will be injected here dynamically -->
-
-                <!-- Label -->
-                <div
-                  style="position:absolute;top:45%;left:40%;font-size:12px;color:var(--text);font-weight:700;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.8);padding:4px 8px;border-radius:20px;box-shadow:0 2px 4px rgba(0,0,0,0.05);backdrop-filter:blur(4px);z-index:10;">
-                  <i class="ph-fill ph-map-pin" style="color:#ef4444;"></i> Live Issue Clusters
-                </div>
+                style="position:relative;width:100%;height:200px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;z-index:1;">
               </div>
 
               <!-- Zone Tags -->
@@ -1034,7 +1026,7 @@
 
         <!-- STATISTICS VIEW -->
         <div id="admin-view-statistics" style="display: none;">
-          <div class="stat-cards" style="margin-bottom: 24px;">
+          <div class="stat-cards" style="margin-bottom: 24px; grid-template-columns: repeat(3, 1fr);">
             <div class="stat-card">
               <div class="stat-card-val" id="stat-avg-time">--</div>
               <div class="stat-card-label">Avg Resolve Time</div>
@@ -1171,41 +1163,41 @@
                 <div>
                   <div
                     style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;font-weight:600;">
-                    <span style="color:var(--text3)">Same Day</span><span
-                      style="color:var(--text);font-weight:800;">28%</span>
+                    <span style="color:var(--text3)">Same Day</span><span style="color:var(--text);font-weight:800;"
+                      id="res-speed-sameday">28%</span>
                   </div>
                   <div style="height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden;">
-                    <div style="height:100%;background:#22c55e;width:28%;border-radius:4px;"></div>
+                    <div id="res-bar-sameday" style="height:100%;background:#22c55e;width:28%;border-radius:4px;"></div>
                   </div>
                 </div>
                 <div>
                   <div
                     style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;font-weight:600;">
-                    <span style="color:var(--text3)">1–3 Days</span><span
-                      style="color:var(--text);font-weight:800;">44%</span>
+                    <span style="color:var(--text3)">1–3 Days</span><span style="color:var(--text);font-weight:800;"
+                      id="res-speed-1to3">44%</span>
                   </div>
                   <div style="height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden;">
-                    <div style="height:100%;background:#3b82f6;width:44%;border-radius:4px;"></div>
+                    <div id="res-bar-1to3" style="height:100%;background:#3b82f6;width:44%;border-radius:4px;"></div>
                   </div>
                 </div>
                 <div>
                   <div
                     style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;font-weight:600;">
-                    <span style="color:var(--text3)">4–7 Days</span><span
-                      style="color:var(--text);font-weight:800;">19%</span>
+                    <span style="color:var(--text3)">4–7 Days</span><span style="color:var(--text);font-weight:800;"
+                      id="res-speed-4to7">19%</span>
                   </div>
                   <div style="height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden;">
-                    <div style="height:100%;background:#f59e0b;width:19%;border-radius:4px;"></div>
+                    <div id="res-bar-4to7" style="height:100%;background:#f59e0b;width:19%;border-radius:4px;"></div>
                   </div>
                 </div>
                 <div>
                   <div
                     style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;font-weight:600;">
-                    <span style="color:var(--text3)">7+ Days</span><span
-                      style="color:var(--text);font-weight:800;">9%</span>
+                    <span style="color:var(--text3)">7+ Days</span><span style="color:var(--text);font-weight:800;"
+                      id="res-speed-7plus">9%</span>
                   </div>
                   <div style="height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden;">
-                    <div style="height:100%;background:#ef4444;width:9%;border-radius:4px;"></div>
+                    <div id="res-bar-7plus" style="height:100%;background:#ef4444;width:9%;border-radius:4px;"></div>
                   </div>
                 </div>
               </div>
@@ -1218,7 +1210,7 @@
                 <div style="padding:16px;background:#f0fdf4;border-radius:12px;border:1px solid #bbf7d0;">
                   <div style="font-size:11px;color:#16a34a;font-weight:700;margin-bottom:4px;letter-spacing:0.5px;">NEW
                     REPORTERS</div>
-                  <div
+                  <div id="eng-new-reporters"
                     style="font-family:'Outfit',sans-serif;font-size:32px;font-weight:800;color:#15803d;line-height:1;">
                     +84</div>
                   <div style="font-size:13px;color:#16a34a;margin-top:4px;font-weight:500;">this month</div>
@@ -1226,10 +1218,11 @@
                 <div style="padding:16px;background:#eff6ff;border-radius:12px;border:1px solid #bfdbfe;">
                   <div style="font-size:11px;color:#2563eb;font-weight:700;margin-bottom:4px;letter-spacing:0.5px;">
                     REPEAT REPORTERS</div>
-                  <div
+                  <div id="eng-repeat-reporters"
                     style="font-family:'Outfit',sans-serif;font-size:32px;font-weight:800;color:#1d4ed8;line-height:1;">
                     234</div>
-                  <div style="font-size:13px;color:#2563eb;margin-top:4px;font-weight:500;">73.6% of total</div>
+                  <div id="eng-repeat-pct" style="font-size:13px;color:#2563eb;margin-top:4px;font-weight:500;">73.6% of
+                    total</div>
                 </div>
               </div>
             </div>
@@ -1749,34 +1742,54 @@
             }
           </style>
 
-          <div class="m-filter-bar" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:16px;">
+          <div class="m-filter-bar"
+            style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:16px;">
             <div class="m-filter-group" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-              <span style="font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-right:4px;font-weight:700;">Filter:</span>
+              <span
+                style="font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-right:4px;font-weight:700;">Filter:</span>
               <button class="m-fbtn active" onclick="filterMapIssues('all',this)">All</button>
-              <button class="m-fbtn" onclick="filterMapIssues('Garbage',this)"><span class="m-fcat" style="background:#ef4444;"></span>Garbage</button>
-              <button class="m-fbtn" onclick="filterMapIssues('Plastic Waste',this)"><span class="m-fcat" style="background:#f97316;"></span>Plastic</button>
-              <button class="m-fbtn" onclick="filterMapIssues('Dirty Area',this)"><span class="m-fcat" style="background:#eab308;"></span>Dirty Area</button>
-              <button class="m-fbtn" onclick="filterMapIssues('Junkyard',this)"><span class="m-fcat" style="background:#d97706;"></span>Junkyard</button>
-              <button class="m-fbtn" onclick="filterMapIssues('Water Pollution',this)"><span class="m-fcat" style="background:#3b82f6;"></span>Water</button>
-              <button class="m-fbtn" onclick="filterMapIssues('Plantation Opportunity',this)"><span class="m-fcat" style="background:#22c55e;"></span>Plantation</button>
-              <button class="m-fbtn" onclick="filterMapIssues('Resolved',this)"><span class="m-fcat" style="background:#808080;"></span>Resolved</button>
+              <button class="m-fbtn" onclick="filterMapIssues('Garbage',this)"><span class="m-fcat"
+                  style="background:#ef4444;"></span>Garbage</button>
+              <button class="m-fbtn" onclick="filterMapIssues('Plastic Waste',this)"><span class="m-fcat"
+                  style="background:#f97316;"></span>Plastic</button>
+              <button class="m-fbtn" onclick="filterMapIssues('Dirty Area',this)"><span class="m-fcat"
+                  style="background:#eab308;"></span>Dirty Area</button>
+              <button class="m-fbtn" onclick="filterMapIssues('Junkyard',this)"><span class="m-fcat"
+                  style="background:#d97706;"></span>Junkyard</button>
+              <button class="m-fbtn" onclick="filterMapIssues('Water Pollution',this)"><span class="m-fcat"
+                  style="background:#3b82f6;"></span>Water</button>
+              <button class="m-fbtn" onclick="filterMapIssues('Plantation Opportunity',this)"><span class="m-fcat"
+                  style="background:#22c55e;"></span>Plantation</button>
+              <button class="m-fbtn" onclick="filterMapIssues('Resolved',this)"><span class="m-fcat"
+                  style="background:#808080;"></span>Resolved</button>
             </div>
 
             <div style="display:flex;gap:12px;" id="live-monitoring-stats">
-              <div style="display:flex;align-items:center;gap:6px;background:#05140A;border:1px solid #14301D;border-radius:24px;padding:6px 14px;">
-                 <div style="width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 6px #ef4444;"></div>
-                 <span style="font-weight:700;color:#ef4444;font-size:14px;font-family:'Outfit',sans-serif;" id="stat-pill-high">0</span>
-                 <span style="color:#f8fafc;font-size:13px;font-family:'Outfit',sans-serif;font-weight:500;">High</span>
+              <div
+                style="display:flex;align-items:center;gap:6px;background:#05140A;border:1px solid #14301D;border-radius:24px;padding:6px 14px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 6px #ef4444;">
+                </div>
+                <span style="font-weight:700;color:#ef4444;font-size:14px;font-family:'Outfit',sans-serif;"
+                  id="stat-pill-high">0</span>
+                <span style="color:#f8fafc;font-size:13px;font-family:'Outfit',sans-serif;font-weight:500;">High</span>
               </div>
-              <div style="display:flex;align-items:center;gap:6px;background:#05140A;border:1px solid #14301D;border-radius:24px;padding:6px 14px;">
-                 <div style="width:8px;height:8px;border-radius:50%;background:#eab308;box-shadow:0 0 6px #eab308;"></div>
-                 <span style="font-weight:700;color:#eab308;font-size:14px;font-family:'Outfit',sans-serif;" id="stat-pill-active">0</span>
-                 <span style="color:#f8fafc;font-size:13px;font-family:'Outfit',sans-serif;font-weight:500;">Active</span>
+              <div
+                style="display:flex;align-items:center;gap:6px;background:#05140A;border:1px solid #14301D;border-radius:24px;padding:6px 14px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#eab308;box-shadow:0 0 6px #eab308;">
+                </div>
+                <span style="font-weight:700;color:#eab308;font-size:14px;font-family:'Outfit',sans-serif;"
+                  id="stat-pill-active">0</span>
+                <span
+                  style="color:#f8fafc;font-size:13px;font-family:'Outfit',sans-serif;font-weight:500;">Active</span>
               </div>
-              <div style="display:flex;align-items:center;gap:6px;background:#05140A;border:1px solid #14301D;border-radius:24px;padding:6px 14px;">
-                 <div style="width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e;"></div>
-                 <span style="font-weight:700;color:#22c55e;font-size:14px;font-family:'Outfit',sans-serif;" id="stat-pill-resolved">0</span>
-                 <span style="color:#f8fafc;font-size:13px;font-family:'Outfit',sans-serif;font-weight:500;">Resolved</span>
+              <div
+                style="display:flex;align-items:center;gap:6px;background:#05140A;border:1px solid #14301D;border-radius:24px;padding:6px 14px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e;">
+                </div>
+                <span style="font-weight:700;color:#22c55e;font-size:14px;font-family:'Outfit',sans-serif;"
+                  id="stat-pill-resolved">0</span>
+                <span
+                  style="color:#f8fafc;font-size:13px;font-family:'Outfit',sans-serif;font-weight:500;">Resolved</span>
               </div>
             </div>
           </div>
@@ -2748,7 +2761,8 @@
             </button>
           </div>
 
-          <div id="cert-templates-container" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+          <div id="cert-templates-container"
+            style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
             <!-- Dynamically populated certificate templates -->
           </div>
 
@@ -4022,6 +4036,16 @@
         document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-child'));
         linkElement.closest('.admin-nav-item').classList.add('active-child');
       }
+
+      // Reset scroll instantly
+      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      setTimeout(() => {
+        document.querySelectorAll('.help-content, .admin-content-wrap, .admin-page, .modal, .help-page, .help-subpage').forEach(el => el.scrollTop = 0);
+        document.documentElement.style.removeProperty('scroll-behavior');
+      }, 50);
     }
 
     // Sidebar Logic
@@ -4076,6 +4100,16 @@
 
       document.querySelectorAll('.help-tab-btn').forEach(el => el.classList.remove('active'));
       btnElement.classList.add('active');
+
+      // Reset scroll instantly
+      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      setTimeout(() => {
+        document.querySelectorAll('.help-content, .admin-content-wrap, .admin-page, .modal, .help-page, .help-subpage').forEach(el => el.scrollTop = 0);
+        document.documentElement.style.removeProperty('scroll-behavior');
+      }, 50);
     }
 
     function sendHelpChat() {
@@ -4118,6 +4152,16 @@
       document.querySelectorAll('.help-page').forEach(p => p.classList.remove('active'));
       const pg = document.getElementById('help-page-' + name);
       if (pg) pg.classList.add('active');
+
+      // Reset scroll instantly
+      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      setTimeout(() => {
+        document.querySelectorAll('.help-content, .admin-content-wrap, .admin-page, .modal, .help-page, .help-subpage').forEach(el => el.scrollTop = 0);
+        document.documentElement.style.removeProperty('scroll-behavior');
+      }, 50);
     }
 
     function switchHelpSubpage(name, btn) {
@@ -4129,6 +4173,16 @@
       if (parentPage) parentPage.querySelectorAll('.help-subpage').forEach(sp => sp.classList.remove('active'));
       const sp = document.getElementById(name);
       if (sp) sp.classList.add('active');
+
+      // Reset scroll instantly
+      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      setTimeout(() => {
+        document.querySelectorAll('.help-content, .admin-content-wrap, .admin-page, .modal, .help-page, .help-subpage').forEach(el => el.scrollTop = 0);
+        document.documentElement.style.removeProperty('scroll-behavior');
+      }, 50);
     }
 
     function toggleHelpFaq(el) {
@@ -4165,9 +4219,14 @@
         <button class="modal-close" onclick="closeCreateTemplateModal()">✕</button>
       </div>
       <div class="modal-body" style="padding: 20px;">
-        <div style="display:flex;gap:16px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:12px;">
-          <button id="tab-visual-builder" style="padding:6px 12px;background:var(--primary);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;" onclick="switchTemplateBuilderTab('visual')">Visual Builder</button>
-          <button id="tab-html-editor" style="padding:6px 12px;background:none;color:var(--text3);border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;" onclick="switchTemplateBuilderTab('html')">HTML Editor</button>
+        <div
+          style="display:flex;gap:16px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:12px;">
+          <button id="tab-visual-builder"
+            style="padding:6px 12px;background:var(--primary);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;"
+            onclick="switchTemplateBuilderTab('visual')">Visual Builder</button>
+          <button id="tab-html-editor"
+            style="padding:6px 12px;background:none;color:var(--text3);border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;"
+            onclick="switchTemplateBuilderTab('html')">HTML Editor</button>
         </div>
 
         <div id="builder-visual" style="display:block;">
@@ -4182,7 +4241,8 @@
             </div>
             <div class="input-group">
               <label class="input-label">Background Gradient</label>
-              <input type="text" id="tpl-bg" class="input-field" value="linear-gradient(135deg,rgba(251,191,36,0.08),rgba(34,197,94,0.06))">
+              <input type="text" id="tpl-bg" class="input-field"
+                value="linear-gradient(135deg,rgba(251,191,36,0.08),rgba(34,197,94,0.06))">
             </div>
             <div class="input-group">
               <label class="input-label">Primary Color</label>
@@ -4206,14 +4266,17 @@
           </div>
           <div class="input-group">
             <label class="input-label">Raw HTML & CSS</label>
-            <textarea id="tpl-html" class="input-field" style="height:200px;font-family:monospace;font-size:12px;" placeholder="<div>\n  <style> .cert-custom { color: red; } </style>\n  <h1 class='cert-custom'>Certificate</h1>\n  <p>Awarded to {NAME}</p>\n</div>"></textarea>
-            <p style="font-size:11px;color:var(--text3);margin-top:6px;">Available placeholders: {NAME}, {EMAIL}, {ZONE}, {DATE}, {ISSUER}</p>
+            <textarea id="tpl-html" class="input-field" style="height:200px;font-family:monospace;font-size:12px;"
+              placeholder="<div>\n  <style> .cert-custom { color: red; } </style>\n  <h1 class='cert-custom'>Certificate</h1>\n  <p>Awarded to {NAME}</p>\n</div>"></textarea>
+            <p style="font-size:11px;color:var(--text3);margin-top:6px;">Available placeholders: {NAME}, {EMAIL},
+              {ZONE}, {DATE}, {ISSUER}</p>
           </div>
         </div>
 
         <div style="margin-top:24px;display:flex;justify-content:flex-end;gap:12px;">
           <button class="action-btn" onclick="closeCreateTemplateModal()">Cancel</button>
-          <button class="btn-primary" style="padding:10px 24px;border-radius:8px;font-size:14px;" onclick="saveCertificateTemplate()">Save Template</button>
+          <button class="btn-primary" style="padding:10px 24px;border-radius:8px;font-size:14px;"
+            onclick="saveCertificateTemplate()">Save Template</button>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 <?php
 require '../../config.php';
+require_once __DIR__ . '/../log_activity.php';
 
 $data = json_decode(file_get_contents("php://input"), true);
 if (!$data) {
@@ -45,6 +46,8 @@ if ($conn->query($sql)) {
             'citation' => $citation
         ]);
     }
+    
+    logActivity($conn, 'Certificate Issued', $cert_id, "Certificate #$cert_id issued to $recipient_name for $certificate_type", 'Certificate', $recipient_zone);
 
     echo json_encode(['success' => true, 'cert_id' => $cert_id]);
 } else {

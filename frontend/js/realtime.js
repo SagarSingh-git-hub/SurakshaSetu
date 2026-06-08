@@ -76,6 +76,25 @@ if (PUSHER_KEY !== 'YOUR_APP_KEY') {
             }
         }
     });
+
+    channel.bind('new-activity', function(data) {
+        console.log('New activity received:', data);
+        if (currentPage === 'admin' && typeof renderLiveActivityFeed === 'function') {
+            renderLiveActivityFeed();
+        }
+    });
+
+    channel.bind('update-priority', function(data) {
+        console.log('Priority update received:', data);
+        const report = currentReports.find(r => r.id === data.id);
+        if (report) {
+            report.priority = data.priority;
+            if (currentPage === 'admin' && typeof adminLoggedIn !== 'undefined' && adminLoggedIn) {
+                renderAdminDashboard();
+            }
+        }
+    });
+
 } else {
     console.warn("Pusher is not configured. Real-time updates are disabled.");
 }

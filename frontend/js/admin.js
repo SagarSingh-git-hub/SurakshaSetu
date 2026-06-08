@@ -1094,6 +1094,9 @@ function adminTimeAgo(dateStr) {
   return Math.floor(diff / 86400) + "d ago";
 }
 
+let adminZonesMap = null;
+let adminZonesMarkers = null;
+
 function renderActiveZones() {
   const mapContainer = document.getElementById('admin-active-zones-map');
   const tagsContainer = document.getElementById('admin-active-zones-tags');
@@ -1103,12 +1106,16 @@ function renderActiveZones() {
   
   // Calculate location counts
   const locCounts = {};
+  let totalActive = 0;
   activeReports.forEach(r => {
+    totalActive++;
     const l = r.loc || 'Unknown';
-    locCounts[l] = (locCounts[l] || 0) + 1;
+    if (!locCounts[l]) locCounts[l] = { active: 0, high: 0 };
+    locCounts[l].active++;
+    if (r.priority === 'High') locCounts[l].high++;
   });
 
-  const sortedLocs = Object.entries(locCounts).sort((a, b) => b[1] - a[1]).slice(0, 4);
+  const sortedLocs = Object.entries(locCounts).sort((a, b) => b[1].active - a[1].active).slice(0, 4);
   const tagColors = [
     { bg: 'rgba(239,68,68,0.1)', text: '#dc2626' }, // Red
     { bg: 'rgba(245,158,11,0.1)', text: '#d97706' }, // Orange
@@ -1118,68 +1125,96 @@ function renderActiveZones() {
 
   tagsContainer.innerHTML = sortedLocs.map((loc, i) => {
     const col = tagColors[i % tagColors.length];
-    return `<div style="padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;background:${col.bg};color:${col.text};text-transform:uppercase;">${loc[0]} — ${loc[1]}</div>`;
+    return `<div style="padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;background:${col.bg};color:${col.text};text-transform:uppercase;">
+      ${loc[0]} — ${loc[1].active} Active ${loc[1].high > 0 ? `(${loc[1].high} High)` : ''}
+    </div>`;
   }).join('');
 
-  // Render dots on the map
-  // Map bounds for Uttarakhand roughly: Lat: 28.5 to 31.5, Lng: 77.5 to 81
-  let dotsHTML = '';
+  if (sortedLocs.length === 0) {
+    tagsContainer.innerHTML = `<div style="padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;background:var(--bg3);color:var(--text3);text-transform:uppercase;">No Active Zones</div>`;
+  }
+
+  // Initialize Leaflet Map if not created
+  if (!adminZonesMap) {
+    adminZonesMap = L.map('admin-active-zones-map', {
+      zoomControl: false,
+      attributionControl: false
+    }).setView([30.0668, 79.0193], 7); // Uttarakhand default view
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 18
+    }).addTo(adminZonesMap);
+
+    adminZonesMarkers = L.layerGroup().addTo(adminZonesMap);
+  } else {
+    adminZonesMarkers.clearLayers();
+  }
+
+  // Add markers
+  let bounds = L.latLngBounds();
   activeReports.forEach(r => {
     if (!r.lat || !r.lng) return;
-    let top = 100 - ((r.lat - 28.5) / 3) * 100;
-    let left = ((r.lng - 77.5) / 3.5) * 100;
-    
-    // Clamp to keep inside box
-    top = Math.max(5, Math.min(95, top));
-    left = Math.max(5, Math.min(95, left));
-
     const colorObj = CAT_COLORS[r.cat] || CAT_COLORS.Other;
     const color = colorObj.pin;
     
     // Make dots slightly larger for high priority
-    const size = r.priority === 'High' ? 14 : 8;
-    const opacity = r.priority === 'High' ? 0.8 : 0.6;
+    const size = r.priority === 'High' ? 14 : 10;
+    const opacity = r.priority === 'High' ? 0.9 : 0.7;
 
-    dotsHTML += `<div style="position:absolute;top:${top}%;left:${left}%;width:${size}px;height:${size}px;background:${color};border-radius:50%;box-shadow:0 0 10px ${color};opacity:${opacity};transform:translate(-50%,-50%);"></div>`;
+    const markerHtml = `<div style="width:${size}px;height:${size}px;background:${color};border-radius:50%;box-shadow:0 0 8px ${color};opacity:${opacity};border:2px solid white;"></div>`;
+    
+    const icon = L.divIcon({
+      className: 'custom-div-icon',
+      html: markerHtml,
+      iconSize: [size, size],
+      iconAnchor: [size/2, size/2]
+    });
+
+    const marker = L.marker([r.lat, r.lng], { icon }).addTo(adminZonesMarkers);
+    marker.bindTooltip(`<b>${r.cat}</b><br>${r.loc}<br>${r.priority} Priority`);
+    bounds.extend([r.lat, r.lng]);
   });
 
-  // Keep the label, replace dots
-  const labelHTML = `<div style="position:absolute;top:45%;left:40%;font-size:12px;color:var(--text);font-weight:700;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.8);padding:4px 8px;border-radius:20px;box-shadow:0 2px 4px rgba(0,0,0,0.05);backdrop-filter:blur(4px);z-index:10;"><i class="ph-fill ph-map-pin" style="color:#ef4444;"></i> Live Issue Clusters</div>`;
-  mapContainer.innerHTML = dotsHTML + labelHTML;
+  if (activeReports.length > 0) {
+    adminZonesMap.fitBounds(bounds, { padding: [20, 20], maxZoom: 14 });
+  } else {
+    adminZonesMap.setView([30.0668, 79.0193], 7);
+  }
 }
 
-function renderLiveActivityFeed() {
+async function renderLiveActivityFeed() {
   const feedContainer = document.getElementById('admin-live-activity-feed');
   if (!feedContainer) return;
 
-  // Sort reports by date descending
-  const sorted = [...currentReports].sort((a, b) => new Date(b.date || b.created_at) - new Date(a.date || a.created_at));
-  const recent = sorted.slice(0, 6); // top 6 activities
-
-  feedContainer.innerHTML = recent.map(r => {
-    const colorObj = CAT_COLORS[r.cat] || CAT_COLORS.Other;
-    const dotColor = colorObj.pin;
+  try {
+    const res = await fetch(`${API_URL}/api/get_activity_logs.php`);
+    const logs = await res.json();
     
-    // Generate an action string based on status/priority
-    let actionStr = r.cat + " reported — " + r.loc;
-    if (r.status === 'Resolved') {
-      actionStr = `Issue #${r.id} marked Resolved`;
-    } else if (r.status === 'In Progress') {
-      actionStr = `Cleanup started — ${r.loc}`;
-    } else if (r.priority === 'High') {
-      actionStr = `${r.cat} escalated — High Priority`;
+    if (!logs || logs.length === 0) {
+      feedContainer.innerHTML = '<div style="font-size:12px;color:var(--text3);text-align:center;padding:20px;">No recent activity</div>';
+      return;
     }
 
-    return `
-      <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid var(--border);">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div style="width:8px;height:8px;border-radius:50%;background:${dotColor};box-shadow:0 0 6px ${dotColor};"></div>
-          <span style="font-size:14px;color:var(--text);font-weight:500;">${actionStr}</span>
+    feedContainer.innerHTML = logs.slice(0, 15).map(log => {
+      let dotColor = '#94a3b8'; // default
+      if (log.event_type === 'Report Created') dotColor = '#3b82f6';
+      else if (log.event_type === 'Status Changed') dotColor = '#10b981';
+      else if (log.event_type === 'Priority Changed') dotColor = '#ef4444';
+      else if (log.event_type === 'Certificate Issued') dotColor = '#f59e0b';
+
+      return `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:${dotColor};box-shadow:0 0 6px ${dotColor};flex-shrink:0;"></div>
+            <span style="font-size:13px;color:var(--text);font-weight:500;">${log.description}</span>
+          </div>
+          <span style="font-size:11px;color:var(--text3);white-space:nowrap;margin-left:12px;">${adminTimeAgo(log.created_at)}</span>
         </div>
-        <span style="font-size:12px;color:var(--text3);white-space:nowrap;margin-left:12px;">${adminTimeAgo(r.date || r.created_at)}</span>
-      </div>
-    `;
-  }).join('');
+      `;
+    }).join('');
+  } catch (err) {
+    console.error('Failed to load activity logs:', err);
+  }
 }
 
 function openCreateTemplateModal() {

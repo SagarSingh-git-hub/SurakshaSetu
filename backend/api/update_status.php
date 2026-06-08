@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/log_activity.php';
 
 header('Content-Type: application/json');
 
@@ -25,12 +26,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sss", $status, $resolved_at_val, $report_id);
 
     if ($stmt->execute()) {
+        // Fetch report info for activity log
+        $res = $conn->query("SELECT category, location_str FROM reports WHERE report_id = '" . $conn->real_escape_string($report_id) . "'");
+        $cat = 'General'; $loc = 'Unknown';
+        if ($res && $res->num_rows > 0) {
+            $row = $res->fetch_assoc();
+            $cat = $row['category'];
+            $loc = $row['location_str'];
+        }
+
         // Trigger Pusher WebSocket Event
         triggerPusherEvent('eco-channel', 'update-status', [
             'id' => $report_id,
             'status' => $status
         ]);
         
+        $action = ($status === 'Resolved') ? "Issue #$report_id marked Resolved" : "Issue #$report_id status updated to $status";
+        logActivity($conn, 'Status Changed', $report_id, $action, $cat, $loc);
+
         echo json_encode(['success' => true, 'message' => 'Status updated successfully']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Failed to update status: ' . $conn->error]);

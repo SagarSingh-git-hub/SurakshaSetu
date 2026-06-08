@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/log_activity.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $category = $_POST['category'] ?? '';
@@ -98,6 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Trigger Pusher WebSocket Event
         triggerPusherEvent('eco-channel', 'new-report', $new_report_data);
+        
+        logActivity($conn, 'Report Created', $report_id, "Report #$report_id created in $locStr", $category, $locStr);
         
         echo json_encode(['success' => true, 'report_id' => $report_id]);
     } else {

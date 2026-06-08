@@ -99,3 +99,13 @@ INSERT IGNORE INTO certificate_templates (name, award_type, bg_gradient, primary
 ('Volunteer Purple', 'Volunteer Excellence', 'linear-gradient(135deg,rgba(167,139,250,0.08),rgba(34,197,94,0.04))', 'var(--purple)', 'var(--t3)', 'ti ti-heart', FALSE),
 ('Drive Green', 'Drive Completion', 'linear-gradient(135deg,rgba(34,197,94,0.08),rgba(251,191,36,0.04))', 'var(--acc2)', 'var(--t3)', 'ti ti-check', FALSE);
 
+-- Table for Activity Logs
+CREATE TABLE IF NOT EXISTS activity_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    event_type VARCHAR(100) NOT NULL,
+    reference_id VARCHAR(50) NOT NULL,
+    description TEXT NOT NULL,
+    category VARCHAR(50),
+    location VARCHAR(255),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
