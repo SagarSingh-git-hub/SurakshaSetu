@@ -302,10 +302,10 @@ async function loadCertificates(page = 1) {
         
         if (data.success) {
             // Update stats
-            document.getElementById('stat-total').innerText = data.stats.total;
-            document.getElementById('stat-active').innerText = data.stats.active;
-            document.getElementById('stat-month').innerText = data.stats.this_month;
-            document.getElementById('stat-revoked').innerText = data.stats.revoked;
+            document.getElementById('cert-stat-total').innerText = data.stats.total;
+            document.getElementById('cert-stat-active').innerText = data.stats.active;
+            document.getElementById('cert-stat-month').innerText = data.stats.this_month;
+            document.getElementById('cert-stat-revoked').innerText = data.stats.revoked;
             
             // Render table
             const tbody = document.getElementById('cert-table-body');

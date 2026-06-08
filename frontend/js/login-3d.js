@@ -1,12 +1,11 @@
-document.addEventListener('DOMContentLoaded', () => {
-  initLoginAnimations();
-  initLogin3DScene();
-});
+let login3dInitialized = false;
+let loginContainer = null;
+let loginCamera = null;
+let loginRenderer = null;
 
 function initLoginAnimations() {
   if (typeof gsap === 'undefined') return;
 
-  // Animate login form card
   gsap.to('#login-form-card', {
     y: 0,
     opacity: 1,
@@ -15,7 +14,6 @@ function initLoginAnimations() {
     delay: 0.2
   });
 
-  // Animate badges
   gsap.to('#login-badge-1', {
     y: 0,
     opacity: 1,
@@ -31,8 +29,7 @@ function initLoginAnimations() {
     ease: 'back.out(1.5)',
     delay: 0.8
   });
-  
-  // Fade in canvas
+
   gsap.to('#login-3d-canvas', {
     opacity: 1,
     duration: 1.2,
@@ -45,23 +42,27 @@ function initLogin3DScene() {
   const container = document.getElementById('login-3d-canvas');
   if (!container || typeof THREE === 'undefined') return;
 
-  // Scene setup
+  if (login3dInitialized) {
+    window.triggerLoginResize();
+    return;
+  }
+
+  loginContainer = container;
+
   const scene = new THREE.Scene();
-  
-  // Camera setup
-  const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
   camera.position.z = 10;
-  
-  // Renderer setup
+  loginCamera = camera;
+
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-  renderer.setSize(container.clientWidth, container.clientHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // optimize performance
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.appendChild(renderer.domElement);
-  
-  // Lighting setup for glassmorphism / soft look
+  loginRenderer = renderer;
+
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
   scene.add(ambientLight);
-  
+
   const dirLight = new THREE.DirectionalLight(0xffffff, 1);
   dirLight.position.set(5, 5, 5);
   scene.add(dirLight);
@@ -73,18 +74,16 @@ function initLogin3DScene() {
   const backLight = new THREE.DirectionalLight(0x2ecc71, 0.8);
   backLight.position.set(0, -5, -5);
   scene.add(backLight);
-  
-  // Planet Group
+
   const planetGroup = new THREE.Group();
   scene.add(planetGroup);
-  
-  // Main eco-sphere (Glass-like material)
+
   const sphereGeo = new THREE.SphereGeometry(2.8, 64, 64);
   const sphereMat = new THREE.MeshPhysicalMaterial({
     color: 0x147a3d,
     metalness: 0.1,
     roughness: 0.2,
-    transmission: 0.6, // glass-like
+    transmission: 0.6,
     thickness: 1.5,
     envMapIntensity: 1.0,
     clearcoat: 1.0,
@@ -93,7 +92,6 @@ function initLogin3DScene() {
   const planet = new THREE.Mesh(sphereGeo, sphereMat);
   planetGroup.add(planet);
 
-  // Decorative rings / tech elements
   const ringGeo = new THREE.TorusGeometry(3.6, 0.02, 16, 100);
   const ringMat = new THREE.MeshBasicMaterial({ color: 0x2ecc71, transparent: true, opacity: 0.4 });
   const ring1 = new THREE.Mesh(ringGeo, ringMat);
@@ -105,8 +103,7 @@ function initLogin3DScene() {
   ring2.rotation.x = Math.PI / 3;
   ring2.rotation.y = Math.PI / 6;
   planetGroup.add(ring2);
-  
-  // Outer wireframe shell
+
   const wireGeo = new THREE.IcosahedronGeometry(3.1, 2);
   const wireMat = new THREE.MeshBasicMaterial({
     color: 0x2ecc71,
@@ -116,26 +113,23 @@ function initLogin3DScene() {
   });
   const wireShell = new THREE.Mesh(wireGeo, wireMat);
   planetGroup.add(wireShell);
-  
-  // Floating environmental particles
+
   const particlesGeo = new THREE.BufferGeometry();
   const particlesCount = 250;
   const posArray = new Float32Array(particlesCount * 3);
-  
-  for(let i=0; i<particlesCount * 3; i++) {
-    // distribute in a spherical volume
+
+  for (let i = 0; i < particlesCount * 3; i++) {
     const radius = 6 + Math.random() * 4;
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos((Math.random() * 2) - 1);
-    
-    posArray[i * 3] = radius * Math.sin(phi) * Math.cos(theta); // x
-    posArray[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta); // y
-    posArray[i * 3 + 2] = radius * Math.cos(phi); // z
+
+    posArray[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+    posArray[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+    posArray[i * 3 + 2] = radius * Math.cos(phi);
   }
-  
+
   particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-  
-  // Map a small circular texture for particles if possible, else basic
+
   const particleMat = new THREE.PointsMaterial({
     size: 0.08,
     color: 0x2ecc71,
@@ -143,87 +137,82 @@ function initLogin3DScene() {
     opacity: 0.6,
     blending: THREE.AdditiveBlending
   });
-  
+
   const particlesMesh = new THREE.Points(particlesGeo, particleMat);
   scene.add(particlesMesh);
-  
-  // Mouse Interaction Setup
+
   let mouseX = 0;
   let mouseY = 0;
   let targetX = 0;
   let targetY = 0;
-  
-  // Only track mouse over the canvas area to avoid conflicting with form inputs
+
   document.addEventListener('mousemove', (event) => {
     const windowHalfX = window.innerWidth / 2;
     const windowHalfY = window.innerHeight / 2;
     mouseX = (event.clientX - windowHalfX) * 0.0005;
     mouseY = (event.clientY - windowHalfY) * 0.0005;
   });
-  
-  // Animation Loop
+
   const clock = new THREE.Clock();
   let loginAnimId = null;
   let loginIsAnimating = false;
-  
+
   function animate() {
     if (!loginIsAnimating) return;
     loginAnimId = requestAnimationFrame(animate);
-    
+
     const elapsedTime = clock.getElapsedTime();
-    
-    // Smooth mouse follow
+
     targetX = mouseX;
     targetY = mouseY;
-    
-    // Constant rotation + mouse parallax
+
     planetGroup.rotation.y += 0.002;
     planetGroup.rotation.x += 0.05 * (targetY - planetGroup.rotation.x);
     planetGroup.rotation.y += 0.05 * (targetX - planetGroup.rotation.y);
-    
-    // Floating effect
+
     const floatOffset = Math.sin(elapsedTime * 1.2) * 0.15;
     planetGroup.position.y = floatOffset;
-    
-    // Rotate rings independently
+
     ring1.rotation.z += 0.003;
     ring2.rotation.z -= 0.002;
-    
-    // Rotate particles slowly
+
     particlesMesh.rotation.y = elapsedTime * 0.03;
     particlesMesh.rotation.z = elapsedTime * 0.01;
-    
+
     renderer.render(scene, camera);
   }
-  
+
   window.resumeLoginAnimation = function() {
     if (!loginIsAnimating) {
       loginIsAnimating = true;
       animate();
     }
-  }
-  
+  };
+
   window.stopLoginAnimation = function() {
     loginIsAnimating = false;
     if (loginAnimId) {
       cancelAnimationFrame(loginAnimId);
       loginAnimId = null;
     }
-  }
-  
-  // Handle window resize gracefully
-  window.addEventListener('resize', () => {
-    if (!container) return;
-    const w = container.clientWidth;
-    const h = container.clientHeight;
-    if (w === 0 || h === 0) return;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-  });
+  };
 
-  // Start animation loop only if admin page is active and not logged in yet
-  if (typeof currentPage !== 'undefined' && currentPage === 'admin' && typeof adminLoggedIn !== 'undefined' && !adminLoggedIn) {
-    window.resumeLoginAnimation();
-  }
+  window.triggerLoginResize = function() {
+    if (!loginContainer || !loginRenderer || !loginCamera) return;
+    const w = loginContainer.clientWidth;
+    const h = loginContainer.clientHeight;
+    if (w === 0 || h === 0) return false;
+    loginCamera.aspect = w / h;
+    loginCamera.updateProjectionMatrix();
+    loginRenderer.setSize(w, h);
+    return true;
+  };
+
+  window.addEventListener('resize', window.triggerLoginResize);
+
+  login3dInitialized = true;
+  window.triggerLoginResize();
 }
+
+window.initLogin3DScene = initLogin3DScene;
+window.initLoginAnimations = initLoginAnimations;

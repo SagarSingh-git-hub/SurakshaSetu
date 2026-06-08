@@ -67,7 +67,9 @@ async function renderAdminDashboard(initialView = 'overview') {
   // Instead, they are called inside switchAdminView when their tab is displayed.
   const activeSubView = initialView || 'overview';
   const linkElement = document.querySelector(`.admin-subnav-link[onclick*="'${activeSubView}'"]`) || 
-                      document.querySelector(`.admin-subnav-link[onclick*="${activeSubView}"]`);
+                      document.querySelector(`.admin-subnav-link[onclick*="${activeSubView}"]`) ||
+                      document.querySelector(`.admin-nav-link[onclick*="'${activeSubView}'"]`) ||
+                      document.querySelector(`.admin-nav-link[onclick*="${activeSubView}"]`);
   
   if (typeof switchAdminView === 'function') {
     switchAdminView(activeSubView, linkElement);

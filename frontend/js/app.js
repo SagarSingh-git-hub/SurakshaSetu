@@ -117,22 +117,7 @@ function showPage(id, pushHistory = true) {
     }
   }
   if(id==='home') {
-    // Fire premium GSAP Hero animations instantly
-    if (typeof animateHeroSection === 'function') {
-      animateHeroSection();
-    }
-    if (typeof initAnimations === 'function') {
-      setTimeout(initAnimations, 50);
-    }
-    // Resume/initialize globe
-    if (typeof initGlobe === 'function') {
-      if (typeof globeScene === 'undefined' || !globeScene) {
-        initGlobe();
-      } else {
-        if (typeof triggerGlobeResize === 'function') triggerGlobeResize();
-        if (typeof resumeGlobeAnimation === 'function') resumeGlobeAnimation();
-      }
-    }
+    mountHomePage();
   } else {
     // Navigate away from home: stop globe animation
     if (typeof stopGlobeAnimation === 'function') {
@@ -140,18 +125,12 @@ function showPage(id, pushHistory = true) {
     }
   }
 
-  // Handle Three.js Login Scene performance optimization
-  if (id === 'admin' && !adminLoggedIn) {
-    if (typeof resumeLoginAnimation === 'function') resumeLoginAnimation();
-  } else {
-    if (typeof stopLoginAnimation === 'function') stopLoginAnimation();
-  }
-
   if(id==='report') {
     initReportForm();
   }
   if(id==='admin') { 
     if(adminLoggedIn) {
+      if (typeof stopLoginAnimation === 'function') stopLoginAnimation();
       const loginWrap = document.getElementById('admin-login-wrap');
       const dashboard = document.getElementById('admin-dashboard');
       if(loginWrap) loginWrap.style.display='none';
@@ -161,8 +140,18 @@ function showPage(id, pushHistory = true) {
       const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : 'overview';
       renderAdminDashboard(sub);
     } else {
+      // Lazy-init 3D login scene after admin page is visible (avoids 0×0 canvas)
+      if (typeof initLogin3DScene === 'function') initLogin3DScene();
       if (typeof initLoginAnimations === 'function') initLoginAnimations();
+      const bootLoginScene = (attempts = 0) => {
+        const sized = typeof triggerLoginResize === 'function' ? triggerLoginResize() : true;
+        if (typeof resumeLoginAnimation === 'function') resumeLoginAnimation();
+        if (!sized && attempts < 8) setTimeout(() => bootLoginScene(attempts + 1), 50);
+      };
+      requestAnimationFrame(() => requestAnimationFrame(() => bootLoginScene()));
     }
+  } else {
+    if (typeof stopLoginAnimation === 'function') stopLoginAnimation();
   }
   window.scrollTo(0,0);
 }
@@ -317,62 +306,102 @@ window.addEventListener('DOMContentLoaded', async () => {
   setTimeout(updateNavIndicator, 100);
 });
 
-function animateHeroSection() {
-  if (typeof gsap === 'undefined') return;
-  
-  // Set elements to zero/hidden states before animating to prevent flash of content
-  gsap.set(['.hero-h1', '.hero-tagline', '.hero-cta', '.hero-stats', '#hero-globe-wrapper'], { 
-    opacity: 0,
-    y: 30
-  });
-  
-  gsap.set('#hero-globe-wrapper', {
-    x: 50,
-    y: 0
-  });
+let homeVisitCount = 0;
 
-  // Run the premium animations
-  gsap.to('.hero-h1', {
-    y: 0,
-    opacity: 1,
-    duration: 0.8,
-    ease: 'power3.out',
-    delay: 0.1
-  });
-  gsap.to('.hero-tagline', {
-    y: 0,
-    opacity: 1,
-    duration: 0.8,
-    ease: 'power3.out',
-    delay: 0.2
-  });
-  gsap.to('.hero-cta', {
-    y: 0,
-    opacity: 1,
-    duration: 0.8,
-    ease: 'power3.out',
-    delay: 0.3
-  });
-  gsap.to('.hero-stats', {
-    y: 0,
-    opacity: 1,
-    duration: 0.8,
-    ease: 'power3.out',
-    delay: 0.4
-  });
-  gsap.to('#hero-globe-wrapper', {
-    x: 0,
-    opacity: 1,
-    duration: 1.0,
-    ease: 'power3.out',
-    delay: 0.3
+const HOME_SR_TARGETS = [
+  '#page-home section h2',
+  '#page-home section > p',
+  '#page-home .step-card',
+  '#page-home .cat-card',
+  '#page-home .testimonial-card'
+];
+
+const HOME_VISIBILITY_SELECTORS = [
+  '.hero-h1', '.hero-tagline', '.hero-cta', '.hero-stats', '#hero-globe-wrapper',
+  '.step-card', '.cat-card', '.testimonial-card', 'section h2', 'section > p'
+];
+
+function resetHomeVisibility() {
+  const home = document.getElementById('page-home');
+  if (!home) return;
+
+  if (window.sr) {
+    HOME_SR_TARGETS.forEach(sel => window.sr.clean(sel));
+  }
+
+  HOME_VISIBILITY_SELECTORS.forEach(sel => {
+    home.querySelectorAll(sel).forEach(el => {
+      if (typeof gsap !== 'undefined') gsap.killTweensOf(el);
+      el.style.removeProperty('opacity');
+      el.style.removeProperty('transform');
+      el.style.removeProperty('visibility');
+    });
   });
 }
 
-let animationsInitialized = false;
-function initAnimations() {
+function bootGlobe(attempts = 0) {
+  const sized = typeof triggerGlobeResize === 'function' ? triggerGlobeResize() : true;
+  if (typeof resumeGlobeAnimation === 'function') resumeGlobeAnimation();
+  if (!sized && attempts < 8) setTimeout(() => bootGlobe(attempts + 1), 50);
+}
+
+function mountHomePage() {
+  const isRevisit = homeVisitCount > 0;
+  homeVisitCount++;
+
+  resetHomeVisibility();
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      if (typeof initGlobe === 'function') {
+        if (typeof globeScene === 'undefined' || !globeScene) {
+          initGlobe();
+        } else {
+          bootGlobe();
+        }
+      }
+
+      if (typeof updateHeroStats === 'function') updateHeroStats();
+      animateHeroSection(isRevisit);
+      initHomeScrollReveal(isRevisit);
+    });
+  });
+}
+
+function animateHeroSection(isRevisit = false) {
+  const targets = ['.hero-h1', '.hero-tagline', '.hero-cta', '.hero-stats', '#hero-globe-wrapper'];
+
+  if (typeof gsap === 'undefined') {
+    document.querySelectorAll(targets.join(',')).forEach(el => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+    return;
+  }
+
+  gsap.killTweensOf(targets);
+
+  if (isRevisit) {
+    gsap.set(targets, { opacity: 1, y: 0, x: 0 });
+    return;
+  }
+
+  gsap.set(targets, { opacity: 0, y: 30 });
+  gsap.set('#hero-globe-wrapper', { x: 50, y: 0 });
+
+  gsap.to('.hero-h1', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.1 });
+  gsap.to('.hero-tagline', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.2 });
+  gsap.to('.hero-cta', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.3 });
+  gsap.to('.hero-stats', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.4 });
+  gsap.to('#hero-globe-wrapper', { x: 0, opacity: 1, duration: 1.0, ease: 'power3.out', delay: 0.3 });
+}
+
+function initHomeScrollReveal(isRevisit = false) {
   if (typeof ScrollReveal === 'undefined') return;
-  if (!animationsInitialized) {
+
+  if (isRevisit) return;
+
+  if (!window.sr) {
     window.sr = ScrollReveal({
       distance: '60px',
       duration: 1000,
@@ -380,27 +409,14 @@ function initAnimations() {
       opacity: 0,
       scale: 0.95
     });
-    
-    // Hero section (Disabled ScrollReveal on hero elements to avoid SPA visibility bugs. Handled by GSAP.)
-    // window.sr.reveal('.hero h1', { delay: 100, origin: 'bottom' });
-    // window.sr.reveal('.hero > p', { delay: 200, origin: 'bottom' });
-    // window.sr.reveal('.hero .hero-stats', { delay: 300, origin: 'bottom' });
-    // window.sr.reveal('.hero .btn', { delay: 400, origin: 'bottom' });
-    // window.sr.reveal('#globe-canvas', { delay: 500, origin: 'right', distance: '100px' });
-    
-    // Sections
-    window.sr.reveal('section h2', { origin: 'left', viewFactor: 0.2 });
-    window.sr.reveal('section > p', { delay: 100, origin: 'left', viewFactor: 0.2 });
-    
-    // Cards stagger
-    window.sr.reveal('.step-card', { interval: 150, origin: 'bottom', viewFactor: 0.2 });
-    window.sr.reveal('.cat-card', { interval: 100, origin: 'bottom', viewFactor: 0.2, scale: 0.9 });
-    window.sr.reveal('.testimonial-card', { interval: 150, origin: 'bottom', viewFactor: 0.2 });
-    
-    animationsInitialized = true;
-  } else if (window.sr) {
-    window.sr.sync();
   }
+
+  window.sr.reveal('#page-home section h2', { origin: 'left', viewFactor: 0.2 });
+  window.sr.reveal('#page-home section > p', { delay: 100, origin: 'left', viewFactor: 0.2 });
+  window.sr.reveal('#page-home .step-card', { interval: 150, origin: 'bottom', viewFactor: 0.2 });
+  window.sr.reveal('#page-home .cat-card', { interval: 100, origin: 'bottom', viewFactor: 0.2, scale: 0.9 });
+  window.sr.reveal('#page-home .testimonial-card', { interval: 150, origin: 'bottom', viewFactor: 0.2 });
+  window.sr.sync();
 }
 window.addEventListener('resize', updateNavIndicator);
 

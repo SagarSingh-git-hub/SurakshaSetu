@@ -20,14 +20,14 @@
 
   <script src="../js/config.js?v=5" defer></script>
   <script src="../js/data.js?v=5" defer></script>
-  <script src="../js/globe.js?v=5" defer></script>
+  <script src="../js/globe.js?v=6" defer></script>
   <script src="../js/map.js?v=5" defer></script>
   <script src="../js/report.js?v=5" defer></script>
   <script src="../js/feed.js?v=5" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
   <script src="../js/admin.js?v=5" defer></script>
   <script src="../js/certificates.js?v=1" defer></script>
-  <script src="../js/app.js?v=5" defer></script>
+  <script src="../js/app.js?v=7" defer></script>
   <!-- Real-time WebSockets -->
   <script src="https://js.pusher.com/8.0/pusher.min.js" defer></script>
   <script src="../js/realtime.js?v=5" defer></script>
@@ -58,7 +58,7 @@
     }
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
-  <script src="../js/login-3d.js?v=5" defer></script>
+  <script src="../js/login-3d.js?v=6" defer></script>
 </head>
 
 <body>
@@ -869,7 +869,7 @@
 
         <div class="admin-sidebar-nav">
           <!-- Item 1 -->
-          <div class="admin-nav-item open">
+          <div class="admin-nav-item">
             <button class="admin-nav-link" onclick="toggleSubnav(this)">
               <div class="admin-nav-link-left">
                 <i class="ph-duotone ph-squares-four admin-nav-icon" style="font-size: 20px;"></i>
@@ -878,7 +878,7 @@
               <i class="ph-duotone ph-caret-down admin-nav-arrow" style="font-size: 16px;"></i>
             </button>
             <div class="admin-subnav">
-              <a href="#" class="admin-subnav-link active"
+              <a href="#" class="admin-subnav-link"
                 onclick="switchAdminView('overview', this); return false;">Overview</a>
               <a href="#" class="admin-subnav-link"
                 onclick="switchAdminView('statistics', this); return false;">Statistics</a>
@@ -2676,7 +2676,7 @@
 
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;">
             <div class="admin-widget" style="padding:16px;">
-              <div id="stat-total"
+              <div id="cert-stat-total"
                 style="font-size:24px;font-family:'Outfit',sans-serif;font-weight:800;color:#f59e0b;margin-bottom:4px;">
                 0</div>
               <div
@@ -2684,7 +2684,7 @@
                 Total issued</div>
             </div>
             <div class="admin-widget" style="padding:16px;">
-              <div id="stat-active"
+              <div id="cert-stat-active"
                 style="font-size:24px;font-family:'Outfit',sans-serif;font-weight:800;color:#16a34a;margin-bottom:4px;">
                 0</div>
               <div
@@ -2692,7 +2692,7 @@
                 Active</div>
             </div>
             <div class="admin-widget" style="padding:16px;">
-              <div id="stat-month"
+              <div id="cert-stat-month"
                 style="font-size:24px;font-family:'Outfit',sans-serif;font-weight:800;color:#3b82f6;margin-bottom:4px;">
                 0</div>
               <div
@@ -2700,7 +2700,7 @@
                 This month</div>
             </div>
             <div class="admin-widget" style="padding:16px;">
-              <div id="stat-revoked"
+              <div id="cert-stat-revoked"
                 style="font-size:24px;font-family:'Outfit',sans-serif;font-weight:800;color:#8b5cf6;margin-bottom:4px;">
                 0</div>
               <div
@@ -4066,12 +4066,22 @@
       }
 
       if (linkElement) {
-        document.querySelectorAll('.admin-subnav-link').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.admin-subnav-link, .admin-nav-link').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.admin-nav-item').forEach(el => {
+          el.classList.remove('active-child');
+          el.classList.remove('open');
+        });
+
         linkElement.classList.add('active');
 
         // Highlight active parent nav item
-        document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-child'));
-        linkElement.closest('.admin-nav-item').classList.add('active-child');
+        const parentNavItem = linkElement.closest('.admin-nav-item');
+        if (parentNavItem) {
+          parentNavItem.classList.add('active-child');
+          if (linkElement.classList.contains('admin-subnav-link')) {
+            parentNavItem.classList.add('open');
+          }
+        }
       }
 
       // Reset scroll instantly
@@ -4116,11 +4126,15 @@
     document.querySelectorAll('.admin-subnav-link').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        document.querySelectorAll('.admin-subnav-link').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.admin-subnav-link, .admin-nav-link').forEach(l => l.classList.remove('active'));
         document.querySelectorAll('.admin-nav-item').forEach(l => l.classList.remove('active-child'));
 
         link.classList.add('active');
-        link.closest('.admin-nav-item').classList.add('active-child');
+        const parentNavItem = link.closest('.admin-nav-item');
+        if (parentNavItem) {
+          parentNavItem.classList.add('active-child');
+          // Note: switchAdminView will handle adding 'open' class if needed, but we can ensure it here too if desired.
+        }
       });
     }); function switchHelpPage(pageId, linkElement) {
       document.querySelectorAll('.help-page').forEach(el => el.classList.remove('active'));

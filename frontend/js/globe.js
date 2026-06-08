@@ -200,19 +200,19 @@ function initGlobe() {
   }
 
   window.triggerGlobeResize = function() {
-    if (!container || !globeRenderer || !globeCamera) return;
+    if (!container || !globeRenderer || !globeCamera) return false;
     let newW = container.clientWidth;
     let newH = container.clientHeight;
-    
-    if (newW === 0 || newH === 0) return; // Ignore hidden states
-    
-    // Maintain bounded aspect ratio on resize too
+
+    if (newW === 0 || newH === 0) return false;
+
     if (newH > newW * 1.2) newH = newW * 1.2;
     if (newW > newH * 1.5) newW = newH * 1.5;
 
     globeCamera.aspect = newW / newH;
     globeCamera.updateProjectionMatrix();
     globeRenderer.setSize(newW, newH);
+    return true;
   }
 
   // Handle Resize gracefully
