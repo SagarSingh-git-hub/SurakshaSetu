@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $report_id = $_POST['report_id'] ?? '';
-    $status = $_POST['status'] ?? '';
+    $priority = $_POST['priority'] ?? '';
     $admin_password = $_POST['admin_password'] ?? '';
 
     // Verify Admin Password
@@ -15,25 +15,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    if (empty($report_id) || empty($status)) {
-        echo json_encode(['success' => false, 'message' => 'Missing report_id or status']);
+    if (empty($report_id) || empty($priority)) {
+        echo json_encode(['success' => false, 'message' => 'Missing report_id or priority']);
         exit;
     }
 
-    $resolved_at_val = ($status === 'Resolved') ? date('Y-m-d H:i:s') : null;
-    $stmt = $conn->prepare("UPDATE reports SET status = ?, resolved_at = ? WHERE report_id = ?");
-    $stmt->bind_param("sss", $status, $resolved_at_val, $report_id);
+    $stmt = $conn->prepare("UPDATE reports SET priority = ? WHERE report_id = ?");
+    $stmt->bind_param("ss", $priority, $report_id);
 
     if ($stmt->execute()) {
         // Trigger Pusher WebSocket Event
-        triggerPusherEvent('eco-channel', 'update-status', [
+        triggerPusherEvent('eco-channel', 'update-priority', [
             'id' => $report_id,
-            'status' => $status
+            'priority' => $priority
         ]);
         
-        echo json_encode(['success' => true, 'message' => 'Status updated successfully']);
+        echo json_encode(['success' => true, 'message' => 'Priority updated successfully']);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Failed to update status: ' . $conn->error]);
+        echo json_encode(['success' => false, 'message' => 'Failed to update priority: ' . $conn->error]);
     }
 
     $stmt->close();

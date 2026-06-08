@@ -393,6 +393,13 @@ async function submitReport() {
   fd.append('lng', formData.lng);
   fd.append('locStr', formData.locStr);
 
+  let deviceId = localStorage.getItem('eco_device_id');
+  if (!deviceId) {
+    deviceId = 'DEV-' + Math.random().toString(36).substr(2, 9) + Date.now();
+    localStorage.setItem('eco_device_id', deviceId);
+  }
+  fd.append('device_id', deviceId);
+
   formData.photos.forEach(p => fd.append('photos[]', p));
 
   try {

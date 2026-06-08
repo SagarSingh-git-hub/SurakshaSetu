@@ -71,14 +71,18 @@ function showPage(id, pushHistory = true) {
       setTimeout(() => { if(typeof mainMap !== 'undefined') mainMap.invalidateSize(); }, 100);
     }
   }
-  if(id==='feed' && !feedInit) {
-    fetchReports().then(() => {
-        renderFeed(currentReports);
-        if (typeof updateGlobeMarkers === 'function') {
-          updateGlobeMarkers(currentReports);
-        }
-        feedInit=true;
-    });
+  if(id==='feed') {
+    if (!feedInit) {
+      fetchReports().then(() => {
+          if (typeof renderFeed === 'function') renderFeed(currentReports);
+          if (typeof updateGlobeMarkers === 'function') {
+            updateGlobeMarkers(currentReports);
+          }
+          feedInit=true;
+      });
+    } else {
+      if (typeof renderFeed === 'function') renderFeed(currentReports);
+    }
   }
   if(id==='home') {
     if (typeof initAnimations === 'function') {

@@ -12,7 +12,7 @@
     rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/style.css?v=2">
   <!-- Premium Animations & 3D -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js" defer></script>
@@ -24,13 +24,41 @@
   <script src="../js/map.js?v=5" defer></script>
   <script src="../js/report.js?v=5" defer></script>
   <script src="../js/feed.js?v=5" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
   <script src="../js/admin.js?v=5" defer></script>
+  <script src="../js/certificates.js?v=1" defer></script>
   <script src="../js/app.js?v=5" defer></script>
   <!-- Real-time WebSockets -->
   <script src="https://js.pusher.com/8.0/pusher.min.js" defer></script>
   <script src="../js/realtime.js?v=5" defer></script>
   <!-- PDF Export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+  <!-- Phosphor Icons (Duotone for 3D look) -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- SheetJS for Excel Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <!-- Tailwind CSS & Animation Libraries -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      corePlugins: {
+        preflight: false,
+      },
+      theme: {
+        extend: {
+          colors: {
+            g400: '#2ecc71',
+            g700: '#147a3d',
+            g800: '#0f5c2e',
+            g900: '#0a3d1f',
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+  <script src="../js/login-3d.js?v=5" defer></script>
 </head>
 
 <body>
@@ -200,7 +228,8 @@
           style="background:#fff;border-radius:20px;border:1px solid #fca5a5;padding:28px 20px;text-align:center;box-shadow:var(--shadow2);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
           <div style="font-size:32px;margin-bottom:4px">🗑</div>
           <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#ef4444">Garbage</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span id="cat-count-Garbage">98</span> reports • Most common</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span
+              id="cat-count-Garbage">98</span> reports • Most common</div>
         </div>
 
         <!-- Plastic Waste -->
@@ -209,7 +238,8 @@
           style="background:#fff;border-radius:20px;border:1px solid #fdba74;padding:28px 20px;text-align:center;box-shadow:var(--shadow2);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
           <div style="font-size:32px;margin-bottom:4px">🧴</div>
           <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#f97316">Plastic Waste</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span id="cat-count-Plastic-Waste">61</span> reports</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span
+              id="cat-count-Plastic-Waste">61</span> reports</div>
         </div>
 
         <!-- Dirty Area -->
@@ -218,7 +248,8 @@
           style="background:#fff;border-radius:20px;border:1px solid #fde047;padding:28px 20px;text-align:center;box-shadow:var(--shadow2);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
           <div style="font-size:32px;margin-bottom:4px">🪣</div>
           <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#eab308">Dirty Area</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span id="cat-count-Dirty-Area">44</span> reports</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span
+              id="cat-count-Dirty-Area">44</span> reports</div>
         </div>
 
         <!-- Junkyard -->
@@ -227,7 +258,8 @@
           style="background:#fff;border-radius:20px;border:1px solid #fdba74;padding:28px 20px;text-align:center;box-shadow:var(--shadow2);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
           <div style="font-size:32px;margin-bottom:4px">🔧</div>
           <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#92400e">Junkyard</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span id="cat-count-Junkyard">22</span> reports</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span
+              id="cat-count-Junkyard">22</span> reports</div>
         </div>
 
         <!-- Water Pollution -->
@@ -237,7 +269,8 @@
           <div style="font-size:32px;margin-bottom:4px">💧</div>
           <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#2563eb">Water Pollution
           </div>
-          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span id="cat-count-Water-Pollution">31</span> reports</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span
+              id="cat-count-Water-Pollution">31</span> reports</div>
         </div>
 
         <!-- Plantation Opp. -->
@@ -247,7 +280,8 @@
           <div style="font-size:32px;margin-bottom:4px">🌱</div>
           <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#16a34a">Plantation Opp.
           </div>
-          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span id="cat-count-Plantation-Opportunity">18</span> reports</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span
+              id="cat-count-Plantation-Opportunity">18</span> reports</div>
         </div>
 
         <!-- Other Issues -->
@@ -256,7 +290,8 @@
           style="background:#fff;border-radius:20px;border:1px solid #c4b5fd;padding:28px 20px;text-align:center;box-shadow:var(--shadow2);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
           <div style="font-size:32px;margin-bottom:4px">✦</div>
           <div style="font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:#7c3aed">Other Issues</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span id="cat-count-Other">0</span> reports</div>
+          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:var(--text3)"><span
+              id="cat-count-Other">0</span> reports</div>
         </div>
 
         <!-- Report Now -->
@@ -693,97 +728,3415 @@
   <!-- ══════════════════ ADMIN PAGE ══════════════════ -->
   <div class="page" id="page-admin">
     <!-- Login -->
-    <div class="admin-login" id="admin-login-wrap">
-      <div class="admin-card">
-        <div class="admin-logo">🌿 Suraksha Setu</div>
-        <div class="admin-logo-sub">NGO Admin Dashboard</div>
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input type="email" class="form-input" id="admin-email" placeholder="admin@ngo.org">
+    <div id="admin-login-wrap"
+      class="relative min-h-[calc(100vh-64px)] flex flex-col lg:flex-row overflow-hidden bg-gradient-to-br from-[#f0fdf4] to-[#e0f2fe] p-4 lg:p-0">
+
+      <!-- Left Side: Login Form -->
+      <div
+        class="w-full lg:w-5/12 flex flex-col justify-center items-center p-4 sm:p-8 lg:p-16 z-10 order-2 lg:order-1 mt-4 lg:mt-0">
+        <div id="login-form-card"
+          class="w-full max-w-md bg-white/85 backdrop-blur-xl border border-white/60 rounded-[24px] shadow-[0_20px_40px_rgba(0,0,0,0.06)] p-8 lg:p-12 opacity-0 transform translate-y-8">
+
+          <div
+            class="admin-logo text-center mb-1 text-[26px] font-[800] text-[#0f5c2e] font-['Outfit'] tracking-[-0.5px]">
+            🌿 Suraksha<span class="text-[#2ecc71]">Setu</span></div>
+          <div class="text-center mb-8 text-[14px] font-[600] text-gray-500 font-['Nunito']">NGO Admin Dashboard</div>
+
+          <div class="mb-8">
+            <h1 class="text-2xl font-[800] text-gray-900 mb-2 font-['Outfit'] tracking-tight">Welcome Back 👋</h1>
+            <p class="text-[14px] text-gray-500 font-[500] leading-relaxed">Secure access to the Suraksha Setu Admin
+              Dashboard</p>
+          </div>
+
+          <div class="form-group mb-5">
+            <label
+              class="block text-[13px] font-[700] text-gray-700 mb-2 font-['Outfit'] tracking-[0.2px]">Email</label>
+            <input type="email" id="admin-email"
+              class="w-full px-4 py-3 border-[1.5px] border-gray-200 rounded-xl text-[14px] font-['Nunito'] text-gray-900 bg-white focus:border-[#2ecc71] focus:ring-[3px] focus:ring-[#c4f0d5] outline-none transition-all duration-200"
+              placeholder="admin@ngo.org">
+          </div>
+
+          <div class="form-group mb-8">
+            <div class="flex justify-between items-center mb-2">
+              <label
+                class="block text-[13px] font-[700] text-gray-700 font-['Outfit'] tracking-[0.2px]">Password</label>
+              <a href="#"
+                class="text-[12px] font-[700] text-[#147a3d] hover:text-[#2ecc71] transition-colors font-['Outfit']">Forgot
+                Password?</a>
+            </div>
+            <div class="relative">
+              <input type="password" id="admin-pass"
+                class="w-full px-4 py-3 border-[1.5px] border-gray-200 rounded-xl text-[14px] font-['Nunito'] text-gray-900 bg-white focus:border-[#2ecc71] focus:ring-[3px] focus:ring-[#c4f0d5] outline-none transition-all duration-200 pr-10"
+                placeholder="••••••••">
+              <button type="button" onclick="togglePasswordVisibility()"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none text-[16px]">
+                <span id="eye-icon">👁️</span>
+              </button>
+            </div>
+          </div>
+
+          <button
+            class="w-full py-[14px] bg-gradient-to-br from-[#147a3d] to-[#0a3d1f] hover:from-[#1a9a4e] hover:to-[#0f5c2e] text-white rounded-xl font-[700] font-['Outfit'] text-[15px] shadow-[0_4px_24px_rgba(20,122,61,0.4)] hover:shadow-[0_8px_32px_rgba(20,122,61,0.45)] transform hover:-translate-y-[2px] transition-all duration-250 flex justify-center items-center gap-2"
+            onclick="doAdminLogin()">
+            Sign In to Dashboard <span class="text-[18px]">→</span>
+          </button>
+
         </div>
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <div style="position:relative;">
-            <input type="password" class="form-input" id="admin-pass" placeholder="••••••••" style="padding-right:40px;">
-            <button type="button" onclick="togglePasswordVisibility()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--text3);">
-              <span id="eye-icon">👁️</span>
-            </button>
+      </div>
+
+      <!-- Right Side: Interactive 3D Section -->
+      <div
+        class="w-full lg:w-7/12 h-[35vh] lg:h-auto relative z-0 flex items-center justify-center overflow-hidden rounded-[24px] lg:rounded-none order-1 lg:order-2">
+        <!-- 3D Canvas Container -->
+        <div id="login-3d-canvas" class="absolute inset-0 w-full h-full bg-gradient-to-br from-[#dcfce7] to-[#e0f2fe]">
+        </div>
+
+        <!-- Overlay Badges -->
+        <div
+          class="absolute inset-0 pointer-events-none flex flex-col justify-end lg:justify-center items-center lg:items-start lg:pl-20 pb-8 lg:pb-0">
+          <div id="login-badge-1"
+            class="bg-white/40 backdrop-blur-md border border-white/60 px-5 py-3 rounded-2xl shadow-lg transform translate-y-10 opacity-0 mb-4 ml-0 lg:-ml-10 hidden sm:flex items-center gap-3">
+            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[20px] shadow-sm">🌍</div>
+            <div>
+              <div class="text-[13px] font-[800] text-[#0a3d1f] font-['Outfit']">Global Impact</div>
+              <div class="text-[11px] font-[600] text-gray-600">Community driven change</div>
+            </div>
+          </div>
+
+          <div id="login-badge-2"
+            class="bg-white/40 backdrop-blur-md border border-white/60 px-5 py-3 rounded-2xl shadow-lg transform translate-y-10 opacity-0 flex items-center gap-3">
+            <div
+              class="w-10 h-10 bg-[#2ecc71] text-white rounded-full flex items-center justify-center text-[20px] shadow-sm">
+              ♻️</div>
+            <div>
+              <div class="text-[13px] font-[800] text-[#0a3d1f] font-['Outfit']">Sustainable Future</div>
+              <div class="text-[11px] font-[600] text-gray-600">Tracking our environment</div>
+            </div>
           </div>
         </div>
-        <button class="btn-primary" style="width:100%;padding:13px" onclick="doAdminLogin()">Sign In to Dashboard
-          →</button>
       </div>
+
     </div>
     <!-- Dashboard -->
     <div class="admin-page" id="admin-dashboard">
-      <div class="dashboard-header">
-        <h2>Admin Dashboard</h2>
-        <div style="display:flex;gap:12px;margin-left:auto">
-          <button class="btn-primary"
-            style="padding:8px 16px;border-radius:8px;font-size:13px;display:inline-flex;align-items:center;gap:6px"
-            onclick="exportPremiumPDF()">📄 Export PDF</button>
-          <button class="logout-btn" onclick="adminLogout()">Logout</button>
+      <!-- SIDEBAR -->
+      <aside class="admin-sidebar" id="admin-sidebar">
+        <!-- Edge Collapse Toggle -->
+        <button class="sidebar-edge-toggle" onclick="toggleSidebar()" id="sidebar-toggle-btn" title="Collapse Sidebar">
+          <i class="ph-bold ph-caret-left" id="sidebar-toggle-icon"></i>
+        </button>
+
+        <div class="admin-sidebar-search">
+          <div class="admin-sidebar-search-box" onclick="expandSidebarIfCollapsed()">
+            <i class="ph-duotone ph-magnifying-glass" style="font-size: 16px; color:var(--text3)"></i>
+            <input type="text" id="admin-module-search" placeholder="Search modules..."
+              oninput="filterAdminModules(this.value)">
+            <button id="admin-search-clear" onclick="clearAdminSearch()"
+              style="display:none; background:none; border:none; color:var(--text3); cursor:pointer; font-size:16px; padding:0;"><i
+                class="ph-bold ph-x"></i></button>
+          </div>
         </div>
-      </div>
-      <div class="stat-cards" id="admin-stats"></div>
-      <!-- Analytics chart -->
-      <div
-        style="background:#fff;border-radius:var(--radius-sm);border:1px solid var(--border);padding:20px;margin-bottom:24px;box-shadow:var(--shadow2)">
-        <h3 style="font-size:15px;font-weight:800;margin-bottom:4px;font-family:'Outfit',sans-serif">Reports by Category
-        </h3>
-        <p style="font-size:12px;color:var(--text3)">All-time distribution across issue types</p>
-        <div class="chart-bars" id="admin-chart"></div>
-      </div>
-      <div class="admin-table-wrap">
-        <div class="admin-table-header">
-          <h3>Recent Reports</h3>
-          <select class="filter-select" onchange="filterAdminTable(this.value,'status')">
-            <option value="">All Status</option>
-            <option>Reported</option>
-            <option>Verified</option>
-            <option>Action Planned</option>
-            <option>In Progress</option>
-            <option>Resolved</option>
-          </select>
-          <select class="filter-select" onchange="filterAdminTable(this.value,'cat')">
-            <option value="">All Categories</option>
-            <option>Garbage</option>
-            <option>Plastic Waste</option>
-            <option>Dirty Area</option>
-            <option>Junkyard</option>
-            <option>Water Pollution</option>
-            <option>Plantation Opportunity</option>
-          </select>
-          <button class="action-btn"
-            style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif"
-            onclick="exportCSV()">⬇ Export CSV</button>
+
+        <div class="admin-sidebar-nav">
+          <!-- Item 1 -->
+          <div class="admin-nav-item open">
+            <button class="admin-nav-link" onclick="toggleSubnav(this)">
+              <div class="admin-nav-link-left">
+                <i class="ph-duotone ph-squares-four admin-nav-icon" style="font-size: 20px;"></i>
+                <span class="admin-sidebar-text">Dashboard</span>
+              </div>
+              <i class="ph-duotone ph-caret-down admin-nav-arrow" style="font-size: 16px;"></i>
+            </button>
+            <div class="admin-subnav">
+              <a href="#" class="admin-subnav-link active"
+                onclick="switchAdminView('overview', this); return false;">Overview</a>
+              <a href="#" class="admin-subnav-link"
+                onclick="switchAdminView('statistics', this); return false;">Statistics</a>
+              <a href="#" class="admin-subnav-link"
+                onclick="switchAdminView('analytics', this); return false;">Analytics</a>
+            </div>
+          </div>
+          <!-- Item 2 -->
+          <div class="admin-nav-item">
+            <button class="admin-nav-link" onclick="switchAdminView('reports', this); return false;">
+              <div class="admin-nav-link-left">
+                <i class="ph-duotone ph-file-text admin-nav-icon" style="font-size: 20px;"></i>
+                <span class="admin-sidebar-text">Reports & Exports</span>
+              </div>
+            </button>
+          </div>
+          <!-- Item 3 -->
+          <div class="admin-nav-item">
+            <button class="admin-nav-link" onclick="switchAdminView('monitoring', this); return false;">
+              <div class="admin-nav-link-left">
+                <i class="ph-duotone ph-map-trifold admin-nav-icon" style="font-size: 20px;"></i>
+                <span class="admin-sidebar-text">Monitoring</span>
+              </div>
+            </button>
+          </div>
+          <!-- Item 4 -->
+          <div class="admin-nav-item">
+            <button class="admin-nav-link" onclick="toggleSubnav(this)">
+              <div class="admin-nav-link-left">
+                <i class="ph-duotone ph-users admin-nav-icon" style="font-size: 20px;"></i>
+                <span class="admin-sidebar-text">Community & Users</span>
+              </div>
+              <i class="ph-duotone ph-caret-down admin-nav-arrow" style="font-size: 16px;"></i>
+            </button>
+            <div class="admin-subnav">
+              <a href="#" class="admin-subnav-link">Active Users</a>
+              <a href="#" class="admin-subnav-link">Comments Management</a>
+              <a href="#" class="admin-subnav-link">Community Feed</a>
+              <a href="#" class="admin-subnav-link">User Posts</a>
+              <a href="#" class="admin-subnav-link">Volunteers</a>
+            </div>
+          </div>
+          <!-- Item 5 -->
+          <div class="admin-nav-item">
+            <button class="admin-nav-link" onclick="toggleSubnav(this)">
+              <div class="admin-nav-link-left">
+                <i class="ph-duotone ph-certificate admin-nav-icon" style="font-size: 20px;"></i>
+                <span class="admin-sidebar-text">Certificate</span>
+              </div>
+              <i class="ph-duotone ph-caret-down admin-nav-arrow" style="font-size: 16px;"></i>
+            </button>
+            <div class="admin-subnav">
+              <a href="#" class="admin-subnav-link" onclick="switchAdminView('cert-issue', this); return false;">Issue
+                Certificates</a>
+              <a href="#" class="admin-subnav-link" onclick="switchAdminView('cert-view', this); return false;">View
+                Certificates</a>
+              <a href="#" class="admin-subnav-link"
+                onclick="switchAdminView('cert-templates', this); return false;">Certificate Templates</a>
+            </div>
+          </div>
+          <!-- Item 6 -->
+          <div class="admin-nav-item">
+            <button class="admin-nav-link" onclick="toggleSubnav(this)">
+              <div class="admin-nav-link-left">
+                <i class="ph-duotone ph-bell-ringing admin-nav-icon" style="font-size: 20px;"></i>
+                <span class="admin-sidebar-text">Notifications</span>
+              </div>
+              <i class="ph-duotone ph-caret-down admin-nav-arrow" style="font-size: 16px;"></i>
+            </button>
+            <div class="admin-subnav">
+              <a href="#" class="admin-subnav-link">Urgent Alerts</a>
+              <a href="#" class="admin-subnav-link">Resolved Updates</a>
+            </div>
+          </div>
+          <!-- Item 6 -->
+          <div class="admin-nav-item">
+            <button class="admin-nav-link" onclick="toggleSubnav(this)">
+              <div class="admin-nav-link-left">
+                <i class="ph-duotone ph-gear admin-nav-icon" style="font-size: 20px;"></i>
+                <span class="admin-sidebar-text">Settings</span>
+              </div>
+              <i class="ph-duotone ph-caret-down admin-nav-arrow" style="font-size: 16px;"></i>
+            </button>
+            <div class="admin-subnav">
+              <a href="#" class="admin-subnav-link"
+                onclick="switchAdminView('settings-general', this); return false;">General</a>
+              <a href="#" class="admin-subnav-link"
+                onclick="switchAdminView('settings-categories', this); return false;">Categories Settings</a>
+              <a href="#" class="admin-subnav-link"
+                onclick="switchAdminView('settings-security', this); return false;">Security</a>
+            </div>
+          </div>
         </div>
-        <div style="overflow-x:auto; overflow-y:auto; max-height: 580px;">
-          <table class="admin-table" id="admin-table">
-            <thead>
-              <tr>
-                <th>Report ID</th>
-                <th>Category</th>
-                <th>Location</th>
-                <th>Date</th>
-                <th>Priority</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="admin-tbody">
-              <tr>
-                <td colspan="7" style="text-align:center;padding:32px;color:var(--text3)">
-                  <div style="font-size:20px;margin-bottom:8px;animation:spin 1s linear infinite;display:inline-block">⏳</div>
-                  <div style="font-family:'Outfit';font-weight:700">Loading dashboard data...</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+
+        <div class="admin-sidebar-footer">
+          <button style="margin-bottom:8px" onclick="switchAdminView('help-center', this); return false;">
+            <i class="ph-duotone ph-question" style="font-size: 20px; color:var(--text3)"></i>
+            <span class="admin-sidebar-text" style="color:var(--text3)">Help Center</span>
+          </button>
+          <button onclick="adminLogout()">
+            <i class="ph-duotone ph-sign-out" style="font-size: 20px;"></i>
+            <span class="admin-sidebar-text">Logout</span>
+          </button>
+
+          <div class="admin-profile-card">
+            <div class="admin-avatar">SN</div>
+            <div class="admin-profile-info">
+              <div class="admin-profile-name">Sanjay Negi</div>
+              <div class="admin-profile-role">Super Admin</div>
+            </div>
+          </div>
         </div>
+      </aside>
+
+      <div class="admin-content-wrap">
+        <div class="dashboard-header">
+          <h2 id="admin-page-title">Admin Dashboard</h2>
+          <div style="display:flex;gap:12px;margin-left:auto" id="admin-page-actions">
+            <button id="btn-export-pdf" class="btn-primary"
+              style="padding:8px 16px;border-radius:8px;font-size:13px;display:inline-flex;align-items:center;gap:6px"
+              onclick="exportPremiumPDF()">📄 Export PDF</button>
+            <button id="btn-export-csv" class="btn-primary"
+              style="padding:8px 16px;border-radius:8px;font-size:13px;display:none;align-items:center;gap:6px"
+              onclick="exportStatsCSV()">📄 Export CSV</button>
+            <button id="btn-export-analytics" class="btn-primary"
+              style="padding:8px 16px;border-radius:8px;font-size:13px;display:none;align-items:center;gap:6px"
+              onclick="exportAnalyticsData()">📄 Download Analytics</button>
+          </div>
+        </div>
+
+        <!-- OVERVIEW VIEW -->
+        <div id="admin-view-overview">
+          <div class="stat-cards" id="admin-stats"></div>
+          <!-- Analytics chart -->
+          <div
+            style="background:#fff;border-radius:var(--radius-sm);border:1px solid var(--border);padding:20px;margin-bottom:24px;box-shadow:var(--shadow2)">
+            <h3 style="font-size:15px;font-weight:800;margin-bottom:4px;font-family:'Outfit',sans-serif">Reports by
+              Category
+            </h3>
+            <p style="font-size:12px;color:var(--text3)">All-time distribution across issue types</p>
+            <div class="chart-bars" id="admin-chart-overview"></div>
+          </div>
+
+          <!-- New Widgets Row -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+            <!-- Active Zones -->
+            <div class="admin-widget" style="padding:24px;display:flex;flex-direction:column;">
+              <h3
+                style="font-size:16px;font-weight:800;font-family:'Outfit',sans-serif;margin-bottom:20px;color:var(--text);">
+                Active Zones — Uttarakhand</h3>
+
+              <!-- Abstract Map Grid (Light Theme) -->
+              <div id="admin-active-zones-map"
+                style="position:relative;width:100%;height:200px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;background-image:linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);background-size:25px 25px;">
+                <!-- Scattered Dots will be injected here dynamically -->
+
+                <!-- Label -->
+                <div
+                  style="position:absolute;top:45%;left:40%;font-size:12px;color:var(--text);font-weight:700;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.8);padding:4px 8px;border-radius:20px;box-shadow:0 2px 4px rgba(0,0,0,0.05);backdrop-filter:blur(4px);z-index:10;">
+                  <i class="ph-fill ph-map-pin" style="color:#ef4444;"></i> Live Issue Clusters
+                </div>
+              </div>
+
+              <!-- Zone Tags -->
+              <div id="admin-active-zones-tags" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;">
+                <!-- Dynamic Tags will be injected here -->
+              </div>
+            </div>
+
+            <!-- Live Activity Feed -->
+            <div class="admin-widget" style="padding:24px;display:flex;flex-direction:column;">
+              <h3
+                style="font-size:16px;font-weight:800;font-family:'Outfit',sans-serif;margin-bottom:20px;color:var(--text);">
+                Live Activity Feed</h3>
+
+              <div style="display:flex;flex-direction:column;gap:16px;overflow-y:auto;max-height:260px;"
+                id="admin-live-activity-feed">
+                <!-- Dynamic Feed Items will be injected here -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATISTICS VIEW -->
+        <div id="admin-view-statistics" style="display: none;">
+          <div class="stat-cards" style="margin-bottom: 24px;">
+            <div class="stat-card">
+              <div class="stat-card-val" id="stat-avg-time">--</div>
+              <div class="stat-card-label">Avg Resolve Time</div>
+              <div class="stat-card-trend">Across all zones</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-val" id="stat-reports-day" style="color:#3b82f6;">--</div>
+              <div class="stat-card-label">Reports/Day</div>
+              <div class="stat-card-trend">Live frequency</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-val" id="stat-active-users" style="color:#8b5cf6;">--</div>
+              <div class="stat-card-label">Active Users</div>
+              <div class="stat-card-trend">Unique reporters</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-val" id="stat-escalation" style="color:#f97316;">--%</div>
+              <div class="stat-card-label">Escalation Rate</div>
+              <div class="stat-card-trend">High priority ratio</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-val" id="stat-resolution" style="color:#16a34a;">--%</div>
+              <div class="stat-card-label">Resolution Rate</div>
+              <div class="stat-card-trend">Overall efficiency</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-val" id="stat-satisfaction" style="color:#eab308;">--★</div>
+              <div class="stat-card-label">Satisfaction</div>
+              <div class="stat-card-trend">Based on resolve time</div>
+            </div>
+          </div>
+
+          <div class="admin-dashboard-grid">
+            <!-- Monthly Volume -->
+            <div class="admin-widget">
+              <h3 class="admin-widget-title">Monthly Report Volume</h3>
+              <div style="position:relative;width:100%;height:220px;">
+                <canvas id="barChart" role="img" aria-label="Monthly reports Jan to Jun">Monthly reports trend over 6
+                  months.</canvas>
+              </div>
+            </div>
+
+            <!-- Category Distribution -->
+            <div class="admin-widget">
+              <h3 class="admin-widget-title">Category Distribution</h3>
+              <div style="display:flex;align-items:center;gap:20px;height:220px;">
+                <canvas id="donutChart" width="160" height="160" role="img" aria-label="Category donut chart">Issue
+                  category breakdown.</canvas>
+                <div id="stat-category-legend" style="flex:1;">
+                  <!-- Dynamically populated category legend -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Top Reporting Zones -->
+            <div class="admin-widget">
+              <h3 class="admin-widget-title">Top Reporting Zones</h3>
+              <div id="stat-top-zones-list" style="display:flex;flex-direction:column;gap:12px;">
+                <!-- Dynamically populated top zones -->
+              </div>
+            </div>
+
+            <!-- Issue Status Flow -->
+            <div class="admin-widget">
+              <h3 class="admin-widget-title">Issue Status Flow</h3>
+              <div id="stat-status-flow-list" style="display:flex;flex-direction:column;gap:16px;">
+                <!-- Dynamically populated status flow -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ANALYTICS VIEW -->
+        <div id="admin-view-analytics" style="display: none;">
+          <!-- Heatmap (Full width) -->
+          <div class="admin-widget" style="margin-bottom: 24px;">
+            <h3 class="admin-widget-title">Weekly Report Heatmap</h3>
+            <p style="font-size:13px;color:var(--text3);margin-top:-12px;margin-bottom:16px;">Mon → Sun · Last 4 weeks
+            </p>
+            <div style="display:flex;gap:20px;align-items:flex-start;">
+              <div style="display:flex;flex-direction:column;gap:6px;padding-top:2px;">
+                <span
+                  style="font-size:12px;font-weight:600;color:var(--text3);height:28px;display:flex;align-items:center;">Wk
+                  1</span>
+                <span
+                  style="font-size:12px;font-weight:600;color:var(--text3);height:28px;display:flex;align-items:center;">Wk
+                  2</span>
+                <span
+                  style="font-size:12px;font-weight:600;color:var(--text3);height:28px;display:flex;align-items:center;">Wk
+                  3</span>
+                <span
+                  style="font-size:12px;font-weight:600;color:var(--text3);height:28px;display:flex;align-items:center;">Wk
+                  4</span>
+              </div>
+              <div style="flex:1;">
+                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px;">
+                  <span style="font-size:12px;font-weight:700;color:var(--text3);text-align:center;">M</span>
+                  <span style="font-size:12px;font-weight:700;color:var(--text3);text-align:center;">T</span>
+                  <span style="font-size:12px;font-weight:700;color:var(--text3);text-align:center;">W</span>
+                  <span style="font-size:12px;font-weight:700;color:var(--text3);text-align:center;">T</span>
+                  <span style="font-size:12px;font-weight:700;color:var(--text3);text-align:center;">F</span>
+                  <span style="font-size:12px;font-weight:700;color:var(--text3);text-align:center;">S</span>
+                  <span style="font-size:12px;font-weight:700;color:var(--text3);text-align:center;">S</span>
+                </div>
+                <div id="heatmap" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;"></div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:20px;justify-content:flex-end;">
+              <span style="font-size:12px;font-weight:600;color:var(--text3);">Less</span>
+              <div style="width:16px;height:16px;border-radius:4px;background:#f0fdf4;border:1px solid #bbf7d0;"></div>
+              <div style="width:16px;height:16px;border-radius:4px;background:#dcfce7;border:1px solid #86efac;"></div>
+              <div style="width:16px;height:16px;border-radius:4px;background:#86efac;border:1px solid #4ade80;"></div>
+              <div style="width:16px;height:16px;border-radius:4px;background:#4ade80;"></div>
+              <div style="width:16px;height:16px;border-radius:4px;background:#22c55e;"></div>
+              <span style="font-size:12px;font-weight:600;color:var(--text3);">More</span>
+            </div>
+          </div>
+
+          <!-- Middle Row -->
+          <div class="admin-dashboard-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 24px;">
+            <!-- Peak Hours -->
+            <div class="admin-widget">
+              <h3 class="admin-widget-title">Peak Reporting Hours</h3>
+              <div style="position:relative;width:100%;height:180px;margin-top:16px;">
+                <canvas id="hourChart" role="img" aria-label="Hourly report distribution">Hourly report distribution
+                  across 24h.</canvas>
+              </div>
+            </div>
+
+            <!-- Resolution Speed -->
+            <div class="admin-widget">
+              <h3 class="admin-widget-title">Resolution Speed</h3>
+              <div style="display:flex;flex-direction:column;gap:14px;margin-top:16px;">
+                <div>
+                  <div
+                    style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;font-weight:600;">
+                    <span style="color:var(--text3)">Same Day</span><span
+                      style="color:var(--text);font-weight:800;">28%</span>
+                  </div>
+                  <div style="height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden;">
+                    <div style="height:100%;background:#22c55e;width:28%;border-radius:4px;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;font-weight:600;">
+                    <span style="color:var(--text3)">1–3 Days</span><span
+                      style="color:var(--text);font-weight:800;">44%</span>
+                  </div>
+                  <div style="height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden;">
+                    <div style="height:100%;background:#3b82f6;width:44%;border-radius:4px;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;font-weight:600;">
+                    <span style="color:var(--text3)">4–7 Days</span><span
+                      style="color:var(--text);font-weight:800;">19%</span>
+                  </div>
+                  <div style="height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden;">
+                    <div style="height:100%;background:#f59e0b;width:19%;border-radius:4px;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;font-weight:600;">
+                    <span style="color:var(--text3)">7+ Days</span><span
+                      style="color:var(--text);font-weight:800;">9%</span>
+                  </div>
+                  <div style="height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden;">
+                    <div style="height:100%;background:#ef4444;width:9%;border-radius:4px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- User Engagement -->
+            <div class="admin-widget">
+              <h3 class="admin-widget-title">User Engagement</h3>
+              <div style="display:flex;flex-direction:column;gap:16px;margin-top:16px;">
+                <div style="padding:16px;background:#f0fdf4;border-radius:12px;border:1px solid #bbf7d0;">
+                  <div style="font-size:11px;color:#16a34a;font-weight:700;margin-bottom:4px;letter-spacing:0.5px;">NEW
+                    REPORTERS</div>
+                  <div
+                    style="font-family:'Outfit',sans-serif;font-size:32px;font-weight:800;color:#15803d;line-height:1;">
+                    +84</div>
+                  <div style="font-size:13px;color:#16a34a;margin-top:4px;font-weight:500;">this month</div>
+                </div>
+                <div style="padding:16px;background:#eff6ff;border-radius:12px;border:1px solid #bfdbfe;">
+                  <div style="font-size:11px;color:#2563eb;font-weight:700;margin-bottom:4px;letter-spacing:0.5px;">
+                    REPEAT REPORTERS</div>
+                  <div
+                    style="font-family:'Outfit',sans-serif;font-size:32px;font-weight:800;color:#1d4ed8;line-height:1;">
+                    234</div>
+                  <div style="font-size:13px;color:#2563eb;margin-top:4px;font-weight:500;">73.6% of total</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Row -->
+          <div class="admin-widget">
+            <h3 class="admin-widget-title">6-Month Trend — Reported vs Resolved</h3>
+            <div style="position:relative;width:100%;height:260px;margin-top:16px;">
+              <canvas id="lineChart" role="img" aria-label="6 month comparison of reported vs resolved issues">Reported
+                vs resolved issues over 6 months.</canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- REPORTS VIEW -->
+        <div id="admin-view-reports" style="display: none;">
+          <div class="admin-table-wrap">
+            <div class="admin-table-header">
+              <h3>Recent Reports</h3>
+              <select class="filter-select" onchange="filterAdminTable(this.value,'status')">
+                <option value="">All Status</option>
+                <option>Reported</option>
+                <option>Verified</option>
+                <option>Action Planned</option>
+                <option>In Progress</option>
+                <option>Resolved</option>
+              </select>
+              <select class="filter-select" onchange="filterAdminTable(this.value,'cat')">
+                <option value="">All Categories</option>
+                <option>Garbage</option>
+                <option>Plastic Waste</option>
+                <option>Dirty Area</option>
+                <option>Junkyard</option>
+                <option>Water Pollution</option>
+                <option>Plantation Opportunity</option>
+              </select>
+              <button class="action-btn"
+                style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif"
+                onclick="exportReportsExcel()">📄 Export Excel</button>
+            </div>
+            <div style="overflow-x:auto; overflow-y:auto; max-height: 580px;">
+              <table class="admin-table" id="admin-table">
+                <thead>
+                  <tr>
+                    <th>Report ID</th>
+                    <th>Category</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-tbody">
+                  <tr>
+                    <td colspan="7" style="text-align:center;padding:32px;color:var(--text3)">
+                      <div
+                        style="font-size:20px;margin-bottom:8px;animation:spin 1s linear infinite;display:inline-block">
+                        ⏳
+                      </div>
+                      <div style="font-family:'Outfit';font-weight:700">Loading dashboard data...</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- MONITORING VIEW -->
+        <div id="admin-view-monitoring" style="display: none;">
+          <style>
+            .m-filter-bar {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              padding: 0 0 16px 0;
+              margin-bottom: 20px;
+              border-bottom: 1px solid var(--border);
+              background: transparent;
+            }
+
+            .m-fbtn {
+              border: 1px solid #cbd5e1;
+              background: #fff;
+              color: var(--text3);
+              font-size: 12px;
+              font-family: 'Outfit', sans-serif;
+              padding: 6px 14px;
+              border-radius: 20px;
+              cursor: pointer;
+              transition: all .2s;
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              font-weight: 600;
+            }
+
+            .m-fbtn:hover {
+              border-color: var(--primary);
+              color: var(--primary);
+            }
+
+            .m-fbtn.active {
+              background: #f0fdf4;
+              border-color: var(--primary);
+              color: var(--primary);
+            }
+
+            .m-fcat {
+              width: 8px;
+              height: 8px;
+              border-radius: 50%;
+              display: inline-block;
+            }
+
+            .m-layout {
+              display: grid;
+              grid-template-columns: 1fr 340px;
+              min-height: 560px;
+              background: #fff;
+              border: 1px solid var(--border);
+              border-radius: 12px;
+              overflow: hidden;
+              box-shadow: var(--shadow);
+            }
+
+            .m-map-panel {
+              position: relative;
+              overflow: hidden;
+              border-right: 1px solid var(--border);
+            }
+
+            .m-map-canvas {
+              width: 100%;
+              height: 100%;
+              min-height: 560px;
+              position: relative;
+              background: #f8fafc;
+              z-index: 1;
+            }
+
+            .m-zoom {
+              position: absolute;
+              top: 16px;
+              left: 16px;
+              z-index: 20;
+              display: flex;
+              flex-direction: column;
+              gap: 6px;
+            }
+
+            .m-zoom-btn {
+              width: 34px;
+              height: 34px;
+              background: #fff;
+              border: 1px solid #cbd5e1;
+              color: var(--text2);
+              font-size: 18px;
+              border-radius: 8px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transition: all .2s;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
+
+            .m-zoom-btn:hover {
+              background: #f0fdf4;
+              color: var(--primary);
+              border-color: var(--primary);
+            }
+
+            .m-legend {
+              position: absolute;
+              bottom: 16px;
+              left: 16px;
+              z-index: 20;
+              background: #fff;
+              border: 1px solid var(--border);
+              border-radius: 10px;
+              padding: 12px 14px;
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            }
+
+            .m-leg-row {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              margin-bottom: 6px;
+              font-size: 12px;
+              color: var(--text2);
+              font-weight: 600;
+            }
+
+            .m-leg-row:last-child {
+              margin-bottom: 0;
+            }
+
+            .m-leg-dot {
+              width: 10px;
+              height: 10px;
+              border-radius: 50%;
+            }
+
+            .m-marker {
+              position: absolute;
+              transform: translate(-50%, -100%);
+              cursor: pointer;
+              transition: transform .2s;
+              z-index: 15;
+            }
+
+            .m-marker:hover {
+              transform: translate(-50%, -100%) scale(1.15);
+              z-index: 25;
+            }
+
+            .m-mpin {
+              width: 30px;
+              height: 36px;
+              position: relative;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+
+            .m-mpin-body {
+              width: 30px;
+              height: 30px;
+              border-radius: 50% 50% 50% 0;
+              transform: rotate(-45deg);
+              border: 2px solid #fff;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            }
+
+            .m-mpin-inner {
+              width: 12px;
+              height: 12px;
+              border-radius: 50%;
+              background: #fff;
+              transform: rotate(45deg);
+            }
+
+            .m-mpulse {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 30px;
+              height: 30px;
+              border-radius: 50%;
+              animation: mring 2s infinite;
+            }
+
+            .m-tooltip {
+              position: absolute;
+              z-index: 30;
+              background: #fff;
+              border: 1px solid var(--border);
+              border-radius: 10px;
+              padding: 12px 16px;
+              min-width: 180px;
+              pointer-events: none;
+              display: none;
+              box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            }
+
+            .m-tt-title {
+              font-family: 'Outfit', sans-serif;
+              font-size: 14px;
+              font-weight: 700;
+              margin-bottom: 4px;
+            }
+
+            .m-tt-row {
+              font-size: 12px;
+              color: var(--text3);
+              display: flex;
+              justify-content: space-between;
+              gap: 12px;
+              margin-bottom: 3px;
+            }
+
+            .m-right {
+              display: flex;
+              flex-direction: column;
+              background: #fff;
+            }
+
+            .m-ptabs {
+              display: flex;
+              border-bottom: 1px solid var(--border);
+            }
+
+            .m-ptab {
+              flex: 1;
+              padding: 14px 8px;
+              text-align: center;
+              font-size: 13px;
+              font-weight: 700;
+              color: var(--text3);
+              cursor: pointer;
+              border-bottom: 2px solid transparent;
+              transition: all .2s;
+            }
+
+            .m-ptab.active {
+              color: var(--primary);
+              border-bottom-color: var(--primary);
+            }
+
+            .m-list {
+              flex: 1;
+              overflow-y: auto;
+              max-height: 515px;
+            }
+
+            .m-list::-webkit-scrollbar {
+              width: 4px;
+            }
+
+            .m-list::-webkit-scrollbar-track {
+              background: transparent;
+            }
+
+            .m-list::-webkit-scrollbar-thumb {
+              background: #cbd5e1;
+              border-radius: 4px;
+            }
+
+            .m-card {
+              padding: 14px 16px;
+              border-bottom: 1px solid #f1f5f9;
+              cursor: pointer;
+              transition: background .15s;
+            }
+
+            .m-card:hover {
+              background: #f8fafc;
+            }
+
+            .m-card.selected {
+              background: #f0fdf4;
+              border-left: 3px solid var(--primary);
+            }
+
+            .m-ic-header {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-bottom: 6px;
+            }
+
+            .m-ic-id {
+              font-family: 'Outfit', sans-serif;
+              font-size: 12px;
+              color: var(--text3);
+              font-weight: 600;
+            }
+
+            .m-ic-badge {
+              font-size: 10px;
+              padding: 3px 8px;
+              border-radius: 10px;
+              font-weight: 700;
+              text-transform: uppercase;
+            }
+
+            .m-ic-title {
+              font-size: 14px;
+              font-weight: 600;
+              color: var(--text);
+              margin-bottom: 4px;
+            }
+
+            .m-ic-meta {
+              font-size: 12px;
+              color: var(--text3);
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            }
+
+            .m-detail {
+              padding: 20px;
+              display: none;
+              overflow-y: auto;
+              max-height: 515px;
+            }
+
+            .m-detail.show {
+              display: block;
+            }
+
+            .m-dp-back {
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              font-size: 13px;
+              color: var(--primary);
+              font-weight: 700;
+              cursor: pointer;
+              margin-bottom: 16px;
+            }
+
+            .m-dp-title {
+              font-family: 'Outfit', sans-serif;
+              font-size: 18px;
+              font-weight: 700;
+              color: var(--text);
+              margin-bottom: 6px;
+              line-height: 1.3;
+            }
+
+            .m-dp-id {
+              font-size: 12px;
+              color: var(--text3);
+              margin-bottom: 16px;
+            }
+
+            .m-dp-row {
+              display: flex;
+              align-items: flex-start;
+              gap: 8px;
+              margin-bottom: 10px;
+              font-size: 13px;
+            }
+
+            .m-dp-lbl {
+              color: var(--text3);
+              min-width: 80px;
+              font-weight: 600;
+            }
+
+            .m-dp-val {
+              color: var(--text);
+              flex: 1;
+              font-weight: 600;
+            }
+
+            .m-dp-actions {
+              display: flex;
+              gap: 8px;
+              margin-top: 24px;
+              flex-wrap: wrap;
+            }
+
+            .m-dp-btn {
+              flex: 1;
+              min-width: 80px;
+              padding: 10px;
+              border-radius: 8px;
+              font-size: 13px;
+              font-weight: 600;
+              cursor: pointer;
+              border: 1px solid;
+              text-align: center;
+              transition: all .2s;
+            }
+
+            .m-dp-btn-primary {
+              background: var(--primary);
+              border-color: var(--primary);
+              color: #fff;
+            }
+
+            .m-dp-btn-primary:hover {
+              background: #16a34a;
+            }
+
+            .m-dp-btn-success {
+              background: #dcfce7;
+              border-color: #bbf7d0;
+              color: #16a34a;
+            }
+
+            .m-dp-btn-success:hover {
+              background: #bbf7d0;
+            }
+
+            .m-dp-btn-warning {
+              background: #fef3c7;
+              border-color: #fde68a;
+              color: #d97706;
+            }
+
+            .m-dp-btn-warning:hover {
+              background: #fde68a;
+            }
+
+            .m-dp-btn-danger {
+              background: #fee2e2;
+              border-color: #fca5a5;
+              color: #dc2626;
+            }
+
+            .m-dp-btn-danger:hover {
+              background: #fecaca;
+            }
+
+            .leaflet-custom-tooltip {
+              background: #fff;
+              border: 1px solid var(--border);
+              border-radius: 10px;
+              padding: 12px 16px;
+              box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+              opacity: 1 !important;
+            }
+
+            .leaflet-custom-tooltip::before {
+              display: none !important;
+            }
+          </style>
+
+          <div class="m-filter-bar" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:16px;">
+            <div class="m-filter-group" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span style="font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-right:4px;font-weight:700;">Filter:</span>
+              <button class="m-fbtn active" onclick="filterMapIssues('all',this)">All</button>
+              <button class="m-fbtn" onclick="filterMapIssues('Garbage',this)"><span class="m-fcat" style="background:#ef4444;"></span>Garbage</button>
+              <button class="m-fbtn" onclick="filterMapIssues('Plastic Waste',this)"><span class="m-fcat" style="background:#f97316;"></span>Plastic</button>
+              <button class="m-fbtn" onclick="filterMapIssues('Dirty Area',this)"><span class="m-fcat" style="background:#eab308;"></span>Dirty Area</button>
+              <button class="m-fbtn" onclick="filterMapIssues('Junkyard',this)"><span class="m-fcat" style="background:#d97706;"></span>Junkyard</button>
+              <button class="m-fbtn" onclick="filterMapIssues('Water Pollution',this)"><span class="m-fcat" style="background:#3b82f6;"></span>Water</button>
+              <button class="m-fbtn" onclick="filterMapIssues('Plantation Opportunity',this)"><span class="m-fcat" style="background:#22c55e;"></span>Plantation</button>
+              <button class="m-fbtn" onclick="filterMapIssues('Resolved',this)"><span class="m-fcat" style="background:#808080;"></span>Resolved</button>
+            </div>
+
+            <div style="display:flex;gap:12px;" id="live-monitoring-stats">
+              <div style="display:flex;align-items:center;gap:6px;background:#05140A;border:1px solid #14301D;border-radius:24px;padding:6px 14px;">
+                 <div style="width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 6px #ef4444;"></div>
+                 <span style="font-weight:700;color:#ef4444;font-size:14px;font-family:'Outfit',sans-serif;" id="stat-pill-high">0</span>
+                 <span style="color:#f8fafc;font-size:13px;font-family:'Outfit',sans-serif;font-weight:500;">High</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;background:#05140A;border:1px solid #14301D;border-radius:24px;padding:6px 14px;">
+                 <div style="width:8px;height:8px;border-radius:50%;background:#eab308;box-shadow:0 0 6px #eab308;"></div>
+                 <span style="font-weight:700;color:#eab308;font-size:14px;font-family:'Outfit',sans-serif;" id="stat-pill-active">0</span>
+                 <span style="color:#f8fafc;font-size:13px;font-family:'Outfit',sans-serif;font-weight:500;">Active</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;background:#05140A;border:1px solid #14301D;border-radius:24px;padding:6px 14px;">
+                 <div style="width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e;"></div>
+                 <span style="font-weight:700;color:#22c55e;font-size:14px;font-family:'Outfit',sans-serif;" id="stat-pill-resolved">0</span>
+                 <span style="color:#f8fafc;font-size:13px;font-family:'Outfit',sans-serif;font-weight:500;">Resolved</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="m-layout">
+            <div class="m-map-panel" style="position: relative;">
+              <div id="live-leaflet-map" style="width: 100%; height: 100%; min-height: 560px;"></div>
+
+              <div class="m-legend"
+                style="position: absolute; bottom: 24px; left: 16px; height: fit-content; z-index: 1000; background: rgba(255,255,255,0.9); padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; pointer-events: none;">
+                <div class="m-leg-row">
+                  <div class="m-leg-dot" style="background:#ef4444;"></div>Garbage
+                </div>
+                <div class="m-leg-row">
+                  <div class="m-leg-dot" style="background:#f97316;"></div>Plastic Waste
+                </div>
+                <div class="m-leg-row">
+                  <div class="m-leg-dot" style="background:#eab308;"></div>Dirty Area
+                </div>
+                <div class="m-leg-row">
+                  <div class="m-leg-dot" style="background:#d97706;"></div>Junkyard
+                </div>
+                <div class="m-leg-row">
+                  <div class="m-leg-dot" style="background:#3b82f6;"></div>Water Pollution
+                </div>
+                <div class="m-leg-row">
+                  <div class="m-leg-dot" style="background:#22c55e;"></div>Plantation
+                </div>
+                <div class="m-leg-row">
+                  <div class="m-leg-dot" style="background:#808080;"></div>Resolved
+                </div>
+              </div>
+
+              <div id="mTooltip" class="m-tooltip"></div>
+            </div>
+
+            <div class="m-right">
+              <div class="m-ptabs">
+                <div class="m-ptab active" onclick="switchMapPanel('list',this)"><i class="ph-duotone ph-list"
+                    style="font-size:16px;margin-right:4px;position:relative;top:2px;"></i>Active Issues</div>
+                <div class="m-ptab" onclick="switchMapPanel('detail',this)"><i class="ph-duotone ph-info"
+                    style="font-size:16px;margin-right:4px;position:relative;top:2px;"></i>Details</div>
+              </div>
+
+              <div id="mIssuesList" class="m-list"></div>
+
+              <div id="mDetailPanel" class="m-detail">
+                <div class="m-dp-back" onclick="switchMapPanel('list', document.querySelectorAll('.m-ptab')[0])">
+                  <i class="ph-bold ph-arrow-left" style="font-size:14px;"></i>Back to Issues
+                </div>
+                <div id="mDpContent"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SETTINGS VIEWS -->
+        <div id="admin-view-settings-general" style="display: none;">
+          <div class="settings-section">
+            <div class="settings-sec-title"><i class="ph-duotone ph-buildings" style="font-size:20px;"></i>Platform
+              identity</div>
+            <div class="settings-card">
+              <div class="settings-field-row">
+                <div class="settings-field">
+                  <div class="settings-field-label">Platform name</div>
+                  <input class="settings-field-input" type="text" value="Suraksha Setu">
+                </div>
+                <div class="settings-field">
+                  <div class="settings-field-label">Tagline</div>
+                  <input class="settings-field-input" type="text" value="Community Environmental Reporter">
+                </div>
+              </div>
+              <div class="settings-field-row">
+                <div class="settings-field">
+                  <div class="settings-field-label">Admin contact email</div>
+                  <input class="settings-field-input" type="email" value="admin@surakshasetu.in">
+                </div>
+                <div class="settings-field">
+                  <div class="settings-field-label">Support phone</div>
+                  <input class="settings-field-input" type="text" value="+91 562 400 0000">
+                </div>
+              </div>
+              <div class="settings-field-row full">
+                <div class="settings-field">
+                  <div class="settings-field-label">Platform description</div>
+                  <textarea class="settings-field-input" rows="2"
+                    style="resize:vertical;">A civic technology platform enabling Agra residents to report and track environmental issues in real time.</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="settings-sec-title"><i class="ph-duotone ph-map-pin" style="font-size:20px;"></i>Region & locale
+            </div>
+            <div class="settings-card">
+              <div class="settings-field-row">
+                <div class="settings-field">
+                  <div class="settings-field-label">Primary city</div>
+                  <select class="settings-field-input">
+                    <option selected>Haldwani, Uttarakhand</option>
+                    <option>Nainital, Uttarakhand</option>
+                    <option>Dehradun, Uttarakhand</option>
+                  </select>
+                </div>
+                <div class="settings-field">
+                  <div class="settings-field-label">Timezone</div>
+                  <select class="settings-field-input">
+                    <option selected>Asia/Kolkata (IST +5:30)</option>
+                    <option>UTC</option>
+                  </select>
+                </div>
+              </div>
+              <div class="settings-field-row">
+                <div class="settings-field">
+                  <div class="settings-field-label">Language</div>
+                  <select class="settings-field-input">
+                    <option>English</option>
+                    <option selected>English + हिंदी</option>
+                    <option>हिंदी only</option>
+                  </select>
+                </div>
+                <div class="settings-field">
+                  <div class="settings-field-label">Date format</div>
+                  <select class="settings-field-input">
+                    <option selected>DD/MM/YYYY</option>
+                    <option>MM/DD/YYYY</option>
+                    <option>YYYY-MM-DD</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="settings-sec-title"><i class="ph-duotone ph-toggle-left" style="font-size:20px;"></i>Platform
+              features</div>
+            <div class="settings-card">
+              <div class="settings-toggle-row">
+                <div class="settings-toggle-info">
+                  <div class="settings-toggle-name">Community feed</div>
+                  <div class="settings-toggle-desc">Allow users to view and comment on public reports.</div>
+                </div>
+                <div class="settings-toggle on" onclick="this.classList.toggle('on')">
+                  <div class="settings-toggle-knob"></div>
+                </div>
+              </div>
+              <div class="settings-toggle-row">
+                <div class="settings-toggle-info">
+                  <div class="settings-toggle-name">Public report map</div>
+                  <div class="settings-toggle-desc">Show live map to unauthenticated visitors.</div>
+                </div>
+                <div class="settings-toggle on" onclick="this.classList.toggle('on')">
+                  <div class="settings-toggle-knob"></div>
+                </div>
+              </div>
+              <div class="settings-toggle-row">
+                <div class="settings-toggle-info">
+                  <div class="settings-toggle-name">Anonymous reporting</div>
+                  <div class="settings-toggle-desc">Allow reports without account registration.</div>
+                </div>
+                <div class="settings-toggle" onclick="this.classList.toggle('on')">
+                  <div class="settings-toggle-knob"></div>
+                </div>
+              </div>
+              <div class="settings-toggle-row">
+                <div class="settings-toggle-info">
+                  <div class="settings-toggle-name">AI auto-categorization</div>
+                  <div class="settings-toggle-desc">Use Eco Warrior YOLO model to classify uploaded photos.</div>
+                </div>
+                <div class="settings-toggle on" onclick="this.classList.toggle('on')">
+                  <div class="settings-toggle-knob"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-save-bar">
+            <span class="settings-save-hint"><i class="ph-duotone ph-info" style="font-size:18px;"></i>Unsaved changes
+              will be lost on navigation.</span>
+            <div style="display:flex;gap:8px;">
+              <button class="action-btn"
+                style="padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid var(--border);background:#fff;cursor:pointer;">Discard</button>
+              <button class="btn-primary" style="padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;">Save
+                changes</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SETTINGS: CATEGORIES -->
+        <div id="admin-view-settings-categories" style="display: none;">
+          <div class="settings-section">
+            <div class="settings-sec-title"><i class="ph-duotone ph-list-dashes" style="font-size:20px;"></i>Active
+              categories</div>
+            <div class="settings-cat-grid">
+
+              <div class="settings-cat-card active-cat"
+                onclick="document.querySelectorAll('.settings-cat-card').forEach(c=>c.classList.remove('active-cat')); this.classList.add('active-cat');">
+                <div class="settings-cat-head">
+                  <div class="settings-cat-icon" style="background:#fef2f2;"><i class="ph-duotone ph-trash"
+                      style="color:#ef4444;"></i></div>
+                  <span class="settings-cat-badge" style="background:#f0fdf4;color:#16a34a;">Active</span>
+                </div>
+                <div class="settings-cat-name">Garbage</div>
+                <div class="settings-cat-meta">438 reports · High frequency</div>
+                <div class="settings-cat-bar">
+                  <div class="settings-cat-fill" style="width:34%;background:#ef4444;"></div>
+                </div>
+                <div class="settings-cat-actions">
+                  <span class="settings-cat-btn"
+                    style="background:#fef2f2;border-color:#fca5a5;color:#ef4444;">Edit</span>
+                  <span class="settings-cat-btn"
+                    style="background:#f8fafc;border-color:#cbd5e1;color:var(--text3);">Hide</span>
+                </div>
+              </div>
+
+              <div class="settings-cat-card"
+                onclick="document.querySelectorAll('.settings-cat-card').forEach(c=>c.classList.remove('active-cat')); this.classList.add('active-cat');">
+                <div class="settings-cat-head">
+                  <div class="settings-cat-icon" style="background:#fff7ed;"><i class="ph-duotone ph-recycle"
+                      style="color:#f97316;"></i></div>
+                  <span class="settings-cat-badge" style="background:#f0fdf4;color:#16a34a;">Active</span>
+                </div>
+                <div class="settings-cat-name">Plastic waste</div>
+                <div class="settings-cat-meta">282 reports · Medium frequency</div>
+                <div class="settings-cat-bar">
+                  <div class="settings-cat-fill" style="width:22%;background:#f97316;"></div>
+                </div>
+                <div class="settings-cat-actions">
+                  <span class="settings-cat-btn"
+                    style="background:#fff7ed;border-color:#fdba74;color:#f97316;">Edit</span>
+                  <span class="settings-cat-btn"
+                    style="background:#f8fafc;border-color:#cbd5e1;color:var(--text3);">Hide</span>
+                </div>
+              </div>
+
+              <div class="settings-cat-card"
+                onclick="document.querySelectorAll('.settings-cat-card').forEach(c=>c.classList.remove('active-cat')); this.classList.add('active-cat');">
+                <div class="settings-cat-head">
+                  <div class="settings-cat-icon" style="background:#fefce8;"><i class="ph-duotone ph-warning"
+                      style="color:#eab308;"></i></div>
+                  <span class="settings-cat-badge" style="background:#f0fdf4;color:#16a34a;">Active</span>
+                </div>
+                <div class="settings-cat-name">Dirty area</div>
+                <div class="settings-cat-meta">231 reports · Medium frequency</div>
+                <div class="settings-cat-bar">
+                  <div class="settings-cat-fill" style="width:18%;background:#eab308;"></div>
+                </div>
+                <div class="settings-cat-actions">
+                  <span class="settings-cat-btn"
+                    style="background:#fefce8;border-color:#fde047;color:#eab308;">Edit</span>
+                  <span class="settings-cat-btn"
+                    style="background:#f8fafc;border-color:#cbd5e1;color:var(--text3);">Hide</span>
+                </div>
+              </div>
+
+              <div class="settings-cat-card"
+                onclick="document.querySelectorAll('.settings-cat-card').forEach(c=>c.classList.remove('active-cat')); this.classList.add('active-cat');">
+                <div class="settings-cat-head">
+                  <div class="settings-cat-icon" style="background:#f3e8ff;"><i class="ph-duotone ph-car-profile"
+                      style="color:#a855f7;"></i></div>
+                  <span class="settings-cat-badge" style="background:#f0fdf4;color:#16a34a;">Active</span>
+                </div>
+                <div class="settings-cat-name">Junkyard</div>
+                <div class="settings-cat-meta">180 reports · Low frequency</div>
+                <div class="settings-cat-bar">
+                  <div class="settings-cat-fill" style="width:14%;background:#a855f7;"></div>
+                </div>
+                <div class="settings-cat-actions">
+                  <span class="settings-cat-btn"
+                    style="background:#f3e8ff;border-color:#d8b4fe;color:#a855f7;">Edit</span>
+                  <span class="settings-cat-btn"
+                    style="background:#f8fafc;border-color:#cbd5e1;color:var(--text3);">Hide</span>
+                </div>
+              </div>
+
+              <div class="settings-cat-card"
+                onclick="document.querySelectorAll('.settings-cat-card').forEach(c=>c.classList.remove('active-cat')); this.classList.add('active-cat');">
+                <div class="settings-cat-head">
+                  <div class="settings-cat-icon" style="background:#eff6ff;"><i class="ph-duotone ph-drop"
+                      style="color:#3b82f6;"></i></div>
+                  <span class="settings-cat-badge" style="background:#f0fdf4;color:#16a34a;">Active</span>
+                </div>
+                <div class="settings-cat-name">Water issue</div>
+                <div class="settings-cat-meta">103 reports · Low frequency</div>
+                <div class="settings-cat-bar">
+                  <div class="settings-cat-fill" style="width:8%;background:#3b82f6;"></div>
+                </div>
+                <div class="settings-cat-actions">
+                  <span class="settings-cat-btn"
+                    style="background:#eff6ff;border-color:#93c5fd;color:#3b82f6;">Edit</span>
+                  <span class="settings-cat-btn"
+                    style="background:#f8fafc;border-color:#cbd5e1;color:var(--text3);">Hide</span>
+                </div>
+              </div>
+
+              <div class="settings-cat-card"
+                onclick="document.querySelectorAll('.settings-cat-card').forEach(c=>c.classList.remove('active-cat')); this.classList.add('active-cat');">
+                <div class="settings-cat-head">
+                  <div class="settings-cat-icon" style="background:#f0fdf4;"><i class="ph-duotone ph-plant"
+                      style="color:#22c55e;"></i></div>
+                  <span class="settings-cat-badge" style="background:#fefce8;color:#eab308;">Beta</span>
+                </div>
+                <div class="settings-cat-name">Plantation</div>
+                <div class="settings-cat-meta">51 reports · Emerging</div>
+                <div class="settings-cat-bar">
+                  <div class="settings-cat-fill" style="width:4%;background:#22c55e;"></div>
+                </div>
+                <div class="settings-cat-actions">
+                  <span class="settings-cat-btn"
+                    style="background:#f0fdf4;border-color:#86efac;color:#22c55e;">Edit</span>
+                  <span class="settings-cat-btn"
+                    style="background:#f8fafc;border-color:#cbd5e1;color:var(--text3);">Hide</span>
+                </div>
+              </div>
+
+              <div class="settings-add-cat-btn">
+                <i class="ph-duotone ph-plus-circle" style="font-size:24px;"></i>
+                Add new category
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="settings-sec-title"><i class="ph-duotone ph-sliders-horizontal"
+                style="font-size:20px;"></i>Category defaults</div>
+            <div class="settings-card">
+              <div class="settings-toggle-row">
+                <div class="settings-toggle-info">
+                  <div class="settings-toggle-name">Auto-assign priority based on category</div>
+                  <div class="settings-toggle-desc">Garbage and water issues default to High priority.</div>
+                </div>
+                <div class="settings-toggle on" onclick="this.classList.toggle('on')">
+                  <div class="settings-toggle-knob"></div>
+                </div>
+              </div>
+              <div class="settings-toggle-row">
+                <div class="settings-toggle-info">
+                  <div class="settings-toggle-name">Require photo for all categories</div>
+                  <div class="settings-toggle-desc">Reporters must upload evidence before submission.</div>
+                </div>
+                <div class="settings-toggle on" onclick="this.classList.toggle('on')">
+                  <div class="settings-toggle-knob"></div>
+                </div>
+              </div>
+              <div class="settings-toggle-row">
+                <div class="settings-toggle-info">
+                  <div class="settings-toggle-name">Show category count on public map</div>
+                  <div class="settings-toggle-desc">Display badge counts on map filter buttons.</div>
+                </div>
+                <div class="settings-toggle" onclick="this.classList.toggle('on')">
+                  <div class="settings-toggle-knob"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-save-bar">
+            <span class="settings-save-hint"><i class="ph-duotone ph-info" style="font-size:18px;"></i>Category changes
+              take effect immediately on the live map.</span>
+            <div style="display:flex;gap:8px;">
+              <button class="action-btn"
+                style="padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid var(--border);background:#fff;cursor:pointer;">Discard</button>
+              <button class="btn-primary" style="padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;">Save
+                changes</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SETTINGS: SECURITY -->
+        <div id="admin-view-settings-security" style="display: none;">
+          <div class="settings-section">
+            <div class="settings-sec-title"><i class="ph-duotone ph-shield-check" style="font-size:20px;"></i>Security
+              level</div>
+            <div class="settings-sec-level">
+              <div class="settings-sl-card picked"
+                onclick="document.querySelectorAll('.settings-sl-card').forEach(c=>c.classList.remove('picked','picked-orange','picked-red')); this.classList.add('picked');">
+                <div class="settings-sl-icon"><i class="ph-duotone ph-shield-check" style="color:#16a34a;"></i></div>
+                <div class="settings-sl-name" style="color:#16a34a;">Standard</div>
+                <div class="settings-sl-desc">Email + password login. Suitable for most deployments.</div>
+              </div>
+              <div class="settings-sl-card"
+                onclick="document.querySelectorAll('.settings-sl-card').forEach(c=>c.classList.remove('picked','picked-orange','picked-red')); this.classList.add('picked-orange');">
+                <div class="settings-sl-icon"><i class="ph-duotone ph-lock-key" style="color:#f97316;"></i></div>
+                <div class="settings-sl-name" style="color:#f97316;">Enhanced</div>
+                <div class="settings-sl-desc">Mandatory 2FA for all admin accounts.</div>
+              </div>
+              <div class="settings-sl-card"
+                onclick="document.querySelectorAll('.settings-sl-card').forEach(c=>c.classList.remove('picked','picked-orange','picked-red')); this.classList.add('picked-red');">
+                <div class="settings-sl-icon"><i class="ph-duotone ph-warning-circle" style="color:#ef4444;"></i></div>
+                <div class="settings-sl-name" style="color:#ef4444;">Strict</div>
+                <div class="settings-sl-desc">SSO + IP allowlist + hardware key required.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="settings-sec-title"><i class="ph-duotone ph-key" style="font-size:20px;"></i>Authentication
+            </div>
+            <div class="settings-card">
+              <div class="settings-toggle-row">
+                <div class="settings-toggle-info">
+                  <div class="settings-toggle-name">Two-factor authentication (2FA)</div>
+                  <div class="settings-toggle-desc">Require TOTP app for admin logins.</div>
+                </div>
+                <div class="settings-toggle" onclick="this.classList.toggle('on')">
+                  <div class="settings-toggle-knob"></div>
+                </div>
+              </div>
+              <div class="settings-toggle-row">
+                <div class="settings-toggle-info">
+                  <div class="settings-toggle-name">Single sign-on (SSO)</div>
+                  <div class="settings-toggle-desc">Allow Google / Microsoft OAuth login.</div>
+                </div>
+                <div class="settings-toggle on" onclick="this.classList.toggle('on')">
+                  <div class="settings-toggle-knob"></div>
+                </div>
+              </div>
+              <div class="settings-toggle-row">
+                <div class="settings-toggle-info">
+                  <div class="settings-toggle-name">Auto logout on inactivity</div>
+                  <div class="settings-toggle-desc">Sessions expire after 30 minutes of inactivity.</div>
+                </div>
+                <div class="settings-toggle on" onclick="this.classList.toggle('on')">
+                  <div class="settings-toggle-knob"></div>
+                </div>
+              </div>
+              <div class="settings-field-row">
+                <div class="settings-field">
+                  <div class="settings-field-label">Session timeout (minutes)</div>
+                  <input class="settings-field-input" type="number" value="30" min="5" max="480">
+                </div>
+                <div class="settings-field">
+                  <div class="settings-field-label">Max login attempts before lockout</div>
+                  <input class="settings-field-input" type="number" value="5" min="3" max="20">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="settings-sec-title"><i class="ph-duotone ph-activity" style="font-size:20px;"></i>Recent audit
+              log</div>
+            <div class="settings-card">
+              <div class="settings-log-item">
+                <div class="settings-log-icon" style="background:#f0fdf4;"><i class="ph-duotone ph-sign-in"
+                    style="color:#16a34a;"></i></div>
+                <div class="settings-log-info">
+                  <div class="settings-log-action">Admin login — Admin Kumar</div>
+                  <div class="settings-log-meta">IP: 103.41.xx.xx · Chrome 124 · Windows</div>
+                </div>
+                <div class="settings-log-time">2m ago</div>
+              </div>
+              <div class="settings-log-item">
+                <div class="settings-log-icon" style="background:#eff6ff;"><i class="ph-duotone ph-gear"
+                    style="color:#3b82f6;"></i></div>
+                <div class="settings-log-info">
+                  <div class="settings-log-action">Settings updated — General</div>
+                  <div class="settings-log-meta">By Admin Kumar · Platform name changed</div>
+                </div>
+                <div class="settings-log-time">18m ago</div>
+              </div>
+              <div class="settings-log-item">
+                <div class="settings-log-icon" style="background:#fefce8;"><i class="ph-duotone ph-user-plus"
+                    style="color:#eab308;"></i></div>
+                <div class="settings-log-info">
+                  <div class="settings-log-action">New moderator added — Priya Sharma</div>
+                  <div class="settings-log-meta">By Admin Kumar · Role: Moderator</div>
+                </div>
+                <div class="settings-log-time">2h ago</div>
+              </div>
+              <div class="settings-log-item">
+                <div class="settings-log-icon" style="background:#fef2f2;"><i class="ph-duotone ph-trash"
+                    style="color:#ef4444;"></i></div>
+                <div class="settings-log-info">
+                  <div class="settings-log-action">Report deleted — SS-1039</div>
+                  <div class="settings-log-meta">By Admin Kumar · Plastic waste, Fatehabad Rd</div>
+                </div>
+                <div class="settings-log-time">3h ago</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-section">
+            <div class="settings-danger-zone">
+              <div class="settings-dz-title"><i class="ph-duotone ph-warning" style="font-size:20px;"></i>Danger zone
+              </div>
+              <div class="settings-dz-row">
+                <div class="settings-toggle-info">
+                  <div class="settings-toggle-name">Revoke all active sessions</div>
+                  <div class="settings-toggle-desc">Force logout all logged-in users immediately.</div>
+                </div>
+                <button class="settings-dz-btn">Revoke all</button>
+              </div>
+              <div class="settings-dz-row">
+                <div class="settings-toggle-info">
+                  <div class="settings-toggle-name">Reset API keys</div>
+                  <div class="settings-toggle-desc">Invalidate all existing API tokens and generate new ones.</div>
+                </div>
+                <button class="settings-dz-btn">Reset keys</button>
+              </div>
+              <div class="settings-dz-row">
+                <div class="settings-toggle-info">
+                  <div class="settings-toggle-name">Export full audit log</div>
+                  <div class="settings-toggle-desc">Download all activity logs as CSV for compliance review.</div>
+                </div>
+                <button class="settings-dz-btn" style="background:#fff;border-color:#cbd5e1;color:var(--text3);">Export
+                  CSV</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-save-bar">
+            <span class="settings-save-hint"><i class="ph-duotone ph-info" style="font-size:18px;"></i>Security changes
+              trigger a re-authentication for all admins.</span>
+            <div style="display:flex;gap:8px;">
+              <button class="action-btn"
+                style="padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid var(--border);background:#fff;cursor:pointer;">Discard</button>
+              <button class="btn-primary" style="padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer;">Save
+                changes</button>
+            </div>
+          </div>
+        </div>
+        <!-- CERTIFICATES: ISSUE VIEW -->
+        <div id="admin-view-cert-issue" style="display: none;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;">
+            <div>
+              <div
+                style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--text);display:flex;align-items:center;gap:8px;">
+                <i class="ph-duotone ph-medal" style="color:#f59e0b;font-size:20px;"></i> Issue certificate
+              </div>
+              <div style="font-size:13px;color:var(--text3);margin-top:4px;">Award a recognition certificate to a
+                community member or volunteer.</div>
+            </div>
+            <button class="action-btn"
+              onclick="switchAdminView('cert-view', document.querySelector('[onclick*=\'cert-view\']'))"
+              style="padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <i class="ph-duotone ph-list" style="font-size:16px;"></i> View all
+            </button>
+          </div>
+
+          <!-- Step Bar -->
+          <div style="display:flex;align-items:center;gap:0;margin-bottom:24px;">
+            <div style="display:flex;align-items:center;gap:0;">
+              <div
+                style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:'Outfit',sans-serif;background:rgba(34,197,94,0.1);border:1.5px solid #16a34a;color:#16a34a;">
+                1</div>
+              <span
+                style="font-size:12px;margin-left:8px;margin-right:12px;color:#16a34a;font-weight:600;">Recipient</span>
+            </div>
+            <div style="flex:1;height:1px;background:#16a34a;opacity:0.3;margin:0 8px;"></div>
+            <div style="display:flex;align-items:center;gap:0;">
+              <div
+                style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:'Outfit',sans-serif;background:rgba(34,197,94,0.1);border:1.5px solid #16a34a;color:#16a34a;">
+                2</div>
+              <span
+                style="font-size:12px;margin-left:8px;margin-right:12px;color:#16a34a;font-weight:600;">Details</span>
+            </div>
+            <div style="flex:1;height:1px;background:var(--border);margin:0 8px;"></div>
+            <div style="display:flex;align-items:center;gap:0;">
+              <div
+                style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:'Outfit',sans-serif;background:#f8fafc;border:1px solid var(--border);color:var(--text3);">
+                3</div>
+              <span style="font-size:12px;margin-left:8px;margin-right:12px;color:var(--text3);">Template</span>
+            </div>
+            <div style="flex:1;height:1px;background:var(--border);margin:0 8px;"></div>
+            <div style="display:flex;align-items:center;gap:0;">
+              <div
+                style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:'Outfit',sans-serif;background:#f8fafc;border:1px solid var(--border);color:var(--text3);">
+                4</div>
+              <span style="font-size:12px;margin-left:8px;margin-right:12px;color:var(--text3);">Review & Issue</span>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 340px;gap:24px;">
+            <div>
+              <!-- Recipient Section -->
+              <div style="margin-bottom:24px;">
+                <div
+                  style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:0.5px;">
+                  <i class="ph-duotone ph-user" style="font-size:16px;"></i> Recipient information
+                </div>
+                <div class="admin-widget" style="padding:20px;">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                    <div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Recipient type
+                      </div>
+                      <select id="cert-recipient-type"
+                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;appearance:none;">
+                        <option value="Community Member">Community Member</option>
+                        <option value="Field Reporter">Field Reporter</option>
+                        <option value="Volunteer / NGO">Volunteer / NGO</option>
+                        <option value="Government Official">Government Official</option>
+                      </select>
+                    </div>
+                    <div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Select from
+                        members</div>
+                      <select id="cert-select-member"
+                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;appearance:none;">
+                        <option value="">— Select existing —</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                    <div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Full name</div>
+                      <input type="text" id="cert-full-name"
+                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;"
+                        placeholder="Full name">
+                    </div>
+                    <div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Email address
+                      </div>
+                      <input type="email" id="cert-email"
+                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;"
+                        placeholder="Email address">
+                    </div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                    <div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Phone (optional)
+                      </div>
+                      <input type="text" id="cert-phone"
+                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;"
+                        placeholder="+91 98765 43210">
+                    </div>
+                    <div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Zone / Area
+                      </div>
+                      <select id="cert-zone"
+                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;appearance:none;">
+                        <option value="All of Agra">All of Agra</option>
+                        <option value="Central & East Agra">Central & East Agra</option>
+                        <option value="North Agra">North Agra</option>
+                        <option value="South Agra">South Agra</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Certificate Details -->
+              <div style="margin-bottom:24px;">
+                <div
+                  style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:0.5px;">
+                  <i class="ph-duotone ph-file-text" style="font-size:16px;"></i> Certificate details
+                </div>
+                <div class="admin-widget" style="padding:20px;">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                    <div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Certificate type
+                      </div>
+                      <select id="cert-type"
+                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;appearance:none;">
+                        <option value="">— Select Type —</option>
+                      </select>
+                    </div>
+                    <div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Issue date</div>
+                      <input type="date" id="cert-issue-date"
+                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;">
+                    </div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+
+                    <div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Certificate ID
+                        prefix</div>
+                      <input type="text" id="cert-id-prefix"
+                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;"
+                        value="SS-CERT">
+                    </div>
+                  </div>
+                  <div style="margin-bottom:16px;">
+                    <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Achievement /
+                      citation</div>
+                    <textarea id="cert-citation" rows="3"
+                      style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;resize:vertical;font-family:'Nunito',sans-serif;"></textarea>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                    <div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Issuing
+                        authority</div>
+                      <input type="text" id="cert-issuing-authority"
+                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;"
+                        value="Admin Kumar, Super Admin">
+                    </div>
+                    <div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Co-signatory
+                        (optional)</div>
+                      <input type="text" id="cert-co-signatory"
+                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;"
+                        placeholder="Sagar Singh, Lead Developer">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Delivery Options -->
+              <div>
+                <div
+                  style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:0.5px;">
+                  <i class="ph-duotone ph-paper-plane-right" style="font-size:16px;"></i> Delivery options
+                </div>
+                <div class="admin-widget">
+                  <div
+                    style="display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--border);">
+                    <div>
+                      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Send via email
+                      </div>
+                      <div style="font-size:12px;color:var(--text3);">Deliver PDF certificate to recipient's email.
+                      </div>
+                    </div>
+                    <label style="position:relative;display:inline-block;width:40px;height:24px;">
+                      <input type="checkbox" id="cert-send-email" checked style="opacity:0;width:0;height:0;"
+                        onchange="this.nextElementSibling.style.background=this.checked?'#16a34a':'#e2e8f0';this.nextElementSibling.firstElementChild.style.transform=this.checked?'translateX(16px)':'translateX(0)';">
+                      <span
+                        style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#16a34a;transition:.3s;border-radius:34px;">
+                        <span
+                          style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%;transform:translateX(16px);box-shadow:0 1px 3px rgba(0,0,0,0.1);"></span>
+                      </span>
+                    </label>
+                  </div>
+                  <div
+                    style="display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--border);">
+                    <div>
+                      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Publish to
+                        community feed</div>
+                      <div style="font-size:12px;color:var(--text3);">Announce this award publicly on the platform.
+                      </div>
+                    </div>
+                    <label style="position:relative;display:inline-block;width:40px;height:24px;">
+                      <input type="checkbox" id="cert-publish-feed" checked style="opacity:0;width:0;height:0;"
+                        onchange="this.nextElementSibling.style.background=this.checked?'#16a34a':'#e2e8f0';this.nextElementSibling.firstElementChild.style.transform=this.checked?'translateX(16px)':'translateX(0)';">
+                      <span
+                        style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#16a34a;transition:.3s;border-radius:34px;">
+                        <span
+                          style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%;transform:translateX(16px);box-shadow:0 1px 3px rgba(0,0,0,0.1);"></span>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Preview panel -->
+            <div>
+              <div
+                style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:0.5px;">
+                <i class="ph-duotone ph-eye" style="font-size:16px;"></i> Live preview
+              </div>
+              <div id="cert-preview-card"
+                style="background:linear-gradient(135deg,rgba(245,158,11,0.05),rgba(34,197,94,0.05));border:1px solid rgba(245,158,11,0.2);border-radius:12px;padding:24px;text-align:center;position:relative;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.03);">
+                <div
+                  style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:100px;color:rgba(0,0,0,0.06);font-family:'Outfit',sans-serif;font-weight:800;white-space:nowrap;pointer-events:none;">
+                  SS</div>
+                <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px;">
+                  <div style="width:40px;height:1px;background:rgba(245,158,11,0.4);"></div>
+                  <div style="font-family:'Outfit',sans-serif;font-size:15px;font-weight:800;color:#16a34a;">Suraksha
+                    Setu</div>
+                  <div style="width:40px;height:1px;background:rgba(245,158,11,0.4);"></div>
+                </div>
+                <div
+                  style="width:56px;height:56px;border-radius:50%;background:rgba(245,158,11,0.1);border:1.5px solid rgba(245,158,11,0.4);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+                  <i id="cert-preview-icon" class="ph-duotone ph-medal" style="color:#f59e0b;font-size:26px;"></i>
+                </div>
+                <div
+                  style="font-family:'Georgia',serif;font-size:22px;font-weight:700;color:#b45309;margin-bottom:6px;">
+                  Certificate of Excellence</div>
+                <div id="cert-preview-type"
+                  style="font-size:12px;color:var(--text3);margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">
+                  Certificate Type</div>
+
+                <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">This is proudly presented to</div>
+                <div id="cert-preview-name"
+                  style="font-family:'Georgia',serif;font-size:20px;color:var(--text);margin-bottom:6px;font-weight:600;">
+                  Recipient Name</div>
+                <div id="cert-preview-citation"
+                  style="font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:20px;max-width:280px;margin-left:auto;margin-right:auto;">
+                  Achievement / citation text will appear here.</div>
+
+                <div style="display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:20px;">
+                  <div style="text-align:center;">
+                    <div id="cert-preview-date"
+                      style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;color:var(--text);">Date
+                    </div>
+                    <div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;">Issue date
+                    </div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div id="cert-preview-id"
+                      style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;color:var(--text);">
+                      SS-CERT-XXXX-XXXX</div>
+                    <div style="font-size:10px;color:var(--text3);margin-top:2px;text-transform:uppercase;">Certificate
+                      ID</div>
+                  </div>
+                </div>
+
+                <div
+                  style="display:flex;justify-content:space-around;border-top:1px solid rgba(0,0,0,0.05);padding-top:16px;margin-top:16px;">
+                  <div style="text-align:center;">
+                    <div style="width:80px;height:1px;background:rgba(0,0,0,0.1);margin:0 auto 6px;"></div>
+                    <div id="cert-preview-auth1" style="font-size:10px;color:var(--text3);font-weight:500;">Issuing
+                      Authority</div>
+                  </div>
+                  <div style="text-align:center;">
+                    <div style="width:80px;height:1px;background:rgba(0,0,0,0.1);margin:0 auto 6px;"></div>
+                    <div id="cert-preview-auth2" style="font-size:10px;color:var(--text3);font-weight:500;">Co-Signatory
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">
+                <button id="btn-issue-cert" class="btn-primary"
+                  style="width:100%;justify-content:center;background:#fef3c7;border-color:#fde68a;color:#d97706;"
+                  onclick="issueCertificate()">
+                  <i class="ph-bold ph-award" style="font-size:16px;"></i> Issue certificate
+                </button>
+                <button class="action-btn"
+                  style="width:100%;justify-content:center;background:#fff;border:1px solid var(--border);"
+                  onclick="downloadPDF()">
+                  <i class="ph-duotone ph-download-simple" style="font-size:16px;"></i> Download PDF preview
+                </button>
+              </div>
+
+              <div id="cert-issued-msg"
+                style="display:none;margin-top:16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px;font-size:13px;color:#16a34a;align-items:center;gap:8px;justify-content:center;">
+                <i class="ph-duotone ph-check-circle" style="font-size:18px;"></i> Sent to priya.sharma@surakshasetu.in!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CERTIFICATES: VIEW LIST -->
+        <div id="admin-view-cert-view" style="display: none;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;">
+            <div>
+              <div
+                style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--text);display:flex;align-items:center;gap:8px;">
+                <i class="ph-duotone ph-certificate" style="color:#f59e0b;font-size:20px;"></i> View certificates
+              </div>
+              <div style="font-size:13px;color:var(--text3);margin-top:4px;">All issued certificates across the platform
+                — search, download, and manage.</div>
+            </div>
+            <button class="btn-primary"
+              onclick="switchAdminView('cert-issue', document.querySelector('[onclick*=\'cert-issue\']'))"
+              style="padding:8px 16px;border-radius:8px;font-size:13px;background:#fef3c7;border-color:#fde68a;color:#d97706;display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <i class="ph-bold ph-plus" style="font-size:16px;"></i> Issue new
+            </button>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;">
+            <div class="admin-widget" style="padding:16px;">
+              <div id="stat-total"
+                style="font-size:24px;font-family:'Outfit',sans-serif;font-weight:800;color:#f59e0b;margin-bottom:4px;">
+                0</div>
+              <div
+                style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">
+                Total issued</div>
+            </div>
+            <div class="admin-widget" style="padding:16px;">
+              <div id="stat-active"
+                style="font-size:24px;font-family:'Outfit',sans-serif;font-weight:800;color:#16a34a;margin-bottom:4px;">
+                0</div>
+              <div
+                style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">
+                Active</div>
+            </div>
+            <div class="admin-widget" style="padding:16px;">
+              <div id="stat-month"
+                style="font-size:24px;font-family:'Outfit',sans-serif;font-weight:800;color:#3b82f6;margin-bottom:4px;">
+                0</div>
+              <div
+                style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">
+                This month</div>
+            </div>
+            <div class="admin-widget" style="padding:16px;">
+              <div id="stat-revoked"
+                style="font-size:24px;font-family:'Outfit',sans-serif;font-weight:800;color:#8b5cf6;margin-bottom:4px;">
+                0</div>
+              <div
+                style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">
+                Revoked</div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+            <div
+              style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 12px;flex:1;min-width:200px;">
+              <i class="ph-bold ph-magnifying-glass" style="color:var(--text3);"></i>
+              <input type="text" id="cert-search-input" oninput="handleCertSearchInput()"
+                placeholder="Search by name or certificate ID..."
+                style="border:none;outline:none;background:none;font-size:13px;color:var(--text);width:100%;">
+              <i id="cert-search-clear" class="ph-bold ph-x" style="color:var(--text3);cursor:pointer;display:none;"
+                onclick="clearCertSearch()"></i>
+            </div>
+            <select id="cert-filter-type" onchange="loadCertificates()"
+              style="padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:#fff;color:var(--text);outline:none;font-size:13px;appearance:none;cursor:pointer;min-width:140px;">
+              <option value="All">All types</option>
+            </select>
+            <select id="cert-filter-status" onchange="loadCertificates()"
+              style="padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:#fff;color:var(--text);outline:none;font-size:13px;appearance:none;cursor:pointer;min-width:140px;">
+              <option value="All">All status</option>
+              <option value="Active">Active</option>
+              <option value="Revoked">Revoked</option>
+            </select>
+            <button class="action-btn" onclick="exportCertsCSV()"
+              style="padding:9px 16px;border-radius:8px;font-size:13px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <i class="ph-duotone ph-download-simple" style="font-size:16px;"></i> Export CSV
+            </button>
+          </div>
+
+          <div class="admin-widget" style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:13px;text-align:left;">
+              <thead>
+                <tr style="border-bottom:1px solid var(--border);">
+                  <th
+                    style="padding:12px 16px;font-size:11px;text-transform:uppercase;color:var(--text3);font-weight:600;">
+                    Cert ID</th>
+                  <th
+                    style="padding:12px 16px;font-size:11px;text-transform:uppercase;color:var(--text3);font-weight:600;">
+                    Recipient</th>
+                  <th
+                    style="padding:12px 16px;font-size:11px;text-transform:uppercase;color:var(--text3);font-weight:600;">
+                    Type</th>
+                  <th
+                    style="padding:12px 16px;font-size:11px;text-transform:uppercase;color:var(--text3);font-weight:600;">
+                    Zone</th>
+                  <th
+                    style="padding:12px 16px;font-size:11px;text-transform:uppercase;color:var(--text3);font-weight:600;">
+                    Issued</th>
+                  <th
+                    style="padding:12px 16px;font-size:11px;text-transform:uppercase;color:var(--text3);font-weight:600;">
+                    Status</th>
+                  <th
+                    style="padding:12px 16px;font-size:11px;text-transform:uppercase;color:var(--text3);font-weight:600;">
+                    Actions</th>
+                </tr>
+              </thead>
+              <tbody id="cert-table-body"></tbody>
+            </table>
+          </div>
+          <div
+            style="display:flex;align-items:center;justify-content:space-between;padding:12px 2px;font-size:13px;color:var(--text3);">
+            <span id="cert-pagination-info">Showing 0 of 0 certificates</span>
+            <div id="cert-pagination-controls" style="display:flex;gap:6px;">
+              <!-- Pagination buttons will be injected here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- CERTIFICATES: TEMPLATES VIEW -->
+        <div id="admin-view-cert-templates" style="display: none;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;">
+            <div>
+              <div
+                style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--text);display:flex;align-items:center;gap:8px;">
+                <i class="ph-duotone ph-cards" style="color:#f59e0b;font-size:20px;"></i> Certificate templates
+              </div>
+              <div style="font-size:13px;color:var(--text3);margin-top:4px;">Design and manage reusable certificate
+                layouts for different award types.</div>
+            </div>
+            <button class="btn-primary" onclick="openCreateTemplateModal()"
+              style="padding:8px 16px;border-radius:8px;font-size:13px;background:#fef3c7;border-color:#fde68a;color:#d97706;display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <i class="ph-bold ph-plus" style="font-size:16px;"></i> Create template
+            </button>
+          </div>
+
+          <div id="cert-templates-container" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+            <!-- Dynamically populated certificate templates -->
+          </div>
+
+          <div style="margin-bottom:24px;">
+            <div
+              style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:0.5px;">
+              <i class="ph-duotone ph-sliders" style="font-size:16px;"></i> Template settings
+            </div>
+            <div class="admin-widget">
+              <div
+                style="display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--border);">
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Auto-select template
+                    by award type</div>
+                  <div style="font-size:12px;color:var(--text3);">Map each award type to a default template
+                    automatically.</div>
+                </div>
+                <label style="position:relative;display:inline-block;width:40px;height:24px;">
+                  <input type="checkbox" checked style="opacity:0;width:0;height:0;"
+                    onchange="this.nextElementSibling.style.background=this.checked?'#16a34a':'#e2e8f0';this.nextElementSibling.firstElementChild.style.transform=this.checked?'translateX(16px)':'translateX(0)';">
+                  <span
+                    style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#16a34a;transition:.3s;border-radius:34px;">
+                    <span
+                      style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%;transform:translateX(16px);box-shadow:0 1px 3px rgba(0,0,0,0.1);"></span>
+                  </span>
+                </label>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:16px;">
+                <div>
+                  <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Allow moderators to
+                    issue certificates</div>
+                  <div style="font-size:12px;color:var(--text3);">Moderator role can issue certificates using templates.
+                  </div>
+                </div>
+                <label style="position:relative;display:inline-block;width:40px;height:24px;">
+                  <input type="checkbox" style="opacity:0;width:0;height:0;"
+                    onchange="this.nextElementSibling.style.background=this.checked?'#16a34a':'#e2e8f0';this.nextElementSibling.firstElementChild.style.transform=this.checked?'translateX(16px)':'translateX(0)';">
+                  <span
+                    style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#e2e8f0;transition:.3s;border-radius:34px;">
+                    <span
+                      style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%;transform:translateX(0);box-shadow:0 1px 3px rgba(0,0,0,0.1);"></span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- HELP CENTER VIEW -->
+        <div id="admin-view-help-center" style="display: none;">
+          <style>
+            .help-layout {
+              display: block;
+              min-height: 700px;
+              position: relative;
+            }
+
+            .help-sidebar {
+              display: none;
+              background: #f8fafc;
+              border-right: 1px solid #e2e8f0;
+              padding: 18px 0;
+            }
+
+            .help-sb-head {
+              padding: 0 14px 14px;
+              border-bottom: 1px solid #e2e8f0;
+              margin-bottom: 6px;
+            }
+
+            .help-sb-logo {
+              font-family: 'Outfit', sans-serif;
+              font-size: 13px;
+              font-weight: 700;
+              color: #16a34a;
+            }
+
+            .help-sb-sub {
+              font-size: 11px;
+              color: #64748b;
+              margin-top: 1px;
+            }
+
+            .help-nav-group {
+              font-size: 10px;
+              color: #94a3b8;
+              text-transform: uppercase;
+              letter-spacing: 0.7px;
+              padding: 10px 14px 3px;
+            }
+
+            .help-nav-item {
+              display: flex;
+              align-items: center;
+              gap: 9px;
+              padding: 8px 14px;
+              font-size: 12px;
+              color: #64748b;
+              cursor: pointer;
+              transition: all 0.18s;
+              border-left: 2px solid transparent;
+              margin-bottom: 1px;
+            }
+
+            .help-nav-item:hover {
+              color: #16a34a;
+              background: rgba(34, 197, 94, 0.04);
+            }
+
+            .help-nav-item.active {
+              color: #16a34a;
+              background: rgba(34, 197, 94, 0.08);
+              border-left-color: #16a34a;
+            }
+
+            .help-nav-item i {
+              font-size: 14px;
+            }
+
+            .help-nav-sub {
+              padding-left: 28px;
+              font-size: 11px;
+            }
+
+            .help-content {
+              padding: 0;
+              overflow-y: auto;
+              display: flex;
+              flex-direction: column;
+            }
+
+            .help-page {
+              display: none;
+              flex: 1;
+            }
+
+            .help-page.active {
+              display: flex;
+              flex-direction: column;
+              animation: fadein 0.28s ease;
+            }
+
+            @keyframes fadein {
+              from {
+                opacity: 0;
+                transform: translateY(5px);
+              }
+
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+
+            .help-hero-band {
+              padding: 32px 28px 24px;
+              border-bottom: 1px solid #e2e8f0;
+              background: #fff;
+            }
+
+            .help-hero-title {
+              font-family: 'Outfit', sans-serif;
+              font-size: 22px;
+              font-weight: 800;
+              color: #1e293b;
+              margin-bottom: 6px;
+            }
+
+            .help-hero-sub {
+              font-size: 13px;
+              color: #64748b;
+              margin-bottom: 18px;
+            }
+
+            .help-search-hero {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              background: #f8fafc;
+              border: 1px solid #e2e8f0;
+              border-radius: 12px;
+              padding: 11px 16px;
+              max-width: 480px;
+            }
+
+            .help-search-hero input {
+              background: none;
+              border: none;
+              outline: none;
+              color: #1e293b;
+              font-size: 14px;
+              font-family: 'DM Sans', sans-serif;
+              flex: 1;
+            }
+
+            .help-search-hero input::placeholder {
+              color: #94a3b8;
+            }
+
+            .help-search-hero i {
+              font-size: 16px;
+              color: #94a3b8;
+            }
+
+            .help-search-hero button {
+              background: rgba(34, 197, 94, 0.1);
+              border: 1px solid #16a34a;
+              border-radius: 8px;
+              color: #16a34a;
+              font-size: 12px;
+              padding: 6px 14px;
+              cursor: pointer;
+              font-family: 'DM Sans', sans-serif;
+              transition: all 0.2s;
+            }
+
+            .help-search-hero button:hover {
+              background: rgba(34, 197, 94, 0.2);
+            }
+
+            .help-body-area {
+              padding: 24px 28px;
+              flex: 1;
+            }
+
+            .help-cat-grid {
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 12px;
+              margin-bottom: 28px;
+            }
+
+            .help-cat-card {
+              background: #fff;
+              border: 1px solid #e2e8f0;
+              border-radius: 14px;
+              padding: 18px 16px;
+              cursor: pointer;
+              transition: all 0.2s;
+              position: relative;
+              overflow: hidden;
+            }
+
+            .help-cat-card:hover {
+              border-color: #16a34a;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+              transform: translateY(-2px);
+            }
+
+            .help-cat-icon {
+              width: 38px;
+              height: 38px;
+              border-radius: 10px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 18px;
+              margin-bottom: 12px;
+            }
+
+            .help-cat-name {
+              font-family: 'Outfit', sans-serif;
+              font-size: 13px;
+              font-weight: 700;
+              color: #1e293b;
+              margin-bottom: 4px;
+            }
+
+            .help-cat-desc {
+              font-size: 11px;
+              color: #64748b;
+              line-height: 1.5;
+              margin-bottom: 8px;
+            }
+
+            .help-cat-count {
+              font-size: 10px;
+              color: #94a3b8;
+            }
+
+            .help-section-title {
+              font-family: 'Outfit', sans-serif;
+              font-size: 14px;
+              font-weight: 700;
+              color: #16a34a;
+              margin-bottom: 14px;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            }
+
+            .help-faq-list {
+              margin-bottom: 28px;
+            }
+
+            .help-faq-item {
+              background: #fff;
+              border: 1px solid #e2e8f0;
+              border-radius: 11px;
+              margin-bottom: 8px;
+              overflow: hidden;
+              cursor: pointer;
+              transition: border-color 0.18s;
+            }
+
+            .help-faq-item:hover {
+              border-color: #16a34a;
+            }
+
+            .help-faq-item.open {
+              border-color: #16a34a;
+            }
+
+            .help-faq-q {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              padding: 13px 16px;
+              gap: 12px;
+            }
+
+            .help-faq-q-text {
+              font-size: 13px;
+              font-weight: 500;
+              color: #1e293b;
+              flex: 1;
+            }
+
+            .help-faq-icon {
+              font-size: 15px;
+              color: #94a3b8;
+              transition: transform 0.22s;
+              flex-shrink: 0;
+            }
+
+            .help-faq-item.open .help-faq-icon {
+              transform: rotate(45deg);
+              color: #16a34a;
+            }
+
+            .help-faq-a {
+              max-height: 0;
+              overflow: hidden;
+              transition: max-height 0.3s ease;
+            }
+
+            .help-faq-item.open .help-faq-a {
+              max-height: 200px;
+            }
+
+            .help-faq-a-inner {
+              padding: 0 16px 14px;
+              font-size: 12px;
+              color: #475569;
+              line-height: 1.7;
+              border-top: 1px solid #f1f5f9;
+            }
+
+            .help-guide-grid {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 10px;
+              margin-bottom: 28px;
+            }
+
+            .help-guide-card {
+              background: #fff;
+              border: 1px solid #e2e8f0;
+              border-radius: 11px;
+              padding: 14px;
+              display: flex;
+              align-items: flex-start;
+              gap: 12px;
+              cursor: pointer;
+              transition: all 0.18s;
+            }
+
+            .help-guide-card:hover {
+              border-color: #16a34a;
+              background: #f8fafc;
+            }
+
+            .help-guide-icon {
+              width: 34px;
+              height: 34px;
+              border-radius: 9px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 16px;
+              flex-shrink: 0;
+            }
+
+            .help-guide-title {
+              font-size: 13px;
+              font-weight: 500;
+              color: #1e293b;
+              margin-bottom: 3px;
+            }
+
+            .help-guide-meta {
+              font-size: 11px;
+              color: #64748b;
+            }
+
+            .help-guide-badge {
+              font-size: 10px;
+              padding: 2px 7px;
+              border-radius: 6px;
+              font-weight: 500;
+              margin-top: 5px;
+              display: inline-block;
+            }
+
+            .help-contact-grid {
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 10px;
+              margin-bottom: 28px;
+            }
+
+            .help-contact-card {
+              background: #fff;
+              border: 1px solid #e2e8f0;
+              border-radius: 12px;
+              padding: 16px;
+              text-align: center;
+              cursor: pointer;
+              transition: all 0.2s;
+            }
+
+            .help-contact-card:hover {
+              border-color: #16a34a;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            }
+
+            .help-contact-icon {
+              width: 42px;
+              height: 42px;
+              border-radius: 12px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 20px;
+              margin: 0 auto 10px;
+            }
+
+            .help-contact-title {
+              font-size: 13px;
+              font-weight: 500;
+              color: #1e293b;
+              margin-bottom: 3px;
+            }
+
+            .help-contact-desc {
+              font-size: 11px;
+              color: #64748b;
+              margin-bottom: 10px;
+              line-height: 1.5;
+            }
+
+            .help-contact-btn {
+              display: inline-flex;
+              align-items: center;
+              gap: 6px;
+              padding: 7px 14px;
+              border-radius: 8px;
+              font-size: 12px;
+              font-weight: 500;
+              cursor: pointer;
+              transition: all 0.2s;
+              font-family: 'DM Sans', sans-serif;
+              border: 1px solid;
+            }
+
+            .help-chat-widget {
+              background: rgba(34, 197, 94, 0.04);
+              border: 1px solid rgba(34, 197, 94, 0.2);
+              border-radius: 14px;
+              padding: 20px;
+              margin-bottom: 20px;
+            }
+
+            .help-chat-header {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              margin-bottom: 16px;
+              padding-bottom: 12px;
+              border-bottom: 1px solid #e2e8f0;
+            }
+
+            .help-chat-avatar {
+              width: 36px;
+              height: 36px;
+              border-radius: 10px;
+              background: rgba(34, 197, 94, 0.15);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 18px;
+            }
+
+            .help-chat-status {
+              display: flex;
+              align-items: center;
+              gap: 5px;
+              font-size: 11px;
+              color: #16a34a;
+            }
+
+            .help-pulse-dot {
+              width: 7px;
+              height: 7px;
+              border-radius: 50%;
+              background: #16a34a;
+              animation: pulse 1.8s infinite;
+            }
+
+            @keyframes pulse {
+
+              0%,
+              100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+              }
+
+              50% {
+                box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+              }
+            }
+
+            .help-chat-messages {
+              background: #f8fafc;
+              border-radius: 10px;
+              padding: 14px;
+              margin-bottom: 12px;
+              min-height: 120px;
+            }
+
+            .help-msg {
+              margin-bottom: 10px;
+            }
+
+            .help-msg-bot {
+              display: flex;
+              gap: 8px;
+              align-items: flex-start;
+            }
+
+            .help-msg-user {
+              display: flex;
+              gap: 8px;
+              align-items: flex-start;
+              flex-direction: row-reverse;
+            }
+
+            .help-msg-bubble {
+              padding: 9px 12px;
+              border-radius: 10px;
+              font-size: 12px;
+              line-height: 1.5;
+              max-width: 260px;
+            }
+
+            .help-msg-bot .help-msg-bubble {
+              background: rgba(34, 197, 94, 0.12);
+              color: #1e293b;
+            }
+
+            .help-msg-user .help-msg-bubble {
+              background: #e2e8f0;
+              color: #475569;
+            }
+
+            .help-msg-time {
+              font-size: 10px;
+              color: #94a3b8;
+              margin-top: 3px;
+            }
+
+            .help-msg-avatar-sm {
+              width: 24px;
+              height: 24px;
+              border-radius: 7px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 11px;
+              font-family: 'Outfit', sans-serif;
+              font-weight: 700;
+              flex-shrink: 0;
+            }
+
+            .help-chat-input-row {
+              display: flex;
+              gap: 8px;
+            }
+
+            .help-chat-input {
+              flex: 1;
+              background: #fff;
+              border: 1px solid #e2e8f0;
+              border-radius: 9px;
+              padding: 9px 12px;
+              color: #1e293b;
+              font-size: 13px;
+              font-family: 'DM Sans', sans-serif;
+              outline: none;
+            }
+
+            .help-chat-input::placeholder {
+              color: #94a3b8;
+            }
+
+            .help-chat-send {
+              background: rgba(34, 197, 94, 0.1);
+              border: 1px solid #16a34a;
+              border-radius: 9px;
+              color: #16a34a;
+              padding: 9px 14px;
+              cursor: pointer;
+              font-size: 13px;
+              transition: all 0.2s;
+            }
+
+            .help-chat-send:hover {
+              background: rgba(34, 197, 94, 0.2);
+            }
+
+            .help-ticket-table {
+              width: 100%;
+              border-collapse: collapse;
+              font-size: 12px;
+            }
+
+            .help-ticket-table th {
+              padding: 9px 14px;
+              text-align: left;
+              font-size: 10px;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              color: #64748b;
+              border-bottom: 1px solid #e2e8f0;
+            }
+
+            .help-ticket-table td {
+              padding: 10px 14px;
+              border-bottom: 1px solid #f1f5f9;
+              color: #475569;
+              vertical-align: middle;
+            }
+
+            .help-ticket-table tr:last-child td {
+              border-bottom: none;
+            }
+
+            .help-ticket-table tr:hover td {
+              background: #f8fafc;
+              cursor: pointer;
+            }
+
+            .help-badge {
+              font-size: 10px;
+              padding: 2px 8px;
+              border-radius: 7px;
+              font-weight: 500;
+            }
+
+            .help-badge-open {
+              background: rgba(96, 165, 250, 0.1);
+              color: #3b82f6;
+            }
+
+            .help-badge-progress {
+              background: rgba(251, 191, 36, 0.1);
+              color: #f59e0b;
+            }
+
+            .help-badge-resolved {
+              background: rgba(34, 197, 94, 0.1);
+              color: #16a34a;
+            }
+
+            .help-badge-high {
+              background: rgba(248, 113, 113, 0.1);
+              color: #ef4444;
+            }
+
+            .help-badge-med {
+              background: rgba(251, 191, 36, 0.1);
+              color: #f59e0b;
+            }
+
+            .help-badge-low {
+              background: rgba(148, 163, 184, 0.1);
+              color: #64748b;
+            }
+
+            .help-notice-card {
+              display: flex;
+              align-items: flex-start;
+              gap: 12px;
+              padding: 14px 16px;
+              border-radius: 11px;
+              margin-bottom: 10px;
+            }
+
+            .help-notice-icon {
+              font-size: 16px;
+              flex-shrink: 0;
+              margin-top: 1px;
+            }
+
+            .help-glass-card {
+              background: #fff;
+              border: 1px solid #e2e8f0;
+              border-radius: 14px;
+              overflow: hidden;
+            }
+
+            .help-tab-row {
+              display: flex;
+              gap: 2px;
+              background: #f8fafc;
+              border: 1px solid #e2e8f0;
+              border-radius: 10px;
+              padding: 3px;
+              width: fit-content;
+              margin-bottom: 18px;
+            }
+
+            .help-tab-btn {
+              padding: 6px 16px;
+              border-radius: 7px;
+              font-size: 12px;
+              font-weight: 500;
+              cursor: pointer;
+              color: #64748b;
+              transition: all 0.18s;
+            }
+
+            .help-tab-btn:hover {
+              color: #16a34a;
+            }
+
+            .help-tab-btn.active {
+              background: rgba(34, 197, 94, 0.1);
+              color: #16a34a;
+              border: 1px solid rgba(34, 197, 94, 0.2);
+            }
+
+            .help-subpage {
+              display: none;
+            }
+
+            .help-subpage.active {
+              display: block;
+              animation: fadein 0.25s ease;
+            }
+          </style>
+
+          <div class="help-layout">
+            <div class="help-sidebar" style="display: none;">
+              <div class="help-sb-head">
+                <div class="help-sb-logo"><i class="ph-duotone ph-lifebuoy"
+                    style="font-size: 12px; margin-right: 4px;"></i>Help Center</div>
+                <div class="help-sb-sub">Suraksha Setu Support</div>
+              </div>
+              <div class="help-nav-group">Support</div>
+              <div class="help-nav-item active" id="help-nav-home" onclick="switchHelpPage('home', this)"><i
+                  class="ph-duotone ph-house"></i>Home</div>
+              <div class="help-nav-item" id="help-nav-faq" onclick="switchHelpPage('faq', this)"><i
+                  class="ph-duotone ph-question"></i>FAQs</div>
+              <div class="help-nav-item" id="help-nav-guides" onclick="switchHelpPage('guides', this)"><i
+                  class="ph-duotone ph-book"></i>Guides & tutorials</div>
+              <div class="help-nav-item" id="help-nav-contact" onclick="switchHelpPage('contact', this)"><i
+                  class="ph-duotone ph-headset"></i>Contact support</div>
+              <div class="help-nav-item" id="help-nav-tickets" onclick="switchHelpPage('tickets', this)"><i
+                  class="ph-duotone ph-ticket"></i>My tickets</div>
+              <div class="help-nav-group">Quick links</div>
+              <div class="help-nav-item help-nav-sub"><i class="ph-duotone ph-map-pin"></i>Report an issue</div>
+              <div class="help-nav-item help-nav-sub"><i class="ph-duotone ph-shield"></i>Privacy policy</div>
+              <div class="help-nav-item help-nav-sub"><i class="ph-duotone ph-file-text"></i>Terms of use</div>
+            </div>
+
+            <div class="help-content">
+              <!-- HOME PAGE -->
+              <div class="help-page active" id="help-page-home">
+                <div class="help-hero-band">
+                  <div class="help-hero-title"><i class="ph-duotone ph-lifebuoy"
+                      style="font-size: 20px; margin-right: 8px; color: #16a34a;"></i>How can we help you?</div>
+                  <div class="help-hero-sub">Search our knowledge base or browse categories below.</div>
+                  <div class="help-search-hero">
+                    <i class="ph-bold ph-magnifying-glass"></i>
+                    <input type="text" placeholder="Search: how to report an issue, map not loading...">
+                    <button>Search</button>
+                  </div>
+                </div>
+                <div class="help-body-area">
+                  <div class="help-section-title"><i class="ph-duotone ph-squares-four"
+                      style="font-size: 14px;"></i>Browse by category</div>
+                  <div class="help-cat-grid">
+                    <div class="help-cat-card" onclick="switchHelpPage('faq', document.getElementById('help-nav-faq'))">
+                      <div class="help-cat-icon" style="background: rgba(34, 197, 94, 0.1);"><i
+                          class="ph-duotone ph-map-pin" style="color: #16a34a; font-size: 18px;"></i></div>
+                      <div class="help-cat-name">Reporting issues</div>
+                      <div class="help-cat-desc">How to submit, track, and update environmental reports on the platform.
+                      </div>
+                      <div class="help-cat-count">12 articles</div>
+                    </div>
+                    <div class="help-cat-card" onclick="switchHelpPage('faq', document.getElementById('help-nav-faq'))">
+                      <div class="help-cat-icon" style="background: rgba(96, 165, 250, 0.1);"><i
+                          class="ph-duotone ph-layout-dashboard" style="color: #3b82f6; font-size: 18px;"></i></div>
+                      <div class="help-cat-name">Admin dashboard</div>
+                      <div class="help-cat-desc">Navigating the admin panel, managing reports, analytics and exports.
+                      </div>
+                      <div class="help-cat-count">9 articles</div>
+                    </div>
+                    <div class="help-cat-card" onclick="switchHelpPage('faq', document.getElementById('help-nav-faq'))">
+                      <div class="help-cat-icon" style="background: rgba(167, 139, 250, 0.1);"><i
+                          class="ph-duotone ph-users" style="color: #8b5cf6; font-size: 18px;"></i></div>
+                      <div class="help-cat-name">Team & accounts</div>
+                      <div class="help-cat-desc">User roles, inviting members, permissions, and profile management.
+                      </div>
+                      <div class="help-cat-count">7 articles</div>
+                    </div>
+                    <div class="help-cat-card"
+                      onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))">
+                      <div class="help-cat-icon" style="background: rgba(251, 191, 36, 0.1);"><i
+                          class="ph-duotone ph-medal" style="color: #f59e0b; font-size: 18px;"></i></div>
+                      <div class="help-cat-name">Certificates</div>
+                      <div class="help-cat-desc">Issuing, downloading, and verifying community achievement certificates.
+                      </div>
+                      <div class="help-cat-count">5 articles</div>
+                    </div>
+                    <div class="help-cat-card"
+                      onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))">
+                      <div class="help-cat-icon" style="background: rgba(251, 146, 60, 0.1);"><i
+                          class="ph-duotone ph-map-trifold" style="color: #f97316; font-size: 18px;"></i></div>
+                      <div class="help-cat-name">Live map & zones</div>
+                      <div class="help-cat-desc">Understanding issue markers, filters, zone clustering, and map
+                        settings.</div>
+                      <div class="help-cat-count">6 articles</div>
+                    </div>
+                    <div class="help-cat-card"
+                      onclick="switchHelpPage('contact', document.getElementById('help-nav-contact'))">
+                      <div class="help-cat-icon" style="background: rgba(248, 113, 113, 0.1);"><i
+                          class="ph-duotone ph-wrench" style="color: #ef4444; font-size: 18px;"></i></div>
+                      <div class="help-cat-name">Troubleshooting</div>
+                      <div class="help-cat-desc">Login issues, map not loading, notifications not working, and more.
+                      </div>
+                      <div class="help-cat-count">8 articles</div>
+                    </div>
+                  </div>
+
+                  <div class="help-section-title"><i class="ph-duotone ph-flame"
+                      style="font-size: 14px; color: #f97316;"></i>Popular articles</div>
+                  <div class="help-faq-list">
+                    <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                      <div class="help-faq-q"><span class="help-faq-q-text">How do I submit a new environmental issue
+                          report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                      <div class="help-faq-a">
+                        <div class="help-faq-a-inner">Click the green "+ Report Issue" button in the top navigation bar.
+                          Fill in the category (Garbage, Plastic, Water, etc.), add a photo or description, pin the
+                          location on the map, and set the priority. Your report will be visible on the live map
+                          immediately after submission.</div>
+                      </div>
+                    </div>
+                    <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                      <div class="help-faq-q"><span class="help-faq-q-text">Why is my report showing "In Progress" but
+                          no update from the team?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                      <div class="help-faq-a">
+                        <div class="help-faq-a-inner">In Progress means a moderator or field officer has picked up the
+                          issue for review. Resolution timelines depend on priority — High priority issues are typically
+                          resolved within 24–48 hours. You can track status in real time from your report detail page.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                      <div class="help-faq-q"><span class="help-faq-q-text">How do I access the Admin
+                          Dashboard?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                      <div class="help-faq-a">
+                        <div class="help-faq-a-inner">The Admin Dashboard is accessible only to Super Admins and
+                          Moderators. Click the "Admin" button in the top navigation. If the button is not visible, your
+                          account does not have the required role. Contact your Super Admin to request elevated access.
+                        </div>
+                      </div>
+                    </div>
+                    <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                      <div class="help-faq-q"><span class="help-faq-q-text">How do I download or share a community
+                          certificate?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                      <div class="help-faq-a">
+                        <div class="help-faq-a-inner">Go to Certificate → View Certificates, find your certificate by
+                          name or ID, and click the download icon to save as PDF. Each certificate includes a QR code
+                          for instant verification. You can also resend it to your registered email from the same page.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    style="background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 16px;">
+                    <div
+                      style="width: 44px; height: 44px; border-radius: 12px; background: rgba(34, 197, 94, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                      <i class="ph-duotone ph-headset" style="font-size: 22px; color: #16a34a;"></i>
+                    </div>
+                    <div style="flex: 1;">
+                      <div
+                        style="font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 2px;">
+                        Still need help?</div>
+                      <div style="font-size: 12px; color: #64748b;">Our support team is available Mon–Sat, 9 AM – 6 PM
+                        IST. Average response time: under 2 hours.</div>
+                    </div>
+                    <button onclick="switchHelpPage('contact', document.getElementById('help-nav-contact'))"
+                      style="background: rgba(34, 197, 94, 0.1); border: 1px solid #16a34a; border-radius: 9px; color: #16a34a; font-size: 12px; font-weight: 500; padding: 9px 16px; cursor: pointer; white-space: nowrap; font-family: 'DM Sans', sans-serif;">Contact
+                      us</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FAQ PAGE -->
+              <div class="help-page" id="help-page-faq">
+                <div class="help-hero-band">
+                  <div class="help-hero-title">Frequently asked questions</div>
+                  <div class="help-hero-sub">Answers to the most common questions about Suraksha Setu.</div>
+                  <div class="help-search-hero">
+                    <i class="ph-bold ph-magnifying-glass"></i>
+                    <input type="text" placeholder="Search FAQs...">
+                    <button>Search</button>
+                  </div>
+                </div>
+                <div class="help-body-area">
+                  <div class="help-tab-row">
+                    <div class="help-tab-btn active" onclick="switchHelpSubpage('faq-reporting', this)">Reporting</div>
+                    <div class="help-tab-btn" onclick="switchHelpSubpage('faq-admin', this)">Admin panel</div>
+                    <div class="help-tab-btn" onclick="switchHelpSubpage('faq-account', this)">Account</div>
+                    <div class="help-tab-btn" onclick="switchHelpSubpage('faq-tech', this)">Technical</div>
+                  </div>
+
+                  <div class="help-subpage active" id="faq-reporting">
+                    <div class="help-faq-list">
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">How do I submit a new environmental issue
+                            report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">Click "+ Report Issue" in the top nav. Select the issue
+                            category, upload a photo, pin your location on the map, write a brief description, and set
+                            the priority level. Submit — your report goes live on the map instantly and notifies the
+                            nearest moderator.</div>
+                        </div>
+                      </div>
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">Can I report anonymously?</span><i
+                            class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">Anonymous reporting can be enabled or disabled by the platform
+                            admin. If enabled, your name won't appear on the public report, but your account is still
+                            logged internally for moderation purposes.</div>
+                        </div>
+                      </div>
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">How do I track the status of my
+                            report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">Go to the Community Feed or your profile and find your submitted
+                            report. Status updates (Open → In Progress → Resolved) are shown in real time. You'll also
+                            receive email notifications if email alerts are enabled in your settings.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="help-subpage" id="faq-admin">
+                    <div class="help-faq-list">
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">How do I export all reports as CSV or
+                            PDF?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">In the Admin Dashboard, click "Export PDF" for the current view,
+                            or go to Reports & Exports → select date range and filters → click "Export CSV". Data
+                            includes all report fields: ID, category, location, priority, status, and timestamps.</div>
+                        </div>
+                      </div>
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">How do I change a report's
+                            priority?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">Open the report from the Live Map or Active Issues list, click
+                            the priority badge, and select the new level (Low / Medium / High). Moderators can escalate;
+                            only Super Admins can downgrade High priority issues.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="help-subpage" id="faq-account">
+                    <div class="help-faq-list">
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">How do I reset my password?</span><i
+                            class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">Click "Forgot password" on the login page and enter your
+                            registered email. You'll receive a password reset link valid for 1 hour. If you don't
+                            receive the email within 5 minutes, check your spam folder or contact support.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="help-subpage" id="faq-tech">
+                    <div class="help-faq-list">
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">The live map is not loading — what should
+                            I do?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">First, check your internet connection. The live map uses
+                            OpenStreetMap/Leaflet which requires an active connection. Try a hard refresh
+                            (Ctrl+Shift+R). If the issue persists, clear browser cache or try a different browser.
+                            Contact support if the problem continues.</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- GUIDES PAGE -->
+              <div class="help-page" id="help-page-guides">
+                <div class="help-hero-band">
+                  <div class="help-hero-title">Guides & tutorials</div>
+                  <div class="help-hero-sub">Step-by-step walkthroughs for every feature of Suraksha Setu.</div>
+                </div>
+                <div class="help-body-area">
+                  <div class="help-section-title"><i class="ph-duotone ph-star"
+                      style="font-size: 14px; color: #f59e0b;"></i>Getting started</div>
+                  <div class="help-guide-grid" style="margin-bottom: 20px;">
+                    <div class="help-guide-card">
+                      <div class="help-guide-icon" style="background: rgba(34, 197, 94, 0.1);"><i
+                          class="ph-duotone ph-play" style="color: #16a34a; font-size: 16px;"></i></div>
+                      <div>
+                        <div class="help-guide-title">Platform overview — 5 min tour</div>
+                        <div class="help-guide-meta">For new users · Video guide</div><span class="help-guide-badge"
+                          style="background: rgba(34, 197, 94, 0.1); color: #16a34a;">Beginner</span>
+                      </div>
+                    </div>
+                    <div class="help-guide-card">
+                      <div class="help-guide-icon" style="background: rgba(96, 165, 250, 0.1);"><i
+                          class="ph-duotone ph-map-pin" style="color: #3b82f6; font-size: 16px;"></i></div>
+                      <div>
+                        <div class="help-guide-title">How to submit your first report</div>
+                        <div class="help-guide-meta">Step-by-step · 3 min read</div><span class="help-guide-badge"
+                          style="background: rgba(96, 165, 250, 0.1); color: #3b82f6;">Beginner</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- CONTACT PAGE -->
+              <div class="help-page" id="help-page-contact">
+                <div class="help-hero-band">
+                  <div class="help-hero-title">Contact support</div>
+                  <div class="help-hero-sub">Reach out via live chat, email, or submit a support ticket.</div>
+                </div>
+                <div class="help-body-area">
+                  <div class="help-contact-grid" style="margin-bottom: 24px;">
+                    <div class="help-contact-card">
+                      <div class="help-contact-icon" style="background: rgba(34, 197, 94, 0.1);"><i
+                          class="ph-duotone ph-chat-circle-text" style="color: #16a34a; font-size: 20px;"></i></div>
+                      <div class="help-contact-title">Live chat</div>
+                      <div class="help-contact-desc">Chat with our support team in real time. Available Mon–Sat 9AM–6PM
+                        IST.</div>
+                      <div class="help-contact-btn"
+                        style="background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3); color: #16a34a;">
+                        <i class="ph-bold ph-arrow-right" style="font-size: 13px;"></i>Start chat
+                      </div>
+                    </div>
+                    <div class="help-contact-card">
+                      <div class="help-contact-icon" style="background: rgba(96, 165, 250, 0.1);"><i
+                          class="ph-duotone ph-envelope" style="color: #3b82f6; font-size: 20px;"></i></div>
+                      <div class="help-contact-title">Email support</div>
+                      <div class="help-contact-desc">Send a detailed query. Response within 2 business hours on working
+                        days.</div>
+                      <div class="help-contact-btn"
+                        style="background: rgba(96, 165, 250, 0.1); border-color: rgba(96, 165, 250, 0.3); color: #3b82f6;">
+                        <i class="ph-duotone ph-envelope" style="font-size: 13px;"></i>support@surakshasetu.in
+                      </div>
+                    </div>
+                    <div class="help-contact-card">
+                      <div class="help-contact-icon" style="background: rgba(251, 191, 36, 0.1);"><i
+                          class="ph-duotone ph-ticket" style="color: #f59e0b; font-size: 20px;"></i></div>
+                      <div class="help-contact-title">Submit a ticket</div>
+                      <div class="help-contact-desc">For complex issues or bugs. Track progress in the My Tickets
+                        section.</div>
+                      <div class="help-contact-btn"
+                        style="background: rgba(251, 191, 36, 0.1); border-color: rgba(251, 191, 36, 0.3); color: #f59e0b;"
+                        onclick="switchHelpPage('tickets', document.getElementById('help-nav-tickets'))"><i
+                          class="ph-bold ph-plus" style="font-size: 13px;"></i>New ticket</div>
+                    </div>
+                  </div>
+
+                  <div class="help-section-title"><i class="ph-duotone ph-chat-circle-text"
+                      style="font-size: 14px;"></i>Live chat</div>
+                  <div class="help-chat-widget">
+                    <div class="help-chat-header">
+                      <div class="help-chat-avatar"><i class="ph-duotone ph-robot"
+                          style="color: #16a34a; font-size: 18px;"></i></div>
+                      <div>
+                        <div style="font-size: 13px; font-weight: 500; color: #1e293b;">Suraksha Setu Support</div>
+                        <div class="help-chat-status">
+                          <div class="help-pulse-dot"></div>Online · Avg. response 4 min
+                        </div>
+                      </div>
+                    </div>
+                    <div class="help-chat-messages" id="helpChatMessages">
+                      <div class="help-msg help-msg-bot">
+                        <div class="help-msg-avatar-sm" style="background: rgba(34, 197, 94, 0.1); color: #16a34a;">SS
+                        </div>
+                        <div>
+                          <div class="help-msg-bubble">Namaste! I'm the Suraksha Setu support bot. How can I help you
+                            today? You can ask about reporting issues, admin features, certificates, or anything else.
+                          </div>
+                          <div class="help-msg-time">Just now</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="help-chat-input-row">
+                      <input class="help-chat-input" id="helpChatInput" type="text" placeholder="Type your question..."
+                        onkeydown="if(event.key==='Enter')sendHelpChat()">
+                      <button class="help-chat-send" onclick="sendHelpChat()"><i class="ph-bold ph-paper-plane-right"
+                          style="font-size: 15px;"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- TICKETS PAGE -->
+              <div class="help-page" id="help-page-tickets">
+                <div class="help-hero-band">
+                  <div class="help-hero-title">My support tickets</div>
+                  <div class="help-hero-sub">Track the status of your submitted support requests.</div>
+                </div>
+                <div class="help-body-area">
+                  <div class="help-glass-card">
+                    <table class="help-ticket-table">
+                      <thead>
+                        <tr>
+                          <th>Ticket ID</th>
+                          <th>Subject</th>
+                          <th>Category</th>
+                          <th>Priority</th>
+                          <th>Created</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style="font-family: 'Outfit', sans-serif; font-size: 11px; color: #64748b;">TKT-0018</td>
+                          <td>
+                            <div style="font-size: 13px; font-weight: 500; color: #1e293b;">Live map not loading on
+                              mobile Chrome</div>
+                          </td>
+                          <td><span class="help-badge help-badge-low">Technical</span></td>
+                          <td><span class="help-badge help-badge-med">Medium</span></td>
+                          <td style="font-size: 11px; color: #64748b;">Jun 5, 2024</td>
+                          <td><span class="help-badge help-badge-progress">In progress</span></td>
+                        </tr>
+                        <tr>
+                          <td style="font-family: 'Outfit', sans-serif; font-size: 11px; color: #64748b;">TKT-0015</td>
+                          <td>
+                            <div style="font-size: 13px; font-weight: 500; color: #1e293b;">Certificate PDF not
+                              downloading in Safari</div>
+                          </td>
+                          <td><span class="help-badge help-badge-low">Certificate</span></td>
+                          <td><span class="help-badge help-badge-high">High</span></td>
+                          <td style="font-size: 11px; color: #64748b;">May 28, 2024</td>
+                          <td><span class="help-badge help-badge-open">Open</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
+  </div>
+
+  <script>
+    // Sidebar View Routing
+    function switchAdminView(viewName, linkElement) {
+      document.getElementById('admin-view-overview').style.display = 'none';
+      document.getElementById('admin-view-statistics').style.display = 'none';
+      document.getElementById('admin-view-analytics').style.display = 'none';
+      document.getElementById('admin-view-reports').style.display = 'none';
+      document.getElementById('admin-view-monitoring').style.display = 'none';
+      document.getElementById('admin-view-settings-general').style.display = 'none';
+      document.getElementById('admin-view-settings-categories').style.display = 'none';
+      document.getElementById('admin-view-settings-security').style.display = 'none';
+      if (document.getElementById('admin-view-cert-issue')) document.getElementById('admin-view-cert-issue').style.display = 'none';
+      if (document.getElementById('admin-view-cert-view')) document.getElementById('admin-view-cert-view').style.display = 'none';
+      if (document.getElementById('admin-view-cert-templates')) document.getElementById('admin-view-cert-templates').style.display = 'none';
+      if (document.getElementById('admin-view-help-center')) document.getElementById('admin-view-help-center').style.display = 'none';
+
+      const targetView = document.getElementById('admin-view-' + viewName);
+      if (targetView) targetView.style.display = 'block';
+
+      const title = document.getElementById('admin-page-title');
+      const actions = document.getElementById('admin-page-actions');
+
+      document.getElementById('btn-export-pdf').style.display = 'none';
+      document.getElementById('btn-export-csv').style.display = 'none';
+      document.getElementById('btn-export-analytics').style.display = 'none';
+
+      if (viewName === 'overview') {
+        title.innerText = 'Admin Dashboard';
+        actions.style.display = 'flex';
+        document.getElementById('btn-export-pdf').style.display = 'inline-flex';
+        if (typeof renderDashboardOverview === 'function') renderDashboardOverview();
+      } else if (viewName === 'statistics') {
+        title.innerText = 'Statistics';
+        actions.style.display = 'flex';
+        document.getElementById('btn-export-csv').style.display = 'inline-flex';
+        if (typeof renderStatCharts === 'function') renderStatCharts();
+      } else if (viewName === 'analytics') {
+        title.innerText = 'Analytics';
+        actions.style.display = 'flex';
+        document.getElementById('btn-export-analytics').style.display = 'inline-flex';
+        if (typeof renderAnalyticsCharts === 'function') renderAnalyticsCharts();
+        if (typeof buildHeatmap === 'function') buildHeatmap();
+      } else if (viewName === 'reports') {
+        title.innerText = 'Reports & Exports';
+        actions.style.display = 'none';
+      } else if (viewName === 'monitoring') {
+        title.innerText = 'Live Monitoring';
+        actions.style.display = 'none';
+        if (typeof renderMonitoringMap === 'function') renderMonitoringMap();
+      } else if (viewName === 'settings-general') {
+        title.innerText = 'General Settings';
+        actions.style.display = 'none';
+      } else if (viewName === 'settings-categories') {
+        title.innerText = 'Categories Settings';
+        actions.style.display = 'none';
+      } else if (viewName === 'settings-security') {
+        title.innerText = 'Security Settings';
+        actions.style.display = 'none';
+      } else if (viewName === 'cert-issue') {
+        title.innerText = 'Certificates';
+        actions.style.display = 'none';
+      } else if (viewName === 'cert-view') {
+        title.innerText = 'Certificates';
+        actions.style.display = 'none';
+      } else if (viewName === 'cert-templates') {
+        title.innerText = 'Certificate Templates';
+        actions.style.display = 'flex';
+        if (typeof fetchTemplates === 'function') fetchTemplates();
+      } else if (viewName === 'help-center') {
+        title.innerText = 'Help Center';
+        actions.style.display = 'none';
+      }
+
+      if (linkElement) {
+        document.querySelectorAll('.admin-subnav-link').forEach(el => el.classList.remove('active'));
+        linkElement.classList.add('active');
+
+        // Highlight active parent nav item
+        document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active-child'));
+        linkElement.closest('.admin-nav-item').classList.add('active-child');
+      }
+    }
+
+    // Sidebar Logic
+    function toggleSidebar() {
+      const sidebar = document.getElementById('admin-sidebar');
+      sidebar.classList.toggle('collapsed');
+    }
+
+    function expandSidebarIfCollapsed() {
+      const sidebar = document.getElementById('admin-sidebar');
+      if (sidebar.classList.contains('collapsed')) {
+        toggleSidebar();
+      }
+    }
+
+    function toggleSubnav(btn) {
+      const sidebar = document.getElementById('admin-sidebar');
+      if (sidebar.classList.contains('collapsed')) {
+        toggleSidebar();
+      }
+      const item = btn.parentElement;
+      item.classList.toggle('open');
+    }
+
+    // Add click events to subnav links
+    document.querySelectorAll('.admin-subnav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.admin-subnav-link').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('.admin-nav-item').forEach(l => l.classList.remove('active-child'));
+
+        link.classList.add('active');
+        link.closest('.admin-nav-item').classList.add('active-child');
+      });
+    }); function switchHelpPage(pageId, linkElement) {
+      document.querySelectorAll('.help-page').forEach(el => el.classList.remove('active'));
+      document.getElementById('help-page-' + pageId).classList.add('active');
+
+      if (linkElement) {
+        document.querySelectorAll('.help-nav-item').forEach(el => el.classList.remove('active'));
+        linkElement.classList.add('active');
+      }
+    }
+
+    function toggleHelpFaq(item) {
+      item.classList.toggle('open');
+    }
+
+    function switchHelpSubpage(subpageId, btnElement) {
+      document.querySelectorAll('.help-subpage').forEach(el => el.classList.remove('active'));
+      document.getElementById(subpageId).classList.add('active');
+
+      document.querySelectorAll('.help-tab-btn').forEach(el => el.classList.remove('active'));
+      btnElement.classList.add('active');
+    }
+
+    function sendHelpChat() {
+      const input = document.getElementById('helpChatInput');
+      const messages = document.getElementById('helpChatMessages');
+      if (!input.value.trim()) return;
+
+      const userMsg = document.createElement('div');
+      userMsg.className = 'help-msg help-msg-user';
+      userMsg.innerHTML = `
+        <div class="help-msg-avatar-sm" style="background: #cbd5e1; color: #475569;">You</div>
+        <div>
+          <div class="help-msg-bubble">${input.value}</div>
+          <div class="help-msg-time">Just now</div>
+        </div>
+      `;
+      messages.appendChild(userMsg);
+      input.value = '';
+      messages.scrollTop = messages.scrollHeight;
+
+      setTimeout(() => {
+        const botMsg = document.createElement('div');
+        botMsg.className = 'help-msg help-msg-bot';
+        botMsg.innerHTML = `
+          <div class="help-msg-avatar-sm" style="background: rgba(34, 197, 94, 0.1); color: #16a34a;">SS</div>
+          <div>
+            <div class="help-msg-bubble">Thanks for your message! An agent will be with you shortly.</div>
+            <div class="help-msg-time">Just now</div>
+          </div>
+        `;
+        messages.appendChild(botMsg);
+        messages.scrollTop = messages.scrollHeight;
+      }, 1000);
+    }
+
+    // Help Center Functions
+    function switchHelpPage(name, navEl) {
+      document.querySelectorAll('.help-nav-item').forEach(n => n.classList.remove('active'));
+      if (navEl) navEl.classList.add('active');
+      document.querySelectorAll('.help-page').forEach(p => p.classList.remove('active'));
+      const pg = document.getElementById('help-page-' + name);
+      if (pg) pg.classList.add('active');
+    }
+
+    function switchHelpSubpage(name, btn) {
+      if (btn) {
+        btn.closest('.help-tab-row').querySelectorAll('.help-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      const parentPage = document.querySelector('.help-page.active');
+      if (parentPage) parentPage.querySelectorAll('.help-subpage').forEach(sp => sp.classList.remove('active'));
+      const sp = document.getElementById(name);
+      if (sp) sp.classList.add('active');
+    }
+
+    function toggleHelpFaq(el) {
+      const wasOpen = el.classList.contains('open');
+      el.closest('.help-faq-list').querySelectorAll('.help-faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) el.classList.add('open');
+    }
+  </script>
 
 
 
@@ -799,6 +4152,70 @@
           onclick="document.getElementById('modal-overlay').classList.remove('open')">✕</button>
       </div>
       <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+  <!-- ── CREATE CERTIFICATE TEMPLATE MODAL ── -->
+  <div class="modal-overlay" id="create-template-modal-overlay">
+    <div class="modal" id="create-template-modal" style="max-width: 650px;">
+      <div class="modal-header">
+        <div>
+          <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif">Create Certificate Template</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:3px">Design a new reusable template</div>
+        </div>
+        <button class="modal-close" onclick="closeCreateTemplateModal()">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+        <div style="display:flex;gap:16px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:12px;">
+          <button id="tab-visual-builder" style="padding:6px 12px;background:var(--primary);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;" onclick="switchTemplateBuilderTab('visual')">Visual Builder</button>
+          <button id="tab-html-editor" style="padding:6px 12px;background:none;color:var(--text3);border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;" onclick="switchTemplateBuilderTab('html')">HTML Editor</button>
+        </div>
+
+        <div id="builder-visual" style="display:block;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div class="input-group">
+              <label class="input-label">Template Name</label>
+              <input type="text" id="tpl-name-visual" class="input-field" placeholder="e.g. Bronze Certificate">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Award Type / Subtitle</label>
+              <input type="text" id="tpl-award-type" class="input-field" placeholder="e.g. Monthly Contributor">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Background Gradient</label>
+              <input type="text" id="tpl-bg" class="input-field" value="linear-gradient(135deg,rgba(251,191,36,0.08),rgba(34,197,94,0.06))">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Primary Color</label>
+              <input type="text" id="tpl-primary" class="input-field" value="var(--gold)">
+            </div>
+            <div class="input-group">
+              <label class="input-label">Icon Class (Phosphor/Tabler)</label>
+              <input type="text" id="tpl-icon" class="input-field" value="ph-duotone ph-medal">
+            </div>
+          </div>
+        </div>
+
+        <div id="builder-html" style="display:none;">
+          <div class="input-group">
+            <label class="input-label">Template Name</label>
+            <input type="text" id="tpl-name-html" class="input-field" placeholder="e.g. Custom Corporate Certificate">
+          </div>
+          <div class="input-group">
+            <label class="input-label">Award Type</label>
+            <input type="text" id="tpl-award-type-html" class="input-field" placeholder="e.g. Outstanding Service">
+          </div>
+          <div class="input-group">
+            <label class="input-label">Raw HTML & CSS</label>
+            <textarea id="tpl-html" class="input-field" style="height:200px;font-family:monospace;font-size:12px;" placeholder="<div>\n  <style> .cert-custom { color: red; } </style>\n  <h1 class='cert-custom'>Certificate</h1>\n  <p>Awarded to {NAME}</p>\n</div>"></textarea>
+            <p style="font-size:11px;color:var(--text3);margin-top:6px;">Available placeholders: {NAME}, {EMAIL}, {ZONE}, {DATE}, {ISSUER}</p>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;display:flex;justify-content:flex-end;gap:12px;">
+          <button class="action-btn" onclick="closeCreateTemplateModal()">Cancel</button>
+          <button class="btn-primary" style="padding:10px 24px;border-radius:8px;font-size:14px;" onclick="saveCertificateTemplate()">Save Template</button>
+        </div>
+      </div>
     </div>
   </div>
 

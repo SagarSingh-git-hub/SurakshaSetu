@@ -36,10 +36,13 @@ if ($result && $result->num_rows > 0) {
             'status' => htmlspecialchars($row['status']),
             'priority' => htmlspecialchars($row['priority']),
             'date' => date('Y-m-d', strtotime($row['created_at'])),
+            'created_at' => $row['created_at'],
+            'resolved_at' => $row['resolved_at'],
             'photos' => count($photos),
             'photo_urls' => $photos,
             'tags' => array_map('htmlspecialchars', $tags),
-            'reporter' => htmlspecialchars($row['reporter'] ?? 'Anonymous')
+            'reporter' => htmlspecialchars($row['reporter'] ?? 'Anonymous'),
+            'device_id' => htmlspecialchars($row['device_id'] ?? '')
         ];
     }
 }

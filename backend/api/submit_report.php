@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $lat = (float)($_POST['lat'] ?? 0);
     $lng = (float)($_POST['lng'] ?? 0);
     $locStr = $_POST['locStr'] ?? '';
+    $device_id = $_POST['device_id'] ?? '';
     
     // Generate Unique ID
     $report_id = 'ECO-' . rand(100, 999) . time();
@@ -22,8 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // -------------------------------------------------
 
     // Insert Report into Database
-    $stmt = $conn->prepare("INSERT INTO reports (report_id, category, location_str, lat, lng, description) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssdss", $report_id, $category, $locStr, $lat, $lng, $desc);
+    $stmt = $conn->prepare("INSERT INTO reports (report_id, category, location_str, lat, lng, description, device_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssdsss", $report_id, $category, $locStr, $lat, $lng, $desc, $device_id);
             
     if ($stmt->execute()) {
         
@@ -91,7 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'photos' => count($saved_photos),
             'photo_urls' => $saved_photos,
             'tags' => $tags,
-            'reporter' => 'Anonymous'
+            'reporter' => 'Anonymous',
+            'device_id' => $device_id
         ];
 
         // Trigger Pusher WebSocket Event
