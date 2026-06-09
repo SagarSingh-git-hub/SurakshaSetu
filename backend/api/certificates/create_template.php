@@ -27,9 +27,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $is_custom_html = 1;
     $is_default = 0;
 
-    // Dynamically ensure columns exist to prevent errors
-    $conn->query("ALTER TABLE certificate_templates ADD COLUMN IF NOT EXISTS css_content LONGTEXT NULL");
-    $conn->query("ALTER TABLE certificate_templates ADD COLUMN IF NOT EXISTS mode VARCHAR(50) DEFAULT 'design'");
+    // Dynamically ensure columns exist to prevent errors (safe standard syntax)
+    $check_css = $conn->query("SHOW COLUMNS FROM certificate_templates LIKE 'css_content'");
+    if ($check_css && $check_css->num_rows == 0) {
+        $conn->query("ALTER TABLE certificate_templates ADD COLUMN css_content LONGTEXT NULL");
+    }
+    $check_mode = $conn->query("SHOW COLUMNS FROM certificate_templates LIKE 'mode'");
+    if ($check_mode && $check_mode->num_rows == 0) {
+        $conn->query("ALTER TABLE certificate_templates ADD COLUMN mode VARCHAR(50) DEFAULT 'design'");
+    }
 
     $stmt = $conn->prepare("INSERT INTO certificate_templates (name, award_type, html_content, css_content, mode, is_custom_html, is_default) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("sssssii", $name, $award_type, $html_content, $css_content, $mode, $is_custom_html, $is_default);
