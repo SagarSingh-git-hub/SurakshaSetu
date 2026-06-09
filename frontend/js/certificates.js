@@ -149,9 +149,14 @@ function applyTemplateToPreview(templateId) {
     
     const card = document.getElementById('cert-preview-card');
     const icon = document.getElementById('cert-preview-icon');
+    const title = document.getElementById('cert-preview-title');
     
     if (card) {
         card.style.background = tmpl.bg_gradient;
+    }
+    if (title) {
+        title.innerText = tmpl.name || 'Certificate of Excellence';
+        title.style.color = tmpl.primary_color;
     }
     if (icon) {
         icon.className = tmpl.icon_class;
@@ -202,6 +207,7 @@ async function issueCertificate() {
     const tmplId = typeSelect.options[typeSelect.selectedIndex]?.getAttribute('data-tid') || 0;
     
     const payload = {
+        recipient_type: document.getElementById('cert-recipient-type')?.value || 'Community Member',
         recipient_name: document.getElementById('cert-full-name').value,
         recipient_email: document.getElementById('cert-email').value,
         recipient_phone: document.getElementById('cert-phone').value,
@@ -218,7 +224,8 @@ async function issueCertificate() {
     };
     
     if(!payload.recipient_name || !payload.certificate_type || !payload.issue_date) {
-        alert("Please fill all required fields (Name, Type, Date)");
+        if(typeof showToast === 'function') showToast("❌ Please fill all required fields (Name, Type, Date)");
+        else alert("Please fill all required fields (Name, Type, Date)");
         return;
     }
 
@@ -238,6 +245,7 @@ async function issueCertificate() {
             
             msg.style.display = 'flex';
             msg.innerHTML = `<i class="ph-duotone ph-check-circle" style="font-size:18px;"></i> Issued ${data.cert_id} to ${payload.recipient_email}!`;
+            if(typeof showToast === 'function') showToast(`✅ Successfully issued ${data.cert_id}`);
             
             // Reset state
             setTimeout(() => {
@@ -252,11 +260,13 @@ async function issueCertificate() {
             
             loadCertificates(); // Refresh list
         } else {
-            alert('Error issuing certificate: ' + data.error);
+            if(typeof showToast === 'function') showToast('❌ Error issuing certificate: ' + data.error);
+            else alert('Error issuing certificate: ' + data.error);
         }
     } catch(e) {
         console.error(e);
-        alert('Server error');
+        if(typeof showToast === 'function') showToast('❌ Server error issuing certificate');
+        else alert('Server error');
     }
     
     btn.disabled = false;
@@ -337,8 +347,8 @@ async function loadCertificates(page = 1) {
                             <td style="padding:12px;">
                                 <div style="display:flex;gap:6px;">
                                     <button class="action-btn" title="Download" onclick="downloadCert('${cert.cert_id}')" style="width:28px;height:28px;border-radius:6px;border:1px solid #fde68a;background:#fef3c7;color:#d97706;display:flex;align-items:center;justify-content:center;cursor:pointer;"><i class="ph-duotone ph-download-simple"></i></button>
-                                    <button class="action-btn" title="View" style="width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;"><i class="ph-duotone ph-eye"></i></button>
-                                    ${cert.status === 'Active' ? `<button class="action-btn" title="Revoke" onclick="updateCertStatus('${cert.cert_id}', 'revoke')" style="width:28px;height:28px;border-radius:6px;border:1px solid #fecaca;background:#fef2f2;color:#ef4444;display:flex;align-items:center;justify-content:center;cursor:pointer;"><i class="ph-duotone ph-prohibit"></i></button>` : ''}
+                                    <button class="action-btn" title="View" onclick="viewIssuedCertificate('${cert.cert_id}')" style="width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;"><i class="ph-duotone ph-eye"></i></button>
+                                    ${cert.status === 'Active' ? `<button class="action-btn" title="Revoke" onclick="updateCertStatus('${cert.cert_id}', 'revoke')" style="width:28px;height:28px;border-radius:6px;border:1px solid #fecaca;background:#fef2f2;color:#ef4444;display:flex;align-items:center;justify-content:center;cursor:pointer;"><i class="ph-duotone ph-prohibit"></i></button>` : (cert.status === 'Revoked' ? `<button class="action-btn" title="Reinstate" onclick="updateCertStatus('${cert.cert_id}', 'reinstate')" style="width:28px;height:28px;border-radius:6px;border:1px solid #bbf7d0;background:#f0fdf4;color:#22c55e;display:flex;align-items:center;justify-content:center;cursor:pointer;"><i class="ph-duotone ph-arrow-counter-clockwise"></i></button>` : '')}
                                 </div>
                             </td>
                         </tr>`;
@@ -397,12 +407,23 @@ async function updateCertStatus(certId, action) {
         });
         const data = await res.json();
         if (data.success) {
-            loadCertificates(currentCertPage);
+            if(typeof showToast === 'function') {
+                showToast(`✅ Certificate ${action} successful!`);
+            }
+            loadCertificates(currentCertPage); // Instantly updates UI and stats
         } else {
-            alert('Error: ' + data.error);
+            if(typeof showToast === 'function') {
+                showToast('❌ Error: ' + data.error);
+            } else {
+                alert('Error: ' + data.error);
+            }
         }
     } catch(e) {
-        alert('Server error');
+        if(typeof showToast === 'function') {
+            showToast('❌ Server error');
+        } else {
+            alert('Server error');
+        }
     }
 }
 
@@ -427,8 +448,97 @@ function downloadPDF() {
     html2pdf().set(opt).from(card).save();
 }
 
-function downloadCert(certId) {
-    alert("In a full implementation, this would regenerate the PDF for " + certId + " based on DB records.");
+async function viewIssuedCertificate(certId) {
+    try {
+        const res = await fetch(API_URL + `/api/certificates/get_issued_certificate.php?id=${encodeURIComponent(certId)}`);
+        const data = await res.json();
+        
+        if (data.success && data.html_content) {
+            const overlay = document.getElementById('template-preview-overlay');
+            const iframe = document.getElementById('full-preview-frame');
+            
+            // Hide edit/delete buttons for issued certificate preview
+            const btnEdit = document.getElementById('btn-preview-edit');
+            const btnDelete = document.getElementById('btn-preview-delete');
+            if(btnEdit) btnEdit.style.display = 'none';
+            if(btnDelete) btnDelete.style.display = 'none';
+            
+            const doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write('<html><head><style>body{margin:0;padding:0;display:flex;align-items:center;justify-content:center;height:100vh;background:#e2e8f0;font-family:sans-serif;} .cert-container{box-shadow:0 10px 40px rgba(0,0,0,0.1);background:#fff;max-width:95%;max-height:95%;overflow:hidden;transform-origin:center center;} *{box-sizing:inherit;}</style></head><body><div class="cert-container">' + data.html_content + '</div></body></html>');
+            doc.close();
+
+            overlay.classList.add('open');
+            
+            // Ensure buttons are restored when modal closes
+            const closeBtn = overlay.querySelector('.modal-close');
+            if(closeBtn) {
+                const oldOnclick = closeBtn.onclick;
+                closeBtn.onclick = function(e) {
+                    if(btnEdit) btnEdit.style.display = 'flex';
+                    if(btnDelete) btnDelete.style.display = 'flex';
+                    if(oldOnclick) oldOnclick.call(this, e);
+                }
+            }
+        } else {
+            if(typeof showToast === 'function') {
+                showToast('❌ Failed to load certificate preview: ' + (data.error || 'Not found'));
+            } else {
+                alert('Failed to load certificate preview: ' + (data.error || 'Not found'));
+            }
+        }
+    } catch(e) {
+        console.error('Error fetching issued certificate:', e);
+        if(typeof showToast === 'function') {
+            showToast('❌ Error loading certificate preview');
+        } else {
+            alert('Error loading certificate preview');
+        }
+    }
+}
+
+async function downloadCert(certId) {
+    if (typeof html2pdf === 'undefined') {
+        if(typeof showToast === 'function') showToast('❌ PDF library not loaded');
+        else alert('PDF library not loaded');
+        return;
+    }
+    
+    if(typeof showToast === 'function') showToast('⏳ Generating PDF...');
+
+    try {
+        const res = await fetch(API_URL + `/api/certificates/get_issued_certificate.php?id=${encodeURIComponent(certId)}`);
+        const data = await res.json();
+        
+        if (data.success && data.html_content) {
+            // Create a temporary hidden div
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = data.html_content;
+            tempDiv.style.position = 'absolute';
+            tempDiv.style.left = '-9999px';
+            tempDiv.style.top = '-9999px';
+            tempDiv.style.width = '794px'; // A4 width at 96 DPI
+            document.body.appendChild(tempDiv);
+            
+            const opt = {
+                margin:       0,
+                filename:     `${certId}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'px', format: [794, 1123], orientation: 'landscape' } // Adjust dimensions as needed or use 'a4'
+            };
+            
+            html2pdf().set(opt).from(tempDiv).save().then(() => {
+                document.body.removeChild(tempDiv);
+                if(typeof showToast === 'function') showToast('✅ PDF Downloaded successfully!');
+            });
+        } else {
+            if(typeof showToast === 'function') showToast('❌ Failed to load certificate data');
+        }
+    } catch(e) {
+        console.error(e);
+        if(typeof showToast === 'function') showToast('❌ Error generating PDF');
+    }
 }
 
 function exportCertsCSV() {

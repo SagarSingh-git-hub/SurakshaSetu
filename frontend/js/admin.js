@@ -1232,71 +1232,229 @@ async function renderLiveActivityFeed() {
   }
 }
 
+let currentBuilderMode = 'design';
+let tinymceEditor = null;
+let codemirrorEditor = null;
+let currentEditingTemplateId = null;
+let allTemplates = [];
+
 function openCreateTemplateModal() {
-  document.getElementById('create-template-modal-overlay').classList.add('open');
+  currentEditingTemplateId = null;
+  document.getElementById('builder-tpl-name').value = '';
+  document.getElementById('builder-tpl-award').value = '';
+  if (tinymceEditor) tinymceEditor.setContent('');
+  if (codemirrorEditor) codemirrorEditor.setValue('');
+  document.getElementById('template-mode-selector-overlay').classList.add('open');
 }
 
-function closeCreateTemplateModal() {
-  document.getElementById('create-template-modal-overlay').classList.remove('open');
+function closeTemplateModeSelector() {
+  document.getElementById('template-mode-selector-overlay').classList.remove('open');
 }
 
-function switchTemplateBuilderTab(tab) {
-  if (tab === 'visual') {
-    document.getElementById('builder-visual').style.display = 'block';
-    document.getElementById('builder-html').style.display = 'none';
-    document.getElementById('tab-visual-builder').style.background = 'var(--primary)';
-    document.getElementById('tab-visual-builder').style.color = '#fff';
-    document.getElementById('tab-html-editor').style.background = 'none';
-    document.getElementById('tab-html-editor').style.color = 'var(--text3)';
+function openTemplateBuilder(mode) {
+  closeTemplateModeSelector();
+  currentBuilderMode = mode;
+  document.getElementById('template-builder-overlay').style.display = 'flex';
+  document.getElementById('builder-mode-indicator').innerText = mode === 'design' ? 'Design Editor' : 'Code Editor';
+  
+  let initialContent = '';
+  if (currentEditingTemplateId) {
+    const template = allTemplates.find(t => t.id == currentEditingTemplateId);
+    if (template) {
+      initialContent = template.html_content || '';
+    }
+  }
+
+  if (mode === 'design') {
+    document.getElementById('editor-container-design').style.display = 'flex';
+    document.getElementById('editor-container-code').style.display = 'none';
+    if (!tinymceEditor) {
+      tinymce.init({
+        selector: '#tinymce-editor',
+        height: '100%',
+        menubar: false,
+        plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table code help wordcount',
+        toolbar: 'undo redo | blocks | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | image table code',
+        setup: function(editor) {
+          tinymceEditor = editor;
+          editor.on('Change KeyUp', function() {
+            updateCertificatePreview();
+            triggerAutoSave();
+          });
+        }
+      });
+      setTimeout(() => {
+        if (initialContent) tinymceEditor.setContent(initialContent);
+        updateCertificatePreview();
+      }, 500);
+    } else {
+      if (initialContent) tinymceEditor.setContent(initialContent);
+      updateCertificatePreview();
+    }
   } else {
-    document.getElementById('builder-visual').style.display = 'none';
-    document.getElementById('builder-html').style.display = 'block';
-    document.getElementById('tab-html-editor').style.background = 'var(--primary)';
-    document.getElementById('tab-html-editor').style.color = '#fff';
-    document.getElementById('tab-visual-builder').style.background = 'none';
-    document.getElementById('tab-visual-builder').style.color = 'var(--text3)';
+    document.getElementById('editor-container-design').style.display = 'none';
+    document.getElementById('editor-container-code').style.display = 'flex';
+    if (!codemirrorEditor) {
+      codemirrorEditor = CodeMirror(document.getElementById('codemirror-editor'), {
+        mode: 'htmlmixed',
+        theme: 'monokai',
+        lineNumbers: true,
+        lineWrapping: true,
+        value: initialContent || '<div style="padding:40px; font-family:sans-serif; text-align:center;">\n  <h1 style="color:#059669;">Certificate of Achievement</h1>\n  <p>This is presented to</p>\n  <h2 style="color:#1e293b;">{{NAME}}</h2>\n</div>'
+      });
+      codemirrorEditor.on('change', function() {
+        updateCertificatePreview();
+        triggerAutoSave();
+      });
+      setTimeout(updateCertificatePreview, 100);
+    } else {
+      if (initialContent) codemirrorEditor.setValue(initialContent);
+      updateCertificatePreview();
+    }
+  }
+  
+  // Set default view to desktop
+  setBuilderPreviewMode('desktop');
+}
+
+function closeTemplateBuilder() {
+  document.getElementById('template-builder-overlay').style.display = 'none';
+}
+
+function insertBuilderVariable(variable) {
+  if (currentBuilderMode === 'design' && tinymceEditor) {
+    tinymceEditor.insertContent(variable);
+  } else if (currentBuilderMode === 'code' && codemirrorEditor) {
+    codemirrorEditor.replaceSelection(variable);
+  }
+  document.getElementById('builder-var-dropdown').classList.remove('show');
+  updateCertificatePreview();
+}
+
+function setBuilderPreviewMode(mode) {
+  const wrapper = document.getElementById('preview-wrapper');
+  if (mode === 'mobile') {
+    wrapper.classList.add('mobile-mode');
+    document.getElementById('btn-preview-mobile').style.background = 'var(--bg3)';
+    document.getElementById('btn-preview-mobile').style.color = 'var(--text)';
+    document.getElementById('btn-preview-desktop').style.background = 'transparent';
+    document.getElementById('btn-preview-desktop').style.color = 'var(--text3)';
+  } else {
+    wrapper.classList.remove('mobile-mode');
+    document.getElementById('btn-preview-desktop').style.background = 'var(--bg3)';
+    document.getElementById('btn-preview-desktop').style.color = 'var(--text)';
+    document.getElementById('btn-preview-mobile').style.background = 'transparent';
+    document.getElementById('btn-preview-mobile').style.color = 'var(--text3)';
+  }
+  updatePreviewScale();
+}
+
+function updatePreviewScale() {
+  const wrapper = document.getElementById('preview-wrapper');
+  const scaleContainer = document.getElementById('preview-scale-container');
+  if (!wrapper || !scaleContainer) return;
+  const container = scaleContainer.parentElement;
+  if (!wrapper.classList.contains('mobile-mode')) {
+    // Desktop scale
+    const availableWidth = container.clientWidth - 48;
+    const availableHeight = container.clientHeight - 100;
+    const scaleX = availableWidth / 794;
+    const scaleY = availableHeight / 1123;
+    const scale = Math.max(0.3, Math.min(scaleX, scaleY, 1));
+    wrapper.style.transform = `scale(${scale})`;
+    scaleContainer.style.width = `${794 * scale}px`;
+    scaleContainer.style.height = `${1123 * scale}px`;
+  } else {
+    wrapper.style.transform = 'scale(1)';
+    scaleContainer.style.width = `375px`;
+    scaleContainer.style.height = `667px`;
   }
 }
 
-async function saveCertificateTemplate() {
-  const isHtml = document.getElementById('builder-html').style.display === 'block';
+window.addEventListener('resize', () => {
+  if (document.getElementById('template-builder-overlay') && document.getElementById('template-builder-overlay').style.display === 'flex') {
+    updatePreviewScale();
+  }
+});
+
+function updateCertificatePreview() {
+  let content = '';
+  if (currentBuilderMode === 'design' && tinymceEditor) {
+    content = tinymceEditor.getContent();
+  } else if (currentBuilderMode === 'code' && codemirrorEditor) {
+    content = codemirrorEditor.getValue();
+  }
+  
+  // Replace variables with dummy data
+  content = content.replace(/{{NAME}}/g, 'Priya Sharma')
+                   .replace(/{{EMAIL}}/g, 'priya@example.com')
+                   .replace(/{{ZONE}}/g, 'North Zone')
+                   .replace(/{{DATE}}/g, new Date().toLocaleDateString())
+                   .replace(/{{ISSUER}}/g, 'Eco Warrior Admin')
+                   .replace(/{{CERTIFICATE_ID}}/g, 'CERT-2026-001')
+                   .replace(/{{CERTIFICATE_TYPE}}/g, 'Achievement')
+                   .replace(/{{AWARD_TYPE}}/g, document.getElementById('builder-tpl-award').value || 'Outstanding Service')
+                   .replace(/{{ORGANIZATION}}/g, 'Eco Warrior Foundation');
+                   
+  const iframe = document.getElementById('live-preview-frame');
+  if(!iframe) return;
+  const doc = iframe.contentWindow.document;
+  doc.open();
+  doc.write('<html><head><style>body{margin:0;padding:0;box-sizing:border-box;} *{box-sizing:inherit;}</style></head><body>' + content + '</body></html>');
+  doc.close();
+}
+
+// Global click to close var dropdown
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.builder-var-toolbar')) {
+    const dropdown = document.getElementById('builder-var-dropdown');
+    if (dropdown) dropdown.classList.remove('show');
+  }
+});
+
+async function saveTemplateBuilder() {
+  const name = document.getElementById('builder-tpl-name').value;
+  const awardType = document.getElementById('builder-tpl-award').value;
+  
+  if (!name || !awardType) {
+    return showToast('⚠️ Fill Template Name and Award Type');
+  }
+  
+  let htmlContent = '';
+  if (currentBuilderMode === 'design' && tinymceEditor) {
+    htmlContent = tinymceEditor.getContent();
+  } else if (currentBuilderMode === 'code' && codemirrorEditor) {
+    htmlContent = codemirrorEditor.getValue();
+  }
+  
+  if (!htmlContent) {
+    return showToast('⚠️ Template content cannot be empty');
+  }
   
   const formData = new FormData();
   formData.append('admin_password', currentAdminPassword);
+  formData.append('name', name);
+  formData.append('award_type', awardType);
+  formData.append('mode', currentBuilderMode);
+  formData.append('html_content', htmlContent);
+  // Default CSS for now, user can embed it in HTML in code editor
+  formData.append('css_content', ''); 
   
-  if (isHtml) {
-    const name = document.getElementById('tpl-name-html').value;
-    const awardType = document.getElementById('tpl-award-type-html').value;
-    const htmlContent = document.getElementById('tpl-html').value;
-    if (!name || !awardType || !htmlContent) return showToast('⚠️ Fill all fields');
-    
-    formData.append('is_custom_html', 'true');
-    formData.append('name', name);
-    formData.append('award_type', awardType);
-    formData.append('html_content', htmlContent);
-  } else {
-    const name = document.getElementById('tpl-name-visual').value;
-    const awardType = document.getElementById('tpl-award-type').value;
-    if (!name || !awardType) return showToast('⚠️ Fill all fields');
-    
-    formData.append('is_custom_html', 'false');
-    formData.append('name', name);
-    formData.append('award_type', awardType);
-    formData.append('bg_gradient', document.getElementById('tpl-bg').value);
-    formData.append('primary_color', document.getElementById('tpl-primary').value);
-    formData.append('icon_class', document.getElementById('tpl-icon').value);
+  if (currentEditingTemplateId) {
+    formData.append('id', currentEditingTemplateId);
   }
   
+  const endpoint = currentEditingTemplateId ? `${API_URL}/api/certificates/update_template.php` : `${API_URL}/api/certificates/create_template.php`;
+  
   try {
-    const res = await fetch(`${API_URL}/api/certificates/create_template.php`, {
+    const res = await fetch(endpoint, {
       method: 'POST',
       body: formData
     });
     const data = await res.json();
     if (data.success) {
       showToast('✅ Template Saved!');
-      closeCreateTemplateModal();
-      // Reload templates if we have the load logic
+      closeTemplateBuilder();
       if (typeof fetchTemplates === 'function') {
         fetchTemplates();
       }
@@ -1309,6 +1467,156 @@ async function saveCertificateTemplate() {
   }
 }
 
+let autoSaveTimeout = null;
+
+function triggerAutoSave() {
+  if (!currentEditingTemplateId) return; // Only auto-save existing templates
+  
+  const statusEl = document.getElementById('template-save-status');
+  if (statusEl) {
+    statusEl.innerText = 'Saving...';
+    statusEl.style.display = 'inline';
+  }
+  
+  clearTimeout(autoSaveTimeout);
+  autoSaveTimeout = setTimeout(() => {
+    performAutoSave();
+  }, 1000);
+}
+
+async function performAutoSave() {
+  const name = document.getElementById('builder-tpl-name').value;
+  const awardType = document.getElementById('builder-tpl-award').value;
+  
+  if (!name || !awardType) return;
+  
+  let htmlContent = '';
+  if (currentBuilderMode === 'design' && tinymceEditor) {
+    htmlContent = tinymceEditor.getContent();
+  } else if (currentBuilderMode === 'code' && codemirrorEditor) {
+    htmlContent = codemirrorEditor.getValue();
+  }
+  
+  if (!htmlContent) return;
+  
+  const formData = new FormData();
+  formData.append('admin_password', currentAdminPassword);
+  formData.append('name', name);
+  formData.append('award_type', awardType);
+  formData.append('mode', currentBuilderMode);
+  formData.append('html_content', htmlContent);
+  formData.append('css_content', ''); 
+  formData.append('id', currentEditingTemplateId);
+  
+  try {
+    const res = await fetch(`${API_URL}/api/certificates/update_template.php`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    const statusEl = document.getElementById('template-save-status');
+    if (data.success) {
+      if (statusEl) statusEl.innerText = 'Saved ✓';
+      const tIdx = allTemplates.findIndex(t => t.id == currentEditingTemplateId);
+      if (tIdx > -1) {
+        allTemplates[tIdx].html_content = htmlContent;
+        allTemplates[tIdx].mode = currentBuilderMode;
+        allTemplates[tIdx].name = name;
+        allTemplates[tIdx].award_type = awardType;
+      }
+      if (typeof fetchTemplates === 'function') fetchTemplates(); 
+    } else {
+      if (statusEl) statusEl.innerText = 'Error saving';
+    }
+  } catch (e) {
+    console.error(e);
+    const statusEl = document.getElementById('template-save-status');
+    if (statusEl) statusEl.innerText = 'Error saving';
+  }
+}
+
+function editTemplate(id) {
+  const template = allTemplates.find(t => t.id == id);
+  if (!template) return;
+  
+  currentEditingTemplateId = id;
+  
+  const previewOverlay = document.getElementById('template-preview-overlay');
+  if (previewOverlay) previewOverlay.classList.remove('open');
+  
+  document.getElementById('builder-tpl-name').value = template.name;
+  document.getElementById('builder-tpl-award').value = template.award_type;
+
+  document.getElementById('template-mode-selector-overlay').classList.add('open');
+}
+
+function openTemplatePreview(id) {
+  const template = allTemplates.find(t => t.id == id);
+  if (!template) return;
+
+  const overlay = document.getElementById('template-preview-overlay');
+  const iframe = document.getElementById('full-preview-frame');
+  const btnEdit = document.getElementById('btn-preview-edit');
+  const btnDelete = document.getElementById('btn-preview-delete');
+
+  let content = template.html_content || '';
+  content = content.replace(/{{NAME}}/g, 'Recipient Name')
+                   .replace(/{{EMAIL}}/g, 'recipient@example.com')
+                   .replace(/{{ZONE}}/g, 'Sample Zone')
+                   .replace(/{{DATE}}/g, new Date().toLocaleDateString())
+                   .replace(/{{ISSUER}}/g, 'Authorized Person')
+                   .replace(/{{CERTIFICATE_ID}}/g, 'CERT-XXXX-XXXX')
+                   .replace(/{{CERTIFICATE_TYPE}}/g, 'Certificate Type')
+                   .replace(/{{AWARD_TYPE}}/g, template.award_type || 'Award Type')
+                   .replace(/{{ORGANIZATION}}/g, 'Organization Name');
+
+  const doc = iframe.contentWindow.document;
+  doc.open();
+  doc.write('<html><head><style>body{margin:0;padding:0;display:flex;align-items:center;justify-content:center;height:100vh;background:#e2e8f0;font-family:sans-serif;} .cert-container{box-shadow:0 10px 40px rgba(0,0,0,0.1);background:#fff;max-width:95%;max-height:95%;overflow:hidden;transform-origin:center center;} *{box-sizing:inherit;}</style></head><body><div class="cert-container">' + content + '</div></body></html>');
+  doc.close();
+
+  btnEdit.onclick = () => editTemplate(id);
+  btnDelete.onclick = () => deleteTemplate(id);
+
+  overlay.classList.add('open');
+}
+
+function deleteTemplate(id) {
+  const template = allTemplates.find(t => t.id == id);
+  if (template && template.is_default == 1) {
+    if (!confirm("This is the default template. Please assign another default template before deleting. Do you still want to delete it?")) {
+      return;
+    }
+  } else {
+    if (!confirm("Delete Certificate Template?\n\nThis action cannot be undone.")) {
+      return;
+    }
+  }
+
+  const formData = new FormData();
+  formData.append('admin_password', currentAdminPassword);
+  formData.append('id', id);
+
+  fetch(`${API_URL}/api/certificates/delete_template.php`, {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      showToast('✅ Certificate Template deleted successfully.');
+      document.getElementById('template-preview-overlay').classList.remove('open');
+      if (typeof fetchTemplates === 'function') fetchTemplates();
+    } else {
+      showToast('❌ Failed: ' + data.message);
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    showToast('❌ Error deleting template');
+  });
+}
+
 async function fetchTemplates() {
   const container = document.getElementById('cert-templates-container');
   if (!container) return;
@@ -1316,11 +1624,12 @@ async function fetchTemplates() {
     const res = await fetch(`${API_URL}/api/certificates/get_templates.php`);
     const data = await res.json();
     if (data.success && data.templates.length > 0) {
+      allTemplates = data.templates;
       container.innerHTML = data.templates.map(t => {
         if (t.is_custom_html == 1) {
           // Render custom HTML template card
           return `
-            <div class="admin-widget" style="overflow:hidden;border:1px solid #bfdbfe;cursor:pointer;">
+            <div class="admin-widget" onclick="openTemplatePreview(${t.id})" style="overflow:hidden;border:1px solid #bfdbfe;cursor:pointer;">
               <div style="height:130px;display:flex;align-items:center;justify-content:center;background:#f8fafc;position:relative;">
                 <div style="font-family:monospace;font-size:12px;color:var(--text3);"><i class="ph-duotone ph-code" style="font-size:24px;"></i><br>Custom HTML Template</div>
               </div>
@@ -1332,7 +1641,7 @@ async function fetchTemplates() {
         } else {
           // Render visual builder template card
           return `
-            <div class="admin-widget" style="overflow:hidden;border:1px solid var(--border);cursor:pointer;">
+            <div class="admin-widget" onclick="openTemplatePreview(${t.id})" style="overflow:hidden;border:1px solid var(--border);cursor:pointer;">
               <div style="height:130px;display:flex;align-items:center;justify-content:center;position:relative;background:${t.bg_gradient};">
                 <div style="text-align:center;">
                   <div style="font-family:'Georgia',serif;font-size:16px;color:${t.primary_color};margin-bottom:4px;font-weight:700;">${t.name}</div>
@@ -1356,5 +1665,67 @@ async function fetchTemplates() {
     }
   } catch (e) {
     console.error("Error fetching templates", e);
+  }
+}
+
+async function loadTemplateSettings() {
+  try {
+    const res = await fetch(`${API_URL}/api/certificates/get_settings.php`);
+    const data = await res.json();
+    if (data.success && data.settings) {
+      const autoSelect = data.settings['auto_select'] === '1';
+      const modIssue = data.settings['mod_issue'] === '1';
+      
+      const elAuto = document.getElementById('setting-auto-select');
+      if (elAuto) {
+        elAuto.checked = autoSelect;
+        elAuto.nextElementSibling.style.background = autoSelect ? '#16a34a' : '#e2e8f0';
+        elAuto.nextElementSibling.firstElementChild.style.transform = autoSelect ? 'translateX(16px)' : 'translateX(0)';
+      }
+      
+      const elMod = document.getElementById('setting-mod-issue');
+      if (elMod) {
+        elMod.checked = modIssue;
+        elMod.nextElementSibling.style.background = modIssue ? '#16a34a' : '#e2e8f0';
+        elMod.nextElementSibling.firstElementChild.style.transform = modIssue ? 'translateX(16px)' : 'translateX(0)';
+      }
+    }
+  } catch (e) {
+    console.error("Error loading template settings", e);
+  }
+}
+
+async function saveTemplateSetting(key, checkbox) {
+  const value = checkbox.checked ? '1' : '0';
+  
+  // Update UI manually first
+  checkbox.nextElementSibling.style.background = checkbox.checked ? '#16a34a' : '#e2e8f0';
+  checkbox.nextElementSibling.firstElementChild.style.transform = checkbox.checked ? 'translateX(16px)' : 'translateX(0)';
+  
+  const formData = new FormData();
+  formData.append('admin_password', currentAdminPassword);
+  formData.append('setting_key', key);
+  formData.append('setting_value', value);
+  
+  try {
+    const res = await fetch(`${API_URL}/api/certificates/update_settings.php`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (!data.success) {
+      showToast('❌ Failed to update setting: ' + data.message);
+      // Revert UI if failed
+      checkbox.checked = !checkbox.checked;
+      checkbox.nextElementSibling.style.background = checkbox.checked ? '#16a34a' : '#e2e8f0';
+      checkbox.nextElementSibling.firstElementChild.style.transform = checkbox.checked ? 'translateX(16px)' : 'translateX(0)';
+    }
+  } catch (e) {
+    console.error(e);
+    showToast('❌ Error saving setting');
+    // Revert UI if failed
+    checkbox.checked = !checkbox.checked;
+    checkbox.nextElementSibling.style.background = checkbox.checked ? '#16a34a' : '#e2e8f0';
+    checkbox.nextElementSibling.firstElementChild.style.transform = checkbox.checked ? 'translateX(16px)' : 'translateX(0)';
   }
 }

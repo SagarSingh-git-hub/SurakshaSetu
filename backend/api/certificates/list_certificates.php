@@ -69,6 +69,10 @@ if (isset($_GET['export']) && $_GET['export'] == '1') {
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename=certificates_export.csv');
     $output = fopen('php://output', 'w');
+    
+    // Add UTF-8 BOM for proper Excel rendering
+    fputs($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
+    
     fputcsv($output, ['Cert ID', 'Recipient Name', 'Email', 'Type', 'Zone', 'Issue Date', 'Status']);
     
     if ($export_res) {
