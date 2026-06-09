@@ -1265,6 +1265,24 @@ function openTemplateBuilder(mode) {
     }
   }
 
+  // Bind change events to name and award inputs for real-time preview and auto-save
+  const nameInput = document.getElementById('builder-tpl-name');
+  const awardInput = document.getElementById('builder-tpl-award');
+  if (nameInput && !nameInput.dataset.autosaveBound) {
+    nameInput.dataset.autosaveBound = 'true';
+    nameInput.addEventListener('input', () => {
+      updateCertificatePreview();
+      triggerAutoSave();
+    });
+  }
+  if (awardInput && !awardInput.dataset.autosaveBound) {
+    awardInput.dataset.autosaveBound = 'true';
+    awardInput.addEventListener('input', () => {
+      updateCertificatePreview();
+      triggerAutoSave();
+    });
+  }
+
   if (mode === 'design') {
     document.getElementById('editor-container-design').style.display = 'flex';
     document.getElementById('editor-container-code').style.display = 'none';
@@ -1284,11 +1302,11 @@ function openTemplateBuilder(mode) {
         }
       });
       setTimeout(() => {
-        if (initialContent) tinymceEditor.setContent(initialContent);
+        tinymceEditor.setContent(initialContent || '');
         updateCertificatePreview();
       }, 500);
     } else {
-      if (initialContent) tinymceEditor.setContent(initialContent);
+      tinymceEditor.setContent(initialContent || '');
       updateCertificatePreview();
     }
   } else {
@@ -1308,7 +1326,7 @@ function openTemplateBuilder(mode) {
       });
       setTimeout(updateCertificatePreview, 100);
     } else {
-      if (initialContent) codemirrorEditor.setValue(initialContent);
+      codemirrorEditor.setValue(initialContent || '<div style="padding:40px; font-family:sans-serif; text-align:center;">\n  <h1 style="color:#059669;">Certificate of Achievement</h1>\n  <p>This is presented to</p>\n  <h2 style="color:#1e293b;">{{NAME}}</h2>\n</div>');
       updateCertificatePreview();
     }
   }
@@ -1470,7 +1488,10 @@ async function saveTemplateBuilder() {
 let autoSaveTimeout = null;
 
 function triggerAutoSave() {
-  if (!currentEditingTemplateId) return; // Only auto-save existing templates
+  const name = document.getElementById('builder-tpl-name').value.trim();
+  const awardType = document.getElementById('builder-tpl-award').value.trim();
+  
+  if (!currentEditingTemplateId && (!name || !awardType)) return; // Only auto-save new templates if basic fields are set
   
   const statusEl = document.getElementById('template-save-status');
   if (statusEl) {
@@ -1485,8 +1506,8 @@ function triggerAutoSave() {
 }
 
 async function performAutoSave() {
-  const name = document.getElementById('builder-tpl-name').value;
-  const awardType = document.getElementById('builder-tpl-award').value;
+  const name = document.getElementById('builder-tpl-name').value.trim();
+  const awardType = document.getElementById('builder-tpl-award').value.trim();
   
   if (!name || !awardType) return;
   
@@ -1506,10 +1527,17 @@ async function performAutoSave() {
   formData.append('mode', currentBuilderMode);
   formData.append('html_content', htmlContent);
   formData.append('css_content', ''); 
-  formData.append('id', currentEditingTemplateId);
+  
+  if (currentEditingTemplateId) {
+    formData.append('id', currentEditingTemplateId);
+  }
+  
+  const endpoint = currentEditingTemplateId 
+    ? `${API_URL}/api/certificates/update_template.php` 
+    : `${API_URL}/api/certificates/create_template.php`;
   
   try {
-    const res = await fetch(`${API_URL}/api/certificates/update_template.php`, {
+    const res = await fetch(endpoint, {
       method: 'POST',
       body: formData
     });
@@ -1517,13 +1545,12 @@ async function performAutoSave() {
     const statusEl = document.getElementById('template-save-status');
     if (data.success) {
       if (statusEl) statusEl.innerText = 'Saved ✓';
-      const tIdx = allTemplates.findIndex(t => t.id == currentEditingTemplateId);
-      if (tIdx > -1) {
-        allTemplates[tIdx].html_content = htmlContent;
-        allTemplates[tIdx].mode = currentBuilderMode;
-        allTemplates[tIdx].name = name;
-        allTemplates[tIdx].award_type = awardType;
+      
+      // If a new template was created, save its ID
+      if (!currentEditingTemplateId && data.id) {
+        currentEditingTemplateId = data.id;
       }
+      
       if (typeof fetchTemplates === 'function') fetchTemplates(); 
     } else {
       if (statusEl) statusEl.innerText = 'Error saving';
@@ -1574,6 +1601,9 @@ function openTemplatePreview(id) {
   doc.open();
   doc.write('<html><head><style>body{margin:0;padding:0;display:flex;align-items:center;justify-content:center;height:100vh;background:#e2e8f0;font-family:sans-serif;} .cert-container{box-shadow:0 10px 40px rgba(0,0,0,0.1);background:#fff;max-width:95%;max-height:95%;overflow:hidden;transform-origin:center center;} *{box-sizing:inherit;}</style></head><body><div class="cert-container">' + content + '</div></body></html>');
   doc.close();
+
+  if (btnEdit) btnEdit.style.display = 'flex';
+  if (btnDelete) btnDelete.style.display = 'flex';
 
   btnEdit.onclick = () => editTemplate(id);
   btnDelete.onclick = () => deleteTemplate(id);

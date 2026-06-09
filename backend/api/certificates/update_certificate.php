@@ -15,7 +15,7 @@ if ($action === 'revoke') {
     $new_status = 'Revoked';
 } elseif ($action === 'archive') {
     $new_status = 'Archived';
-} elseif ($action === 'reactivate') {
+} elseif ($action === 'reactivate' || $action === 'reinstate') {
     $new_status = 'Active';
 }
 

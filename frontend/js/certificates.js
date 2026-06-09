@@ -289,7 +289,7 @@ function handleCertSearchInput() {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
         loadCertificates(1);
-    }, 400);
+    }, 200);
 }
 
 function clearCertSearch() {
@@ -312,10 +312,14 @@ async function loadCertificates(page = 1) {
         
         if (data.success) {
             // Update stats
-            document.getElementById('cert-stat-total').innerText = data.stats.total;
-            document.getElementById('cert-stat-active').innerText = data.stats.active;
-            document.getElementById('cert-stat-month').innerText = data.stats.this_month;
-            document.getElementById('cert-stat-revoked').innerText = data.stats.revoked;
+            const totalEl = document.getElementById('cert-stat-total');
+            if (totalEl) totalEl.innerText = data.stats.total;
+            const activeEl = document.getElementById('cert-stat-active');
+            if (activeEl) activeEl.innerText = data.stats.active;
+            const monthEl = document.getElementById('cert-stat-month');
+            if (monthEl) monthEl.innerText = data.stats.this_month;
+            const revokedEl = document.getElementById('cert-stat-revoked');
+            if (revokedEl) revokedEl.innerText = data.stats.revoked;
             
             // Render table
             const tbody = document.getElementById('cert-table-body');
@@ -513,11 +517,13 @@ async function downloadCert(certId) {
         if (data.success && data.html_content) {
             // Create a temporary hidden div
             const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = data.html_content;
             tempDiv.style.position = 'absolute';
             tempDiv.style.left = '-9999px';
             tempDiv.style.top = '-9999px';
-            tempDiv.style.width = '794px'; // A4 width at 96 DPI
+            tempDiv.style.width = '1056px'; // Letter landscape width at 96 DPI
+            
+            // Wrap the content so it has nice padding, white background, and standard height
+            tempDiv.innerHTML = `<div style="padding:40px; box-sizing:border-box; background:#fff; min-height:816px; display:flex; flex-direction:column; justify-content:center;">${data.html_content}</div>`;
             document.body.appendChild(tempDiv);
             
             const opt = {
@@ -525,7 +531,7 @@ async function downloadCert(certId) {
                 filename:     `${certId}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'px', format: [794, 1123], orientation: 'landscape' } // Adjust dimensions as needed or use 'a4'
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
             };
             
             html2pdf().set(opt).from(tempDiv).save().then(() => {
