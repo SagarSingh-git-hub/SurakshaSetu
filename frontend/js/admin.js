@@ -1602,13 +1602,66 @@ function openTemplatePreview(id) {
   doc.write('<html><head><style>body{margin:0;padding:0;display:flex;align-items:center;justify-content:center;height:100vh;background:#e2e8f0;font-family:sans-serif;} .cert-container{box-shadow:0 10px 40px rgba(0,0,0,0.1);background:#fff;max-width:95%;max-height:95%;overflow:hidden;transform-origin:center center;} *{box-sizing:inherit;}</style></head><body><div class="cert-container">' + content + '</div></body></html>');
   doc.close();
 
+  const btnDefault = document.getElementById('btn-preview-default');
   if (btnEdit) btnEdit.style.display = 'flex';
   if (btnDelete) btnDelete.style.display = 'flex';
+  if (btnDefault) {
+    btnDefault.style.display = 'flex';
+    if (template.is_default == 1) {
+      btnDefault.innerHTML = '<i class="ph-bold ph-check-circle"></i> Default ✓';
+      btnDefault.style.background = '#f59e0b';
+      btnDefault.style.color = '#fff';
+      btnDefault.style.borderColor = '#d97706';
+      btnDefault.disabled = true;
+      btnDefault.style.cursor = 'default';
+      btnDefault.onclick = null;
+    } else {
+      btnDefault.innerHTML = '<i class="ph-bold ph-star"></i> Set Default';
+      btnDefault.style.background = '#fff';
+      btnDefault.style.color = '#d97706';
+      btnDefault.style.borderColor = '#fde68a';
+      btnDefault.disabled = false;
+      btnDefault.style.cursor = 'pointer';
+      btnDefault.onclick = () => setDefaultTemplate(id);
+    }
+  }
 
   btnEdit.onclick = () => editTemplate(id);
   btnDelete.onclick = () => deleteTemplate(id);
 
   overlay.classList.add('open');
+}
+
+function setDefaultTemplate(id) {
+  showCustomConfirm("Set Default?", "Are you sure you want to set this template as the default template?", async () => {
+    const formData = new FormData();
+    formData.append('admin_password', currentAdminPassword);
+    formData.append('id', id);
+
+    try {
+      const res = await fetch(`${API_URL}/api/certificates/set_default_template.php`, {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast('✅ Default template set successfully!');
+        
+        // Refresh local templates array & UI
+        if (typeof fetchTemplates === 'function') {
+          await fetchTemplates();
+        }
+        
+        // Refresh the preview to update button state
+        openTemplatePreview(id);
+      } else {
+        showToast('❌ Failed: ' + data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      showToast('❌ Error setting default template');
+    }
+  });
 }
 
 function showCustomConfirm(title, message, onAccept) {

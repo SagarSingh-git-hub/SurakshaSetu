@@ -461,11 +461,13 @@ async function viewIssuedCertificate(certId) {
             const overlay = document.getElementById('template-preview-overlay');
             const iframe = document.getElementById('full-preview-frame');
             
-            // Hide edit/delete buttons for issued certificate preview
+            // Hide edit/delete/default buttons for issued certificate preview
             const btnEdit = document.getElementById('btn-preview-edit');
             const btnDelete = document.getElementById('btn-preview-delete');
+            const btnDefault = document.getElementById('btn-preview-default');
             if(btnEdit) btnEdit.style.display = 'none';
             if(btnDelete) btnDelete.style.display = 'none';
+            if(btnDefault) btnDefault.style.display = 'none';
             
             const doc = iframe.contentWindow.document;
             doc.open();
@@ -481,6 +483,7 @@ async function viewIssuedCertificate(certId) {
                 closeBtn.onclick = function(e) {
                     if(btnEdit) btnEdit.style.display = 'flex';
                     if(btnDelete) btnDelete.style.display = 'flex';
+                    if(btnDefault) btnDefault.style.display = 'flex';
                     if(oldOnclick) oldOnclick.call(this, e);
                 }
             }
