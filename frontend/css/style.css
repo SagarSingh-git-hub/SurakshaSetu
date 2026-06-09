@@ -252,6 +252,10 @@ textarea.form-input{resize:vertical;min-height:100px}
   min-width: 150px;
   user-select: none;
 }
+.custom-select-wrapper.w-full {
+  display: block;
+  width: 100% !important;
+}
 .custom-select-trigger {
   display: flex;
   align-items: center;

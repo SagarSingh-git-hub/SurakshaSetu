@@ -188,6 +188,9 @@ function initCustomSelects() {
     
     const wrapper = document.createElement('div');
     wrapper.className = 'custom-select-wrapper';
+    if (select.classList.contains('w-full')) {
+      wrapper.classList.add('w-full');
+    }
     
     const trigger = document.createElement('div');
     trigger.className = 'custom-select-trigger';
@@ -216,8 +219,9 @@ function initCustomSelects() {
       optionDiv.addEventListener('click', () => {
         // Update native select
         select.selectedIndex = index;
-        // Dispatch change event to trigger original onchange handler
+        // Dispatch events to trigger original handlers
         select.dispatchEvent(new Event('change'));
+        select.dispatchEvent(new Event('input'));
         
         // Update custom UI
         triggerText.textContent = option.text;
@@ -230,6 +234,21 @@ function initCustomSelects() {
     
     wrapper.appendChild(optionsContainer);
     
+    // Listen to programmatic updates on the select
+    const syncUI = () => {
+      const selectedOpt = select.options[select.selectedIndex];
+      triggerText.textContent = selectedOpt ? selectedOpt.text : 'Select...';
+      optionsContainer.querySelectorAll('.custom-select-option').forEach((el, idx) => {
+        if (idx === select.selectedIndex) {
+          el.classList.add('selected');
+        } else {
+          el.classList.remove('selected');
+        }
+      });
+    };
+    select.addEventListener('change', syncUI);
+    select.addEventListener('input', syncUI);
+    
     // Toggle dropdown
     trigger.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -241,6 +260,20 @@ function initCustomSelects() {
     
     select.parentNode.insertBefore(wrapper, select.nextSibling);
   });
+}
+
+function refreshCustomSelect(select) {
+  if (typeof select === 'string') {
+    select = document.getElementById(select);
+  }
+  if (!select) return;
+  
+  const wrapper = select.nextElementSibling;
+  if (wrapper && wrapper.classList.contains('custom-select-wrapper')) {
+    wrapper.remove();
+  }
+  select.classList.remove('custom-select-hidden');
+  initCustomSelects();
 }
 
 // Close custom selects on click outside

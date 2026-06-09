@@ -51,7 +51,13 @@ function initCertificates() {
                     document.getElementById('cert-full-name').value = member.name;
                     document.getElementById('cert-email').value = member.email;
                     document.getElementById('cert-phone').value = member.phone || '';
-                    document.getElementById('cert-zone').value = member.zone || 'All of Agra';
+                    
+                    const zoneSelect = document.getElementById('cert-zone');
+                    if (zoneSelect) {
+                        zoneSelect.value = member.zone || 'All of Agra';
+                        zoneSelect.dispatchEvent(new Event('change'));
+                        zoneSelect.dispatchEvent(new Event('input'));
+                    }
                     
                     // Trigger input event to update preview
                     document.getElementById('cert-full-name').dispatchEvent(new Event('input'));
@@ -95,6 +101,9 @@ async function loadMembers() {
                 certMembers.forEach(m => {
                     select.innerHTML += `<option value="${m.id}">${m.name} (${m.role})</option>`;
                 });
+                if (typeof refreshCustomSelect === 'function') {
+                    refreshCustomSelect(select);
+                }
             }
         }
     } catch(e) { console.error('Failed to load members', e); }
@@ -118,12 +127,21 @@ async function loadTemplates() {
                     typeSelect.innerHTML += `<option value="${t.award_type}" data-tid="${t.id}">${t.award_type}</option>`;
                 });
                 
-                typeSelect.addEventListener('change', (e) => {
-                    // Update preview style based on selected template
-                    const opt = e.target.options[e.target.selectedIndex];
-                    const tid = opt.getAttribute('data-tid');
-                    applyTemplateToPreview(tid);
-                });
+                if (!typeSelect.dataset.listenerBound) {
+                    typeSelect.addEventListener('change', (e) => {
+                        // Update preview style based on selected template
+                        const opt = e.target.options[e.target.selectedIndex];
+                        if (opt) {
+                            const tid = opt.getAttribute('data-tid');
+                            if (tid) applyTemplateToPreview(tid);
+                        }
+                    });
+                    typeSelect.dataset.listenerBound = 'true';
+                }
+
+                if (typeof refreshCustomSelect === 'function') {
+                    refreshCustomSelect(typeSelect);
+                }
             }
             if (filterTypeSelect) {
                 filterTypeSelect.innerHTML = '<option value="All">All types</option>';
@@ -136,6 +154,7 @@ async function loadTemplates() {
             const defaultTmpl = certTemplates.find(t => t.is_default == 1);
             if (defaultTmpl && typeSelect) {
                 typeSelect.value = defaultTmpl.award_type;
+                typeSelect.dispatchEvent(new Event('change'));
                 typeSelect.dispatchEvent(new Event('input'));
                 applyTemplateToPreview(defaultTmpl.id);
             }
