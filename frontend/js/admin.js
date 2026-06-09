@@ -1635,8 +1635,8 @@ function deleteTemplate(id) {
   if (!template) return;
 
   const msg = template.is_default == 1 
-    ? "यह डिफ़ॉल्ट टेम्पलेट है। डिलीट करने से पहले कृपया कोई अन्य डिफ़ॉल्ट टेम्पलेट चुनें। क्या आप अभी भी इसे डिलीट करना चाहते हैं?"
-    : "क्या आप वाकई इस सर्टिफिकेट टेम्पलेट को डिलीट करना चाहते हैं? या आपने अपना इरादा बदल दिया है?";
+    ? "This is the default template. Please assign another template as default before deleting. Do you still want to delete it?"
+    : "Are you sure you want to permanently delete this certificate template, or have you changed your mind?";
 
   showCustomConfirm("Delete Template?", msg, () => {
 
