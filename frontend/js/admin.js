@@ -1661,23 +1661,50 @@ function setDefaultTemplate(id) {
       console.error(err);
       showToast('❌ Error setting default template');
     }
-  });
+  }, "Yes, set default", false);
 }
 
-function showCustomConfirm(title, message, onAccept) {
+function showCustomConfirm(title, message, onAccept, acceptText = 'Yes, delete it', isDanger = true) {
   const overlay = document.getElementById('custom-confirm-overlay');
   const titleEl = document.getElementById('confirm-title');
   const msgEl = document.getElementById('confirm-message');
   const acceptBtn = document.getElementById('btn-confirm-accept');
+  const iconEl = overlay ? overlay.querySelector('i') : null;
+  const iconContainer = iconEl ? iconEl.parentElement : null;
   
   if (titleEl) titleEl.innerText = title;
   if (msgEl) msgEl.innerText = message;
   
   if (acceptBtn) {
+    acceptBtn.innerText = acceptText;
+    if (isDanger) {
+      acceptBtn.style.background = '#ef4444';
+      acceptBtn.style.borderColor = '#ef4444';
+      acceptBtn.style.color = '#fff';
+    } else {
+      acceptBtn.style.background = '#16a34a';
+      acceptBtn.style.borderColor = '#16a34a';
+      acceptBtn.style.color = '#fff';
+    }
+    
     acceptBtn.onclick = () => {
       if (overlay) overlay.classList.remove('open');
       if (typeof onAccept === 'function') onAccept();
     };
+  }
+  
+  if (iconEl && iconContainer) {
+    if (isDanger) {
+      iconEl.className = 'ph-duotone ph-warning-octagon';
+      iconEl.style.color = '#ef4444';
+      iconContainer.style.background = '#fef2f2';
+      iconContainer.style.borderColor = '#fca5a5';
+    } else {
+      iconEl.className = 'ph-duotone ph-star';
+      iconEl.style.color = '#eab308';
+      iconContainer.style.background = '#fef9c3';
+      iconContainer.style.borderColor = '#fde047';
+    }
   }
   
   if (overlay) overlay.classList.add('open');
