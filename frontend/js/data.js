@@ -1,5 +1,5 @@
 // ── DATA CONFIGURATIONS ──
-let currentReports = []; // Dynamically fetched reports
+let currentReports = [];
 let fetchReportsPromise = null;
 
 const CAT_COLORS = {
@@ -17,81 +17,66 @@ const STATUS_CLASS = {
   'Action Planned':'status-planned','In Progress':'status-inprogress','Resolved':'status-resolved'
 };
 
-// Load cached reports from localStorage immediately on startup
+// Hydrate from cache synchronously so first paint can use stale-while-revalidate data
 try {
   const cached = localStorage.getItem('eco_warrior_reports_cache');
   if (cached) {
     currentReports = JSON.parse(cached);
   }
 } catch (e) {
-  console.error("Failed to parse cached reports", e);
+  console.error('Failed to parse cached reports', e);
+}
+
+function notifyReportsUpdated() {
+  if (typeof updateHeroStats === 'function') updateHeroStats();
+  if (typeof updateGlobeMarkers === 'function') updateGlobeMarkers(currentReports);
+
+  if (typeof currentPage === 'undefined') return;
+
+  if (currentPage === 'feed' && typeof renderFeed === 'function') {
+    renderFeed(currentReports);
+  }
+  if (currentPage === 'map' && typeof refreshMapMarkers === 'function') {
+    refreshMapMarkers();
+  }
+  if (currentPage === 'admin' && typeof adminLoggedIn !== 'undefined' && adminLoggedIn && typeof renderAdminDashboard === 'function') {
+    const parts = window.location.hash.substring(1).split('/');
+    const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : 'overview';
+    renderAdminDashboard(sub);
+  }
 }
 
 async function fetchReports(forceRefresh = false) {
-    // If we have cached reports and we haven't fetched yet, trigger UI updates with cached data first
-    if (currentReports.length > 0 && !fetchReportsPromise) {
-        setTimeout(() => {
-            if (typeof updateHeroStats === 'function') updateHeroStats();
-            if (typeof updateGlobeMarkers === 'function') updateGlobeMarkers(currentReports);
-            
-            const feedPage = document.getElementById('page-feed');
-            if (typeof renderFeed === 'function' && feedPage && feedPage.classList.contains('active')) {
-                renderFeed(currentReports);
-            }
-            
-            const adminPage = document.getElementById('page-admin');
-            if (typeof renderAdminDashboard === 'function' && adminPage && adminPage.classList.contains('active') && typeof adminLoggedIn !== 'undefined' && adminLoggedIn) {
-                const parts = window.location.hash.substring(1).split('/');
-                const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : 'overview';
-                renderAdminDashboard(sub);
-            }
-        }, 10);
-    }
+  if (forceRefresh) fetchReportsPromise = null;
+  if (fetchReportsPromise) return fetchReportsPromise;
 
-    if (fetchReportsPromise && !forceRefresh) {
-        return fetchReportsPromise;
-    }
+  fetchReportsPromise = (async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/get_reports.php`, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
 
-    fetchReportsPromise = (async () => {
-        try {
-            const response = await fetch(`${API_URL}/api/get_reports.php`);
-            const data = await response.json();
-            
-            // Fix relative image paths to use the backend API URL
-            data.forEach(report => {
-                if (report.photo_urls && Array.isArray(report.photo_urls)) {
-                    report.photo_urls = report.photo_urls.map(url => {
-                        return url.startsWith('http') ? url : `${API_URL}/${url}`;
-                    });
-                }
-            });
-
-            currentReports = data;
-            
-            // Cache the reports
-            localStorage.setItem('eco_warrior_reports_cache', JSON.stringify(data));
-            
-            // Update UI components if they exist
-            if (typeof updateHeroStats === 'function') updateHeroStats();
-            if (typeof updateGlobeMarkers === 'function') updateGlobeMarkers(currentReports);
-            if (typeof renderFeed === 'function') {
-                renderFeed(currentReports);
-            }
-            if (typeof renderAdminDashboard === 'function' && typeof adminLoggedIn !== 'undefined' && adminLoggedIn) {
-                const adminPage = document.getElementById('page-admin');
-                if (adminPage && adminPage.classList.contains('active')) {
-                    const parts = window.location.hash.substring(1).split('/');
-                    const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : 'overview';
-                    renderAdminDashboard(sub);
-                }
-            }
-            
-            return data;
-        } catch (e) {
-            console.error("Failed to fetch reports from backend", e);
-            return currentReports;
+      data.forEach(report => {
+        if (report.photo_urls && Array.isArray(report.photo_urls)) {
+          report.photo_urls = report.photo_urls.map(url => {
+            return url.startsWith('http') ? url : `${API_URL}/${url}`;
+          });
         }
-    })();
-    
-    return fetchReportsPromise;
+      });
+
+      currentReports = data;
+      localStorage.setItem('eco_warrior_reports_cache', JSON.stringify(data));
+      notifyReportsUpdated();
+      return data;
+    } catch (e) {
+      console.error('Failed to fetch reports from backend', e);
+      if (currentReports.length > 0) notifyReportsUpdated();
+      return currentReports;
+    }
+  })();
+
+  return fetchReportsPromise;
 }
+
+// Start network fetch as soon as this script loads (stale-while-revalidate)
+fetchReports();

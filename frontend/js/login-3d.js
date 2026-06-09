@@ -4,7 +4,16 @@ let loginCamera = null;
 let loginRenderer = null;
 
 function initLoginAnimations() {
-  if (typeof gsap === 'undefined') return;
+  const targets = ['#login-form-card', '#login-badge-1', '#login-badge-2', '#login-3d-canvas'];
+  if (typeof gsap === 'undefined') {
+    targets.forEach(sel => {
+      const el = document.querySelector(sel);
+      if (el) { el.style.opacity = '1'; el.style.transform = 'none'; }
+    });
+    return;
+  }
+
+  gsap.killTweensOf(targets);
 
   gsap.to('#login-form-card', {
     y: 0,
@@ -47,6 +56,7 @@ function initLogin3DScene() {
     return;
   }
 
+  container.querySelectorAll('canvas').forEach(c => c.remove());
   loginContainer = container;
 
   const scene = new THREE.Scene();

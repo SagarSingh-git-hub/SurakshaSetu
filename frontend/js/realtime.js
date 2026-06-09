@@ -7,7 +7,7 @@ const PUSHER_CLUSTER = 'ap2';
 
 if (PUSHER_KEY !== 'YOUR_APP_KEY') {
     // Enable pusher logging for debugging (optional)
-    Pusher.logToConsole = true;
+    Pusher.logToConsole = false;
 
     var pusher = new Pusher(PUSHER_KEY, {
         cluster: PUSHER_CLUSTER

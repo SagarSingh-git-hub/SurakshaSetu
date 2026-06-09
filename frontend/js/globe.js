@@ -218,7 +218,7 @@ function initGlobe() {
   // Handle Resize gracefully
   window.addEventListener('resize', window.triggerGlobeResize);
 
-  // Auto-start if currentPage is home
+  window.triggerGlobeResize();
   if (typeof currentPage !== 'undefined' && currentPage === 'home') {
     window.resumeGlobeAnimation();
   }
