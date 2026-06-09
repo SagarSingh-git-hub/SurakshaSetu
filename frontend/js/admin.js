@@ -1611,17 +1611,34 @@ function openTemplatePreview(id) {
   overlay.classList.add('open');
 }
 
+function showCustomConfirm(title, message, onAccept) {
+  const overlay = document.getElementById('custom-confirm-overlay');
+  const titleEl = document.getElementById('confirm-title');
+  const msgEl = document.getElementById('confirm-message');
+  const acceptBtn = document.getElementById('btn-confirm-accept');
+  
+  if (titleEl) titleEl.innerText = title;
+  if (msgEl) msgEl.innerText = message;
+  
+  if (acceptBtn) {
+    acceptBtn.onclick = () => {
+      if (overlay) overlay.classList.remove('open');
+      if (typeof onAccept === 'function') onAccept();
+    };
+  }
+  
+  if (overlay) overlay.classList.add('open');
+}
+
 function deleteTemplate(id) {
   const template = allTemplates.find(t => t.id == id);
-  if (template && template.is_default == 1) {
-    if (!confirm("This is the default template. Please assign another default template before deleting. Do you still want to delete it?")) {
-      return;
-    }
-  } else {
-    if (!confirm("Delete Certificate Template?\n\nThis action cannot be undone.")) {
-      return;
-    }
-  }
+  if (!template) return;
+
+  const msg = template.is_default == 1 
+    ? "यह डिफ़ॉल्ट टेम्पलेट है। डिलीट करने से पहले कृपया कोई अन्य डिफ़ॉल्ट टेम्पलेट चुनें। क्या आप अभी भी इसे डिलीट करना चाहते हैं?"
+    : "क्या आप वाकई इस सर्टिफिकेट टेम्पलेट को डिलीट करना चाहते हैं? या आपने अपना इरादा बदल दिया है?";
+
+  showCustomConfirm("Delete Template?", msg, () => {
 
   const formData = new FormData();
   formData.append('admin_password', currentAdminPassword);
@@ -1645,6 +1662,7 @@ function deleteTemplate(id) {
     console.error(err);
     showToast('❌ Error deleting template');
   });
+});
 }
 
 async function fetchTemplates() {
