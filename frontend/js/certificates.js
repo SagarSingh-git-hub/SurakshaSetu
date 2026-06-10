@@ -602,25 +602,6 @@ function downloadPDF() {
     const certContainer = iframeDoc.querySelector('.cert-container');
     if (!certContainer) return;
     
-    // Need to clone the container and render it properly for PDF
-    const tempDiv = document.createElement('div');
-    tempDiv.style.position = 'absolute';
-    tempDiv.style.top = '0';
-    tempDiv.style.left = '0';
-    tempDiv.style.width = '1056px';
-    tempDiv.style.height = '816px';
-    tempDiv.style.zIndex = '-9999';
-    
-    // Inject styles from iframe to main document for html2pdf to catch
-    let stylesHtml = '';
-    const styles = iframeDoc.querySelectorAll('style');
-    styles.forEach(style => {
-        stylesHtml += `<style>${style.innerHTML}</style>`;
-    });
-    
-    tempDiv.innerHTML = stylesHtml + `<div class="cert-container" style="width:1056px; height:816px; background:#fff; display:flex; align-items:center; justify-content:center; box-sizing:border-box;">${certContainer.innerHTML}</div>`;
-    document.body.appendChild(tempDiv);
-    
     const dateStr = document.getElementById('cert-issue-date')?.value || new Date().toISOString().split('T')[0];
     const year = new Date(dateStr).getFullYear();
     
@@ -628,13 +609,11 @@ function downloadPDF() {
       margin:       0,
       filename:     `Certificate-SS-CERT-${year}-XXXX.pdf`,
       image:        { type: 'jpeg', quality: 1 },
-      html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff', logging: false },
+      html2canvas:  { scale: 2, useCORS: true },
       jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
     };
     
-    html2pdf().set(opt).from(tempDiv).save().then(() => {
-        document.body.removeChild(tempDiv);
-    });
+    html2pdf().set(opt).from(certContainer).save();
 }
 
 async function viewIssuedCertificate(certId) {
