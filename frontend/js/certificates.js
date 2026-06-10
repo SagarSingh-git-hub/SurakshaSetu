@@ -184,7 +184,7 @@ async function loadTemplates() {
         const res = await fetch(API_URL + '/api/certificates/get_templates.php');
         const data = await res.json();
         if (data.success) {
-            certTemplates = data.data;
+            certTemplates = data.templates || data.data || [];
             renderTemplatesGrid();
             
             // Populate types dropdown
@@ -240,12 +240,20 @@ function renderLivePreview() {
     const typeSelect = document.getElementById('cert-type');
     if (!typeSelect) return;
     const opt = typeSelect.options[typeSelect.selectedIndex];
-    if (!opt) return;
-    const tid = opt.getAttribute('data-tid');
-    if (!tid) return;
     
-    const tmpl = certTemplates.find(t => t.id == tid);
-    if (!tmpl) return;
+    let tid = opt ? opt.getAttribute('data-tid') : null;
+    let tmpl = tid ? certTemplates.find(t => t.id == tid) : null;
+
+    if (!tmpl) {
+        const iframe = document.getElementById('cert-live-preview-iframe');
+        if (iframe) {
+            const doc = iframe.contentWindow.document;
+            doc.open();
+            doc.write('<html><body style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#94a3b8;background:transparent;margin:0;"><div>Please select a certificate type to preview.</div></body></html>');
+            doc.close();
+        }
+        return;
+    }
 
     let html = tmpl.html_content || `
         <div style="padding:40px; font-family:sans-serif; text-align:center;">
