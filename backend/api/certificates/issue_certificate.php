@@ -36,7 +36,7 @@ $citation = $conn->real_escape_string($data['citation']);
 $issuing_authority = $conn->real_escape_string($data['issuing_authority']);
 $co_signatory = $conn->real_escape_string($data['co_signatory'] ?? '');
 $template_id = (int)($data['template_id'] ?? 0);
-$prefix = $conn->real_escape_string($data['prefix'] ?? 'SS-CERT');
+$prefix = 'SS-CERT';
 $recipient_type = $conn->real_escape_string($data['recipient_type'] ?? 'Community Member');
 
 // Generate unique ID

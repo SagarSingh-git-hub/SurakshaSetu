@@ -269,9 +269,8 @@ function renderLivePreview() {
     const citation = document.getElementById('cert-citation')?.value || 'Achievement / citation text will appear here.';
     const issuer = document.getElementById('cert-issuing-authority')?.value || 'Issuing Authority';
     const coSignatory = document.getElementById('cert-co-signatory')?.value || 'Co-Signatory';
-    const prefix = document.getElementById('cert-id-prefix')?.value || 'SS-CERT';
     const year = new Date(date).getFullYear() || new Date().getFullYear();
-    const certId = `${prefix}-${year}-XXXX`;
+    const certId = `SS-CERT-${year}-XXXX`;
     const certType = typeSelect.value || 'Certificate Type';
     
     const pin = document.getElementById('cert-pin')?.value || '';
@@ -371,7 +370,6 @@ async function issueCertificate() {
         issuing_authority: document.getElementById('cert-issuing-authority').value,
         co_signatory: document.getElementById('cert-co-signatory').value,
         template_id: tmplId,
-        prefix: document.getElementById('cert-id-prefix').value,
         send_email: document.getElementById('cert-send-email')?.checked ? 1 : 0,
         publish_to_feed: document.getElementById('cert-publish-feed')?.checked ? 1 : 0
     };
