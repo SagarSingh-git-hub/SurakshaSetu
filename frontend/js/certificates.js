@@ -589,18 +589,30 @@ async function updateCertStatus(certId, action) {
 }
 
 function downloadPDF() {
-    const iframe = document.getElementById('cert-live-preview-iframe');
-    if(!iframe) return;
+    const originalIframe = document.getElementById('cert-live-preview-iframe');
+    if(!originalIframe) return;
     
-    // Check if html2pdf is loaded
     if (typeof html2pdf === 'undefined') {
         alert('PDF library not loaded');
         return;
     }
     
-    const iframeDoc = iframe.contentWindow.document;
-    const certContainer = iframeDoc.querySelector('.cert-container');
-    if (!certContainer) return;
+    // Create a hidden print iframe to avoid CSS transform scaling issues
+    const printIframe = document.createElement('iframe');
+    printIframe.style.position = 'fixed';
+    printIframe.style.right = '0';
+    printIframe.style.bottom = '0';
+    printIframe.style.width = '1056px';
+    printIframe.style.height = '816px';
+    printIframe.style.zIndex = '-1000';
+    printIframe.style.opacity = '0';
+    printIframe.style.pointerEvents = 'none';
+    document.body.appendChild(printIframe);
+    
+    const doc = printIframe.contentWindow.document;
+    doc.open();
+    doc.write(originalIframe.contentWindow.document.documentElement.outerHTML);
+    doc.close();
     
     const dateStr = document.getElementById('cert-issue-date')?.value || new Date().toISOString().split('T')[0];
     const year = new Date(dateStr).getFullYear();
@@ -609,11 +621,25 @@ function downloadPDF() {
       margin:       0,
       filename:     `Certificate-SS-CERT-${year}-XXXX.pdf`,
       image:        { type: 'jpeg', quality: 1 },
-      html2canvas:  { scale: 2, useCORS: true },
+      html2canvas:  { scale: 2, useCORS: true, windowWidth: 1056, windowHeight: 816 },
       jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
     };
     
-    html2pdf().set(opt).from(certContainer).save();
+    // Wait slightly for fonts/styles to parse in the new iframe
+    setTimeout(() => {
+        const certContainer = printIframe.contentWindow.document.querySelector('.cert-container');
+        if (!certContainer) {
+            document.body.removeChild(printIframe);
+            return;
+        }
+        
+        html2pdf().set(opt).from(certContainer).save().then(() => {
+            document.body.removeChild(printIframe);
+        }).catch(err => {
+            console.error('PDF generation error:', err);
+            document.body.removeChild(printIframe);
+        });
+    }, 500);
 }
 
 async function viewIssuedCertificate(certId) {
