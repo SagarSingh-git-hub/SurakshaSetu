@@ -218,6 +218,9 @@ async function loadTemplates() {
                 certTemplates.forEach(t => {
                     filterTypeSelect.innerHTML += `<option value="${t.award_type}">${t.award_type}</option>`;
                 });
+                if (typeof refreshCustomSelect === 'function') {
+                    refreshCustomSelect(filterTypeSelect);
+                }
             }
             
             // Apply default template to preview
