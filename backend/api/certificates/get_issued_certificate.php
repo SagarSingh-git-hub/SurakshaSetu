@@ -37,7 +37,9 @@ if ($res && $res->num_rows > 0) {
     $html = str_replace('{{ISSUER}}', htmlspecialchars($cert['issuing_authority'] ?? ''), $html);
     $html = str_replace('{{CERTIFICATE_ID}}', htmlspecialchars($cert['cert_id']), $html);
     $html = str_replace('{{CERTIFICATE_TYPE}}', htmlspecialchars($cert['certificate_type']), $html);
-    $html = str_replace('{{AWARD_TYPE}}', htmlspecialchars($cert['certificate_type']), $html);
+    $html = str_replace('{{AWARD_TYPE}}', htmlspecialchars($cert['certificate_type'] ?? ''), $html);
+    $html = str_replace('{{CITATION}}', htmlspecialchars($cert['citation'] ?? ''), $html);
+    $html = str_replace('{{CO_SIGNATORY}}', htmlspecialchars($cert['co_signatory'] ?? ''), $html);
     
     // Also include CSS if any
     if (!empty($cert['css_content'])) {

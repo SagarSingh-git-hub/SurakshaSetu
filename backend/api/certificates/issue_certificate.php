@@ -9,11 +9,28 @@ if (!$data) {
     exit;
 }
 
-$recipient_name = $conn->real_escape_string($data['recipient_name']);
-$recipient_email = $conn->real_escape_string($data['recipient_email']);
-$recipient_phone = $conn->real_escape_string($data['recipient_phone'] ?? '');
-$recipient_zone = $conn->real_escape_string($data['recipient_zone'] ?? '');
-$certificate_type = $conn->real_escape_string($data['certificate_type']);
+$recipient_name = $data['recipient_name'] ?? '';
+$recipient_email = $data['recipient_email'] ?? '';
+$recipient_phone = $data['recipient_phone'] ?? '';
+$recipient_zone = $data['recipient_zone'] ?? '';
+$certificate_type = $data['certificate_type'] ?? '';
+
+// Validations
+if (!preg_match('/^[A-Za-z\s]+$/', $recipient_name)) {
+    echo json_encode(['success' => false, 'error' => 'Full name must contain only alphabets and spaces.']);
+    exit;
+}
+$numericPhone = str_replace('+91', '', $recipient_phone);
+if (!empty($numericPhone) && !preg_match('/^\d{10}$/', $numericPhone)) {
+    echo json_encode(['success' => false, 'error' => 'Phone number must be exactly 10 digits.']);
+    exit;
+}
+
+$recipient_name = $conn->real_escape_string($recipient_name);
+$recipient_email = $conn->real_escape_string($recipient_email);
+$recipient_phone = $conn->real_escape_string($recipient_phone);
+$recipient_zone = $conn->real_escape_string($recipient_zone);
+$certificate_type = $conn->real_escape_string($certificate_type);
 $issue_date = $conn->real_escape_string($data['issue_date']);
 $citation = $conn->real_escape_string($data['citation']);
 $issuing_authority = $conn->real_escape_string($data['issuing_authority']);

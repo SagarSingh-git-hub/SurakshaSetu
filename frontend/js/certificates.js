@@ -16,30 +16,118 @@ function initCertificates() {
     loadTemplates();
     loadCertificates();
 
-    // Bind preview live updates
-    const bindPreview = (inputId, previewId, fallback) => {
-        const input = document.getElementById(inputId);
-        if(input) {
-            input.addEventListener('input', (e) => {
-                const el = document.getElementById(previewId);
-                if(el) el.innerText = e.target.value || fallback;
-            });
-        }
-    };
-    
-    bindPreview('cert-full-name', 'cert-preview-name', 'Recipient Name');
-    bindPreview('cert-type', 'cert-preview-type', 'Certificate Type');
-    bindPreview('cert-citation', 'cert-preview-citation', 'Achievement / citation text will appear here.');
-    bindPreview('cert-issue-date', 'cert-preview-date', 'Date');
-    bindPreview('cert-issuing-authority', 'cert-preview-auth1', 'Issuing Authority');
-    bindPreview('cert-co-signatory', 'cert-preview-auth2', 'Co-Signatory');
-    
-    // Prefix handling
-    const prefixInput = document.getElementById('cert-id-prefix');
-    if (prefixInput) {
-        prefixInput.addEventListener('input', updatePreviewId);
+    // Input Validations
+    const nameInput = document.getElementById('cert-full-name');
+    const nameError = document.getElementById('cert-name-error');
+    if (nameInput) {
+        nameInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            if (val && !/^[A-Za-z\s]+$/.test(val)) {
+                nameError.style.display = 'block';
+                e.target.value = val.replace(/[^A-Za-z\s]/g, '');
+            } else {
+                nameError.style.display = 'none';
+            }
+            renderLivePreview();
+        });
     }
 
+    const phoneInput = document.getElementById('cert-phone');
+    const phoneError = document.getElementById('cert-phone-error');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            if (val && !/^\d+$/.test(val)) {
+                e.target.value = val.replace(/\D/g, '');
+            }
+            if (e.target.value.length > 0 && e.target.value.length < 10) {
+                phoneError.style.display = 'block';
+            } else {
+                phoneError.style.display = 'none';
+            }
+        });
+    }
+
+    // PIN Code Logic
+    const pinInput = document.getElementById('cert-pin');
+    const pinError = document.getElementById('cert-pin-error');
+    const pinLoading = document.getElementById('cert-pin-loading');
+    const areaSelect = document.getElementById('cert-area');
+    const cityInput = document.getElementById('cert-city');
+    const stateInput = document.getElementById('cert-state');
+
+    if (pinInput) {
+        pinInput.addEventListener('input', async (e) => {
+            const val = e.target.value.replace(/\D/g, '');
+            e.target.value = val;
+            
+            if (val.length === 6) {
+                pinLoading.style.display = 'block';
+                pinError.style.display = 'none';
+                try {
+                    const res = await fetch(`https://api.postalpincode.in/pincode/${val}`);
+                    const data = await res.json();
+                    pinLoading.style.display = 'none';
+                    
+                    if (data && data[0].Status === 'Success') {
+                        const postOffices = data[0].PostOffice;
+                        
+                        // Populate Area
+                        areaSelect.innerHTML = '';
+                        postOffices.forEach(po => {
+                            areaSelect.innerHTML += `<option value="${po.Name}">${po.Name}</option>`;
+                        });
+                        
+                        // Populate City & State
+                        cityInput.value = postOffices[0].District;
+                        stateInput.value = postOffices[0].State;
+                        
+                        if (typeof refreshCustomSelect === 'function') {
+                            refreshCustomSelect(areaSelect);
+                        }
+                        
+                        renderLivePreview();
+                    } else {
+                        pinError.style.display = 'block';
+                        areaSelect.innerHTML = '<option value="">— Select Area —</option>';
+                        if (typeof refreshCustomSelect === 'function') {
+                            refreshCustomSelect(areaSelect);
+                        }
+                        cityInput.value = '';
+                        stateInput.value = '';
+                    }
+                } catch (err) {
+                    pinLoading.style.display = 'none';
+                    pinError.style.display = 'block';
+                }
+            } else {
+                pinLoading.style.display = 'none';
+                pinError.style.display = 'none';
+                areaSelect.innerHTML = '<option value="">— Select Area —</option>';
+                if (typeof refreshCustomSelect === 'function') {
+                    refreshCustomSelect(areaSelect);
+                }
+                cityInput.value = '';
+                stateInput.value = '';
+            }
+            renderLivePreview();
+        });
+    }
+
+    if (areaSelect) {
+        areaSelect.addEventListener('change', renderLivePreview);
+    }
+
+    // Bind preview live updates
+    const formInputs = [
+        'cert-email', 'cert-type', 'cert-citation',
+        'cert-issue-date', 'cert-issuing-authority', 'cert-co-signatory', 'cert-id-prefix'
+    ];
+    formInputs.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.addEventListener('input', renderLivePreview);
+    });
+    
     // Auto-populate from member select
     const memberSelect = document.getElementById('cert-select-member');
     if (memberSelect) {
@@ -50,16 +138,7 @@ function initCertificates() {
                 if (member) {
                     document.getElementById('cert-full-name').value = member.name;
                     document.getElementById('cert-email').value = member.email;
-                    document.getElementById('cert-phone').value = member.phone || '';
-                    
-                    const zoneSelect = document.getElementById('cert-zone');
-                    if (zoneSelect) {
-                        zoneSelect.value = member.zone || 'All of Agra';
-                        zoneSelect.dispatchEvent(new Event('change'));
-                        zoneSelect.dispatchEvent(new Event('input'));
-                    }
-                    
-                    // Trigger input event to update preview
+                    document.getElementById('cert-phone').value = member.phone ? member.phone.replace('+91', '').trim() : '';
                     document.getElementById('cert-full-name').dispatchEvent(new Event('input'));
                 }
             } else {
@@ -76,17 +155,8 @@ function initCertificates() {
     if (dateInput) {
         const today = new Date().toISOString().split('T')[0];
         dateInput.value = today;
-        dateInput.dispatchEvent(new Event('input'));
-        updatePreviewId();
+        renderLivePreview();
     }
-}
-
-function updatePreviewId() {
-    const prefix = document.getElementById('cert-id-prefix')?.value || 'SS-CERT';
-    const dateStr = document.getElementById('cert-issue-date')?.value || new Date().toISOString().split('T')[0];
-    const year = new Date(dateStr).getFullYear();
-    const el = document.getElementById('cert-preview-id');
-    if(el) el.innerText = `${prefix}-${year}-XXXX`;
 }
 
 async function loadMembers() {
@@ -163,29 +233,71 @@ async function loadTemplates() {
 }
 
 function applyTemplateToPreview(templateId) {
-    const tmpl = certTemplates.find(t => t.id == templateId);
+    renderLivePreview();
+}
+
+function renderLivePreview() {
+    const typeSelect = document.getElementById('cert-type');
+    if (!typeSelect) return;
+    const opt = typeSelect.options[typeSelect.selectedIndex];
+    if (!opt) return;
+    const tid = opt.getAttribute('data-tid');
+    if (!tid) return;
+    
+    const tmpl = certTemplates.find(t => t.id == tid);
     if (!tmpl) return;
+
+    let html = tmpl.html_content || `
+        <div style="padding:40px; font-family:sans-serif; text-align:center;">
+          <h1 style="color:#059669;">Certificate of Achievement</h1>
+          <p>This is presented to</p>
+          <h2 style="color:#1e293b;">{{NAME}}</h2>
+          <p>For {{AWARD_TYPE}}</p>
+        </div>`;
+        
+    const name = document.getElementById('cert-full-name')?.value || 'Recipient Name';
+    const email = document.getElementById('cert-email')?.value || 'email@example.com';
+    const date = document.getElementById('cert-issue-date')?.value || new Date().toISOString().split('T')[0];
+    const citation = document.getElementById('cert-citation')?.value || 'Achievement / citation text will appear here.';
+    const issuer = document.getElementById('cert-issuing-authority')?.value || 'Issuing Authority';
+    const coSignatory = document.getElementById('cert-co-signatory')?.value || 'Co-Signatory';
+    const prefix = document.getElementById('cert-id-prefix')?.value || 'SS-CERT';
+    const year = new Date(date).getFullYear() || new Date().getFullYear();
+    const certId = `${prefix}-${year}-XXXX`;
+    const certType = typeSelect.value || 'Certificate Type';
     
-    const card = document.getElementById('cert-preview-card');
-    const icon = document.getElementById('cert-preview-icon');
-    const title = document.getElementById('cert-preview-title');
+    const pin = document.getElementById('cert-pin')?.value || '';
+    const area = document.getElementById('cert-area')?.value || '';
+    const city = document.getElementById('cert-city')?.value || '';
+    const state = document.getElementById('cert-state')?.value || '';
     
-    if (card) {
-        card.style.background = tmpl.bg_gradient;
+    let zone = '';
+    if(area) zone = area;
+    if(city) zone += (zone ? ', ' : '') + city;
+    if(state) zone += (zone ? ', ' : '') + state;
+    if(pin) zone += ` - ${pin}`;
+    
+    html = html.replace(/\{\{NAME\}\}/g, name)
+               .replace(/\{\{EMAIL\}\}/g, email)
+               .replace(/\{\{ZONE\}\}/g, zone)
+               .replace(/\{\{DATE\}\}/g, date)
+               .replace(/\{\{ISSUER\}\}/g, issuer)
+               .replace(/\{\{CERTIFICATE_ID\}\}/g, certId)
+               .replace(/\{\{CERTIFICATE_TYPE\}\}/g, certType)
+               .replace(/\{\{AWARD_TYPE\}\}/g, certType)
+               .replace(/\{\{CITATION\}\}/g, citation)
+               .replace(/\{\{CO_SIGNATORY\}\}/g, coSignatory);
+               
+    if (tmpl.css_content) {
+        html = '<style>' + tmpl.css_content + '</style>' + html;
     }
-    if (title) {
-        title.innerText = tmpl.name || 'Certificate of Excellence';
-        title.style.color = tmpl.primary_color;
-    }
-    if (icon) {
-        icon.className = tmpl.icon_class;
-        icon.style.color = tmpl.primary_color;
-        // The parent circle of icon
-        if(icon.parentElement) {
-            icon.parentElement.style.borderColor = tmpl.primary_color;
-            // set low opacity background
-            icon.parentElement.style.background = tmpl.primary_color.replace(')', ', 0.1)').replace('rgb', 'rgba'); 
-        }
+    
+    const iframe = document.getElementById('cert-live-preview-iframe');
+    if (iframe) {
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write('<html><head><style>body{margin:0;padding:0;display:flex;align-items:center;justify-content:center;min-height:100vh;background:transparent;font-family:sans-serif;} .cert-container{width:100%;max-width:900px;background:#fff;transform-origin:center center;} *{box-sizing:inherit;}</style></head><body><div class="cert-container">' + html + '</div></body></html>');
+        doc.close();
     }
 }
 
@@ -225,12 +337,26 @@ async function issueCertificate() {
     const typeSelect = document.getElementById('cert-type');
     const tmplId = typeSelect.options[typeSelect.selectedIndex]?.getAttribute('data-tid') || 0;
     
+    const pin = document.getElementById('cert-pin')?.value || '';
+    const area = document.getElementById('cert-area')?.value || '';
+    const city = document.getElementById('cert-city')?.value || '';
+    const state = document.getElementById('cert-state')?.value || '';
+    
+    let zone = '';
+    if(area) zone = area;
+    if(city) zone += (zone ? ', ' : '') + city;
+    if(state) zone += (zone ? ', ' : '') + state;
+    if(pin) zone += ` - ${pin}`;
+
+    const phoneValue = document.getElementById('cert-phone').value;
+    const finalPhone = phoneValue ? '+91' + phoneValue : '';
+
     const payload = {
         recipient_type: document.getElementById('cert-recipient-type')?.value || 'Community Member',
         recipient_name: document.getElementById('cert-full-name').value,
         recipient_email: document.getElementById('cert-email').value,
-        recipient_phone: document.getElementById('cert-phone').value,
-        recipient_zone: document.getElementById('cert-zone').value,
+        recipient_phone: finalPhone,
+        recipient_zone: zone,
         certificate_type: typeSelect.value,
         issue_date: document.getElementById('cert-issue-date').value,
         citation: document.getElementById('cert-citation').value,
@@ -271,10 +397,13 @@ async function issueCertificate() {
                 msg.style.display = 'none';
                 document.getElementById('cert-full-name').value = '';
                 document.getElementById('cert-email').value = '';
+                document.getElementById('cert-phone').value = '';
+                document.getElementById('cert-pin').value = '';
+                document.getElementById('cert-area').innerHTML = '<option value="">— Select Area —</option>';
+                document.getElementById('cert-city').value = '';
+                document.getElementById('cert-state').value = '';
                 document.getElementById('cert-citation').value = '';
-                document.getElementById('cert-preview-name').innerText = 'Recipient Name';
-                document.getElementById('cert-preview-citation').innerText = 'Achievement / citation text will appear here.';
-                updatePreviewId();
+                renderLivePreview();
             }, 3000);
             
             loadCertificates(); // Refresh list
@@ -451,8 +580,8 @@ async function updateCertStatus(certId, action) {
 }
 
 function downloadPDF() {
-    const card = document.getElementById('cert-preview-card');
-    if(!card) return;
+    const iframe = document.getElementById('cert-live-preview-iframe');
+    if(!iframe) return;
     
     // Check if html2pdf is loaded
     if (typeof html2pdf === 'undefined') {
@@ -460,15 +589,44 @@ function downloadPDF() {
         return;
     }
     
+    const iframeDoc = iframe.contentWindow.document;
+    const certContainer = iframeDoc.querySelector('.cert-container');
+    if (!certContainer) return;
+    
+    // Need to clone the container and render it properly for PDF
+    const tempDiv = document.createElement('div');
+    tempDiv.style.position = 'absolute';
+    tempDiv.style.left = '-9999px';
+    tempDiv.style.top = '-9999px';
+    tempDiv.style.width = '1056px';
+    
+    tempDiv.innerHTML = `<div style="padding:40px; box-sizing:border-box; background:#fff; min-height:816px; display:flex; flex-direction:column; justify-content:center;">${certContainer.innerHTML}</div>`;
+    
+    // Inject styles from iframe to main document for html2pdf to catch
+    const styles = iframeDoc.querySelectorAll('style');
+    styles.forEach(style => {
+        const newStyle = document.createElement('style');
+        newStyle.innerHTML = style.innerHTML;
+        tempDiv.appendChild(newStyle);
+    });
+    
+    document.body.appendChild(tempDiv);
+    
+    const dateStr = document.getElementById('cert-issue-date')?.value || new Date().toISOString().split('T')[0];
+    const year = new Date(dateStr).getFullYear();
+    const prefix = document.getElementById('cert-id-prefix')?.value || 'SS-CERT';
+    
     const opt = {
-      margin:       0.5,
-      filename:     `Certificate-${document.getElementById('cert-preview-id').innerText}.pdf`,
+      margin:       0,
+      filename:     `Certificate-${prefix}-${year}-XXXX.pdf`,
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, useCORS: true },
       jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
     };
     
-    html2pdf().set(opt).from(card).save();
+    html2pdf().set(opt).from(tempDiv).save().then(() => {
+        document.body.removeChild(tempDiv);
+    });
 }
 
 async function viewIssuedCertificate(certId) {
