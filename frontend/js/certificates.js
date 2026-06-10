@@ -601,30 +601,30 @@ function downloadPDF() {
     
     // Need to clone the container and render it properly for PDF
     const tempDiv = document.createElement('div');
-    tempDiv.style.position = 'absolute';
-    tempDiv.style.left = '-9999px';
-    tempDiv.style.top = '-9999px';
+    tempDiv.style.position = 'fixed';
+    tempDiv.style.top = '0';
+    tempDiv.style.left = '0';
     tempDiv.style.width = '1056px';
-    
-    tempDiv.innerHTML = `<div style="padding:40px; box-sizing:border-box; background:#fff; min-height:816px; display:flex; flex-direction:column; justify-content:center;">${certContainer.innerHTML}</div>`;
+    tempDiv.style.height = '816px';
+    tempDiv.style.zIndex = '-9999';
+    tempDiv.style.background = '#ffffff';
     
     // Inject styles from iframe to main document for html2pdf to catch
+    let stylesHtml = '';
     const styles = iframeDoc.querySelectorAll('style');
     styles.forEach(style => {
-        const newStyle = document.createElement('style');
-        newStyle.innerHTML = style.innerHTML;
-        tempDiv.appendChild(newStyle);
+        stylesHtml += `<style>${style.innerHTML}</style>`;
     });
     
+    tempDiv.innerHTML = stylesHtml + `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">${certContainer.innerHTML}</div>`;
     document.body.appendChild(tempDiv);
     
     const dateStr = document.getElementById('cert-issue-date')?.value || new Date().toISOString().split('T')[0];
     const year = new Date(dateStr).getFullYear();
-    const prefix = document.getElementById('cert-id-prefix')?.value || 'SS-CERT';
     
     const opt = {
       margin:       0,
-      filename:     `Certificate-${prefix}-${year}-XXXX.pdf`,
+      filename:     `Certificate-SS-CERT-${year}-XXXX.pdf`,
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, useCORS: true },
       jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
