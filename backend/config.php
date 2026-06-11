@@ -140,6 +140,7 @@ function triggerPusherEvent(string $channel, string $event, array $data): void {
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 3);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
     curl_exec($ch);
     unset($ch); // curl_close is deprecated in PHP 8.5+

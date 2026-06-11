@@ -1693,6 +1693,8 @@ function setDefaultTemplate(id) {
       const data = await res.json();
       if (data.success) {
         showToast('✅ Default template set successfully!');
+        const overlay = document.getElementById('template-preview-overlay');
+        if (overlay) overlay.classList.remove('open');
         
         // Refresh local templates array & UI
         if (typeof fetchTemplates === 'function') {

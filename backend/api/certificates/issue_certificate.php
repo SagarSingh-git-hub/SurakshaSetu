@@ -83,8 +83,8 @@ if ($conn->query($sql)) {
         $headers = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
         $headers .= "From: no-reply@surakshasetu.org" . "\r\n";
-        
-        @mail($recipient_email, $subject, $message, $headers);
+        // Prevent mail() from hanging on servers without an MTA
+        // @mail($recipient_email, $subject, $message, $headers);
     }
     
     logActivity($conn, 'Certificate Issued', $cert_id, "Certificate #$cert_id issued to $recipient_name for $certificate_type", 'Certificate', $recipient_zone);

@@ -183,8 +183,6 @@ let templatesLoadedInCert = false;
 
 async function loadTemplates(force = false) {
     if (!force && templatesLoadedInCert && certTemplates.length > 0) {
-        renderTemplatesGrid();
-        populateTemplateDropdowns();
         return;
     }
     try {

@@ -232,6 +232,11 @@ function initCustomSelects() {
         }
       });
     };
+    if (select.customSyncUI) {
+      select.removeEventListener('change', select.customSyncUI);
+      select.removeEventListener('input', select.customSyncUI);
+    }
+    select.customSyncUI = syncUI;
     select.addEventListener('change', syncUI);
     select.addEventListener('input', syncUI);
     
