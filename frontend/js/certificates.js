@@ -270,12 +270,23 @@ function renderLivePreview() {
     }
 
     let html = tmpl.html_content || `
-        <div style="padding:40px; font-family:sans-serif; text-align:center;">
-          <h1 style="color:#059669;">Certificate of Achievement</h1>
-          <p>This is presented to</p>
-          <h2 style="color:#1e293b;">{{NAME}}</h2>
-          <p>For {{AWARD_TYPE}}</p>
-        </div>`;
+      <html>
+      <head>
+        <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/duotone/style.css">
+        <style>body{margin:0;padding:0;}</style>
+      </head>
+      <body>
+        <div style="width:100%; height:100vh; background:${tmpl.bg_gradient || '#f8fafc'}; padding:40px; box-sizing:border-box; position:relative; font-family:'Georgia', serif; text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+          <div style="font-size:48px; color:${tmpl.primary_color || '#1e293b'}; margin-bottom:10px;"><i class="${tmpl.icon_class || 'ph-duotone ph-certificate'}"></i></div>
+          <h1 style="font-size:36px; color:${tmpl.primary_color || '#1e293b'}; margin:0 0 10px 0; text-transform:uppercase; letter-spacing:2px;">${tmpl.name || 'Certificate'}</h1>
+          <div style="width:100px; height:2px; background:${tmpl.primary_color || '#1e293b'}; margin:0 auto 20px auto;"></div>
+          <p style="font-size:16px; color:#475569; font-family:sans-serif; margin-bottom:5px;">This is presented to</p>
+          <h2 style="font-size:28px; color:#0f172a; margin:0 0 20px 0; font-style:italic;">{{NAME}}</h2>
+          <p style="font-size:16px; color:#475569; font-family:sans-serif;">For outstanding contribution in</p>
+          <h3 style="font-size:20px; color:${tmpl.primary_color || '#1e293b'}; margin:10px 0 30px 0; text-transform:uppercase;">{{AWARD_TYPE}}</h3>
+        </div>
+      </body>
+      </html>`;
         
     const name = document.getElementById('cert-full-name')?.value || 'Recipient Name';
     const email = document.getElementById('cert-email')?.value || 'email@example.com';

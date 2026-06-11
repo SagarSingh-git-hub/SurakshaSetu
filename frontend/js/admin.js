@@ -1584,7 +1584,17 @@ function openTemplatePreview(id) {
   const btnEdit = document.getElementById('btn-preview-edit');
   const btnDelete = document.getElementById('btn-preview-delete');
 
-  let content = template.html_content || '';
+  let content = template.html_content || `
+        <div style="width:100%; height:100%; background:${template.bg_gradient || '#f8fafc'}; padding:40px; box-sizing:border-box; position:relative; font-family:'Georgia', serif; text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+          <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/duotone/style.css">
+          <div style="font-size:48px; color:${template.primary_color || '#1e293b'}; margin-bottom:10px;"><i class="${template.icon_class || 'ph-duotone ph-certificate'}"></i></div>
+          <h1 style="font-size:36px; color:${template.primary_color || '#1e293b'}; margin:0 0 10px 0; text-transform:uppercase; letter-spacing:2px;">${template.name || 'Certificate'}</h1>
+          <div style="width:100px; height:2px; background:${template.primary_color || '#1e293b'}; margin:0 auto 20px auto;"></div>
+          <p style="font-size:16px; color:#475569; font-family:sans-serif; margin-bottom:5px;">This is presented to</p>
+          <h2 style="font-size:28px; color:#0f172a; margin:0 0 20px 0; font-style:italic;">{{NAME}}</h2>
+          <p style="font-size:16px; color:#475569; font-family:sans-serif;">For outstanding contribution in</p>
+          <h3 style="font-size:20px; color:${template.primary_color || '#1e293b'}; margin:10px 0 30px 0; text-transform:uppercase;">{{AWARD_TYPE}}</h3>
+        </div>`;
   content = content.replace(/{{NAME}}/g, 'Recipient Name')
                    .replace(/{{EMAIL}}/g, 'recipient@example.com')
                    .replace(/{{ZONE}}/g, 'Sample Zone')
@@ -1647,7 +1657,7 @@ function setDefaultTemplate(id) {
         
         // Refresh local templates array & UI
         if (typeof fetchTemplates === 'function') {
-          await fetchTemplates();
+          await fetchTemplates(true);
         }
         
         // Refresh the preview to update button state
@@ -1755,10 +1765,10 @@ async function fetchTemplates(force = false) {
   }
   
   try {
-    const res = await fetch(`${API_URL}/api/certificates/get_templates.php`);
+    const res = await fetch(`${API_URL}/api/certificates/get_templates.php?t=${new Date().getTime()}`);
     const data = await res.json();
     if (data.success && data.templates.length > 0) {
-      allTemplates = data.templates;
+      allTemplates = data.templates.sort((a, b) => Number(b.is_default) - Number(a.is_default));
       templatesFetched = true;
       renderTemplatesUI(container, allTemplates);
     } else {
@@ -1770,46 +1780,80 @@ async function fetchTemplates(force = false) {
 }
 
 function renderTemplatesUI(container, templates) {
-  container.innerHTML = templates.map(t => {
-    const defaultBadge = t.is_default == 1 ? `<div style="position:absolute;top:10px;right:10px;z-index:5;"><span style="font-size:10px;padding:3px 8px;border-radius:12px;font-weight:700;background:#fef3c7;color:#d97706;">Default</span></div>` : '';
-    if (t.is_custom_html == 1) {
-      let encodedHtml = t.html_content ? t.html_content.replace(/"/g, '&quot;') : '';
-      // Render custom HTML template card with iframe preview
-      return `
-        <div class="admin-widget" onclick="openTemplatePreview(${t.id})" style="overflow:hidden;border:1px solid #bfdbfe;cursor:pointer;position:relative;">
-          ${defaultBadge}
-          <div style="height:130px;display:flex;align-items:center;justify-content:center;background:#f8fafc;position:relative;overflow:hidden;">
-             <div style="width:100%;height:300%;transform:scale(0.33);transform-origin:top center;pointer-events:none;">
-                <iframe srcdoc="${encodedHtml}" style="width:100%;height:100%;border:none;" scrolling="no"></iframe>
-             </div>
+  const dynamicCss = `
+    <style>
+      .template-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 12px; }
+      .template-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -8px rgba(0,0,0,0.15); border-color: #94a3b8 !important; z-index: 10; }
+      .template-card .action-overlay { opacity: 0; pointer-events: none; transition: all 0.3s ease; }
+      .template-card:hover .action-overlay { opacity: 1; pointer-events: auto; }
+      .template-card .iframe-wrap { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+      .template-card:hover .iframe-wrap { transform: scale(0.35) !important; }
+      .template-card .action-btn-icon { transform: translateY(10px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+      .template-card:hover .action-btn-icon { transform: translateY(0); }
+      .template-card .action-btn-icon:hover { transform: scale(1.1) translateY(0); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+    </style>
+  `;
+
+  const htmlContent = templates.map(t => {
+    const defaultBadge = t.is_default == 1 ? `
+      <div style="position:absolute;top:12px;right:12px;z-index:10;display:flex;align-items:center;gap:4px;background:rgba(245,158,11,0.15);backdrop-filter:blur(4px);border:1px solid rgba(245,158,11,0.3);color:#d97706;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+        <i class="ph-fill ph-star"></i> Default
+      </div>` : '';
+    
+    let html = t.html_content || `
+      <html>
+      <head>
+        <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/duotone/style.css">
+        <style>body{margin:0;padding:0;}</style>
+      </head>
+      <body>
+        <div style="width:100%; height:100vh; background:${t.bg_gradient || '#f8fafc'}; padding:40px; box-sizing:border-box; position:relative; font-family:'Georgia', serif; text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+          <div style="font-size:48px; color:${t.primary_color || '#1e293b'}; margin-bottom:10px;"><i class="${t.icon_class || 'ph-duotone ph-certificate'}"></i></div>
+          <h1 style="font-size:36px; color:${t.primary_color || '#1e293b'}; margin:0 0 10px 0; text-transform:uppercase; letter-spacing:2px;">${t.name || 'Certificate'}</h1>
+          <div style="width:100px; height:2px; background:${t.primary_color || '#1e293b'}; margin:0 auto 20px auto;"></div>
+          <p style="font-size:16px; color:#475569; font-family:sans-serif; margin-bottom:5px;">This is presented to</p>
+          <h2 style="font-size:28px; color:#0f172a; margin:0 0 20px 0; font-style:italic;">{{NAME}}</h2>
+          <p style="font-size:16px; color:#475569; font-family:sans-serif;">For outstanding contribution in</p>
+          <h3 style="font-size:20px; color:${t.primary_color || '#1e293b'}; margin:10px 0 30px 0; text-transform:uppercase;">{{AWARD_TYPE}}</h3>
+        </div>
+      </body>
+      </html>`;
+    
+    html = html.replace(/{{NAME}}/g, 'Recipient Name')
+               .replace(/{{AWARD_TYPE}}/g, t.award_type || 'Award Type')
+               .replace(/{{DATE}}/g, new Date().toLocaleDateString())
+               .replace(/{{ISSUER}}/g, 'Issuing Authority')
+               .replace(/{{ORGANIZATION}}/g, 'Organization');
+
+    let encodedHtml = html.replace(/"/g, '&quot;');
+    
+    // Render dynamic template card
+    return `
+      <div class="admin-widget template-card group" style="overflow:hidden;border:1px solid #e2e8f0;position:relative;background:#fff;cursor:default;">
+        ${defaultBadge}
+        <div style="height:140px;display:flex;align-items:center;justify-content:center;background:#f8fafc;position:relative;overflow:hidden;border-bottom:1px solid #e2e8f0;">
+           <div class="iframe-wrap" style="width:100%;height:300%;transform:scale(0.33);transform-origin:top center;pointer-events:none;">
+              <iframe srcdoc="${encodedHtml}" style="width:100%;height:100%;border:none;" scrolling="no"></iframe>
+           </div>
+           
+           <!-- Dynamic Hover Overlay -->
+           <div class="action-overlay" style="position:absolute;inset:0;background:rgba(15,23,42,0.65);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;gap:12px;z-index:20;">
+              <button class="action-btn-icon" onclick="openTemplatePreview(${t.id})" title="Preview" style="width:36px;height:36px;border-radius:50%;background:#fff;border:none;color:#0f172a;cursor:pointer;display:flex;align-items:center;justify-content:center;transition-delay:0.05s;"><i class="ph-bold ph-eye"></i></button>
+              <button class="action-btn-icon" onclick="editTemplate(${t.id})" title="Edit" style="width:36px;height:36px;border-radius:50%;background:#fff;border:none;color:#3b82f6;cursor:pointer;display:flex;align-items:center;justify-content:center;transition-delay:0.1s;"><i class="ph-bold ph-pencil-simple"></i></button>
+              <button class="action-btn-icon" onclick="deleteTemplate(${t.id})" title="Delete" style="width:36px;height:36px;border-radius:50%;background:#fff;border:none;color:#ef4444;cursor:pointer;display:flex;align-items:center;justify-content:center;transition-delay:0.15s;"><i class="ph-bold ph-trash"></i></button>
+           </div>
+        </div>
+        <div style="padding:16px;">
+          <div style="font-size:15px;font-weight:700;color:#0f172a;margin-bottom:6px;">${t.name}</div>
+          <div style="font-size:12px;color:#64748b;display:flex;justify-content:space-between;align-items:center;">
+             <span style="display:flex;align-items:center;gap:4px;"><i class="ph-duotone ph-tag"></i> ${t.award_type}</span>
+             <span style="font-weight:600;background:#f1f5f9;color:#475569;padding:3px 8px;border-radius:12px;">${t.usage_count || 0} Uses</span>
           </div>
-          <div style="padding:16px;border-top:1px solid var(--border);background:#fff;">
-            <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">${t.name}</div>
-            <div style="font-size:12px;color:var(--text3);">${t.award_type}</div>
-          </div>
-        </div>`;
-    } else {
-      // Render visual builder template card
-      return `
-        <div class="admin-widget" onclick="openTemplatePreview(${t.id})" style="overflow:hidden;border:1px solid var(--border);cursor:pointer;position:relative;">
-          ${defaultBadge}
-          <div style="height:130px;display:flex;align-items:center;justify-content:center;position:relative;background:${t.bg_gradient};">
-            <div style="text-align:center;">
-              <div style="font-family:'Georgia',serif;font-size:16px;color:${t.primary_color};margin-bottom:4px;font-weight:700;">${t.name}</div>
-              <div style="width:60px;height:1px;background:${t.primary_color};margin:0 auto 6px;"></div>
-              <div style="font-size:11px;color:var(--text2);text-transform:uppercase;">${t.award_type}</div>
-              <div style="margin-top:10px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.5);border:1px solid ${t.primary_color};display:flex;align-items:center;justify-content:center;margin-left:auto;margin-right:auto;">
-                <i class="${t.icon_class}" style="font-size:18px;color:${t.primary_color};"></i>
-              </div>
-            </div>
-          </div>
-          <div style="padding:16px;border-top:1px solid var(--border);background:#fff;">
-            <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">${t.name}</div>
-            <div style="font-size:12px;color:var(--text3);">${t.usage_count} Uses</div>
-          </div>
-        </div>`;
-    }
+        </div>
+      </div>`;
   }).join('');
+
+  container.innerHTML = dynamicCss + htmlContent;
 }
 
 async function loadTemplateSettings() {
