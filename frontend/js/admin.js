@@ -14,23 +14,52 @@ function togglePasswordVisibility() {
   }
 }
 
-function doAdminLogin() {
+async function doAdminLogin() {
   const e = document.getElementById('admin-email').value.trim();
   const p = document.getElementById('admin-pass').value.trim();
-  if (e === 'admin@surakshasetu.org' && p !== '') {
-    adminLoggedIn = true;
-    currentAdminPassword = p; // Store the entered password for API calls
-    sessionStorage.setItem('adminLoggedIn', 'true');
-    sessionStorage.setItem('adminPassword', p);
-    document.getElementById('admin-login-wrap').style.display = 'none';
-    document.getElementById('admin-dashboard').classList.add('active');
+  
+  if (!e || !p) {
+    showToast('Please enter both email and password.');
+    return;
+  }
+
+  const btn = document.querySelector('#login-form-card button');
+  const oldText = btn.innerHTML;
+  btn.innerHTML = 'Signing In...';
+  btn.disabled = true;
+
+  const formData = new FormData();
+  formData.append('email', e);
+  formData.append('password', p);
+
+  try {
+    const res = await fetch(`${API_URL}/api/admin_login.php`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
     
-    const parts = window.location.hash.substring(1).split('/');
-    const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : 'overview';
-    renderAdminDashboard(sub);
-    showToast('Welcome back, Admin!');
-  } else {
-    showToast('Invalid credentials. Please enter email and password.');
+    if (data.success) {
+      adminLoggedIn = true;
+      currentAdminPassword = p; // Store the entered password for API calls
+      sessionStorage.setItem('adminLoggedIn', 'true');
+      sessionStorage.setItem('adminPassword', p);
+      document.getElementById('admin-login-wrap').style.display = 'none';
+      document.getElementById('admin-dashboard').classList.add('active');
+      
+      const parts = window.location.hash.substring(1).split('/');
+      const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : 'overview';
+      renderAdminDashboard(sub);
+      showToast('Welcome back, Admin!');
+    } else {
+      showToast('❌ ' + data.message);
+    }
+  } catch (err) {
+    console.error(err);
+    showToast('❌ Login failed. Please check your connection.');
+  } finally {
+    btn.innerHTML = oldText;
+    btn.disabled = false;
   }
 }
 
@@ -1784,13 +1813,8 @@ function renderTemplatesUI(container, templates) {
     <style>
       .template-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 12px; }
       .template-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -8px rgba(0,0,0,0.15); border-color: #94a3b8 !important; z-index: 10; }
-      .template-card .action-overlay { opacity: 0; pointer-events: none; transition: all 0.3s ease; }
-      .template-card:hover .action-overlay { opacity: 1; pointer-events: auto; }
       .template-card .iframe-wrap { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
       .template-card:hover .iframe-wrap { transform: scale(0.35) !important; }
-      .template-card .action-btn-icon { transform: translateY(10px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-      .template-card:hover .action-btn-icon { transform: translateY(0); }
-      .template-card .action-btn-icon:hover { transform: scale(1.1) translateY(0); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
     </style>
   `;
 
@@ -1829,18 +1853,11 @@ function renderTemplatesUI(container, templates) {
     
     // Render dynamic template card
     return `
-      <div class="admin-widget template-card group" style="overflow:hidden;border:1px solid #e2e8f0;position:relative;background:#fff;cursor:default;">
+      <div class="admin-widget template-card group" onclick="openTemplatePreview(${t.id})" style="overflow:hidden;border:1px solid #e2e8f0;position:relative;background:#fff;cursor:pointer;">
         ${defaultBadge}
         <div style="height:140px;display:flex;align-items:center;justify-content:center;background:#f8fafc;position:relative;overflow:hidden;border-bottom:1px solid #e2e8f0;">
            <div class="iframe-wrap" style="width:100%;height:300%;transform:scale(0.33);transform-origin:top center;pointer-events:none;">
               <iframe srcdoc="${encodedHtml}" style="width:100%;height:100%;border:none;" scrolling="no"></iframe>
-           </div>
-           
-           <!-- Dynamic Hover Overlay -->
-           <div class="action-overlay" style="position:absolute;inset:0;background:rgba(15,23,42,0.65);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;gap:12px;z-index:20;">
-              <button class="action-btn-icon" onclick="openTemplatePreview(${t.id})" title="Preview" style="width:36px;height:36px;border-radius:50%;background:#fff;border:none;color:#0f172a;cursor:pointer;display:flex;align-items:center;justify-content:center;transition-delay:0.05s;"><i class="ph-bold ph-eye"></i></button>
-              <button class="action-btn-icon" onclick="editTemplate(${t.id})" title="Edit" style="width:36px;height:36px;border-radius:50%;background:#fff;border:none;color:#3b82f6;cursor:pointer;display:flex;align-items:center;justify-content:center;transition-delay:0.1s;"><i class="ph-bold ph-pencil-simple"></i></button>
-              <button class="action-btn-icon" onclick="deleteTemplate(${t.id})" title="Delete" style="width:36px;height:36px;border-radius:50%;background:#fff;border:none;color:#ef4444;cursor:pointer;display:flex;align-items:center;justify-content:center;transition-delay:0.15s;"><i class="ph-bold ph-trash"></i></button>
            </div>
         </div>
         <div style="padding:16px;">
