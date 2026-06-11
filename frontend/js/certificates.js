@@ -179,60 +179,71 @@ async function loadMembers() {
     } catch(e) { console.error('Failed to load members', e); }
 }
 
-async function loadTemplates() {
+let templatesLoadedInCert = false;
+
+async function loadTemplates(force = false) {
+    if (!force && templatesLoadedInCert && certTemplates.length > 0) {
+        renderTemplatesGrid();
+        populateTemplateDropdowns();
+        return;
+    }
     try {
         const res = await fetch(API_URL + '/api/certificates/get_templates.php');
         const data = await res.json();
         if (data.success) {
             certTemplates = data.templates || data.data || [];
+            templatesLoadedInCert = true;
             renderTemplatesGrid();
-            
-            // Populate types dropdown
-            const typeSelect = document.getElementById('cert-type');
-            const filterTypeSelect = document.getElementById('cert-filter-type');
-            
-            if (typeSelect) {
-                typeSelect.innerHTML = '<option value="">— Select Type —</option>';
-                certTemplates.forEach(t => {
-                    typeSelect.innerHTML += `<option value="${t.award_type}" data-tid="${t.id}">${t.award_type}</option>`;
-                });
-                
-                if (!typeSelect.dataset.listenerBound) {
-                    typeSelect.addEventListener('change', (e) => {
-                        // Update preview style based on selected template
-                        const opt = e.target.options[e.target.selectedIndex];
-                        if (opt) {
-                            const tid = opt.getAttribute('data-tid');
-                            if (tid) applyTemplateToPreview(tid);
-                        }
-                    });
-                    typeSelect.dataset.listenerBound = 'true';
-                }
-
-                if (typeof refreshCustomSelect === 'function') {
-                    refreshCustomSelect(typeSelect);
-                }
-            }
-            if (filterTypeSelect) {
-                filterTypeSelect.innerHTML = '<option value="All">All types</option>';
-                certTemplates.forEach(t => {
-                    filterTypeSelect.innerHTML += `<option value="${t.award_type}">${t.award_type}</option>`;
-                });
-                if (typeof refreshCustomSelect === 'function') {
-                    refreshCustomSelect(filterTypeSelect);
-                }
-            }
-            
-            // Apply default template to preview
-            const defaultTmpl = certTemplates.find(t => t.is_default == 1);
-            if (defaultTmpl && typeSelect) {
-                typeSelect.value = defaultTmpl.award_type;
-                typeSelect.dispatchEvent(new Event('change'));
-                typeSelect.dispatchEvent(new Event('input'));
-                applyTemplateToPreview(defaultTmpl.id);
-            }
+            populateTemplateDropdowns();
         }
     } catch(e) { console.error('Failed to load templates', e); }
+}
+
+function populateTemplateDropdowns() {
+    // Populate types dropdown
+    const typeSelect = document.getElementById('cert-type');
+    const filterTypeSelect = document.getElementById('cert-filter-type');
+    
+    if (typeSelect) {
+        typeSelect.innerHTML = '<option value="">— Select Type —</option>';
+        certTemplates.forEach(t => {
+            typeSelect.innerHTML += `<option value="${t.award_type}" data-tid="${t.id}">${t.award_type}</option>`;
+        });
+        
+        if (!typeSelect.dataset.listenerBound) {
+            typeSelect.addEventListener('change', (e) => {
+                // Update preview style based on selected template
+                const opt = e.target.options[e.target.selectedIndex];
+                if (opt) {
+                    const tid = opt.getAttribute('data-tid');
+                    if (tid) applyTemplateToPreview(tid);
+                }
+            });
+            typeSelect.dataset.listenerBound = 'true';
+        }
+
+        if (typeof refreshCustomSelect === 'function') {
+            refreshCustomSelect(typeSelect);
+        }
+    }
+    if (filterTypeSelect) {
+        filterTypeSelect.innerHTML = '<option value="All">All types</option>';
+        certTemplates.forEach(t => {
+            filterTypeSelect.innerHTML += `<option value="${t.award_type}">${t.award_type}</option>`;
+        });
+        if (typeof refreshCustomSelect === 'function') {
+            refreshCustomSelect(filterTypeSelect);
+        }
+    }
+    
+    // Apply default template to preview
+    const defaultTmpl = certTemplates.find(t => t.is_default == 1);
+    if (defaultTmpl && typeSelect) {
+        typeSelect.value = defaultTmpl.award_type;
+        typeSelect.dispatchEvent(new Event('change'));
+        typeSelect.dispatchEvent(new Event('input'));
+        applyTemplateToPreview(defaultTmpl.id);
+    }
 }
 
 function applyTemplateToPreview(templateId) {

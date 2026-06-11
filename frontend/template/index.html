@@ -4383,8 +4383,8 @@
         </div>
         <div style="width: 1px; height: 24px; background: var(--border);"></div>
         <button class="action-btn" onclick="closeTemplateBuilder()">Cancel</button>
-        <button class="btn-primary" onclick="saveTemplateBuilder()"
-          style="padding: 8px 20px; border-radius: 8px; font-size: 14px;">Save Template</button>
+        <button id="btn-save-template" class="btn-primary" onclick="saveTemplateBuilder()"
+          style="padding: 8px 20px; border-radius: 8px; font-size: 14px; min-width: 140px;">Save Template</button>
       </div>
     </div>
 
@@ -4433,16 +4433,7 @@
 
       <!-- Right: Preview Pane -->
       <div style="width: 50%; display: flex; flex-direction: column; background: #e2e8f0; position: relative;">
-        <!-- Preview Controls -->
-        <div
-          style="position: absolute; top: 16px; left: 50%; transform: translateX(-50%); background: #fff; border-radius: 8px; box-shadow: var(--shadow1); display: flex; padding: 4px; z-index: 10;">
-          <button id="btn-preview-desktop" onclick="setBuilderPreviewMode('desktop')"
-            style="padding: 6px 12px; background: var(--bg3); color: var(--text); border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;"><i
-              class="ph-duotone ph-desktop"></i> Desktop</button>
-          <button id="btn-preview-mobile" onclick="setBuilderPreviewMode('mobile')"
-            style="padding: 6px 12px; background: transparent; color: var(--text3); border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;"><i
-              class="ph-duotone ph-device-mobile"></i> Mobile</button>
-        </div>
+        <!-- Preview Controls removed -->
 
         <!-- Preview Canvas -->
         <div style="flex: 1; overflow: auto; padding: 80px 24px 24px;">

@@ -58,6 +58,8 @@ function adminLogout() {
 async function renderAdminDashboard(initialView = 'overview') {
   // Only fetch if empty, otherwise use currentReports to prevent slow UI
   if (currentReports.length === 0) await fetchReports();
+  if (!templatesFetched) fetchTemplates(); // preload templates for instant loading
+
   const total = currentReports.length;
   const resolved = currentReports.filter(r => r.status === 'Resolved').length;
   const inprog = currentReports.filter(r => r.status === 'In Progress').length;
@@ -1350,21 +1352,7 @@ function insertBuilderVariable(variable) {
 }
 
 function setBuilderPreviewMode(mode) {
-  const wrapper = document.getElementById('preview-wrapper');
-  if (mode === 'mobile') {
-    wrapper.classList.add('mobile-mode');
-    document.getElementById('btn-preview-mobile').style.background = 'var(--bg3)';
-    document.getElementById('btn-preview-mobile').style.color = 'var(--text)';
-    document.getElementById('btn-preview-desktop').style.background = 'transparent';
-    document.getElementById('btn-preview-desktop').style.color = 'var(--text3)';
-  } else {
-    wrapper.classList.remove('mobile-mode');
-    document.getElementById('btn-preview-desktop').style.background = 'var(--bg3)';
-    document.getElementById('btn-preview-desktop').style.color = 'var(--text)';
-    document.getElementById('btn-preview-mobile').style.background = 'transparent';
-    document.getElementById('btn-preview-mobile').style.color = 'var(--text3)';
-  }
-  updatePreviewScale();
+  // Mode toggling logic removed, single responsive mode enforced.
 }
 
 function updatePreviewScale() {
@@ -1372,21 +1360,21 @@ function updatePreviewScale() {
   const scaleContainer = document.getElementById('preview-scale-container');
   if (!wrapper || !scaleContainer) return;
   const container = scaleContainer.parentElement;
-  if (!wrapper.classList.contains('mobile-mode')) {
-    // Desktop scale
-    const availableWidth = container.clientWidth - 48;
-    const availableHeight = container.clientHeight - 100;
-    const scaleX = availableWidth / 794;
-    const scaleY = availableHeight / 1123;
-    const scale = Math.max(0.3, Math.min(scaleX, scaleY, 1));
-    wrapper.style.transform = `scale(${scale})`;
-    scaleContainer.style.width = `${794 * scale}px`;
-    scaleContainer.style.height = `${1123 * scale}px`;
-  } else {
-    wrapper.style.transform = 'scale(1)';
-    scaleContainer.style.width = `375px`;
-    scaleContainer.style.height = `667px`;
-  }
+
+  const availableWidth = container.clientWidth - 48;
+  const availableHeight = container.clientHeight - 100;
+  // Use standard certificate size (A4 Landscape 1123x794)
+  const baseWidth = 1123;
+  const baseHeight = 794;
+  const scaleX = availableWidth / baseWidth;
+  const scaleY = availableHeight / baseHeight;
+  const scale = Math.max(0.3, Math.min(scaleX, scaleY, 1));
+
+  wrapper.style.transform = `scale(${scale})`;
+  scaleContainer.style.width = `${baseWidth * scale}px`;
+  scaleContainer.style.height = `${baseHeight * scale}px`;
+  wrapper.style.width = `${baseWidth}px`;
+  wrapper.style.height = `${baseHeight}px`;
 }
 
 window.addEventListener('resize', () => {
@@ -1433,6 +1421,7 @@ document.addEventListener('click', function(e) {
 async function saveTemplateBuilder() {
   const name = document.getElementById('builder-tpl-name').value;
   const awardType = document.getElementById('builder-tpl-award').value;
+  const saveBtn = document.getElementById('btn-save-template');
   
   if (!name || !awardType) {
     return showToast('⚠️ Fill Template Name and Award Type');
@@ -1447,6 +1436,12 @@ async function saveTemplateBuilder() {
   
   if (!htmlContent) {
     return showToast('⚠️ Template content cannot be empty');
+  }
+  
+  // Disable button to prevent duplicates
+  if (saveBtn) {
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = '<i class="ph-duotone ph-spinner animate-spin"></i> Saving...';
   }
   
   const formData = new FormData();
@@ -1473,15 +1468,18 @@ async function saveTemplateBuilder() {
     if (data.success) {
       showToast('✅ Template Saved!');
       closeTemplateBuilder();
-      if (typeof fetchTemplates === 'function') {
-        fetchTemplates();
-      }
+      fetchTemplates(true); // Force refresh
     } else {
       showToast('❌ Failed: ' + data.message);
     }
   } catch (e) {
     console.error(e);
     showToast('❌ Error saving template');
+  } finally {
+    if (saveBtn) {
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = 'Save Template';
+    }
   }
 }
 
@@ -1745,55 +1743,73 @@ function deleteTemplate(id) {
 });
 }
 
-async function fetchTemplates() {
+let templatesFetched = false;
+
+async function fetchTemplates(force = false) {
   const container = document.getElementById('cert-templates-container');
   if (!container) return;
+  
+  if (!force && templatesFetched && allTemplates.length > 0) {
+    renderTemplatesUI(container, allTemplates);
+    return;
+  }
+  
   try {
     const res = await fetch(`${API_URL}/api/certificates/get_templates.php`);
     const data = await res.json();
     if (data.success && data.templates.length > 0) {
       allTemplates = data.templates;
-      container.innerHTML = data.templates.map(t => {
-        if (t.is_custom_html == 1) {
-          // Render custom HTML template card
-          return `
-            <div class="admin-widget" onclick="openTemplatePreview(${t.id})" style="overflow:hidden;border:1px solid #bfdbfe;cursor:pointer;">
-              <div style="height:130px;display:flex;align-items:center;justify-content:center;background:#f8fafc;position:relative;">
-                <div style="font-family:monospace;font-size:12px;color:var(--text3);"><i class="ph-duotone ph-code" style="font-size:24px;"></i><br>Custom HTML Template</div>
-              </div>
-              <div style="padding:16px;border-top:1px solid var(--border);background:#fff;">
-                <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">${t.name}</div>
-                <div style="font-size:12px;color:var(--text3);">${t.award_type}</div>
-              </div>
-            </div>`;
-        } else {
-          // Render visual builder template card
-          return `
-            <div class="admin-widget" onclick="openTemplatePreview(${t.id})" style="overflow:hidden;border:1px solid var(--border);cursor:pointer;">
-              <div style="height:130px;display:flex;align-items:center;justify-content:center;position:relative;background:${t.bg_gradient};">
-                <div style="text-align:center;">
-                  <div style="font-family:'Georgia',serif;font-size:16px;color:${t.primary_color};margin-bottom:4px;font-weight:700;">${t.name}</div>
-                  <div style="width:60px;height:1px;background:${t.primary_color};margin:0 auto 6px;"></div>
-                  <div style="font-size:11px;color:var(--text2);text-transform:uppercase;">${t.award_type}</div>
-                  <div style="margin-top:10px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.5);border:1px solid ${t.primary_color};display:flex;align-items:center;justify-content:center;margin-left:auto;margin-right:auto;">
-                    <i class="${t.icon_class}" style="font-size:18px;color:${t.primary_color};"></i>
-                  </div>
-                </div>
-                ${t.is_default == 1 ? `<div style="position:absolute;top:10px;right:10px;"><span style="font-size:10px;padding:3px 8px;border-radius:12px;font-weight:700;background:#fef3c7;color:#d97706;">Default</span></div>` : ''}
-              </div>
-              <div style="padding:16px;border-top:1px solid var(--border);background:#fff;">
-                <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">${t.name}</div>
-                <div style="font-size:12px;color:var(--text3);">${t.usage_count} Uses</div>
-              </div>
-            </div>`;
-        }
-      }).join('');
+      templatesFetched = true;
+      renderTemplatesUI(container, allTemplates);
     } else {
       container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text3);">No templates found. Create one to get started!</div>';
     }
   } catch (e) {
     console.error("Error fetching templates", e);
   }
+}
+
+function renderTemplatesUI(container, templates) {
+  container.innerHTML = templates.map(t => {
+    const defaultBadge = t.is_default == 1 ? `<div style="position:absolute;top:10px;right:10px;z-index:5;"><span style="font-size:10px;padding:3px 8px;border-radius:12px;font-weight:700;background:#fef3c7;color:#d97706;">Default</span></div>` : '';
+    if (t.is_custom_html == 1) {
+      let encodedHtml = t.html_content ? t.html_content.replace(/"/g, '&quot;') : '';
+      // Render custom HTML template card with iframe preview
+      return `
+        <div class="admin-widget" onclick="openTemplatePreview(${t.id})" style="overflow:hidden;border:1px solid #bfdbfe;cursor:pointer;position:relative;">
+          ${defaultBadge}
+          <div style="height:130px;display:flex;align-items:center;justify-content:center;background:#f8fafc;position:relative;overflow:hidden;">
+             <div style="width:100%;height:300%;transform:scale(0.33);transform-origin:top center;pointer-events:none;">
+                <iframe srcdoc="${encodedHtml}" style="width:100%;height:100%;border:none;" scrolling="no"></iframe>
+             </div>
+          </div>
+          <div style="padding:16px;border-top:1px solid var(--border);background:#fff;">
+            <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">${t.name}</div>
+            <div style="font-size:12px;color:var(--text3);">${t.award_type}</div>
+          </div>
+        </div>`;
+    } else {
+      // Render visual builder template card
+      return `
+        <div class="admin-widget" onclick="openTemplatePreview(${t.id})" style="overflow:hidden;border:1px solid var(--border);cursor:pointer;position:relative;">
+          ${defaultBadge}
+          <div style="height:130px;display:flex;align-items:center;justify-content:center;position:relative;background:${t.bg_gradient};">
+            <div style="text-align:center;">
+              <div style="font-family:'Georgia',serif;font-size:16px;color:${t.primary_color};margin-bottom:4px;font-weight:700;">${t.name}</div>
+              <div style="width:60px;height:1px;background:${t.primary_color};margin:0 auto 6px;"></div>
+              <div style="font-size:11px;color:var(--text2);text-transform:uppercase;">${t.award_type}</div>
+              <div style="margin-top:10px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.5);border:1px solid ${t.primary_color};display:flex;align-items:center;justify-content:center;margin-left:auto;margin-right:auto;">
+                <i class="${t.icon_class}" style="font-size:18px;color:${t.primary_color};"></i>
+              </div>
+            </div>
+          </div>
+          <div style="padding:16px;border-top:1px solid var(--border);background:#fff;">
+            <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">${t.name}</div>
+            <div style="font-size:12px;color:var(--text3);">${t.usage_count} Uses</div>
+          </div>
+        </div>`;
+    }
+  }).join('');
 }
 
 async function loadTemplateSettings() {
