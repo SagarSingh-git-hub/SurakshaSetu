@@ -37,7 +37,16 @@ async function doAdminLogin() {
       method: 'POST',
       body: formData
     });
-    const data = await res.json();
+    
+    const text = await res.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseErr) {
+      console.error('Failed to parse response JSON:', text);
+      showToast('❌ Server error. Received invalid response.');
+      return;
+    }
     
     if (data.success) {
       adminLoggedIn = true;
@@ -52,7 +61,8 @@ async function doAdminLogin() {
       renderAdminDashboard(sub);
       showToast('Welcome back, Admin!');
     } else {
-      showToast('❌ ' + data.message);
+      const msg = data.message || data.error || 'Invalid credentials';
+      showToast(msg.startsWith('❌') ? msg : '❌ ' + msg);
     }
   } catch (err) {
     console.error(err);
