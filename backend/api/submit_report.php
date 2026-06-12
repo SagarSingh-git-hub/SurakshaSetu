@@ -69,39 +69,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $saved_photos = [];
         
-        // Handle Photo Uploads via Cloudinary
+        // Handle Photo Uploads via Cloudflare R2
         if (isset($_POST['photos']) && is_array($_POST['photos'])) {
-            // Load Cloudinary config if available
-            require_once __DIR__ . '/../cloudinary_config.php';
+            require_once __DIR__ . '/StorageService.php';
+            $storage = new \App\Services\StorageService();
             
             foreach ($_POST['photos'] as $base64_string) {
                 $uploaded_successfully = false;
-                $uploadApiClass = '\Cloudinary\Api\Upload\UploadApi';
-                if (class_exists($uploadApiClass)) {
-                    try {
-                        $uploadApi = new $uploadApiClass();
-                        $upload_result = $uploadApi->upload($base64_string, [
-                            'folder' => 'suraksha-setu/reports',
-                            'quality' => 'auto',
-                            'fetch_format' => 'auto'
-                        ]);
+                
+                if ($storage->isConfigured()) {
+                    // Determine file extension
+                    $ext = 'jpg';
+                    if (preg_match('/^data:image\/(\w+);base64,/', $base64_string, $type)) {
+                        $ext = strtolower($type[1]);
+                        if ($ext === 'jpeg') $ext = 'jpg';
+                    }
+                    
+                    $uniq = uniqid();
+                    $objectKey = "reports/{$report_id}/photo_{$uniq}.{$ext}";
+                    
+                    $uploadResult = $storage->uploadBase64($base64_string, $objectKey);
+                    
+                    if ($uploadResult) {
+                        $db_filepath = $uploadResult['url']; // Using URL in photo_path for compatibility
+                        $saved_photos[] = $db_filepath;
                         
-                        if (isset($upload_result['secure_url'])) {
-                            $db_filepath = $upload_result['secure_url'];
-                            $saved_photos[] = $db_filepath;
-                            
-                            $photo_stmt = $conn->prepare("INSERT INTO report_photos (report_id, photo_path) VALUES (?, ?)");
-                            $photo_stmt->bind_param("ss", $report_id, $db_filepath);
-                            $photo_stmt->execute();
-                            $photo_stmt->close();
-                            $uploaded_successfully = true;
-                        }
-                    } catch (\Exception $e) {
-                        error_log("Cloudinary Upload Failed: " . $e->getMessage());
+                        $photo_stmt = $conn->prepare("INSERT INTO report_photos (report_id, photo_path, object_key, mime_type, file_size) VALUES (?, ?, ?, ?, ?)");
+                        $photo_stmt->bind_param("ssssi", $report_id, $db_filepath, $uploadResult['object_key'], $uploadResult['mime_type'], $uploadResult['file_size']);
+                        $photo_stmt->execute();
+                        $photo_stmt->close();
+                        $uploaded_successfully = true;
                     }
                 }
                 
-                // Fallback to local storage if Cloudinary SDK is missing or upload failed
+                // Fallback to local storage if R2 is not configured or upload failed
                 if (!$uploaded_successfully) {
                     $upload_dir = __DIR__ . '/../uploads/';
                     if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);

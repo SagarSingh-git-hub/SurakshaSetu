@@ -18,6 +18,11 @@ CREATE TABLE IF NOT EXISTS report_photos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     report_id VARCHAR(20) NOT NULL,
     photo_path VARCHAR(255) NOT NULL,
+    object_key VARCHAR(255) DEFAULT NULL,
+    original_filename VARCHAR(255) DEFAULT NULL,
+    mime_type VARCHAR(50) DEFAULT NULL,
+    file_size INT DEFAULT NULL,
+    uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (report_id) REFERENCES reports(report_id) ON DELETE CASCADE
 );
 
