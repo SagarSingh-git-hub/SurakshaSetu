@@ -3,9 +3,12 @@ FROM php:8.2-apache
 # Enable Apache mod_rewrite for nice URLs and CORS
 RUN a2enmod rewrite
 
-# Install MySQL and cURL extensions (cURL is needed for Pusher)
-RUN apt-get update && apt-get install -y libcurl4-openssl-dev
+# Install MySQL, cURL, unzip, git extensions
+RUN apt-get update && apt-get install -y libcurl4-openssl-dev unzip git
 RUN docker-php-ext-install mysqli pdo pdo_mysql curl
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Change Apache document root to the working directory
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/backend
@@ -23,6 +26,9 @@ RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/a
 
 # Copy everything into the backend directory
 COPY . /var/www/html/backend/
+
+# Run Composer Install
+RUN cd /var/www/html/backend && composer install --no-dev --optimize-autoloader
 
 # Create uploads directory and give it write permissions so users can upload photos
 RUN mkdir -p /var/www/html/backend/uploads && chmod 777 /var/www/html/backend/uploads
