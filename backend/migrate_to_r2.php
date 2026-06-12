@@ -15,11 +15,7 @@ use App\Services\StorageService;
 
 $storage = new StorageService();
 
-if (!$storage->isConfigured()) {
-    die("R2 is not configured. Please set R2 environment variables.\n");
-}
-
-echo "Starting migration to Cloudflare R2...\n";
+echo "Checking database schema...\n";
 
 // 1. Ensure columns exist
 $checkColsSql = "SHOW COLUMNS FROM report_photos LIKE 'object_key'";
@@ -33,7 +29,14 @@ if ($result->num_rows == 0) {
                  ADD COLUMN file_size INT DEFAULT NULL,
                  ADD COLUMN uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP";
     $conn->query($alterSql);
+    echo "Database schema updated successfully.\n";
 }
+
+if (!$storage->isConfigured()) {
+    die("R2 is not configured. Please set R2 environment variables to continue data migration.\n");
+}
+
+echo "Starting migration to Cloudflare R2...\n";
 
 // 2. Fetch all photos that haven't been migrated yet (object_key is NULL)
 $sql = "SELECT id, report_id, photo_path FROM report_photos WHERE object_key IS NULL OR object_key = ''";
