@@ -10,9 +10,9 @@ use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 
 class StorageService {
-    private $s3Client;
-    private $bucket;
-    private $publicUrl;
+    private ?S3Client $s3Client = null;
+    private ?string $bucket = null;
+    private ?string $publicUrl = null;
 
     public function __construct() {
         $accountId = getenv('R2_ACCOUNT_ID');
@@ -89,7 +89,7 @@ class StorageService {
     /**
      * Generates the public CDN URL for an object key
      */
-    public function getPublicUrl($objectKey) {
+    public function getPublicUrl(string $objectKey) {
         if (!$this->publicUrl || empty($objectKey)) {
             return $objectKey; // return as is if it's already an absolute URL or local path
         }
