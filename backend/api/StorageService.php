@@ -10,7 +10,8 @@ use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 
 class StorageService {
-    private ?S3Client $s3Client = null;
+    /** @var \Aws\S3\S3Client|null */
+    private $s3Client = null;
     private ?string $bucket = null;
     private ?string $publicUrl = null;
 
@@ -21,8 +22,8 @@ class StorageService {
         $this->bucket = getenv('R2_BUCKET');
         $this->publicUrl = getenv('R2_PUBLIC_URL'); // e.g., https://pub-xxxxxxxx.r2.dev
 
-        if ($accountId && $accessKeyId && $secretAccessKey && $this->bucket && class_exists(S3Client::class)) {
-            $this->s3Client = new S3Client([
+        if ($accountId && $accessKeyId && $secretAccessKey && $this->bucket && class_exists('\Aws\S3\S3Client')) {
+            $this->s3Client = new \Aws\S3\S3Client([
                 'region' => 'auto',
                 'endpoint' => "https://{$accountId}.r2.cloudflarestorage.com",
                 'version' => 'latest',
@@ -38,7 +39,37 @@ class StorageService {
      * @return bool True if R2 credentials are fully provided and initialized
      */
     public function isConfigured() {
-        return $this->s3Client !== null;
+        return $this->s3Client !== null && !empty($this->bucket);
+    }
+
+    /**
+     * Uploads a file to Cloudflare R2
+     * @param string $sourceFile Local file path
+     * @param string $objectKey Path in R2 (e.g. 'uploads/image.jpg')
+     * @param string $mimeType MIME type of the file
+     * @return array|false Returns ['url' => ..., 'key' => ...] on success, false on failure
+     */
+    public function uploadFile($sourceFile, $objectKey, $mimeType = 'application/octet-stream') {
+        if (!$this->isConfigured()) return false;
+
+        try {
+            $result = $this->s3Client->putObject([
+                'Bucket' => $this->bucket,
+                'Key' => ltrim($objectKey, '/'),
+                'SourceFile' => $sourceFile,
+                'ContentType' => $mimeType,
+                // R2 doesn't use ACLs the same way S3 does, usually public access is managed at bucket level
+            ]);
+
+            return [
+                'key' => $objectKey,
+                'url' => rtrim($this->publicUrl, '/') . '/' . ltrim($objectKey, '/')
+            ];
+
+        } catch (\Exception $e) {
+            error_log("R2 Upload Failed: " . $e->getMessage());
+            return false;
+        }
     }
 
     /**
