@@ -964,43 +964,9 @@ textarea.form-input{resize:vertical;min-height:100px}
     padding: 32px 24px;
   }
 
-  /* Mobile Bottom Navigation Bar */
+  /* Hide Navigation Tabs on Mobile completely */
   .nav-tabs {
-    display: flex !important;
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    transform: none !important;
-    width: 100% !important;
-    height: 60px !important;
-    background: rgba(255, 255, 255, 0.96) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border-top: 1px solid var(--border) !important;
-    border-radius: 0 !important;
-    justify-content: space-around !important;
-    align-items: center !important;
-    padding: 0 !important;
-    z-index: 9999 !important;
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.08) !important;
-  }
-  .nav-tab {
-    flex: 1 !important;
-    height: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: 10px !important;
-    font-weight: 700 !important;
-    color: var(--text3) !important;
-    padding: 0 !important;
-    gap: 3px !important;
-  }
-  .nav-tab.active {
-    color: var(--g700) !important;
-    background: transparent !important;
+    display: none !important;
   }
   .nav-indicator {
     display: none !important;
@@ -1031,7 +997,7 @@ textarea.form-input{resize:vertical;min-height:100px}
   }
   .admin-content-wrap {
     margin-left: 0 !important;
-    padding: 24px 16px 80px !important; /* spacing for top navbar and bottom nav */
+    padding: 24px 16px 24px !important; /* spacing for top navbar */
   }
   
   /* Sidebar toggle button styling */
@@ -1039,7 +1005,7 @@ textarea.form-input{resize:vertical;min-height:100px}
     display: flex;
     position: fixed;
     left: 16px;
-    bottom: 76px; /* Positioned above the bottom navigation bar */
+    bottom: 24px; /* Positioned at bottom left */
     width: 48px;
     height: 48px;
     border-radius: 50%;
