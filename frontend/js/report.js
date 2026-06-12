@@ -437,8 +437,32 @@ async function submitReport() {
       if (sd4) sd4.classList.add('done', 'active');
       showToast('🌿 Report submitted successfully!');
 
-      // Re-fetch reports so map is updated
-      await fetchReports();
+      // Add optimistic report to UI with local base64 photos
+      const newReport = {
+        id: id,
+        cat: formData.category,
+        loc: formData.locStr,
+        lat: formData.lat,
+        lng: formData.lng,
+        desc: formData.desc,
+        status: 'Reported',
+        priority: 'Medium',
+        date: new Date().toISOString().split('T')[0],
+        photos: formData.photos.length,
+        photo_urls: [...formData.photos], // Local base64
+        tags: ['new'],
+        reporter: 'Anonymous',
+        device_id: deviceId
+      };
+      
+      const existingIdx = currentReports.findIndex(r => r.id === id);
+      if (existingIdx !== -1) currentReports.splice(existingIdx, 1);
+      currentReports.unshift(newReport);
+      notifyReportsUpdated();
+      
+      // We do NOT call fetchReports() here because the background Cloudinary upload 
+      // is still running. If we fetch now, the DB will return 0 photos.
+      // Pusher will send the updated Cloudinary URLs in a few seconds.
     } else {
       showToast('Error: ' + data.error);
       if (btn) { btn.textContent = '🌿 Submit Report'; btn.disabled = false; }

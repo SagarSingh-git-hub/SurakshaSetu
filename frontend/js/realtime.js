@@ -20,8 +20,15 @@ if (PUSHER_KEY !== 'YOUR_APP_KEY') {
         // Show a non-intrusive notification
         showToast('📍 New report added nearby!');
         
-        // Add to global array
-        currentReports.unshift(data);
+        // Check if optimistic report already exists (e.g. we just submitted it)
+        const existingIdx = currentReports.findIndex(r => r.id === data.id);
+        if (existingIdx !== -1) {
+            // Replace the optimistic report with the real one from Pusher (which has Cloudinary URLs)
+            currentReports[existingIdx] = data;
+        } else {
+            // Add to global array
+            currentReports.unshift(data);
+        }
         
         // Update Map if active
         if (typeof mainMap !== 'undefined' && mapInit) {
