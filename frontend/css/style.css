@@ -77,9 +77,21 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;backdrop-filter:blur(20px) 
 .hero-stat-label{font-size:9px;color:var(--text2);font-weight:800;text-transform:uppercase;letter-spacing:0.5px;line-height:1.2;font-family:'Outfit',sans-serif}
 /* 3D Globe */
 .hero-visual{position:absolute;right:0;top:0;bottom:0;width:50%;display:flex;align-items:center;justify-content:center;pointer-events:none}
-#globe-canvas{width:520px;height:520px;max-width:calc(100vw - 640px)}
-.hero-globe{position:relative;width:520px;height:520px;max-width:100%;max-height:100%;display:flex;align-items:center;justify-content:center;z-index:2;transform-style:preserve-3d;perspective:1000px}
-#hero-globe-wrapper canvas{display:block;max-width:100%;max-height:100%}
+#globe-canvas{width:750px;height:750px;max-width:none}
+.hero-globe{position:relative;width:750px;height:750px;max-width:none;max-height:none;display:flex;align-items:center;justify-content:center;z-index:2;transform-style:preserve-3d;perspective:1000px}
+#hero-globe-wrapper canvas{display:block;max-width:none;max-height:none}
+
+/* Scroll Reveal Classes */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+  will-change: opacity, transform;
+}
+.reveal-up.reveal-active {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 /* Admin login 3D canvas — prevent layout gaps from inline canvas */
 #login-3d-canvas{overflow:hidden}

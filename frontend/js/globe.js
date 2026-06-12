@@ -26,7 +26,7 @@ function initGlobe() {
 
   globeScene = new THREE.Scene();
   globeCamera = new THREE.PerspectiveCamera(45, W / H, 0.1, 1000);
-  globeCamera.position.z = 320; // Pulled back a little for better view
+  globeCamera.position.z = 280; // Pulled back a little for better view (adjusted for larger size)
 
   globeRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
   globeRenderer.setSize(W, H);
@@ -169,6 +169,7 @@ function initGlobe() {
     // Rotate core elements
     globeGroup.rotation.y += 0.0015;
     globeGroup.rotation.x = Math.sin(time * 0.3) * 0.1; // Gentle rocking
+    globeGroup.position.y = Math.sin(time * 1.5) * 5; // Floating effect
     
     // Rotate layers independently for parallax
     icosahedron.rotation.y -= 0.0005;

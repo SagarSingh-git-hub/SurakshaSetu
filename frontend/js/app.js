@@ -391,6 +391,7 @@ function resetHomeVisibility() {
       el.style.removeProperty('opacity');
       el.style.removeProperty('transform');
       el.style.removeProperty('visibility');
+      el.classList.remove('reveal-up', 'reveal-active');
     });
   });
 }
@@ -457,28 +458,45 @@ function animateHeroSection(isRevisit = false) {
 }
 
 function initHomeScrollReveal(isRevisit = false) {
-  if (typeof ScrollReveal === 'undefined') return;
+  const selectors = [
+    '#page-home section h2',
+    '#page-home section > p',
+    '#page-home .step-card',
+    '#page-home .cat-card',
+    '#page-home .testimonial-card'
+  ];
+  const elements = document.querySelectorAll(selectors.join(', '));
 
-  if (isRevisit) return;
-
-  if (!window.sr) {
-    window.sr = ScrollReveal({
-      distance: '40px',
-      duration: 800,
-      easing: 'cubic-bezier(0.25, 0.8, 0.25, 1)',
-      opacity: 1,
-      scale: 0.98,
-      viewFactor: 0.15,
-      mobile: true
+  if (isRevisit) {
+    elements.forEach(el => {
+      el.classList.remove('reveal-up');
+      el.style.opacity = '1';
+      el.style.transform = 'none';
     });
+    return;
   }
 
-  window.sr.reveal('#page-home section h2', { origin: 'left' });
-  window.sr.reveal('#page-home section > p', { delay: 80, origin: 'left' });
-  window.sr.reveal('#page-home .step-card', { interval: 120, origin: 'bottom' });
-  window.sr.reveal('#page-home .cat-card', { interval: 80, origin: 'bottom', scale: 0.95 });
-  window.sr.reveal('#page-home .testimonial-card', { interval: 120, origin: 'bottom' });
-  requestAnimationFrame(() => window.sr.sync());
+  elements.forEach((el, index) => {
+    el.classList.add('reveal-up');
+    // Stagger items by index for a smooth cascading effect
+    const delay = (index % 4) * 0.1;
+    el.style.transitionDelay = `${delay}s`;
+  });
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('reveal-active');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.15
+  });
+
+  elements.forEach(el => observer.observe(el));
 }
 window.addEventListener('resize', updateNavIndicator);
 
