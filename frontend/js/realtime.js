@@ -20,10 +20,18 @@ if (PUSHER_KEY !== 'YOUR_APP_KEY') {
         // Show a non-intrusive notification
         showToast('📍 New report added nearby!');
         
+        // Ensure relative URLs are converted to absolute URLs for frontend viewing
+        if (data.photo_urls && Array.isArray(data.photo_urls)) {
+            data.photo_urls = data.photo_urls.map(path => {
+                if (path.startsWith('http') || path.startsWith('data:')) return path;
+                return API_BASE_URL + '/../' + path;
+            });
+        }
+        
         // Check if optimistic report already exists (e.g. we just submitted it)
         const existingIdx = currentReports.findIndex(r => r.id === data.id);
         if (existingIdx !== -1) {
-            // Replace the optimistic report with the real one from Pusher (which has Cloudinary URLs)
+            // Replace the optimistic report with the real one from Pusher
             currentReports[existingIdx] = data;
         } else {
             // Add to global array
