@@ -21,7 +21,7 @@ class StorageService {
         $this->bucket = getenv('R2_BUCKET');
         $this->publicUrl = getenv('R2_PUBLIC_URL'); // e.g., https://pub-xxxxxxxx.r2.dev
 
-        if ($accountId && $accessKeyId && $secretAccessKey && $this->bucket) {
+        if ($accountId && $accessKeyId && $secretAccessKey && $this->bucket && class_exists(S3Client::class)) {
             $this->s3Client = new S3Client([
                 'region' => 'auto',
                 'endpoint' => "https://{$accountId}.r2.cloudflarestorage.com",

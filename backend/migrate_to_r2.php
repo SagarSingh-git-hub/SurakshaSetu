@@ -18,8 +18,6 @@ require_once __DIR__ . '/api/StorageService.php';
 
 use App\Services\StorageService;
 
-$storage = new StorageService();
-
 echo "Checking database schema...\n";
 
 // 1. Ensure columns exist
@@ -37,8 +35,10 @@ if ($result->num_rows == 0) {
     echo "Database schema updated successfully.\n";
 }
 
+$storage = new StorageService();
+
 if (!$storage->isConfigured()) {
-    die("R2 is not configured. Please set R2 environment variables to continue data migration.\n");
+    die("Error: R2 is not configured or AWS SDK is missing.\nMake sure you have set R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET in your environment variables AND run 'composer update' on the server to install aws-sdk-php.\n");
 }
 
 echo "Starting migration to Cloudflare R2...\n";
