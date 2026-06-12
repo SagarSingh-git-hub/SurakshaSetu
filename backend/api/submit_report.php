@@ -69,32 +69,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $saved_photos = [];
         
-        // Handle Photo Uploads (if any are sent via base64 strings in this example, or standard $_FILES)
-        // Since frontend sends base64 array right now, we handle it:
-        $upload_dir = __DIR__ . '/../uploads/';
-        if (!is_dir($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
-        }
-
+        // Handle Photo Uploads via Cloudinary
         if (isset($_POST['photos']) && is_array($_POST['photos'])) {
+            // Load Cloudinary config if available
+            require_once __DIR__ . '/../cloudinary_config.php';
+            
             foreach ($_POST['photos'] as $base64_string) {
-                // Remove the "data:image/jpeg;base64," part
-                $img = preg_replace('/^data:image\/\w+;base64,/', '', $base64_string);
-                $img = str_replace(' ', '+', $img);
-                $data = base64_decode($img);
-                
-                $filename = 'photo_' . uniqid() . '.jpg';
-                $filepath = $upload_dir . $filename;
-                
-                // Save physical file
-                if(file_put_contents($filepath, $data)) {
-                    $saved_photos[] = 'uploads/' . $filename;
-                    // Save to DB
-                    $db_filepath = 'uploads/' . $filename;
-                    $photo_stmt = $conn->prepare("INSERT INTO report_photos (report_id, photo_path) VALUES (?, ?)");
-                    $photo_stmt->bind_param("ss", $report_id, $db_filepath);
-                    $photo_stmt->execute();
-                    $photo_stmt->close();
+                // Determine if we should use Cloudinary
+                if (class_exists('Cloudinary\Api\Upload\UploadApi')) {
+                    try {
+                        $uploadApi = new \Cloudinary\Api\Upload\UploadApi();
+                        $upload_result = $uploadApi->upload($base64_string, [
+                            'folder' => 'suraksha-setu/reports',
+                            'quality' => 'auto',
+                            'fetch_format' => 'auto'
+                        ]);
+                        
+                        if (isset($upload_result['secure_url'])) {
+                            $db_filepath = $upload_result['secure_url'];
+                            $saved_photos[] = $db_filepath;
+                            
+                            $photo_stmt = $conn->prepare("INSERT INTO report_photos (report_id, photo_path) VALUES (?, ?)");
+                            $photo_stmt->bind_param("ss", $report_id, $db_filepath);
+                            $photo_stmt->execute();
+                            $photo_stmt->close();
+                        }
+                    } catch (\Exception $e) {
+                        error_log("Cloudinary Upload Failed: " . $e->getMessage());
+                    }
                 }
             }
         }
