@@ -4,21 +4,21 @@ let globeScene, globeCamera, globeRenderer, globePoints, globeGroup;
 function initGlobe() {
   const container = document.querySelector('.hero-visual');
   if (!container) return;
-
+  
   let globeWrapper = document.getElementById('hero-globe-wrapper');
   if (globeWrapper) {
     const oldCanvas = globeWrapper.querySelector('canvas');
-    if (oldCanvas) oldCanvas.remove();
+    if(oldCanvas) oldCanvas.remove();
   } else {
     const oldCanvas = document.getElementById('globe-canvas');
-    if (oldCanvas) oldCanvas.remove();
+    if(oldCanvas) oldCanvas.remove();
   }
 
   if (typeof THREE === 'undefined') return;
 
   let W = container.clientWidth || 520;
   let H = container.clientHeight || 520;
-
+  
   // Prevent extreme aspect ratios causing the 3D globe to balloon in size
   // especially in tall mobile "Desktop Site" views
   if (H > W * 1.2) H = W * 1.2;
@@ -26,13 +26,13 @@ function initGlobe() {
 
   globeScene = new THREE.Scene();
   globeCamera = new THREE.PerspectiveCamera(45, W / H, 0.1, 1000);
-  globeCamera.position.z = 290; // Pulled back a little for better view
+  globeCamera.position.z = 320; // Pulled back a little for better view
 
   globeRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
   globeRenderer.setSize(W, H);
   globeRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // optimize performance
   globeRenderer.domElement.id = 'globe-canvas'; // Ensure styling from CSS applies correctly
-
+  
   if (!globeWrapper) {
     globeWrapper = document.createElement('div');
     globeWrapper.className = 'hero-globe';
@@ -40,7 +40,7 @@ function initGlobe() {
     container.appendChild(globeWrapper);
   }
   globeWrapper.appendChild(globeRenderer.domElement);
-
+  
   globeRenderer.domElement.style.animation = "floatGlobe 8s ease-in-out infinite";
 
   globeGroup = new THREE.Group();
@@ -120,13 +120,13 @@ function initGlobe() {
   const partGeo = new THREE.BufferGeometry();
   const partCount = 800; // More particles
   const posArray = new Float32Array(partCount * 3);
-  for (let i = 0; i < partCount * 3; i += 3) {
+  for(let i=0; i<partCount*3; i+=3) {
     const r = 130 + Math.random() * 100;
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos(Math.random() * 2 - 1);
     posArray[i] = r * Math.sin(phi) * Math.cos(theta);
-    posArray[i + 1] = r * Math.sin(phi) * Math.sin(theta);
-    posArray[i + 2] = r * Math.cos(phi);
+    posArray[i+1] = r * Math.sin(phi) * Math.sin(theta);
+    posArray[i+2] = r * Math.cos(phi);
   }
   partGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
   const partMat = new THREE.PointsMaterial({
@@ -160,7 +160,7 @@ function initGlobe() {
   const clock = new THREE.Clock();
   let globeAnimId = null;
   let globeIsAnimating = false;
-
+  
   function animate() {
     if (!globeIsAnimating) return;
     globeAnimId = requestAnimationFrame(animate);
@@ -169,11 +169,11 @@ function initGlobe() {
     // Rotate core elements
     globeGroup.rotation.y += 0.0015;
     globeGroup.rotation.x = Math.sin(time * 0.3) * 0.1; // Gentle rocking
-
+    
     // Rotate layers independently for parallax
     icosahedron.rotation.y -= 0.0005;
     icosahedron.rotation.z += 0.0005;
-
+    
     dataRing1.rotation.z += 0.002;
     dataRing2.rotation.z -= 0.003;
 
@@ -184,14 +184,14 @@ function initGlobe() {
     globeRenderer.render(globeScene, globeCamera);
   }
 
-  window.resumeGlobeAnimation = function () {
+  window.resumeGlobeAnimation = function() {
     if (!globeIsAnimating) {
       globeIsAnimating = true;
       animate();
     }
   }
 
-  window.stopGlobeAnimation = function () {
+  window.stopGlobeAnimation = function() {
     globeIsAnimating = false;
     if (globeAnimId) {
       cancelAnimationFrame(globeAnimId);
@@ -199,7 +199,7 @@ function initGlobe() {
     }
   }
 
-  window.triggerGlobeResize = function () {
+  window.triggerGlobeResize = function() {
     if (!container || !globeRenderer || !globeCamera) return false;
     let newW = container.clientWidth;
     let newH = container.clientHeight;
@@ -226,21 +226,21 @@ function initGlobe() {
 
 function updateGlobeMarkers(reports) {
   if (!globePoints) return;
-
+  
   // Clear old markers
-  while (globePoints.children.length > 0) {
-    globePoints.remove(globePoints.children[0]);
+  while(globePoints.children.length > 0){ 
+      globePoints.remove(globePoints.children[0]); 
   }
 
-  if (!reports || reports.length === 0) return;
+  if(!reports || reports.length === 0) return;
 
   const R = 100; // Surface of the core sphere
-
+  
   reports.forEach(r => {
     // Map Haldwani coordinates roughly to globe surface for visual effect
     const lat = (r.lat - 29.2183) * 35; // Spread them out more visually
     const lng = (r.lng - 79.5130) * 35;
-
+    
     const phi = (90 - lat) * (Math.PI / 180);
     const theta = (lng + 180) * (Math.PI / 180);
 
@@ -249,20 +249,20 @@ function updateGlobeMarkers(reports) {
     const y = (R * Math.cos(phi));
 
     const color = r.status === 'Resolved' ? 0x22c55e : 0xf87171; // Tailwind Green / Red
-
+    
     // 1. Data Pillar (Cylinder sticking out)
     const pillarHeight = 8 + Math.random() * 12;
     const pillarGeo = new THREE.CylinderGeometry(0.5, 0.5, pillarHeight, 8);
     // Shift geometry up so it scales from the base
-    pillarGeo.translate(0, pillarHeight / 2, 0);
-    const pillarMat = new THREE.MeshBasicMaterial({
-      color: color,
-      transparent: true,
+    pillarGeo.translate(0, pillarHeight/2, 0); 
+    const pillarMat = new THREE.MeshBasicMaterial({ 
+      color: color, 
+      transparent: true, 
       opacity: 0.7,
-      blending: THREE.AdditiveBlending
+      blending: THREE.AdditiveBlending 
     });
     const pillar = new THREE.Mesh(pillarGeo, pillarMat);
-
+    
     // Position on surface
     pillar.position.set(x, y, z);
     // Orient outwards from center
@@ -272,17 +272,17 @@ function updateGlobeMarkers(reports) {
 
     // 2. Base Ring / Ripple
     const ringGeo = new THREE.RingGeometry(1.5, 3, 16);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: color,
-      transparent: true,
-      opacity: 0.8,
+    const ringMat = new THREE.MeshBasicMaterial({ 
+      color: color, 
+      transparent: true, 
+      opacity: 0.8, 
       side: THREE.DoubleSide,
       blending: THREE.AdditiveBlending,
       depthWrite: false
     });
     const ring = new THREE.Mesh(ringGeo, ringMat);
     ring.position.set(x, y, z);
-    ring.lookAt(x * 2, y * 2, z * 2);
+    ring.lookAt(x*2, y*2, z*2);
 
     globePoints.add(pillar);
     globePoints.add(ring);
