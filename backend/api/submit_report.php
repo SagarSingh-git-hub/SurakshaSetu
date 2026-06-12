@@ -75,10 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             require_once __DIR__ . '/../cloudinary_config.php';
             
             foreach ($_POST['photos'] as $base64_string) {
-                // Determine if we should use Cloudinary
-                if (class_exists('Cloudinary\Api\Upload\UploadApi')) {
+                $uploadApiClass = '\Cloudinary\Api\Upload\UploadApi';
+                if (class_exists($uploadApiClass)) {
                     try {
-                        $uploadApi = new \Cloudinary\Api\Upload\UploadApi();
+                        $uploadApi = new $uploadApiClass();
                         $upload_result = $uploadApi->upload($base64_string, [
                             'folder' => 'suraksha-setu/reports',
                             'quality' => 'auto',
