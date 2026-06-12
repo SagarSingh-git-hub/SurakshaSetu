@@ -563,7 +563,7 @@ function renderAdminTable(reports) {
   if (!tbody) return;
   tbody.innerHTML = reports.map(r => {
     const col = CAT_COLORS[r.cat] || CAT_COLORS.Other;
-    return `<tr>
+    return `<tr data-report-id="${r.id}">
       <td><span class="report-id">${r.id}</span></td>
       <td><span style="padding:3px 8px;border-radius:99px;font-size:11px;font-weight:800;background:${col.bg};color:${col.color};font-family:Outfit,sans-serif">${col.emoji} ${r.cat}</span></td>
       <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.loc}</td>
@@ -657,38 +657,49 @@ async function deleteReport(id) {
     `Are you sure you want to permanently delete report ${id}? This action cannot be undone.`,
     'Yes, Delete',
     'Cancel',
-    async () => {
-      try {
-        const formData = new FormData();
-        formData.append('report_id', id);
-        formData.append('admin_password', currentAdminPassword);
-
-        const res = await fetch(`${API_URL}/api/delete_report.php`, {
-          method: 'POST',
-          body: formData
-        });
-        const data = await res.json();
-        
-        if (data.success) {
-          showToast(`✅ Report ${id} deleted`);
-          
-          // Force refresh reports across the app
-          await fetchReports(true); 
-          
-          if (adminLoggedIn) {
-            renderAdminDashboard();
-            if (selectedMapIssue === id) {
-              selectedMapIssue = null;
-              switchMapPanel('list', document.querySelectorAll('.m-ptab')[0]);
-            }
-          }
-        } else {
-          showToast('❌ Failed to delete: ' + data.message);
-        }
-      } catch (e) {
-        console.error("Delete error", e);
-        showToast('❌ Failed to delete report');
+    () => {
+      // 1. Optimistic UI: Immediately remove from DOM if we are on the Reports List
+      const tableRow = document.querySelector(`tr[data-report-id="${id}"]`);
+      if (tableRow) tableRow.remove();
+      
+      // 2. Remove from state arrays immediately
+      if (window.ecoReports) {
+        window.ecoReports = window.ecoReports.filter(r => r.id !== id);
       }
+      if (typeof currentReports !== 'undefined') {
+        currentReports = currentReports.filter(r => r.id !== id);
+      }
+      
+      // 3. Show success toast instantly
+      showToast(`✅ Report ${id} deleted`);
+      
+      // 4. Update Overview Dashboard Stats if it's visible, but don't redirect
+      if (adminLoggedIn && selectedMapIssue === id) {
+        selectedMapIssue = null;
+        switchMapPanel('list', document.querySelectorAll('.m-ptab')[0]);
+      }
+
+      // 5. Fire async API request in background
+      const formData = new FormData();
+      formData.append('report_id', id);
+      formData.append('admin_password', currentAdminPassword);
+
+      fetch(`${API_URL}/api/delete_report.php`, {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) {
+          showToast('❌ Failed to delete: ' + data.message + ' (Reverting)');
+          fetchReports(true).then(() => { if (adminLoggedIn) renderReportsList(); });
+        }
+      })
+      .catch(e => {
+        console.error("Delete error", e);
+        showToast('❌ Network error during deletion (Reverting)');
+        fetchReports(true).then(() => { if (adminLoggedIn) renderReportsList(); });
+      });
     }
   );
 }

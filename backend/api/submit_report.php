@@ -10,24 +10,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $locStr = $_POST['locStr'] ?? '';
     $device_id = $_POST['device_id'] ?? '';
     
-    // Generate Unique ID
-    $report_id = 'ECO-' . rand(100, 999) . time();
+    // 1. Generate a temporary ID (to bypass UNIQUE constraint)
+    $temp_id = uniqid('tmp_');
     
-    // --- [FUTURE PYTHON AI INTEGRATION PLACEHOLDER] ---
-    /*
-    // Example of sending data to Python before saving
-    $python_api_url = "http://localhost:5000/analyze_report";
-    $ai_data = ['description' => $desc, 'category' => $category];
-    // Use cURL to POST $ai_data to $python_api_url
-    // Receive AI response (e.g., Priority, Tags) and use them below
-    */
-    // -------------------------------------------------
-
     // Insert Report into Database
     $stmt = $conn->prepare("INSERT INTO reports (report_id, category, location_str, lat, lng, description, device_id) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssdsss", $report_id, $category, $locStr, $lat, $lng, $desc, $device_id);
+    $stmt->bind_param("sssdsss", $temp_id, $category, $locStr, $lat, $lng, $desc, $device_id);
             
     if ($stmt->execute()) {
+        $inserted_id = $conn->insert_id;
+        // 2. Format sequential ID based on auto-increment id
+        $report_id = 'ECO-0' . $inserted_id;
+        
+        // 3. Update the temporary ID with the permanent sequential ID
+        $update_stmt = $conn->prepare("UPDATE reports SET report_id = ? WHERE id = ?");
+        $update_stmt->bind_param("si", $report_id, $inserted_id);
+        $update_stmt->execute();
+        $update_stmt->close();
+        
+        // 4. Return early response to client to make submission "near-instant"
+        ob_end_clean();
+        header("Connection: close\r\n");
+        header("Content-Encoding: none\r\n");
+        ignore_user_abort(true);
+        ob_start();
+        echo json_encode(['success' => true, 'report_id' => $report_id]);
+        $size = ob_get_length();
+        header("Content-Length: $size\r\n");
+        ob_end_flush();
+        flush();
+        if (function_exists('fastcgi_finish_request')) {
+            fastcgi_finish_request();
+        }
+        if (session_id()) {
+            session_write_close();
+        }
+
+        // --- BACKGROUND PROCESSING CONTINUES ---
+
         
         // Generate some basic tags based on category
         $tags = ['new'];
@@ -102,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         logActivity($conn, 'Report Created', $report_id, "Report #$report_id created in $locStr", $category, $locStr);
         
-        echo json_encode(['success' => true, 'report_id' => $report_id]);
+        // Response was already sent. Activity logged in background.
     } else {
         echo json_encode(['success' => false, 'error' => $conn->error]);
     }

@@ -92,6 +92,7 @@ function showPage(id, pushHistory = true) {
   updateNavIndicator();
   
   currentPage = id;
+  window.scrollTo(0, 0);
   
   if(id==='map') {
     if (!mapInit) {
