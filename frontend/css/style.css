@@ -167,8 +167,9 @@ textarea.form-input{resize:vertical;min-height:100px}
 .map-filters{background:#fff;border-bottom:1px solid var(--border);padding:12px 20px;display:flex;gap:8px;align-items:center;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
 .map-filters::-webkit-scrollbar{display:none}
 .filter-pill{padding:6px 14px;border-radius:99px;border:1.5px solid var(--border);font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap;transition:all .18s;color:var(--text3);background:#fff}
-.filter-pill.active{background:var(--g700);color:#fff;border-color:var(--g700)}
+.filter-pill.active{background:var(--g700);color:#fff!important;border-color:var(--g700)}
 .filter-pill:hover:not(.active){border-color:var(--g300);color:var(--g700)}
+.filter-pill-resolved:not(.active){color:var(--g700)}
 #main-map{flex:1}
 
 /* ── FEED ── */
