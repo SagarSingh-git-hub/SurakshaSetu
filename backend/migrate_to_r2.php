@@ -6,6 +6,11 @@
  */
 
 // WARNING: This script should ideally be run from CLI. If run from web, it might timeout.
+// Add header for browser viewing
+if (php_sapi_name() !== 'cli') {
+    header("Content-Type: text/plain");
+}
+
 set_time_limit(0); 
 
 require_once __DIR__ . '/config.php';
