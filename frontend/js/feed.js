@@ -75,12 +75,12 @@ function openModal(id){
         </div>
       </div>
       <div style="font-size:12px;color:var(--text3);display:flex;gap:16px;flex-wrap:wrap">
-        <span>📸 ${r.photos} photos</span>
+        <span>📸 ${r.photo_urls && r.photo_urls.length ? r.photo_urls.length : 0} photo${(r.photo_urls && r.photo_urls.length) === 1 ? '' : 's'}</span>
         <span>📅 ${r.date}</span>
         <span>📍 ${r.lat.toFixed(4)}, ${r.lng.toFixed(4)}</span>
       </div>
       ${r.photo_urls && r.photo_urls.length > 0 ? `<div style="margin-top:16px;display:flex;gap:8px;overflow-x:auto;padding-bottom:8px">
-        ${r.photo_urls.map(url => `<img src="${url}" style="height:100px;border-radius:8px;object-fit:cover;flex-shrink:0" alt="Report photo">`).join('')}
+        ${r.photo_urls.map(url => `<img src="${url}" onclick="openLightbox('${url}')" style="height:100px;border-radius:8px;object-fit:cover;flex-shrink:0;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" alt="Report photo">`).join('')}
       </div>` : ''}`;
   }
   
@@ -91,4 +91,44 @@ function openModal(id){
 function closeModal(e){
   const modalOverlay = document.getElementById('modal-overlay');
   if(modalOverlay && e.target===modalOverlay) modalOverlay.classList.remove('open');
+}
+
+// ── LIGHTBOX LOGIC ──
+function openLightbox(url) {
+  let lb = document.getElementById('image-lightbox');
+  if (!lb) {
+    lb = document.createElement('div');
+    lb.id = 'image-lightbox';
+    lb.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:99999;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s;';
+    lb.innerHTML = `
+      <span style="position:absolute;top:20px;right:30px;color:white;font-size:40px;cursor:pointer;font-family:Nunito,sans-serif;" onclick="closeLightbox()">&times;</span>
+      <img id="lightbox-img" src="" style="max-width:90%;max-height:90%;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.5);transform:scale(0.9);transition:transform 0.3s;" alt="Full screen preview">
+    `;
+    lb.onclick = function(e) {
+      if (e.target === lb) closeLightbox();
+    };
+    document.body.appendChild(lb);
+  }
+  
+  const img = document.getElementById('lightbox-img');
+  img.src = url;
+  lb.style.display = 'flex';
+  
+  // Trigger animation
+  requestAnimationFrame(() => {
+    lb.style.opacity = '1';
+    img.style.transform = 'scale(1)';
+  });
+}
+
+function closeLightbox() {
+  const lb = document.getElementById('image-lightbox');
+  if (lb) {
+    lb.style.opacity = '0';
+    const img = document.getElementById('lightbox-img');
+    if (img) img.style.transform = 'scale(0.9)';
+    setTimeout(() => {
+      lb.style.display = 'none';
+    }, 300);
+  }
 }

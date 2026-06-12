@@ -75,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             require_once __DIR__ . '/../cloudinary_config.php';
             
             foreach ($_POST['photos'] as $base64_string) {
+                $uploaded_successfully = false;
                 $uploadApiClass = '\Cloudinary\Api\Upload\UploadApi';
                 if (class_exists($uploadApiClass)) {
                     try {
@@ -93,9 +94,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $photo_stmt->bind_param("ss", $report_id, $db_filepath);
                             $photo_stmt->execute();
                             $photo_stmt->close();
+                            $uploaded_successfully = true;
                         }
                     } catch (\Exception $e) {
                         error_log("Cloudinary Upload Failed: " . $e->getMessage());
+                    }
+                }
+                
+                // Fallback to local storage if Cloudinary SDK is missing or upload failed
+                if (!$uploaded_successfully) {
+                    $upload_dir = __DIR__ . '/../uploads/';
+                    if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);
+                    
+                    $img = preg_replace('/^data:image\/\w+;base64,/', '', $base64_string);
+                    $img = str_replace(' ', '+', $img);
+                    $data = base64_decode($img);
+                    
+                    $filename = 'photo_' . uniqid() . '.jpg';
+                    $filepath = $upload_dir . $filename;
+                    
+                    if(file_put_contents($filepath, $data)) {
+                        $db_filepath = 'uploads/' . $filename;
+                        $saved_photos[] = $db_filepath;
+                        
+                        $photo_stmt = $conn->prepare("INSERT INTO report_photos (report_id, photo_path) VALUES (?, ?)");
+                        $photo_stmt->bind_param("ss", $report_id, $db_filepath);
+                        $photo_stmt->execute();
+                        $photo_stmt->close();
                     }
                 }
             }

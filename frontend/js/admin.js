@@ -1070,7 +1070,7 @@ function selectMapIssue(id) {
     <div class="m-dp-title">${issue.desc ? issue.desc : issue.cat + ' reported in ' + issue.loc}</div>
     <div class="m-dp-id">${issue.id} · ${issue.date}</div>
     ${issue.photo_urls && issue.photo_urls.length > 0 ? 
-      `<div style="width:100%;height:140px;border-radius:10px;overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow2)"><img src="${issue.photo_urls[0]}" style="width:100%;height:100%;object-fit:cover;"></div>` : 
+      `<div style="width:100%;height:140px;border-radius:10px;overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow2);cursor:pointer;" onclick="openLightbox('${issue.photo_urls[0]}')"><img src="${issue.photo_urls[0]}" style="width:100%;height:100%;object-fit:cover;"></div>` : 
       `<div style="width:100%;height:100px;border-radius:10px;background:#f8fafc;border:1px dashed #cbd5e1;display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:var(--text3);font-size:12px;"><i class="ph-duotone ph-image" style="font-size:24px;margin-right:8px;"></i>No photo provided</div>`
     }
     <div class="m-dp-row"><span class="m-dp-lbl">Location</span><span class="m-dp-val">${issue.loc}</span></div>
