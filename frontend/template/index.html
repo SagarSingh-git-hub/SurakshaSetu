@@ -2703,6 +2703,22 @@
                   transform: translateY(1px);
                 }
                 
+                .cert-actions-row {
+                  margin-top: 16px;
+                  display: flex;
+                  gap: 12px;
+                  width: 100%;
+                }
+                .cert-actions-row button {
+                  flex: 1;
+                }
+                @media (max-width: 576px) {
+                  .cert-actions-row {
+                    flex-direction: column;
+                    gap: 10px;
+                  }
+                }
+                
                 #cert-issued-msg {
                   animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 }
@@ -2718,7 +2734,7 @@
                 </div>
               </div>
 
-              <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px;">
+              <div class="cert-actions-row">
                 <button id="btn-issue-cert" class="btn-issue-premium" onclick="issueCertificate()">
                   <i class="ph-bold ph-award" style="font-size:16px;"></i> Issue certificate
                 </button>

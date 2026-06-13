@@ -249,6 +249,24 @@ function applyTemplateToPreview(templateId) {
 }
 
 function renderLivePreview() {
+    // Dynamically adjust scale factor of live preview scaler based on actual container size
+    const wrapper = document.querySelector('.cert-preview-wrapper');
+    if (wrapper && !wrapper.dataset.observerAttached) {
+        wrapper.dataset.observerAttached = 'true';
+        const updateScale = () => {
+            const height = wrapper.clientHeight;
+            if (height > 0) {
+                const scale = (height - 32) / 794; // Leave 16px padding on top/bottom
+                wrapper.style.setProperty('--preview-scale', Math.max(0.1, scale));
+            }
+        };
+        const observer = new ResizeObserver(() => {
+            updateScale();
+        });
+        observer.observe(wrapper);
+        updateScale();
+    }
+
     const typeSelect = document.getElementById('cert-type');
     if (!typeSelect) return;
     const opt = typeSelect.options[typeSelect.selectedIndex];
