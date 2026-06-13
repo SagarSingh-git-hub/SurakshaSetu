@@ -2511,87 +2511,94 @@
                   </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Certificate Details -->
-            <div class="cert-details-container-col" style="margin-bottom:24px;">
-              <div
-                style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:0.5px;">
-                <i class="ph-duotone ph-file-text" style="font-size:16px;"></i> Certificate details
-              </div>
-              <div class="admin-widget" style="padding:20px;">
-                <div class="cert-details-meta-grid">
-                  <div>
-                    <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Certificate type</div>
-                    <select id="cert-type" class="filter-select w-full">
-                      <option value="">— Select Type —</option>
-                    </select>
-                  </div>
-                  <div>
-                    <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Issue date</div>
-                    <input type="date" id="cert-issue-date"
-                      style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;">
-                  </div>
-                  <div>
-                    <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Issuing authority</div>
-                    <input type="text" id="cert-issuing-authority"
-                      style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;"
-                      value="Sanjay Negi, Super Admin">
-                  </div>
-                  <div>
-                    <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Co-signatory (optional)</div>
-                    <input type="text" id="cert-co-signatory"
-                      style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;"
-                      placeholder="Sagar Singh, Lead Developer">
-                  </div>
-                </div>
-                <div style="display:none;" id="cert-id-prefix"></div>
-                <div style="margin-bottom:16px;">
-                  <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Achievement / citation</div>
-                  <textarea id="cert-citation" rows="3"
-                    style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;resize:vertical;font-family:'Nunito',sans-serif;"></textarea>
-                </div>
-
-                <div style="height:1px;background:var(--border);margin:20px 0;"></div>
-
+              <!-- Certificate Details -->
+              <div style="margin-bottom:24px;">
                 <div
-                  style="font-size:12px;color:var(--text3);margin-bottom:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:6px;">
-                  <i class="ph-duotone ph-paper-plane-right" style="font-size:14px;"></i> Delivery options
+                  style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:0.5px;">
+                  <i class="ph-duotone ph-file-text" style="font-size:16px;"></i> Certificate details
                 </div>
-                
-                <div class="cert-delivery-grid">
-                  <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;">
+                <div class="admin-widget" style="padding:20px;">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
                     <div>
-                      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Send via email</div>
-                      <div style="font-size:12px;color:var(--text3);">Deliver PDF certificate to recipient.</div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Certificate type
+                      </div>
+                      <select id="cert-type" class="filter-select w-full">
+                        <option value="">— Select Type —</option>
+                      </select>
                     </div>
-                    <label style="position:relative;display:inline-block;width:40px;height:24px;">
-                      <input type="checkbox" id="cert-send-email" checked style="opacity:0;width:0;height:0;"
-                        onchange="this.nextElementSibling.style.background=this.checked?'#16a34a':'#e2e8f0';this.nextElementSibling.firstElementChild.style.transform=this.checked?'translateX(16px)':'translateX(0)';">
-                      <span
-                        style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#16a34a;transition:.3s;border-radius:34px;">
-                        <span
-                          style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%;transform:translateX(16px);box-shadow:0 1px 3px rgba(0,0,0,0.1);"></span>
-                      </span>
-                    </label>
+                    <div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Issue date</div>
+                      <input type="date" id="cert-issue-date"
+                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;">
+                    </div>
                   </div>
-                  <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;">
+                  <div style="display:none;" id="cert-id-prefix"></div>
+                  <div style="margin-bottom:16px;">
+                    <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Achievement /
+                      citation</div>
+                    <textarea id="cert-citation" rows="3"
+                      style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;resize:vertical;font-family:'Nunito',sans-serif;"></textarea>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
                     <div>
-                      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Publish to community feed</div>
-                      <div style="font-size:12px;color:var(--text3);">Announce this award publicly.</div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Issuing
+                        authority</div>
+                      <input type="text" id="cert-issuing-authority"
+                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;"
+                        value="Sanjay Negi, Super Admin">
                     </div>
-                    <label style="position:relative;display:inline-block;width:40px;height:24px;">
-                      <input type="checkbox" id="cert-publish-feed" checked style="opacity:0;width:0;height:0;"
-                        onchange="this.nextElementSibling.style.background=this.checked?'#16a34a':'#e2e8f0';this.nextElementSibling.firstElementChild.style.transform=this.checked?'translateX(16px)':'translateX(0)';">
-                      <span
-                        style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#16a34a;transition:.3s;border-radius:34px;">
+                    <div>
+                      <div style="font-size:12px;color:var(--text3);margin-bottom:6px;font-weight:500;">Co-signatory
+                        (optional)</div>
+                      <input type="text" id="cert-co-signatory"
+                        style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;box-shadow:inset 0 1px 2px rgba(0,0,0,0.02);color:var(--text);outline:none;font-size:13px;"
+                        placeholder="Sagar Singh, Lead Developer">
+                    </div>
+                  </div>
+
+                  <div style="height:1px;background:var(--border);margin:20px 0;"></div>
+
+                  <div
+                    style="font-size:12px;color:var(--text3);margin-bottom:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:6px;">
+                    <i class="ph-duotone ph-paper-plane-right" style="font-size:14px;"></i> Delivery options
+                  </div>
+                  
+                  <div class="cert-delivery-grid">
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;">
+                      <div>
+                        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Send via email</div>
+                        <div style="font-size:12px;color:var(--text3);">Deliver PDF certificate to recipient.</div>
+                      </div>
+                      <label style="position:relative;display:inline-block;width:40px;height:24px;">
+                        <input type="checkbox" id="cert-send-email" checked style="opacity:0;width:0;height:0;"
+                          onchange="this.nextElementSibling.style.background=this.checked?'#16a34a':'#e2e8f0';this.nextElementSibling.firstElementChild.style.transform=this.checked?'translateX(16px)':'translateX(0)';">
                         <span
-                          style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%;transform:translateX(16px);box-shadow:0 1px 3px rgba(0,0,0,0.1);"></span>
-                      </span>
-                    </label>
+                          style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#16a34a;transition:.3s;border-radius:34px;">
+                          <span
+                            style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%;transform:translateX(16px);box-shadow:0 1px 3px rgba(0,0,0,0.1);"></span>
+                        </span>
+                      </label>
+                    </div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;">
+                      <div>
+                        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Publish to community feed</div>
+                        <div style="font-size:12px;color:var(--text3);">Announce this award publicly.</div>
+                      </div>
+                      <label style="position:relative;display:inline-block;width:40px;height:24px;">
+                        <input type="checkbox" id="cert-publish-feed" checked style="opacity:0;width:0;height:0;"
+                          onchange="this.nextElementSibling.style.background=this.checked?'#16a34a':'#e2e8f0';this.nextElementSibling.firstElementChild.style.transform=this.checked?'translateX(16px)':'translateX(0)';">
+                        <span
+                          style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#16a34a;transition:.3s;border-radius:34px;">
+                          <span
+                            style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%;transform:translateX(16px);box-shadow:0 1px 3px rgba(0,0,0,0.1);"></span>
+                        </span>
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
+            </div>
 
             <!-- Preview panel -->
             <div>
@@ -2614,7 +2621,7 @@
                 .cert-preview-scaler {
                   width: 1123px;
                   height: 794px;
-                  transform: scale(var(--preview-scale, calc((62.5cqi - 32px) / 794)));
+                  transform: scale(var(--preview-scale, 0.4));
                   transform-origin: center;
                   position: absolute;
                   top: 50%;
@@ -2634,10 +2641,10 @@
                 .btn-issue-premium {
                   width: 100%;
                   justify-content: center;
-                  padding: 8px 12px;
-                  font-size: 12.5px;
+                  padding: 7px 10px;
+                  font-size: 12px;
                   font-weight: 700;
-                  border-radius: 8px;
+                  border-radius: 6px;
                   background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
                   border: none;
                   color: #fff;
@@ -2667,10 +2674,10 @@
                 .btn-preview-premium {
                   width: 100%;
                   justify-content: center;
-                  padding: 8px 12px;
-                  font-size: 12.5px;
+                  padding: 7px 10px;
+                  font-size: 12px;
                   font-weight: 600;
-                  border-radius: 8px;
+                  border-radius: 6px;
                   background: #fff;
                   border: 1px solid #cbd5e1;
                   color: #475569;
@@ -2716,26 +2723,6 @@
                 }
                 @media (max-width: 992px) {
                   .cert-grid-layout {
-                    grid-template-columns: 1fr;
-                  }
-                }
-
-                .cert-details-container-col {
-                  grid-column: 1 / -1;
-                }
-                .cert-details-meta-grid {
-                  display: grid;
-                  grid-template-columns: repeat(4, 1fr);
-                  gap: 16px;
-                  margin-bottom: 16px;
-                }
-                @media (max-width: 992px) {
-                  .cert-details-meta-grid {
-                    grid-template-columns: 1fr 1fr;
-                  }
-                }
-                @media (max-width: 576px) {
-                  .cert-details-meta-grid {
                     grid-template-columns: 1fr;
                   }
                 }

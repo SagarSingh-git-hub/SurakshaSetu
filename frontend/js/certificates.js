@@ -253,9 +253,9 @@ function renderLivePreview() {
     const wrapper = document.querySelector('.cert-preview-wrapper');
     if (wrapper) {
         const updateScale = () => {
-            const height = wrapper.clientHeight;
-            if (height > 0) {
-                const scale = (height - 32) / 794; // Leave 16px padding on top/bottom
+            const width = wrapper.clientWidth;
+            if (width > 0) {
+                const scale = (width - 32) / 1123; // Leave 16px padding on left/right
                 const finalScale = Math.max(0.1, scale);
                 wrapper.style.setProperty('--preview-scale', finalScale);
             }
