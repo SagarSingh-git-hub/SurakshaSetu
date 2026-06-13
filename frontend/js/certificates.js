@@ -366,7 +366,7 @@ function renderLivePreview() {
     if (iframe) {
         const doc = iframe.contentWindow.document;
         doc.open();
-        doc.write('<html><head><style>body{margin:0;padding:0;display:flex;align-items:center;justify-content:center;min-height:100vh;background:transparent;font-family:sans-serif;} .cert-container{width:100%;max-width:900px;background:#fff;transform-origin:center center;} *{box-sizing:inherit;}</style></head><body><div class="cert-container">' + html + '</div></body></html>');
+        doc.write('<html><head><style>body{margin:0;padding:0;display:flex;align-items:center;justify-content:center;min-height:100vh;background:transparent;font-family:sans-serif;overflow:hidden;} .cert-container{width:1123px;height:794px;background:#fff;transform-origin:center center;position:relative;overflow:hidden;} *{box-sizing:inherit;}</style></head><body><div class="cert-container">' + html + '</div></body></html>');
         doc.close();
     }
 }
