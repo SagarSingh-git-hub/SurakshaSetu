@@ -1645,6 +1645,53 @@ function openTemplatePreview(id) {
           <p style="font-size:16px; color:#475569; font-family:sans-serif;">For outstanding contribution in</p>
           <h3 style="font-size:20px; color:${template.primary_color || '#1e293b'}; margin:10px 0 30px 0; text-transform:uppercase;">{{AWARD_TYPE}}</h3>
         </div>`;
+
+  // Inject global CSS variables to ensure correct rendering inside the iframe sandbox
+  const variablesStyle = `
+    <style>
+      :root {
+        --gold: #d97706;
+        --blue: #3b82f6;
+        --purple: #8b5cf6;
+        --acc2: #16a34a;
+        --t3: #6b7280;
+        --text3: #6b7280;
+        --g900: #0a3d1f;
+        --g800: #0f5c2e;
+        --g700: #147a3d;
+        --g600: #1a9a4e;
+        --g500: #1fb960;
+        --g400: #2ecc71;
+        --g300: #5dd88a;
+        --g200: #8fe5ac;
+        --g100: #c4f0d5;
+        --g50: #edfaf2;
+        --teal: #00b4a0;
+        --teal-l: #e0f7f5;
+        --amber: #f59e0b;
+        --amber-l: #fef3c7;
+        --red: #ef4444;
+        --red-l: #fee2e2;
+        --blue-l: #eff6ff;
+        --brown: #92400e;
+        --brown-l: #fef3c7;
+        --bg: #f9fafb;
+        --bg2: #ffffff;
+        --bg3: #f0fdf4;
+        --text: #111827;
+        --text2: #374151;
+        --border: #e5e7eb;
+        --border2: #d1fae5;
+      }
+    </style>
+  `;
+
+  if (content.includes('</head>')) {
+    content = content.replace('</head>', variablesStyle + '</head>');
+  } else {
+    content = variablesStyle + content;
+  }
+
   content = content.replace(/{{NAME}}/g, 'Recipient Name')
                    .replace(/{{EMAIL}}/g, 'recipient@example.com')
                    .replace(/{{ZONE}}/g, 'Sample Zone')
@@ -1836,8 +1883,25 @@ function renderTemplatesUI(container, templates) {
     <style>
       .template-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 12px; }
       .template-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -8px rgba(0,0,0,0.15); border-color: #94a3b8 !important; z-index: 10; }
-      .template-card .iframe-wrap { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-      .template-card:hover .iframe-wrap { transform: scale(0.35) !important; }
+      .template-card .preview-box {
+        width: 100%;
+        aspect-ratio: 1123 / 238; /* Top 30% aspect ratio of 1123x794 certificate */
+        overflow: hidden;
+        position: relative;
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        container-type: inline-size;
+      }
+      .template-card .iframe-wrap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 1123px;
+        height: 794px;
+        transform-origin: top left;
+        transform: scale(calc(100cqw / 1123));
+        pointer-events: none;
+      }
     </style>
   `;
 
@@ -1866,6 +1930,52 @@ function renderTemplatesUI(container, templates) {
       </body>
       </html>`;
     
+    // Inject global CSS variables to ensure correct rendering inside the iframe sandbox
+    const variablesStyle = `
+      <style>
+        :root {
+          --gold: #d97706;
+          --blue: #3b82f6;
+          --purple: #8b5cf6;
+          --acc2: #16a34a;
+          --t3: #6b7280;
+          --text3: #6b7280;
+          --g900: #0a3d1f;
+          --g800: #0f5c2e;
+          --g700: #147a3d;
+          --g600: #1a9a4e;
+          --g500: #1fb960;
+          --g400: #2ecc71;
+          --g300: #5dd88a;
+          --g200: #8fe5ac;
+          --g100: #c4f0d5;
+          --g50: #edfaf2;
+          --teal: #00b4a0;
+          --teal-l: #e0f7f5;
+          --amber: #f59e0b;
+          --amber-l: #fef3c7;
+          --red: #ef4444;
+          --red-l: #fee2e2;
+          --blue-l: #eff6ff;
+          --brown: #92400e;
+          --brown-l: #fef3c7;
+          --bg: #f9fafb;
+          --bg2: #ffffff;
+          --bg3: #f0fdf4;
+          --text: #111827;
+          --text2: #374151;
+          --border: #e5e7eb;
+          --border2: #d1fae5;
+        }
+      </style>
+    `;
+    
+    if (html.includes('</head>')) {
+      html = html.replace('</head>', variablesStyle + '</head>');
+    } else {
+      html = variablesStyle + html;
+    }
+
     html = html.replace(/{{NAME}}/g, 'Recipient Name')
                .replace(/{{AWARD_TYPE}}/g, t.award_type || 'Award Type')
                .replace(/{{DATE}}/g, new Date().toLocaleDateString())
@@ -1874,12 +1984,12 @@ function renderTemplatesUI(container, templates) {
 
     let encodedHtml = html.replace(/"/g, '&quot;');
     
-    // Render dynamic template card
+    // Render dynamic template card with responsive aspect-ratio cropped top 30% preview
     return `
       <div class="admin-widget template-card group" onclick="openTemplatePreview(${t.id})" style="overflow:hidden;border:1px solid #e2e8f0;position:relative;background:#fff;cursor:pointer;">
         ${defaultBadge}
-        <div style="height:140px;display:flex;align-items:center;justify-content:center;background:#f8fafc;position:relative;overflow:hidden;border-bottom:1px solid #e2e8f0;">
-           <div class="iframe-wrap" style="width:100%;height:300%;transform:scale(0.33);transform-origin:top center;pointer-events:none;">
+        <div class="preview-box">
+           <div class="iframe-wrap">
               <iframe srcdoc="${encodedHtml}" style="width:100%;height:100%;border:none;" scrolling="no"></iframe>
            </div>
         </div>

@@ -322,6 +322,46 @@ function renderLivePreview() {
         html = '<style>' + tmpl.css_content + '</style>' + html;
     }
     
+    const variablesStyle = `
+      <style>
+        :root {
+          --gold: #d97706;
+          --blue: #3b82f6;
+          --purple: #8b5cf6;
+          --acc2: #16a34a;
+          --t3: #6b7280;
+          --text3: #6b7280;
+          --g900: #0a3d1f;
+          --g800: #0f5c2e;
+          --g700: #147a3d;
+          --g600: #1a9a4e;
+          --g500: #1fb960;
+          --g400: #2ecc71;
+          --g300: #5dd88a;
+          --g200: #8fe5ac;
+          --g100: #c4f0d5;
+          --g50: #edfaf2;
+          --teal: #00b4a0;
+          --teal-l: #e0f7f5;
+          --amber: #f59e0b;
+          --amber-l: #fef3c7;
+          --red: #ef4444;
+          --red-l: #fee2e2;
+          --blue-l: #eff6ff;
+          --brown: #92400e;
+          --brown-l: #fef3c7;
+          --bg: #f9fafb;
+          --bg2: #ffffff;
+          --bg3: #f0fdf4;
+          --text: #111827;
+          --text2: #374151;
+          --border: #e5e7eb;
+          --border2: #d1fae5;
+        }
+      </style>
+    `;
+    html = variablesStyle + html;
+    
     const iframe = document.getElementById('cert-live-preview-iframe');
     if (iframe) {
         const doc = iframe.contentWindow.document;
@@ -336,21 +376,123 @@ function renderTemplatesGrid() {
     if (!grid) return;
     
     grid.innerHTML = '';
+    
+    // Inject stylesheet for responsive scaling and styling of the grid cards
+    const dynamicCss = `
+        <style>
+          .cert-grid-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 12px; overflow: hidden; }
+          .cert-grid-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -8px rgba(0,0,0,0.15); border-color: #94a3b8 !important; }
+          .cert-grid-card .preview-box {
+            width: 100%;
+            aspect-ratio: 1123 / 238; /* Top 30% aspect ratio of 1123x794 certificate */
+            overflow: hidden;
+            position: relative;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+            container-type: inline-size;
+          }
+          .cert-grid-card .iframe-wrap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1123px;
+            height: 794px;
+            transform-origin: top left;
+            transform: scale(calc(100cqw / 1123));
+            pointer-events: none;
+          }
+        </style>
+    `;
+    
+    let htmlContent = '';
     certTemplates.forEach(tmpl => {
-        const isSelected = tmpl.is_default == 1 ? 'border-color:#f59e0b;background:rgba(245,158,11,0.05);' : 'border-color:var(--border);background:var(--bg-card);';
-        const defaultBadge = tmpl.is_default == 1 ? '<div style="position:absolute;top:8px;right:8px;"><span style="background:rgba(245,158,11,0.12);color:#f59e0b;font-size:10px;padding:2px 8px;border-radius:8px;">Default</span></div>' : '';
+        const isSelected = tmpl.is_default == 1 
+            ? 'border-color:#f59e0b;background:rgba(245,158,11,0.05);' 
+            : 'border-color:var(--border);background:var(--bg-card);';
+            
+        const defaultBadge = tmpl.is_default == 1 
+            ? '<div style="position:absolute;top:8px;right:8px;z-index:10;"><span style="background:rgba(245,158,11,0.15);backdrop-filter:blur(4px);border:1px solid rgba(245,158,11,0.3);color:#f59e0b;font-size:10px;padding:2px 8px;border-radius:8px;font-weight:700;">Default</span></div>' 
+            : '';
+
+        let html = tmpl.html_content || `
+          <html>
+          <head>
+            <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/duotone/style.css">
+            <style>body{margin:0;padding:0;}</style>
+          </head>
+          <body>
+            <div style="width:100%; height:100vh; background:${tmpl.bg_gradient || '#f8fafc'}; padding:40px; box-sizing:border-box; position:relative; font-family:'Georgia', serif; text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+              <div style="font-size:48px; color:${tmpl.primary_color || '#1e293b'}; margin-bottom:10px;"><i class="${tmpl.icon_class || 'ph-duotone ph-certificate'}"></i></div>
+              <h1 style="font-size:36px; color:${tmpl.primary_color || '#1e293b'}; margin:0 0 10px 0; text-transform:uppercase; letter-spacing:2px;">${tmpl.name || 'Certificate'}</h1>
+              <div style="width:100px; height:2px; background:${tmpl.primary_color || '#1e293b'}; margin:0 auto 20px auto;"></div>
+              <p style="font-size:16px; color:#475569; font-family:sans-serif; margin-bottom:5px;">This is presented to</p>
+              <h2 style="font-size:28px; color:#0f172a; margin:0 0 20px 0; font-style:italic;">{{NAME}}</h2>
+              <p style="font-size:16px; color:#475569; font-family:sans-serif;">For outstanding contribution in</p>
+              <h3 style="font-size:20px; color:${tmpl.primary_color || '#1e293b'}; margin:10px 0 30px 0; text-transform:uppercase;">{{AWARD_TYPE}}</h3>
+            </div>
+          </body>
+          </html>`;
+          
+        const variablesStyle = `
+          <style>
+            :root {
+              --gold: #d97706;
+              --blue: #3b82f6;
+              --purple: #8b5cf6;
+              --acc2: #16a34a;
+              --t3: #6b7280;
+              --text3: #6b7280;
+              --g900: #0a3d1f;
+              --g800: #0f5c2e;
+              --g700: #147a3d;
+              --g600: #1a9a4e;
+              --g500: #1fb960;
+              --g400: #2ecc71;
+              --g300: #5dd88a;
+              --g200: #8fe5ac;
+              --g100: #c4f0d5;
+              --g50: #edfaf2;
+              --teal: #00b4a0;
+              --teal-l: #e0f7f5;
+              --amber: #f59e0b;
+              --amber-l: #fef3c7;
+              --red: #ef4444;
+              --red-l: #fee2e2;
+              --blue-l: #eff6ff;
+              --brown: #92400e;
+              --brown-l: #fef3c7;
+              --bg: #f9fafb;
+              --bg2: #ffffff;
+              --bg3: #f0fdf4;
+              --text: #111827;
+              --text2: #374151;
+              --border: #e5e7eb;
+              --border2: #d1fae5;
+            }
+          </style>
+        `;
         
-        grid.innerHTML += `
-        <div style="${isSelected}border-width:1px;border-style:solid;border-radius:12px;overflow:hidden;transition:all .2s;">
-            <div style="height:110px;display:flex;align-items:center;justify-content:center;position:relative;background:${tmpl.bg_gradient};">
-              <div style="text-align:center;padding:12px;">
-                <div style="font-family:'Georgia',serif;font-size:14px;color:${tmpl.primary_color};margin-bottom:4px;font-weight:700;">Certificate of Excellence</div>
-                <div style="font-size:10px;color:var(--text3);">${tmpl.award_type}</div>
-                <div style="margin-top:8px;width:28px;height:28px;border-radius:50%;border:1px solid ${tmpl.primary_color};display:flex;align-items:center;justify-content:center;margin-left:auto;margin-right:auto;">
-                    <i class="${tmpl.icon_class}" style="font-size:14px;color:${tmpl.primary_color};"></i>
-                </div>
-              </div>
-              ${defaultBadge}
+        if (html.includes('</head>')) {
+            html = html.replace('</head>', variablesStyle + '</head>');
+        } else {
+            html = variablesStyle + html;
+        }
+        
+        html = html.replace(/{{NAME}}/g, 'Recipient Name')
+                   .replace(/{{AWARD_TYPE}}/g, tmpl.award_type || 'Award Type')
+                   .replace(/{{DATE}}/g, new Date().toLocaleDateString())
+                   .replace(/{{ISSUER}}/g, 'Issuing Authority')
+                   .replace(/{{ORGANIZATION}}/g, 'Organization');
+                   
+        let encodedHtml = html.replace(/"/g, '&quot;');
+        
+        htmlContent += `
+        <div class="cert-grid-card" style="${isSelected}border-width:1px;border-style:solid;position:relative;background:#fff;cursor:pointer;">
+            ${defaultBadge}
+            <div class="preview-box">
+               <div class="iframe-wrap">
+                  <iframe srcdoc="${encodedHtml}" style="width:100%;height:100%;border:none;" scrolling="no"></iframe>
+               </div>
             </div>
             <div style="padding:12px 16px;border-top:1px solid var(--border);">
               <div style="font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;">${tmpl.name}</div>
@@ -358,6 +500,8 @@ function renderTemplatesGrid() {
             </div>
         </div>`;
     });
+    
+    grid.innerHTML = dynamicCss + htmlContent;
 }
 
 async function issueCertificate() {
