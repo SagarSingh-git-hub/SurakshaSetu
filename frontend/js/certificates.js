@@ -257,7 +257,13 @@ function renderLivePreview() {
             const height = wrapper.clientHeight;
             if (height > 0) {
                 const scale = (height - 32) / 794; // Leave 16px padding on top/bottom
-                wrapper.style.setProperty('--preview-scale', Math.max(0.1, scale));
+                const finalScale = Math.max(0.1, scale);
+                wrapper.style.setProperty('--preview-scale', finalScale);
+                const activeScaler = document.querySelector('.cert-preview-scaler');
+                if (activeScaler) {
+                    activeScaler.style.transform = `scale(${finalScale}) translate(-50%, -50%)`;
+                    activeScaler.style.translate = 'none';
+                }
             }
         };
         const observer = new ResizeObserver(() => {
@@ -609,7 +615,7 @@ async function issueCertificate() {
     }
     
     btn.disabled = false;
-    btn.innerHTML = '<i class="ph-bold ph-award" style="font-size:16px;"></i> Issue certificate';
+    btn.innerHTML = '<i class="ph-bold ph-award" style="font-size:14px;"></i> Issue certificate';
 }
 
 let searchTimeout;

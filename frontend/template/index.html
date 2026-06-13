@@ -2601,28 +2601,29 @@
                 .btn-issue-premium {
                   width: 100%;
                   justify-content: center;
-                  padding: 12px 24px;
-                  font-size: 15px;
+                  padding: 8px 12px;
+                  font-size: 12.5px;
                   font-weight: 700;
-                  border-radius: 10px;
+                  border-radius: 8px;
                   background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
                   border: none;
                   color: #fff;
-                  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.18);
+                  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.15);
                   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                   display: flex;
                   align-items: center;
-                  gap: 8px;
+                  gap: 6px;
                   cursor: pointer;
                   text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+                  white-space: nowrap;
                 }
                 .btn-issue-premium:hover:not(:disabled) {
-                  transform: translateY(-1.5px);
-                  box-shadow: 0 6px 18px rgba(22, 163, 74, 0.28), inset 0 1px 1px rgba(255, 255, 255, 0.18);
+                  transform: translateY(-1px);
+                  box-shadow: 0 6px 14px rgba(22, 163, 74, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
                 }
                 .btn-issue-premium:active:not(:disabled) {
-                  transform: translateY(1px);
-                  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.15);
+                  transform: translateY(0.5px);
+                  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.12);
                 }
                 .btn-issue-premium:disabled {
                   opacity: 0.8;
@@ -2633,19 +2634,20 @@
                 .btn-preview-premium {
                   width: 100%;
                   justify-content: center;
-                  padding: 10px 20px;
-                  font-size: 14px;
+                  padding: 8px 12px;
+                  font-size: 12.5px;
                   font-weight: 600;
-                  border-radius: 10px;
+                  border-radius: 8px;
                   background: #fff;
                   border: 1px solid #cbd5e1;
                   color: #475569;
-                  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+                  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
                   transition: all 0.2s ease;
                   display: flex;
                   align-items: center;
-                  gap: 8px;
+                  gap: 6px;
                   cursor: pointer;
+                  white-space: nowrap;
                 }
                 .btn-preview-premium:hover {
                   background: #f8fafc;
@@ -2665,6 +2667,7 @@
                 }
                 .cert-actions-row button {
                   flex: 1;
+                  width: auto !important;
                 }
                 @media (max-width: 576px) {
                   .cert-actions-row {
@@ -2701,10 +2704,10 @@
 
               <div class="cert-actions-row">
                 <button id="btn-issue-cert" class="btn-issue-premium" onclick="issueCertificate()">
-                  <i class="ph-bold ph-award" style="font-size:16px;"></i> Issue certificate
+                  <i class="ph-bold ph-award" style="font-size:14px;"></i> Issue certificate
                 </button>
                 <button class="btn-preview-premium" onclick="downloadPDF()">
-                  <i class="ph-duotone ph-download-simple" style="font-size:16px;"></i> Download PDF preview
+                  <i class="ph-duotone ph-download-simple" style="font-size:14px;"></i> Download PDF preview
                 </button>
               </div>
 
@@ -4148,6 +4151,7 @@
         actions.style.display = 'none';
         if (typeof loadTemplates === 'function') loadTemplates();
         if (typeof initCustomSelects === 'function') initCustomSelects();
+        if (typeof renderLivePreview === 'function') setTimeout(renderLivePreview, 50);
       } else if (viewName === 'cert-view') {
         title.innerText = 'Certificates';
         actions.style.display = 'none';
