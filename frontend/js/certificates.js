@@ -251,25 +251,22 @@ function applyTemplateToPreview(templateId) {
 function renderLivePreview() {
     // Dynamically adjust scale factor of live preview scaler based on actual container size
     const wrapper = document.querySelector('.cert-preview-wrapper');
-    if (wrapper && !wrapper.dataset.observerAttached) {
-        wrapper.dataset.observerAttached = 'true';
+    if (wrapper) {
         const updateScale = () => {
             const height = wrapper.clientHeight;
             if (height > 0) {
                 const scale = (height - 32) / 794; // Leave 16px padding on top/bottom
                 const finalScale = Math.max(0.1, scale);
                 wrapper.style.setProperty('--preview-scale', finalScale);
-                const activeScaler = document.querySelector('.cert-preview-scaler');
-                if (activeScaler) {
-                    activeScaler.style.transform = `scale(${finalScale}) translate(-50%, -50%)`;
-                    activeScaler.style.translate = 'none';
-                }
             }
         };
-        const observer = new ResizeObserver(() => {
-            updateScale();
-        });
-        observer.observe(wrapper);
+        if (!wrapper.dataset.observerAttached) {
+            wrapper.dataset.observerAttached = 'true';
+            const observer = new ResizeObserver(() => {
+                updateScale();
+            });
+            observer.observe(wrapper);
+        }
         updateScale();
     }
 
