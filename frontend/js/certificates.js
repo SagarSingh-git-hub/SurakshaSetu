@@ -846,7 +846,7 @@ async function viewIssuedCertificate(certId) {
             
             const doc = iframe.contentWindow.document;
             doc.open();
-            doc.write('<html><head><style>body{margin:0;padding:0;display:flex;align-items:center;justify-content:center;height:100vh;background:#e2e8f0;font-family:sans-serif;} .cert-container{box-shadow:0 10px 40px rgba(0,0,0,0.1);background:#fff;max-width:95%;max-height:95%;overflow:hidden;transform-origin:center center;} *{box-sizing:inherit;}</style></head><body><div class="cert-container">' + data.html_content + '</div></body></html>');
+            doc.write('<html><head><style>body{margin:0;padding:0;display:flex;align-items:center;justify-content:center;height:100vh;background:#e2e8f0;font-family:sans-serif;overflow:hidden;} .cert-scaler{width:1123px;height:794px;transform-origin:center center;} .cert-container{width:100%;height:100%;box-shadow:0 10px 40px rgba(0,0,0,0.1);background:#fff;overflow:hidden;} *{box-sizing:inherit;}</style></head><body><div class="cert-scaler" id="cert-scaler"><div class="cert-container">' + data.html_content + '</div></div><script>function fit(){var s=document.getElementById("cert-scaler");var w=window.innerWidth*0.95;var h=window.innerHeight*0.95;var scale=Math.min(w/1123, h/794);s.style.transform="scale("+scale+")";} window.onload=fit;window.onresize=fit;</script></body></html>');
             doc.close();
 
             overlay.classList.add('open');

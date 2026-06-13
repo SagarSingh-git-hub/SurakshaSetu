@@ -1704,7 +1704,7 @@ function openTemplatePreview(id) {
 
   const doc = iframe.contentWindow.document;
   doc.open();
-  doc.write('<html><head><style>body{margin:0;padding:0;display:flex;align-items:center;justify-content:center;height:100vh;background:#e2e8f0;font-family:sans-serif;} .cert-container{box-shadow:0 10px 40px rgba(0,0,0,0.1);background:#fff;max-width:95%;max-height:95%;overflow:hidden;transform-origin:center center;} *{box-sizing:inherit;}</style></head><body><div class="cert-container">' + content + '</div></body></html>');
+  doc.write('<html><head><style>body{margin:0;padding:0;display:flex;align-items:center;justify-content:center;height:100vh;background:#e2e8f0;font-family:sans-serif;overflow:hidden;} .cert-scaler{width:1123px;height:794px;transform-origin:center center;} .cert-container{width:100%;height:100%;box-shadow:0 10px 40px rgba(0,0,0,0.1);background:#fff;overflow:hidden;} *{box-sizing:inherit;}</style></head><body><div class="cert-scaler" id="cert-scaler"><div class="cert-container">' + content + '</div></div><script>function fit(){var s=document.getElementById("cert-scaler");var w=window.innerWidth*0.95;var h=window.innerHeight*0.95;var scale=Math.min(w/1123, h/794);s.style.transform="scale("+scale+")";} window.onload=fit;window.onresize=fit;</script></body></html>');
   doc.close();
 
   const btnDefault = document.getElementById('btn-preview-default');
@@ -1738,37 +1738,43 @@ function openTemplatePreview(id) {
 }
 
 function setDefaultTemplate(id) {
-  showCustomConfirm("Set Default?", "Are you sure you want to set this template as the default template?", async () => {
-    const formData = new FormData();
-    formData.append('admin_password', currentAdminPassword);
-    formData.append('id', id);
+  // Optimistic UI updates
+  allTemplates.forEach(t => t.is_default = (t.id == id ? 1 : 0));
+  
+  const btnDefault = document.getElementById('btn-preview-default');
+  if (btnDefault) {
+    btnDefault.innerHTML = '<i class="ph-bold ph-check-circle"></i> Default ✓';
+    btnDefault.style.background = '#f59e0b';
+    btnDefault.style.color = '#fff';
+    btnDefault.style.borderColor = '#d97706';
+    btnDefault.disabled = true;
+    btnDefault.style.cursor = 'default';
+    btnDefault.onclick = null;
+  }
+  
+  allTemplates.sort((a, b) => Number(b.is_default) - Number(a.is_default));
+  const container = document.getElementById('cert-templates-container');
+  if (container) renderTemplatesUI(container, allTemplates);
 
-    try {
-      const res = await fetch(`${API_URL}/api/certificates/set_default_template.php`, {
-        method: 'POST',
-        body: formData
-      });
-      const data = await res.json();
-      if (data.success) {
-        showToast('✅ Default template set successfully!');
-        const overlay = document.getElementById('template-preview-overlay');
-        if (overlay) overlay.classList.remove('open');
-        
-        // Refresh local templates array & UI
-        if (typeof fetchTemplates === 'function') {
-          await fetchTemplates(true);
-        }
-        
-        // Refresh the preview to update button state
-        openTemplatePreview(id);
-      } else {
-        showToast('❌ Failed: ' + data.message);
-      }
-    } catch (err) {
-      console.error(err);
-      showToast('❌ Error setting default template');
-    }
-  }, "Yes, set default", false);
+  showToast('✅ Default template set successfully!');
+
+  const formData = new FormData();
+  formData.append('admin_password', currentAdminPassword);
+  formData.append('id', id);
+
+  fetch(`${API_URL}/api/certificates/set_default_template.php`, {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (!data.success) throw new Error('API failed');
+  })
+  .catch(err => {
+    console.error(err);
+    showToast('❌ Failed to set default on server');
+    if (typeof fetchTemplates === 'function') fetchTemplates(true);
+  });
 }
 
 function showCustomConfirm(title, message, onAccept, acceptText = 'Yes, delete it', isDanger = true) {
@@ -1885,22 +1891,11 @@ function renderTemplatesUI(container, templates) {
       .template-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -8px rgba(0,0,0,0.15); border-color: #94a3b8 !important; z-index: 10; }
       .template-card .preview-box {
         width: 100%;
-        aspect-ratio: 1123 / 238; /* Top 30% aspect ratio of 1123x794 certificate */
+        aspect-ratio: 1123 / 449; /* Top 40% aspect ratio of 1123x794 certificate */
         overflow: hidden;
         position: relative;
         background: #f8fafc;
         border-bottom: 1px solid #e2e8f0;
-        container-type: inline-size;
-      }
-      .template-card .iframe-wrap {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 1123px;
-        height: 794px;
-        transform-origin: top left;
-        transform: scale(calc(100cqw / 1123));
-        pointer-events: none;
       }
     </style>
   `;
@@ -1982,16 +1977,23 @@ function renderTemplatesUI(container, templates) {
                .replace(/{{ISSUER}}/g, 'Issuing Authority')
                .replace(/{{ORGANIZATION}}/g, 'Organization');
 
+    const scaleScript = '<style>body{margin:0;padding:0;overflow:hidden;} #cert-scaler{width:1123px;height:794px;transform-origin:top left;}</style><script>function fit(){var s=document.getElementById("cert-scaler");if(s){s.style.transform="scale("+(window.innerWidth/1123)+")";}} window.onload=fit;window.onresize=fit;</script>';
+    
+    if (html.includes('<body') && html.includes('</body>')) {
+      html = html.replace(/(<body[^>]*>)/i, '$1<div id="cert-scaler">');
+      html = html.replace(/<\/body>/i, '</div>' + scaleScript + '</body>');
+    } else {
+      html = '<div id="cert-scaler">' + html + '</div>' + scaleScript;
+    }
+
     let encodedHtml = html.replace(/"/g, '&quot;');
     
-    // Render dynamic template card with responsive aspect-ratio cropped top 30% preview
+    // Render dynamic template card with responsive aspect-ratio cropped top 40% preview
     return `
       <div class="admin-widget template-card group" onclick="openTemplatePreview(${t.id})" style="overflow:hidden;border:1px solid #e2e8f0;position:relative;background:#fff;cursor:pointer;">
         ${defaultBadge}
         <div class="preview-box">
-           <div class="iframe-wrap">
-              <iframe srcdoc="${encodedHtml}" style="width:100%;height:100%;border:none;" scrolling="no"></iframe>
-           </div>
+           <iframe srcdoc="${encodedHtml}" style="width:100%;height:100%;border:none;pointer-events:none;" scrolling="no" tabindex="-1"></iframe>
         </div>
         <div style="padding:16px;">
           <div style="font-size:15px;font-weight:700;color:#0f172a;margin-bottom:6px;">${t.name}</div>
