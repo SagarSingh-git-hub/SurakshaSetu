@@ -958,19 +958,12 @@
           </div>
           <!-- Item 6 -->
           <div class="admin-nav-item">
-            <button class="admin-nav-link" onclick="toggleSubnav(this)">
+            <button class="admin-nav-link" onclick="switchAdminView('notification', this); return false;">
               <div class="admin-nav-link-left">
                 <i class="ph-duotone ph-bell-ringing admin-nav-icon" style="font-size: 20px;"></i>
-                <span class="admin-sidebar-text">Notifications</span>
+                <span class="admin-sidebar-text">Notification</span>
               </div>
-              <i class="ph-duotone ph-caret-down admin-nav-arrow" style="font-size: 16px;"></i>
             </button>
-            <div class="admin-subnav">
-              <a href="#" class="admin-subnav-link" title="Urgent Alerts"><i
-                  class="ph-duotone ph-warning-circle"></i><span class="admin-subnav-text">Urgent Alerts</span></a>
-              <a href="#" class="admin-subnav-link" title="Resolved Updates"><i
-                  class="ph-duotone ph-check-circle"></i><span class="admin-subnav-text">Resolved Updates</span></a>
-            </div>
           </div>
           <!-- Item 6 -->
           <div class="admin-nav-item">
@@ -1908,24 +1901,24 @@
                 </div>
                 <div class="settings-field">
                   <div class="settings-field-label">Tagline</div>
-                  <input class="settings-field-input" type="text" value="Community Environmental Reporter">
+                  <input class="settings-field-input" type="text" value="🌱 Civic Environmental Action Platform">
                 </div>
               </div>
               <div class="settings-field-row">
                 <div class="settings-field">
                   <div class="settings-field-label">Admin contact email</div>
-                  <input class="settings-field-input" type="email" value="admin@surakshasetu.in">
+                  <input class="settings-field-input" type="email" value="admin@surakshasetu.org">
                 </div>
                 <div class="settings-field">
                   <div class="settings-field-label">Support phone</div>
-                  <input class="settings-field-input" type="text" value="+91 562 400 0000">
+                  <input class="settings-field-input" type="text" value="+91 82658 88526">
                 </div>
               </div>
               <div class="settings-field-row full">
                 <div class="settings-field">
                   <div class="settings-field-label">Platform description</div>
                   <textarea class="settings-field-input" rows="2"
-                    style="resize:vertical;">A civic technology platform enabling Agra residents to report and track environmental issues in real time.</textarea>
+                    style="resize:vertical;">A civic technology platform enabling Uttarakhand residents to report and track environmental issues in real time.</textarea>
                 </div>
               </div>
             </div>
@@ -1997,17 +1990,8 @@
               </div>
               <div class="settings-toggle-row">
                 <div class="settings-toggle-info">
-                  <div class="settings-toggle-name">Anonymous reporting</div>
-                  <div class="settings-toggle-desc">Allow reports without account registration.</div>
-                </div>
-                <div class="settings-toggle" onclick="this.classList.toggle('on')">
-                  <div class="settings-toggle-knob"></div>
-                </div>
-              </div>
-              <div class="settings-toggle-row">
-                <div class="settings-toggle-info">
                   <div class="settings-toggle-name">AI auto-categorization</div>
-                  <div class="settings-toggle-desc">Use Eco Warrior YOLO model to classify uploaded photos.</div>
+                  <div class="settings-toggle-desc">Use Suraksha Setu's YOLO model to classify uploaded photos.</div>
                 </div>
                 <div class="settings-toggle on" onclick="this.classList.toggle('on')">
                   <div class="settings-toggle-knob"></div>
@@ -2028,6 +2012,62 @@
           </div>
         </div>
 
+
+        <!-- NOTIFICATIONS: URGENT ALERTS -->
+        <div id="admin-view-notification" style="display: none;">
+          <div style="margin-bottom:24px;">
+            <div style="font-size:24px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--text);display:flex;align-items:center;gap:10px;">
+              <i class="ph-duotone ph-warning-octagon" style="color:#ef4444;font-size:28px;"></i> Urgent Alerts
+            </div>
+            <div style="font-size:14px;color:var(--text3);margin-top:6px;">Critical issues requiring immediate admin attention.</div>
+          </div>
+
+          <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:0.5px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 6px rgba(239, 68, 68, 0.6);"></div>
+            Critical — requires immediate action
+          </div>
+
+          <div class="admin-alert-card" style="background:#fff;border:1px solid var(--border);border-left:4px solid #ef4444;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,0.03);">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:12px;">
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                <span style="background:#fef2f2;color:#ef4444;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;">Security</span>
+                <h3 style="font-size:16px;font-weight:700;color:var(--text);font-family:'Outfit',sans-serif;margin:0;">Security — 8 failed login attempts on admin account</h3>
+              </div>
+              <span style="font-size:12px;color:var(--text3);font-weight:600;"><i class="ph-duotone ph-clock" style="position:relative;top:2px;"></i> 8 min ago</span>
+            </div>
+            
+            <div style="font-size:13px;color:var(--text2);margin-bottom:20px;display:flex;align-items:center;gap:16px;">
+              <span><i class="ph-duotone ph-globe" style="position:relative;top:2px;"></i> IP: 103.41.xx.xx</span>
+              <span style="color:#ef4444;font-weight:600;"><i class="ph-duotone ph-warning-circle" style="position:relative;top:2px;"></i> Account auto-locked</span>
+            </div>
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <button class="action-btn" style="padding:8px 16px;background:#fef2f2;color:#ef4444;border:1px solid #fca5a5;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;">Review Sessions</button>
+              <button class="action-btn" style="padding:8px 16px;background:#fff;color:var(--text);border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;">Block IP</button>
+              <button class="action-btn" style="padding:8px 16px;background:transparent;color:var(--text3);border:none;font-size:13px;font-weight:600;cursor:pointer;margin-left:auto;transition:all 0.2s;">Dismiss</button>
+            </div>
+          </div>
+
+          <div class="admin-alert-card" style="background:#fff;border:1px solid var(--border);border-left:4px solid #f97316;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,0.03);">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:12px;">
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                <span style="background:#fff7ed;color:#f97316;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;">System</span>
+                <h3 style="font-size:16px;font-weight:700;color:var(--text);font-family:'Outfit',sans-serif;margin:0;">System — Real-time report sync failed</h3>
+              </div>
+              <span style="font-size:12px;color:var(--text3);font-weight:600;"><i class="ph-duotone ph-clock" style="position:relative;top:2px;"></i> 12 min ago</span>
+            </div>
+            
+            <div style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.5;">
+              Database connection timeout during routine sync. 43 reports queued locally and waiting to be pushed to main cluster.
+            </div>
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <button class="action-btn" style="padding:8px 16px;background:#fff7ed;color:#f97316;border:1px solid #fdba74;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;">Retry Sync</button>
+              <button class="action-btn" style="padding:8px 16px;background:#fff;color:var(--text);border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;">View Logs</button>
+              <button class="action-btn" style="padding:8px 16px;background:transparent;color:var(--text3);border:none;font-size:13px;font-weight:600;cursor:pointer;margin-left:auto;transition:all 0.2s;">Dismiss</button>
+            </div>
+          </div>
+        </div>
 
         <!-- SETTINGS: SECURITY -->
         <div id="admin-view-settings-security" style="display: none;">
@@ -2345,11 +2385,12 @@
                   border-radius: 12px;
                   position: relative;
                   overflow: hidden;
-                  box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+                  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.02);
                   width: 100%;
                   container-type: inline-size;
                   aspect-ratio: 1.6;
                 }
+
                 .cert-preview-scaler {
                   width: 1123px;
                   height: 794px;
@@ -2360,16 +2401,17 @@
                   left: 50%;
                   translate: -50% -50%;
                   background: #fff;
-                  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+                  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
                   border-radius: 4px;
                   overflow: hidden;
                 }
+
                 .cert-preview-scaler iframe {
                   width: 100%;
                   height: 100%;
                   border: none;
                 }
-                
+
                 .btn-issue-premium {
                   width: 100%;
                   justify-content: center;
@@ -2386,23 +2428,26 @@
                   align-items: center;
                   gap: 6px;
                   cursor: pointer;
-                  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+                  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
                   white-space: nowrap;
                 }
+
                 .btn-issue-premium:hover:not(:disabled) {
                   transform: translateY(-1px);
                   box-shadow: 0 6px 14px rgba(22, 163, 74, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
                 }
+
                 .btn-issue-premium:active:not(:disabled) {
                   transform: translateY(0.5px);
                   box-shadow: 0 2px 6px rgba(22, 163, 74, 0.12);
                 }
+
                 .btn-issue-premium:disabled {
                   opacity: 0.8;
                   cursor: not-allowed;
                   transform: none;
                 }
-                
+
                 .btn-preview-premium {
                   width: 100%;
                   justify-content: center;
@@ -2421,26 +2466,30 @@
                   cursor: pointer;
                   white-space: nowrap;
                 }
+
                 .btn-preview-premium:hover {
                   background: #f8fafc;
                   border-color: #94a3b8;
                   color: #0f172a;
                   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
                 }
+
                 .btn-preview-premium:active {
                   transform: translateY(1px);
                 }
-                
+
                 .cert-actions-row {
                   margin-top: 16px;
                   display: flex;
                   gap: 12px;
                   width: 100%;
                 }
+
                 .cert-actions-row button {
                   flex: 1;
                   width: auto !important;
                 }
+
                 @media (max-width: 576px) {
                   .cert-actions-row {
                     flex-direction: column;
@@ -2453,6 +2502,7 @@
                   grid-template-columns: 1fr 420px;
                   gap: 24px;
                 }
+
                 @media (max-width: 992px) {
                   .cert-grid-layout {
                     grid-template-columns: 1fr;
@@ -2464,19 +2514,28 @@
                   grid-template-columns: 1fr 1fr;
                   gap: 16px;
                 }
+
                 @media (max-width: 576px) {
                   .cert-delivery-grid {
                     grid-template-columns: 1fr;
                     gap: 10px;
                   }
                 }
-                
+
                 #cert-issued-msg {
                   animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 }
+
                 @keyframes popIn {
-                  0% { opacity: 0; transform: scale(0.9) translateY(10px); }
-                  100% { opacity: 1; transform: scale(1) translateY(0); }
+                  0% {
+                    opacity: 0;
+                    transform: scale(0.9) translateY(10px);
+                  }
+
+                  100% {
+                    opacity: 1;
+                    transform: scale(1) translateY(0);
+                  }
                 }
               </style>
 
@@ -2501,7 +2560,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Certificate Details -->
           <div style="margin-bottom:24px;">
             <div
@@ -2555,11 +2614,13 @@
                 style="font-size:12px;color:var(--text3);margin-bottom:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:6px;">
                 <i class="ph-duotone ph-paper-plane-right" style="font-size:14px;"></i> Delivery options
               </div>
-              
+
               <div class="cert-delivery-grid">
-                <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;">
+                <div
+                  style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;">
                   <div>
-                    <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Send via email</div>
+                    <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Send via email
+                    </div>
                     <div style="font-size:12px;color:var(--text3);">Deliver PDF certificate to recipient.</div>
                   </div>
                   <label style="position:relative;display:inline-block;width:40px;height:24px;">
@@ -2572,9 +2633,11 @@
                     </span>
                   </label>
                 </div>
-                <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;">
+                <div
+                  style="display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--border);border-radius:8px;background:#f8fafc;">
                   <div>
-                    <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Publish to community feed</div>
+                    <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Publish to
+                      community feed</div>
                     <div style="font-size:12px;color:var(--text3);">Announce this award publicly.</div>
                   </div>
                   <label style="position:relative;display:inline-block;width:40px;height:24px;">
@@ -3925,6 +3988,7 @@
       document.getElementById('admin-view-monitoring').style.display = 'none';
       document.getElementById('admin-view-settings-general').style.display = 'none';
       document.getElementById('admin-view-settings-security').style.display = 'none';
+      if (document.getElementById('admin-view-notification')) document.getElementById('admin-view-notification').style.display = 'none';
       if (document.getElementById('admin-view-cert-issue')) document.getElementById('admin-view-cert-issue').style.display = 'none';
       if (document.getElementById('admin-view-cert-view')) document.getElementById('admin-view-cert-view').style.display = 'none';
       if (document.getElementById('admin-view-cert-templates')) document.getElementById('admin-view-cert-templates').style.display = 'none';
@@ -3966,8 +4030,8 @@
       } else if (viewName === 'settings-general') {
         title.innerText = 'General Settings';
         actions.style.display = 'none';
-      } else if (viewName === 'settings-categories') {
-        title.innerText = 'Categories Settings';
+      } else if (viewName === 'notification') {
+        title.innerText = 'Urgent Alerts';
         actions.style.display = 'none';
       } else if (viewName === 'settings-security') {
         title.innerText = 'Security Settings';
