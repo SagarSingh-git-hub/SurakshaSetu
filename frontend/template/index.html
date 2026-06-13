@@ -2613,117 +2613,44 @@
                 <i class="ph-duotone ph-eye" style="font-size:16px;"></i> Live preview
               </div>
               <style>
-                .cert-preview-parent {
-                  position: relative;
-                  width: 100%;
-                  aspect-ratio: 1.414;
-                  border-radius: 12px;
-                  overflow: hidden;
-                  border: 1px solid #cbd5e1;
-                  box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
-                }
                 .cert-preview-wrapper {
                   background: #f8fafc;
-                  width: 100%;
-                  height: 100%;
-                  overflow: auto;
-                  container-type: inline-size;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  padding: 24px;
-                  box-sizing: border-box;
-                  --zoom-factor: 1;
-                  --base-scale: calc((100cqi - 48px) / 800);
-                  --zoom-scale: calc(var(--base-scale) * var(--zoom-factor));
-                }
-                .cert-preview-wrapper.is-zoomed {
-                  justify-content: flex-start;
-                  align-items: flex-start;
-                  cursor: grab;
-                }
-                .cert-preview-content {
-                  margin: auto;
+                  border: 1px solid #cbd5e1;
+                  border-radius: 12px;
                   position: relative;
-                  flex-shrink: 0;
-                  width: calc(800px * var(--zoom-scale));
-                  height: calc(566px * var(--zoom-scale));
-                  transition: width 0.15s ease, height 0.15s ease;
+                  overflow: hidden;
+                  box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+                  width: 100%;
+                  container-type: inline-size;
+                  aspect-ratio: 1.414;
                 }
                 .cert-preview-scaler {
                   width: 800px;
                   height: 566px;
+                  transform: scale(calc((100cqi - 32px) / 800));
+                  transform-origin: center;
                   position: absolute;
-                  top: 0;
-                  left: 0;
-                  transform: scale(var(--zoom-scale));
-                  transform-origin: top left;
+                  top: 50%;
+                  left: 50%;
+                  translate: -50% -50%;
                   background: #fff;
                   box-shadow: 0 8px 24px rgba(0,0,0,0.08);
                   border-radius: 4px;
                   overflow: hidden;
-                  pointer-events: none;
-                  transition: transform 0.15s ease;
                 }
                 .cert-preview-scaler iframe {
                   width: 100%;
                   height: 100%;
                   border: none;
-                  pointer-events: none;
-                }
-                .zoom-controls {
-                  position: absolute;
-                  bottom: 16px;
-                  right: 16px;
-                  display: flex;
-                  align-items: center;
-                  gap: 4px;
-                  background: rgba(255, 255, 255, 0.85);
-                  backdrop-filter: blur(8px);
-                  border: 1px solid #cbd5e1;
-                  border-radius: 30px;
-                  padding: 4px;
-                  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-                  z-index: 10;
-                  transition: all 0.2s ease;
-                }
-                .zoom-controls button {
-                  background: transparent;
-                  border: none;
-                  width: 32px;
-                  height: 32px;
-                  border-radius: 50%;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  color: #475569;
-                  cursor: pointer;
-                  transition: all 0.2s ease;
-                  font-family: 'Outfit', sans-serif;
-                  font-size: 14px;
-                }
-                .zoom-controls button:hover {
-                  background: #f1f5f9;
-                  color: #0f172a;
-                }
-                .zoom-controls button:active {
-                  transform: scale(0.95);
-                }
-                .zoom-controls .zoom-percentage {
-                  width: auto;
-                  padding: 0 8px;
-                  font-weight: 600;
-                  font-size: 12px;
-                  border-radius: 12px;
                 }
                 
                 .btn-issue-premium {
                   width: 100%;
                   justify-content: center;
-                  padding: 12px 20px;
-                  font-size: 15px;
+                  padding: 16px 24px;
+                  font-size: 16px;
                   font-weight: 700;
-                  border-radius: 10px;
+                  border-radius: 12px;
                   background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
                   border: none;
                   color: #fff;
@@ -2752,10 +2679,10 @@
                 .btn-preview-premium {
                   width: 100%;
                   justify-content: center;
-                  padding: 10px 16px;
-                  font-size: 13px;
+                  padding: 14px 20px;
+                  font-size: 14px;
                   font-weight: 600;
-                  border-radius: 10px;
+                  border-radius: 12px;
                   background: #fff;
                   border: 1px solid #cbd5e1;
                   color: #475569;
@@ -2785,24 +2712,13 @@
                 }
               </style>
 
-              <div class="cert-preview-parent">
-                <div id="cert-preview-container" class="cert-preview-wrapper">
-                  <div class="cert-preview-content">
-                    <div class="cert-preview-scaler">
-                      <iframe id="cert-live-preview-iframe"></iframe>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Zoom Controls -->
-                <div class="zoom-controls">
-                  <button type="button" onclick="zoomOut()" title="Zoom Out"><i class="ph-bold ph-minus"></i></button>
-                  <button type="button" onclick="resetZoom()" title="Reset Zoom" class="zoom-percentage">100%</button>
-                  <button type="button" onclick="zoomIn()" title="Zoom In"><i class="ph-bold ph-plus"></i></button>
+              <div id="cert-preview-container" class="cert-preview-wrapper">
+                <div class="cert-preview-scaler">
+                  <iframe id="cert-live-preview-iframe"></iframe>
                 </div>
               </div>
 
-              <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px;">
+              <div style="margin-top:20px;display:flex;flex-direction:column;gap:12px;">
                 <button id="btn-issue-cert" class="btn-issue-premium" onclick="issueCertificate()">
                   <i class="ph-bold ph-award" style="font-size:18px;"></i> Issue certificate
                 </button>

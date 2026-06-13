@@ -157,9 +157,6 @@ function initCertificates() {
         dateInput.value = today;
         renderLivePreview();
     }
-
-    // Initialize preview zoom and drag-to-pan controls
-    initZoomControls();
 }
 
 async function loadMembers() {
@@ -912,105 +909,4 @@ function exportCertsCSV() {
     const type = document.getElementById('cert-filter-type')?.value || 'All';
     const status = document.getElementById('cert-filter-status')?.value || 'All';
     window.open(API_URL + `/api/certificates/list_certificates.php?export=1&search=${encodeURIComponent(search)}&type=${encodeURIComponent(type)}&status=${encodeURIComponent(status)}`, '_blank');
-}
-
-// Live Preview Zoom & Pan Controls
-let zoomFactor = 1.0;
-
-function updateZoom(newZoomFactor) {
-    // Clamp zoom factor between 0.5 and 3.0
-    zoomFactor = Math.max(0.5, Math.min(3.0, newZoomFactor));
-    
-    const wrapper = document.getElementById('cert-preview-container');
-    if (wrapper) {
-        wrapper.style.setProperty('--zoom-factor', zoomFactor);
-        
-        // Adjust flex positioning for overflow scrolling
-        if (zoomFactor > 1.0) {
-            wrapper.classList.add('is-zoomed');
-        } else {
-            wrapper.classList.remove('is-zoomed');
-        }
-        
-        // Update percentages display in controls
-        const zoomText = wrapper.parentElement?.querySelector('.zoom-percentage');
-        if (zoomText) {
-            zoomText.textContent = Math.round(zoomFactor * 100) + '%';
-        }
-    }
-}
-
-function zoomIn() {
-    updateZoom(zoomFactor + 0.1);
-}
-
-function zoomOut() {
-    updateZoom(zoomFactor - 0.1);
-}
-
-function resetZoom() {
-    updateZoom(1.0);
-}
-
-// Expose zoom helpers to global window object
-window.zoomIn = zoomIn;
-window.zoomOut = zoomOut;
-window.resetZoom = resetZoom;
-
-function initZoomControls() {
-    const wrapper = document.getElementById('cert-preview-container');
-    if (!wrapper) return;
-    
-    // Zoom via Ctrl + Wheel / Trackpad pinch
-    wrapper.addEventListener('wheel', (e) => {
-        if (e.ctrlKey) {
-            e.preventDefault();
-            // Scale step based on scroll delta
-            const delta = -e.deltaY * 0.005;
-            updateZoom(zoomFactor + delta);
-        }
-    }, { passive: false });
-    
-    // Drag to Pan logic
-    let isDragging = false;
-    let startX, startY, scrollLeft, scrollTop;
-    
-    wrapper.addEventListener('mousedown', (e) => {
-        // Only allow dragging if the content actually overflows the wrapper
-        if (wrapper.scrollWidth > wrapper.clientWidth || wrapper.scrollHeight > wrapper.clientHeight) {
-            isDragging = true;
-            wrapper.style.cursor = 'grabbing';
-            startX = e.pageX - wrapper.offsetLeft;
-            startY = e.pageY - wrapper.offsetTop;
-            scrollLeft = wrapper.scrollLeft;
-            scrollTop = wrapper.scrollTop;
-            e.preventDefault(); // Prevent text selection
-        }
-    });
-    
-    wrapper.addEventListener('mouseleave', () => {
-        if (isDragging) {
-            isDragging = false;
-            wrapper.style.cursor = zoomFactor > 1.0 ? 'grab' : 'default';
-        }
-    });
-    
-    wrapper.addEventListener('mouseup', () => {
-        if (isDragging) {
-            isDragging = false;
-            wrapper.style.cursor = zoomFactor > 1.0 ? 'grab' : 'default';
-        }
-    });
-    
-    wrapper.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        const x = e.pageX - wrapper.offsetLeft;
-        const y = e.pageY - wrapper.offsetTop;
-        // Scroll adjustment with speed multiplier
-        const walkX = (x - startX) * 1.5;
-        const walkY = (y - startY) * 1.5;
-        wrapper.scrollLeft = scrollLeft - walkX;
-        wrapper.scrollTop = scrollTop - walkY;
-    });
 }
