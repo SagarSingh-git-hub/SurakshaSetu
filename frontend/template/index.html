@@ -2416,7 +2416,7 @@
             </div>
           </div>
 
-          <div style="display:grid;grid-template-columns:1fr 420px;gap:24px;">
+          <div class="cert-grid-layout">
             <div>
               <!-- Recipient Section -->
               <div style="margin-bottom:24px;">
@@ -2558,52 +2558,6 @@
                   </div>
                 </div>
               </div>
-
-              <!-- Delivery Options -->
-              <div>
-                <div
-                  style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:0.5px;">
-                  <i class="ph-duotone ph-paper-plane-right" style="font-size:16px;"></i> Delivery options
-                </div>
-                <div class="admin-widget">
-                  <div
-                    style="display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--border);">
-                    <div>
-                      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Send via email
-                      </div>
-                      <div style="font-size:12px;color:var(--text3);">Deliver PDF certificate to recipient's email.
-                      </div>
-                    </div>
-                    <label style="position:relative;display:inline-block;width:40px;height:24px;">
-                      <input type="checkbox" id="cert-send-email" checked style="opacity:0;width:0;height:0;"
-                        onchange="this.nextElementSibling.style.background=this.checked?'#16a34a':'#e2e8f0';this.nextElementSibling.firstElementChild.style.transform=this.checked?'translateX(16px)':'translateX(0)';">
-                      <span
-                        style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#16a34a;transition:.3s;border-radius:34px;">
-                        <span
-                          style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%;transform:translateX(16px);box-shadow:0 1px 3px rgba(0,0,0,0.1);"></span>
-                      </span>
-                    </label>
-                  </div>
-                  <div
-                    style="display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--border);">
-                    <div>
-                      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Publish to
-                        community feed</div>
-                      <div style="font-size:12px;color:var(--text3);">Announce this award publicly on the platform.
-                      </div>
-                    </div>
-                    <label style="position:relative;display:inline-block;width:40px;height:24px;">
-                      <input type="checkbox" id="cert-publish-feed" checked style="opacity:0;width:0;height:0;"
-                        onchange="this.nextElementSibling.style.background=this.checked?'#16a34a':'#e2e8f0';this.nextElementSibling.firstElementChild.style.transform=this.checked?'translateX(16px)':'translateX(0)';">
-                      <span
-                        style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#16a34a;transition:.3s;border-radius:34px;">
-                        <span
-                          style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%;transform:translateX(16px);box-shadow:0 1px 3px rgba(0,0,0,0.1);"></span>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <!-- Preview panel -->
@@ -2718,6 +2672,17 @@
                     gap: 10px;
                   }
                 }
+
+                .cert-grid-layout {
+                  display: grid;
+                  grid-template-columns: 1fr 420px;
+                  gap: 24px;
+                }
+                @media (max-width: 992px) {
+                  .cert-grid-layout {
+                    grid-template-columns: 1fr;
+                  }
+                }
                 
                 #cert-issued-msg {
                   animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -2746,6 +2711,52 @@
               <div id="cert-issued-msg"
                 style="display:none;margin-top:16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px;font-size:13px;color:#16a34a;align-items:center;gap:8px;justify-content:center;">
                 <i class="ph-duotone ph-check-circle" style="font-size:18px;"></i> Sent to priya.sharma@surakshasetu.in!
+              </div>
+
+              <!-- Delivery Options -->
+              <div style="margin-top:24px;">
+                <div
+                  style="font-size:13px;font-weight:700;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:0.5px;">
+                  <i class="ph-duotone ph-paper-plane-right" style="font-size:16px;"></i> Delivery options
+                </div>
+                <div class="admin-widget">
+                  <div
+                    style="display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--border);">
+                    <div>
+                      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Send via email
+                      </div>
+                      <div style="font-size:12px;color:var(--text3);">Deliver PDF certificate to recipient's email.
+                      </div>
+                    </div>
+                    <label style="position:relative;display:inline-block;width:40px;height:24px;">
+                      <input type="checkbox" id="cert-send-email" checked style="opacity:0;width:0;height:0;"
+                        onchange="this.nextElementSibling.style.background=this.checked?'#16a34a':'#e2e8f0';this.nextElementSibling.firstElementChild.style.transform=this.checked?'translateX(16px)':'translateX(0)';">
+                      <span
+                        style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#16a34a;transition:.3s;border-radius:34px;">
+                        <span
+                          style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%;transform:translateX(16px);box-shadow:0 1px 3px rgba(0,0,0,0.1);"></span>
+                      </span>
+                    </label>
+                  </div>
+                  <div
+                    style="display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--border);">
+                    <div>
+                      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;">Publish to
+                        community feed</div>
+                      <div style="font-size:12px;color:var(--text3);">Announce this award publicly on the platform.
+                      </div>
+                    </div>
+                    <label style="position:relative;display:inline-block;width:40px;height:24px;">
+                      <input type="checkbox" id="cert-publish-feed" checked style="opacity:0;width:0;height:0;"
+                        onchange="this.nextElementSibling.style.background=this.checked?'#16a34a':'#e2e8f0';this.nextElementSibling.firstElementChild.style.transform=this.checked?'translateX(16px)':'translateX(0)';">
+                      <span
+                        style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#16a34a;transition:.3s;border-radius:34px;">
+                        <span
+                          style="position:absolute;height:18px;width:18px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%;transform:translateX(16px);box-shadow:0 1px 3px rgba(0,0,0,0.1);"></span>
+                      </span>
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
