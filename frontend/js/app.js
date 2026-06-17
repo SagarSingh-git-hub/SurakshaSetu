@@ -467,7 +467,7 @@ function initHomeScrollReveal(isRevisit = false) {
       distance: '40px',
       duration: 800,
       easing: 'cubic-bezier(0.25, 0.8, 0.25, 1)',
-      opacity: 1,
+      opacity: 0,
       scale: 0.98,
       viewFactor: 0.15,
       mobile: true
