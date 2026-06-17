@@ -375,7 +375,7 @@ const HOME_SR_TARGETS = [
 
 const HOME_VISIBILITY_SELECTORS = [
   '.hero-h1', '.hero-tagline', '.hero-cta', '.hero-stats', '#hero-globe-wrapper',
-  '.step-card', '.cat-card', '.testimonial-card', 'section h2', 'section > p'
+  '.step-card', '.cat-card', '.testimonial-card', 'section h2', 'section > p', '.reveal-line'
 ];
 
 function resetHomeVisibility() {
@@ -441,20 +441,34 @@ function animateHeroSection(isRevisit = false) {
   }
 
   gsap.killTweensOf(targets);
+  gsap.killTweensOf('.reveal-line');
+
+  // Split the H1 into lines for a premium text reveal
+  const h1 = document.querySelector('.hero-h1');
+  if (h1 && !h1.classList.contains('split-done')) {
+    h1.classList.add('split-done');
+    h1.innerHTML = h1.innerHTML.split('<br>').map(line => `<span style="display:inline-block; overflow:hidden; vertical-align:top;"><span class="reveal-line" style="display:inline-block;">${line}</span></span>`).join('<br>');
+  }
 
   if (isRevisit) {
     gsap.set(targets, { opacity: 1, y: 0, x: 0 });
+    gsap.set('.reveal-line', { opacity: 1, y: 0 });
     return;
   }
 
-  gsap.set(targets, { opacity: 0, y: 30 });
-  gsap.set('#hero-globe-wrapper', { x: 50, y: 0 });
+  // Set initial states
+  gsap.set('.hero-h1', { opacity: 1 }); // Main container visible
+  gsap.set('.reveal-line', { y: '120%', opacity: 0 }); // Lines hidden below
+  gsap.set(['.hero-tagline', '.hero-cta', '.hero-stats'], { opacity: 0, y: 30 });
+  gsap.set('#hero-globe-wrapper', { x: 50, opacity: 0 });
 
-  gsap.to('.hero-h1', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.1 });
-  gsap.to('.hero-tagline', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.2 });
-  gsap.to('.hero-cta', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.3 });
-  gsap.to('.hero-stats', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.4 });
-  gsap.to('#hero-globe-wrapper', { x: 0, opacity: 1, duration: 1.0, ease: 'power3.out', delay: 0.3 });
+  // Premium text reveal animation
+  gsap.to('.reveal-line', { y: '0%', opacity: 1, duration: 1.0, stagger: 0.15, ease: 'power4.out', delay: 0.1 });
+  
+  gsap.to('.hero-tagline', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.6 });
+  gsap.to('.hero-cta', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.7 });
+  gsap.to('.hero-stats', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.8 });
+  gsap.to('#hero-globe-wrapper', { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 0.5 });
 }
 
 function initHomeScrollReveal(isRevisit = false) {
