@@ -687,11 +687,11 @@ textarea.form-input{resize:vertical;min-height:100px}
 }
 
 .team-social-a {
-  width: 28px;
-  height: 28px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: var(--bg);
-  font-size: 11px;
+  font-size: 16px;
   text-decoration: none;
   color: var(--text3);
   display: flex;
@@ -1905,4 +1905,57 @@ textarea.form-input{resize:vertical;min-height:100px}
   height: 100% !important;
   font-family: 'Consolas', 'Monaco', monospace !important;
   font-size: 13px;
+}
+
+/* ── ORG PAGE CUSTOM FIXES ── */
+.sp-eyebrow {
+  display: inline-block;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--g700);
+  background: var(--g50);
+  border: 1px solid var(--border2);
+  padding: 6px 14px;
+  border-radius: 99px;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+}
+.sec-tag {
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--g600);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.sec-h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight: 800;
+  color: var(--g900);
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+.sec-sub {
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  color: var(--text3);
+  margin-bottom: 32px;
+  max-width: 680px;
+  line-height: 1.6;
+}
+.badge-summary {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg3);
+  color: var(--g700);
+  border: 1px solid var(--border2);
+  border-radius: 99px;
+  padding: 6px 14px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  margin: 4px;
 }

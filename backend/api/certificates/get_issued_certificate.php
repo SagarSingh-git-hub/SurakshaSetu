@@ -7,13 +7,16 @@ if (!isset($_GET['id'])) {
     exit;
 }
 
-$cert_id = $conn->real_escape_string($_GET['id']);
+$cert_id = $_GET['id'];
 
 $sql = "SELECT c.*, t.html_content, t.css_content 
         FROM certificates c 
         LEFT JOIN certificate_templates t ON c.template_id = t.id 
-        WHERE c.cert_id = '$cert_id'";
-$res = $conn->query($sql);
+        WHERE c.cert_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $cert_id);
+$stmt->execute();
+$res = $stmt->get_result();
 
 if ($res && $res->num_rows > 0) {
     $cert = $res->fetch_assoc();

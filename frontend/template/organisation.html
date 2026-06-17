@@ -29,15 +29,15 @@
 
   <!-- ── NAV ── -->
   <nav>
-    <a class="nav-logo" href="/">🌿 Suraksha<span>Setu</span></a>
+    <a class="nav-logo" href="index.html">🌿 Suraksha<span>Setu</span></a>
     <div class="nav-spacer"></div>
     <div class="nav-tabs">
-      <a class="nav-tab nav-tab-link" href="/">Home</a>
-      <a class="nav-tab nav-tab-link" href="/#map">Live Map</a>
-      <a class="nav-tab nav-tab-link" href="/#feed">Community Feed</a>
-      <a class="nav-tab nav-tab-link" href="/#admin">Admin</a>
+      <a class="nav-tab nav-tab-link" href="index.html">Home</a>
+      <a class="nav-tab nav-tab-link" href="index.html#map">Live Map</a>
+      <a class="nav-tab nav-tab-link" href="index.html#feed">Community Feed</a>
+      <a class="nav-tab nav-tab-link" href="index.html#admin">Admin</a>
     </div>
-    <a class="btn-report-nav" href="/#report"
+    <a class="btn-report-nav" href="index.html#report"
       style="text-decoration:none;display:inline-flex;align-items:center;line-height:1">+ Report Issue</a>
   </nav>
 
@@ -56,6 +56,7 @@
       <!-- Subpage Hero -->
       <div class="subpage-hero">
         <div class="hero-bg-orb o1" style="width:300px;height:300px;top:-50px;right:-50px"></div>
+        <div class="sp-eyebrow">🌿 Our Mission</div>
         <div class="subpage-hero-title">Pioneering Civic Climate Action</div>
         <div class="subpage-hero-tagline">
           Suraksha Setu is an open-source, community-driven citizen reporting system built to bridge the gap between
@@ -64,8 +65,10 @@
       </div>
 
       <!-- Section Title -->
-      <h2 class="subpage-section-title">Our Three Core Pillars</h2>
-
+      <div class="sec-tag">Our Foundation</div>
+      <h2 class="subpage-section-title">Three Core Pillars</h2>
+      <p class="sec-sub">Everything we build is rooted in these three principles that drive genuine environmental
+        change.</p>
       <!-- Pillars Grid -->
       <div class="pillars-grid">
         <!-- Pillar 1 -->
@@ -100,7 +103,10 @@
       </div>
 
       <!-- Section Title -->
-      <h2 class="subpage-section-title">Meet the Core Team</h2>
+      <div class="sec-tag">The People</div>
+      <h2 class="sec-h2">Meet the Core Team</h2>
+      <p class="sec-sub">A small, passionate team of technologists, scientists, and activists building digital
+        infrastructure for public good.</p>
 
       <!-- Team Grid -->
       <div class="team-grid">
@@ -160,6 +166,47 @@
           </div>
         </div>
       </div>
+
+    <!-- VALUES -->
+    <div class="sec-tag">Our Values</div>
+    <h2 class="sec-h2">What We Stand For</h2>
+    <p class="sec-sub">Principles that guide every decision we make — from code to community.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:60px">
+      <div
+        style="background:#fff;border:1px solid var(--border);border-radius:var(--r-sm);padding:22px;box-shadow:var(--shadow-sm);display:flex;align-items:flex-start;gap:14px">
+        <div style="font-size:24px;flex-shrink:0">🌐</div>
+        <div>
+          <div
+            style="font-size:14px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin-bottom:4px">
+            Open Source</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.6">All our code is publicly auditable. No black
+            boxes, no hidden agendas.</div>
+        </div>
+      </div>
+      <div
+        style="background:#fff;border:1px solid var(--border);border-radius:var(--r-sm);padding:22px;box-shadow:var(--shadow-sm);display:flex;align-items:flex-start;gap:14px">
+        <div style="font-size:24px;flex-shrink:0">🔒</div>
+        <div>
+          <div
+            style="font-size:14px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin-bottom:4px">
+            Privacy First</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.6">No accounts. No cookies. No tracking. Only the
+            data needed to fix the issue.</div>
+        </div>
+      </div>
+      <div
+        style="background:#fff;border:1px solid var(--border);border-radius:var(--r-sm);padding:22px;box-shadow:var(--shadow-sm);display:flex;align-items:flex-start;gap:14px">
+        <div style="font-size:24px;flex-shrink:0">💚</div>
+        <div>
+          <div
+            style="font-size:14px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin-bottom:4px">
+            Non-Commercial</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.6">We never monetise civic data. Zero ads. Zero
+            third-party data sales.</div>
+        </div>
+      </div>
+    </div>
+      </div>
     </div>
     <!-- Floating Back Button -->
     <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
@@ -178,6 +225,7 @@
       <!-- Subpage Hero -->
       <div class="subpage-hero">
         <div class="hero-bg-orb o2" style="width:300px;height:300px;bottom:-50px;left:-50px"></div>
+        <div class="sp-eyebrow">📊 Q2 2026 Data</div>
         <div class="subpage-hero-title">Real Change, Quantified</div>
         <div class="subpage-hero-tagline">
           Every report is a step toward a healthier city. We translate citizen reports into measurable ecological
@@ -185,148 +233,222 @@
         </div>
       </div>
 
-      <!-- Stats Grid -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-bottom:56px">
-        <!-- Stat Card 1 -->
-        <div
-          style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
-          <div style="font-size:32px;margin-bottom:12px">🗑️</div>
+      <!-- IMPACT STATS -->
+      <div class="sec-tag">Live Metrics</div>
+      <h2 class="sec-h2">By the Numbers</h2>
+      <p class="sec-sub">All figures independently verified by partner NGOs and updated weekly.</p>
+      <div class="impact-stats-grid">
+        <!-- Stats Grid -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-bottom:56px">
+          <!-- Stat Card 1 -->
           <div
-            style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
-            142 Tons</div>
+            style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
+            <div style="font-size:32px;margin-bottom:12px">🗑️</div>
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
+              142 Tons</div>
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
+              Trash Diverted</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">↑
+              12.4T this week</div>
+          </div>
+
+          <!-- Stat Card 2 -->
           <div
-            style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
-            Trash Diverted</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">↑
-            12.4T this week</div>
+            style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
+            <div style="font-size:32px;margin-bottom:12px">🌳</div>
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
+              480 Trees</div>
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
+              Planted &amp; Nurtured</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">↑
+              94%
+              Survival Rate</div>
+          </div>
+
+          <!-- Stat Card 3 -->
+          <div
+            style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
+            <div style="font-size:32px;margin-bottom:12px">🧴</div>
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
+              88,400+</div>
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
+              Plastics Recycled</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">
+              Partnered with local recyclers</div>
+          </div>
+
+          <!-- Stat Card 4 -->
+          <div
+            style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
+            <div style="font-size:32px;margin-bottom:12px">✨</div>
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
+              89 Areas</div>
+            <div
+              style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
+              Dirty Spaces Sanitized</div>
+            <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">
+              ~4.8
+              days avg. resolution</div>
+          </div>
         </div>
 
-        <!-- Stat Card 2 -->
-        <div
-          style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
-          <div style="font-size:32px;margin-bottom:12px">🌳</div>
-          <div
-            style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
-            480 Trees</div>
-          <div
-            style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
-            Planted &amp; Nurtured</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">↑ 94%
-            Survival Rate</div>
+        <!-- PDF Download Area -->
+        <div class="download-pdf-box">
+          <h3 style="font-family:'Outfit';font-size:24px;font-weight:800;margin-bottom:12px;color:#fff">📄 Download Full
+            Q2
+            2026 Impact Audit Report</h3>
+          <p style="font-size:14px;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 28px;line-height:1.6">
+            Get the comprehensive, verified environmental data audit, including spatial analysis maps of hot-spots,
+            volunteer timesheet logs, and government response comparisons.
+          </p>
+          <button id="btn-download-pdf" class="btn-primary" onclick="simulatePdfDownload()">📥 Download Q2 Report
+            PDF</button>
+
+          <!-- Progress Bar Container -->
+          <div class="download-progress-container" id="download-progress-container">
+            <div class="download-progress-bar" id="download-progress-bar"></div>
+            <span class="download-progress-text" id="download-progress-text">0%</span>
+          </div>
         </div>
 
-        <!-- Stat Card 3 -->
-        <div
-          style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
-          <div style="font-size:32px;margin-bottom:12px">🧴</div>
+        <!-- Section Title -->
+        <div class="sec-tag">Success Stories</div>
+        <h2 class="subpage-section-title">Case Study Success Stories</h2>
+        <p class="sec-sub">Real reports that became real action — documented from submission to resolution.</p>
+        <!-- Success Case Grid -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px">
+          <!-- Story 1 -->
           <div
-            style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
-            88,400+</div>
-          <div
-            style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
-            Plastics Recycled</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">
-            Partnered with local recyclers</div>
-        </div>
+            style="background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow2)">
+            <div
+              style="padding:16px;background:var(--g50);border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center">
+              <span class="badge-summary" style="margin:0">✓ Resolved</span>
+              <span style="font-size:11px;font-weight:700;color:var(--text3)">May 2026</span>
+            </div>
+            <div style="padding:24px;text-align:left">
+              <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Sadar
+                Market Oasis</h3>
+              <p style="font-size:13px;color:var(--text2);line-height:1.6">
+                A massive, 2-ton commercial garbage dump that blocked the entrance of Sadar Market for over two years
+                was
+                reported on Suraksha Setu. In partnership with GreenHaldwani, volunteers cleared the space in 3 days,
+                sanitised
+                the soil, and planted native bushes, transforming it into a micro green zone.
+              </p>
+            </div>
+          </div>
 
-        <!-- Stat Card 4 -->
-        <div
-          style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
-          <div style="font-size:32px;margin-bottom:12px">✨</div>
+          <!-- Story 2 -->
           <div
-            style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
-            89 Areas</div>
+            style="background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow2)">
+            <div
+              style="padding:16px;background:var(--g50);border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center">
+              <span class="badge-summary" style="margin:0">✓ Cleaned</span>
+              <span style="font-size:11px;font-weight:700;color:var(--text3)">April 2026</span>
+            </div>
+            <div style="padding:24px;text-align:left">
+              <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Yamuna
+                Ghat Restoration</h3>
+              <p style="font-size:13px;color:var(--text2);line-height:1.6">
+                A high-priority water pollution report flagged a toxic plastic and foam barrier building up along Yamuna
+                riverbanks. Within 48 hours, over 120 volunteer students were mobilised. Using safety gear, they removed
+                1,800kg of plastic bottles, restoring local river flow.
+              </p>
+            </div>
+          </div>
+
+          <!-- Story 3 -->
           <div
-            style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
-            Dirty Spaces Sanitized</div>
-          <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">~4.8
-            days avg. resolution</div>
+            style="background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow2)">
+            <div
+              style="padding:16px;background:var(--g50);border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center">
+              <span class="badge-summary" style="margin:0">✓ Segregated</span>
+              <span style="font-size:11px;font-weight:700;color:var(--text3)">March 2026</span>
+            </div>
+            <div style="padding:24px;text-align:left">
+              <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Taj
+                Nagri Segment B Drive</h3>
+              <p style="font-size:13px;color:var(--text2);line-height:1.6">
+                A neighborhood report highlighted scattered plastic packets that filled local children parks. In
+                response,
+                SwachhBharat volunteers helped setup colored segregation bins across the park, training children on
+                active
+                sorting while clearing the existing playground trash.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- PDF Download Area -->
-      <div class="download-pdf-box">
-        <h3 style="font-family:'Outfit';font-size:24px;font-weight:800;margin-bottom:12px;color:#fff">Download Full Q2
-          2026 Impact Audit Report</h3>
-        <p style="font-size:14px;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 28px;line-height:1.6">
-          Get the comprehensive, verified environmental data audit, including spatial analysis maps of hot-spots,
-          volunteer timesheet logs, and government response comparisons.
-        </p>
-        <button id="btn-download-pdf" class="btn-primary" onclick="simulatePdfDownload()">📥 Download Q2 Report
-          PDF</button>
-
-        <!-- Progress Bar Container -->
-        <div class="download-progress-container" id="download-progress-container">
-          <div class="download-progress-bar" id="download-progress-bar"></div>
-          <span class="download-progress-text" id="download-progress-text">0%</span>
-        </div>
-      </div>
-
-      <!-- Section Title -->
-      <h2 class="subpage-section-title">Case Study Success Stories</h2>
-
-      <!-- Success Case Grid -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px">
-        <!-- Story 1 -->
+      <!-- PROGRESS TIMELINE -->
+      <div class="sec-tag">Our Journey</div>
+      <h2 class="sec-h2">Platform Timeline</h2>
+      <p class="sec-sub">Key milestones from launch to today.</p>
+      <div
+        style="position:relative;padding-left:32px;border-left:3px solid var(--g200);margin-bottom:60px;display:flex;flex-direction:column;gap:0">
         <div
-          style="background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow2)">
-          <div
-            style="padding:16px;background:var(--g50);border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center">
-            <span class="badge-summary" style="margin:0">✓ Resolved</span>
-            <span style="font-size:11px;font-weight:700;color:var(--text3)">May 2026</span>
-          </div>
-          <div style="padding:24px;text-align:left">
-            <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Sadar
-              Market Oasis</h3>
-            <p style="font-size:13px;color:var(--text2);line-height:1.6">
-              A massive, 2-ton commercial garbage dump that blocked the entrance of Sadar Market for over two years was
-              reported on Suraksha Setu. In partnership with GreenHaldwani, volunteers cleared the space in 3 days, sanitised
-              the soil, and planted native bushes, transforming it into a micro green zone.
-            </p>
-          </div>
+          style="position:absolute;left:-8px;top:0;width:14px;height:14px;border-radius:50%;background:var(--g500);border:3px solid #fff;box-shadow:var(--shadow-sm)">
         </div>
-
-        <!-- Story 2 -->
-        <div
-          style="background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow2)">
+        <div style="margin-bottom:36px">
           <div
-            style="padding:16px;background:var(--g50);border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center">
-            <span class="badge-summary" style="margin:0">✓ Cleaned</span>
-            <span style="font-size:11px;font-weight:700;color:var(--text3)">April 2026</span>
-          </div>
-          <div style="padding:24px;text-align:left">
-            <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Yamuna
-              Ghat Restoration</h3>
-            <p style="font-size:13px;color:var(--text2);line-height:1.6">
-              A high-priority water pollution report flagged a toxic plastic and foam barrier building up along Yamuna
-              riverbanks. Within 48 hours, over 120 volunteer students were mobilised. Using safety gear, they removed
-              1,800kg of plastic bottles, restoring local river flow.
-            </p>
-          </div>
+            style="font-size:11px;font-weight:800;color:var(--g600);text-transform:uppercase;letter-spacing:.5px;font-family:'Outfit',sans-serif">
+            Jan 2026</div>
+          <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin:4px 0">
+            Platform Beta Launch</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.6">First 50 reports submitted in Haldwani. 3 NGOs
+            onboarded. AI image tagging goes live.</div>
         </div>
-
-        <!-- Story 3 -->
         <div
-          style="background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow2)">
+          style="position:absolute;left:-8px;top:112px;width:14px;height:14px;border-radius:50%;background:var(--g500);border:3px solid #fff;box-shadow:var(--shadow-sm)">
+        </div>
+        <div style="margin-bottom:36px">
           <div
-            style="padding:16px;background:var(--g50);border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center">
-            <span class="badge-summary" style="margin:0">✓ Segregated</span>
-            <span style="font-size:11px;font-weight:700;color:var(--text3)">March 2026</span>
-          </div>
-          <div style="padding:24px;text-align:left">
-            <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Taj
-              Nagri Segment B Drive</h3>
-            <p style="font-size:13px;color:var(--text2);line-height:1.6">
-              A neighborhood report highlighted scattered plastic packets that filled local children parks. In response,
-              SwachhBharat volunteers helped setup colored segregation bins across the park, training children on active
-              sorting while clearing the existing playground trash.
-            </p>
-          </div>
+            style="font-size:11px;font-weight:800;color:var(--g600);text-transform:uppercase;letter-spacing:.5px;font-family:'Outfit',sans-serif">
+            March 2026</div>
+          <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin:4px 0">100
+            Reports Milestone</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.6">Taj Nagri playground drive becomes first
+            national
+            media-covered cleanup facilitated by citizen data.</div>
+        </div>
+        <div
+          style="position:absolute;left:-8px;top:224px;width:14px;height:14px;border-radius:50%;background:var(--g500);border:3px solid #fff;box-shadow:var(--shadow-sm)">
+        </div>
+        <div style="margin-bottom:36px">
+          <div
+            style="font-size:11px;font-weight:800;color:var(--g600);text-transform:uppercase;letter-spacing:.5px;font-family:'Outfit',sans-serif">
+            May 2026</div>
+          <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin:4px 0">12
+            NGO Partners</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.6">GreenAgra, Yamuna Bachao, SwachhBharat chapters
+            and 9 others join the dashboard network.</div>
+        </div>
+        <div
+          style="position:absolute;left:-8px;top:336px;width:14px;height:14px;border-radius:50%;background:var(--g300);border:3px solid #fff;box-shadow:var(--shadow-sm)">
+        </div>
+        <div>
+          <div
+            style="font-size:11px;font-weight:800;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;font-family:'Outfit',sans-serif">
+            Q3 2026 — Upcoming</div>
+          <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin:4px 0">
+            Mobile App + Hindi Language Support</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.6">Native Android/iOS app and full Hindi UI
+            rollout
+            across tier-2 cities in Uttarakhand.</div>
         </div>
       </div>
     </div>
-    <!-- Floating Back Button -->
-    <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
+  </div>
+
+  <!-- Floating Back Button -->
+  <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
   </div>
 
   <!-- ══════════════════ PRIVACY POLICY PAGE ══════════════════ -->
@@ -342,6 +464,7 @@
       <!-- Subpage Hero -->
       <div class="subpage-hero">
         <div class="hero-bg-orb o1" style="width:300px;height:300px;top:-50px;right:-50px"></div>
+        <div class="sp-eyebrow">🔒 Data Safety</div>
         <div class="subpage-hero-title">Privacy First, Always</div>
         <div class="subpage-hero-tagline">
           Suraksha Setu is designed with citizen safety and data autonomy at its center. Read how we secure your data
@@ -351,12 +474,16 @@
 
       <!-- Highlight tags -->
       <div style="text-align:center;margin-bottom:36px">
-        <span class="badge-summary">🔒 Zero Login Required</span>
+        <span class="badge-summary">🚫 Zero Login Required</span>
         <span class="badge-summary">📍 Location Anonymisation</span>
         <span class="badge-summary">🤖 Face Blur Technology</span>
         <span class="badge-summary">🍪 Cookie-Free Platform</span>
+        <span class="badge-summary">🔐 No Data Sales — Ever</span>
       </div>
 
+      <div class="sec-tag">Policy Details</div>
+      <h2 class="sec-h2">Full Privacy Policy</h2>
+      <p class="sec-sub">Last updated: June 1, 2026. Tap any section to expand.</p>
       <!-- Accordion Container -->
       <div class="accordion-container">
         <!-- Accordion Item 1 -->
@@ -432,223 +559,257 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <!-- Floating Back Button -->
-    <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
-  </div>
 
-  <!-- ══════════════════ CONTACT US PAGE ══════════════════ -->
-  <div class="page" id="page-contact">
-    <div class="subpage-layout">
-      <!-- Subpage Navigation Header -->
-      <div class="subpage-nav-header">
-        <button class="btn-subpage-back" onclick="goBack()">← Go Back</button>
-        <span style="font-family:'Outfit';font-size:13px;font-weight:700;color:var(--text3)">Platform / Contact</span>
-      </div>
-
-      <!-- Contact Two Column Grid -->
-      <div class="contact-grid">
-
-        <!-- Left Column: Dynamic Interactive Form -->
-        <div class="contact-card">
-          <div id="contact-form-wrap">
-            <h2 style="font-family:'Outfit';font-size:24px;font-weight:800;color:var(--g900);margin-bottom:6px">Send Us
-              a Message</h2>
-            <p style="font-size:13px;color:var(--text3);margin-bottom:28px">Have any questions, partnership proposals,
-              or feedback? Drop us a line.</p>
-
-            <form id="contact-form" onsubmit="handleContactSubmit(event)">
-              <!-- Subject Field -->
-              <div class="form-group">
-                <label class="form-label" for="contact-subject">Subject *</label>
-                <input type="text" class="form-input" id="contact-subject" placeholder="What is this regarding?">
-                <div class="error-feedback" id="contact-subject-error"></div>
-              </div>
-
-              <!-- Flex Name & Email -->
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-                <!-- Name -->
-                <div class="form-group">
-                  <label class="form-label" for="contact-name">Full Name *</label>
-                  <input type="text" class="form-input" id="contact-name" placeholder="Aarav Sharma">
-                  <div class="error-feedback" id="contact-name-error"></div>
-                </div>
-
-                <!-- Email -->
-                <div class="form-group">
-                  <label class="form-label" for="contact-email">Email Address *</label>
-                  <input type="email" class="form-input" id="contact-email" placeholder="aarav@gmail.com">
-                  <div class="error-feedback" id="contact-email-error"></div>
-                </div>
-              </div>
-
-              <!-- Role Selector -->
-              <div class="form-group">
-                <label class="form-label" for="contact-role">Who are you? *</label>
-                <select class="form-input" id="contact-role" style="cursor:pointer">
-                  <option value="" disabled selected>Select your relationship...</option>
-                  <option value="Concerned Citizen">Concerned Citizen</option>
-                  <option value="Volunteer">Volunteer looking to join</option>
-                  <option value="NGO Representative">NGO representative</option>
-                  <option value="Municipal Officer">Municipal / Govt. officer</option>
-                  <option value="Other">Other</option>
-                </select>
-                <div class="error-feedback" id="contact-role-error"></div>
-              </div>
-
-              <!-- Message -->
-              <div class="form-group" style="margin-bottom:28px">
-                <label class="form-label" for="contact-msg">Message *</label>
-                <textarea class="form-input" id="contact-msg" placeholder="Write your message here..."></textarea>
-                <div class="error-feedback" id="contact-msg-error"></div>
-              </div>
-
-              <!-- Submit Button -->
-              <button type="submit" id="btn-contact-submit" class="btn-primary" style="width:100%;padding:14px">
-                Send Secure Message →
-              </button>
-            </form>
+        <!-- Accordion Item 5 -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="togglePrivacyAccordion(this)">
+            5. How long is my data retained?
+            <span class="accordion-icon">▼</span>
           </div>
-
-          <!-- Thank You Panel (Initially Hidden) -->
-          <div class="thankyou-panel" id="contact-thankyou">
-            <div style="font-size:64px;margin-bottom:16px;animation:bounce 0.6s ease">✉️</div>
-            <h2 style="font-family:'Outfit';font-size:26px;font-weight:800;color:var(--g700);margin-bottom:8px">Message
-              Sent Successfully!</h2>
-            <p style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:24px">
-              Thank you, <strong id="thankyou-name"></strong>. We have received your query. A community coordinator will
-              reach out to your email address (<span id="thankyou-email"
-                style="font-weight:600;color:var(--g800)"></span>) within 12 hours.
-            </p>
-            <button class="btn-secondary" onclick="resetContactForm()">Send Another Message</button>
-          </div>
-        </div>
-
-        <!-- Right Column: Support Details & Sidebar -->
-        <div class="sidebar-card">
-          <!-- Item 1 -->
-          <div>
-            <h3>Connect Directly</h3>
-            <p style="font-size:12px;color:#a3b8cc;margin-top:4px">We support decentralised localized community
-              response.</p>
-          </div>
-
-          <!-- Item 2: HQ -->
-          <div class="sidebar-item">
-            <div class="sidebar-icon">📍</div>
-            <div class="sidebar-text">
-              <strong>Haldwani Headquarters</strong>
-              Suraksha Setu Center, Nainital Road,<br>Haldwani, UK - 263139
-            </div>
-          </div>
-
-          <!-- Item 3: Support Emails -->
-          <div class="sidebar-item">
-            <div class="sidebar-icon">✉️</div>
-            <div class="sidebar-text">
-              <strong>Support Channels</strong>
-              General queries: <a href="mailto:support@surakshasetu.org"
-                style="color:var(--g300);text-decoration:none">support@surakshasetu.org</a><br>
-              NGO partnerships: <a href="mailto:partners@surakshasetu.org"
-                style="color:var(--g300);text-decoration:none">partners@surakshasetu.org</a>
-            </div>
-          </div>
-
-          <!-- Item 4: Helpline -->
-          <div class="sidebar-item">
-            <div class="sidebar-icon">📞</div>
-            <div class="sidebar-text">
-              <strong>Citizen Helpline</strong>
-              Tel: +91 562 284 3922<br>
-              Hours: Mon - Sat, 9:00 AM - 6:00 PM IST
-            </div>
-          </div>
-
-          <!-- Social networks -->
-          <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:24px">
-            <strong style="display:block;font-size:13px;color:#fff;margin-bottom:12px;font-family:'Outfit'">Follow Our
-              Journey</strong>
-            <div style="display:flex;gap:12px">
-              <a href="#"
-                style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;transition:background 0.2s"
-                onmouseover="this.style.background='var(--g600)'"
-                onmouseout="this.style.background='rgba(255,255,255,0.06)'">𝕏</a>
-              <a href="#"
-                style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;transition:background 0.2s"
-                onmouseover="this.style.background='var(--g600)'"
-                onmouseout="this.style.background='rgba(255,255,255,0.06)'">🅵</a>
-              <a href="#"
-                style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;transition:background 0.2s"
-                onmouseover="this.style.background='var(--g600)'"
-                onmouseout="this.style.background='rgba(255,255,255,0.06)'">🅸</a>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              Active reports are retained indefinitely on the public map to maintain historical community records.
+              Resolved reports are archived after 180 days and removed from the live map view.<br><br>
+              Unverified reports (not confirmed by an admin within 30 days) are automatically purged, including any
+              uploaded images.
             </div>
           </div>
         </div>
 
+        <!-- Accordion Item 6 -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="togglePrivacyAccordion(this)">
+            6. How can I request deletion of my report?
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <div class="accordion-body">
+              Since we don't store accounts, deletion requests are handled via your unique Report ID (provided after
+              submission). Email <strong>privacy@ecowarrior.org</strong> with your Report ID and we will permanently
+              delete the report and all associated images within 72 hours — no questions asked.
+            </div>
+          </div>
+        </div>
       </div>
+      <!-- Floating Back Button -->
+      <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
     </div>
-    <!-- Floating Back Button -->
-    <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
   </div>
 
-  <!-- ── LIGHTWEIGHT ROUTER FOR STANDALONE SUB-PAGES ── -->
-  <script>
-    // Standalone Toast notification
-    function showToast(msg) {
-      const t = document.getElementById('toast');
-      if (t) {
-        t.textContent = msg;
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 2500);
+    <!-- ══════════════════ CONTACT US PAGE ══════════════════ -->
+    <div class="page" id="page-contact">
+      <div class="subpage-layout">
+        <!-- Subpage Navigation Header -->
+        <div class="subpage-nav-header">
+          <button class="btn-subpage-back" onclick="goBack()">← Go Back</button>
+          <span style="font-family:'Outfit';font-size:13px;font-weight:700;color:var(--text3)">Platform / Contact</span>
+        </div>
+
+        <!-- Contact Two Column Grid -->
+        <div class="contact-grid">
+
+          <!-- Left Column: Dynamic Interactive Form -->
+          <div class="contact-card">
+            <div id="contact-form-wrap">
+              <h2 style="font-family:'Outfit';font-size:24px;font-weight:800;color:var(--g900);margin-bottom:6px">Send
+                Us
+                a Message</h2>
+              <p style="font-size:13px;color:var(--text3);margin-bottom:28px">Have any questions, partnership proposals,
+                or feedback? Drop us a line.</p>
+
+              <form id="contact-form" onsubmit="handleContactSubmit(event)">
+                <!-- Subject Field -->
+                <div class="form-group">
+                  <label class="form-label" for="contact-subject">Subject *</label>
+                  <input type="text" class="form-input" id="contact-subject" placeholder="What is this regarding?">
+                  <div class="error-feedback" id="contact-subject-error"></div>
+                </div>
+
+                <!-- Flex Name & Email -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                  <!-- Name -->
+                  <div class="form-group">
+                    <label class="form-label" for="contact-name">Full Name *</label>
+                    <input type="text" class="form-input" id="contact-name" placeholder="Aarav Sharma">
+                    <div class="error-feedback" id="contact-name-error"></div>
+                  </div>
+
+                  <!-- Email -->
+                  <div class="form-group">
+                    <label class="form-label" for="contact-email">Email Address *</label>
+                    <input type="email" class="form-input" id="contact-email" placeholder="aarav@gmail.com">
+                    <div class="error-feedback" id="contact-email-error"></div>
+                  </div>
+                </div>
+
+                <!-- Role Selector -->
+                <div class="form-group">
+                  <label class="form-label" for="contact-role">Who are you? *</label>
+                  <select class="form-input" id="contact-role" style="cursor:pointer">
+                    <option value="" disabled selected>Select your relationship...</option>
+                    <option value="Concerned Citizen">Concerned Citizen</option>
+                    <option value="Volunteer">Volunteer looking to join</option>
+                    <option value="NGO Representative">NGO representative</option>
+                    <option value="Municipal Officer">Municipal / Govt. officer</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <div class="error-feedback" id="contact-role-error"></div>
+                </div>
+
+                <!-- Message -->
+                <div class="form-group" style="margin-bottom:28px">
+                  <label class="form-label" for="contact-msg">Message *</label>
+                  <textarea class="form-input" id="contact-msg" placeholder="Write your message here..."></textarea>
+                  <div class="error-feedback" id="contact-msg-error"></div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="btn-contact-submit" class="btn-primary" style="width:100%;padding:14px">
+                  Send Secure Message →
+                </button>
+              </form>
+            </div>
+
+            <!-- Thank You Panel (Initially Hidden) -->
+            <div class="thankyou-panel" id="contact-thankyou">
+              <div style="font-size:64px;margin-bottom:16px;animation:bounce 0.6s ease">✉️</div>
+              <h2 style="font-family:'Outfit';font-size:26px;font-weight:800;color:var(--g700);margin-bottom:8px">
+                Message
+                Sent Successfully!</h2>
+              <p style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:24px">
+                Thank you, <strong id="thankyou-name"></strong>. We have received your query. A community coordinator
+                will
+                reach out to your email address (<span id="thankyou-email"
+                  style="font-weight:600;color:var(--g800)"></span>) within 12 hours.
+              </p>
+              <button class="btn-secondary" onclick="resetContactForm()">Send Another Message</button>
+            </div>
+          </div>
+
+          <!-- Right Column: Support Details & Sidebar -->
+          <div class="sidebar-card">
+            <!-- Item 1 -->
+            <div>
+              <h3>Connect Directly</h3>
+              <p style="font-size:12px;color:#a3b8cc;margin-top:4px">We support decentralised localized community
+                response.</p>
+            </div>
+
+            <!-- Item 2: HQ -->
+            <div class="sidebar-item">
+              <div class="sidebar-icon">📍</div>
+              <div class="sidebar-text">
+                <strong>Haldwani Headquarters</strong>
+                Suraksha Setu Center, Nainital Road,<br>Haldwani, UK - 263139
+              </div>
+            </div>
+
+            <!-- Item 3: Support Emails -->
+            <div class="sidebar-item">
+              <div class="sidebar-icon">✉️</div>
+              <div class="sidebar-text">
+                <strong>Support Channels</strong>
+                General queries: <a href="mailto:support@surakshasetu.org"
+                  style="color:var(--g300);text-decoration:none">support@surakshasetu.org</a><br>
+                NGO partnerships: <a href="mailto:partners@surakshasetu.org"
+                  style="color:var(--g300);text-decoration:none">partners@surakshasetu.org</a>
+              </div>
+            </div>
+
+            <!-- Item 4: Helpline -->
+            <div class="sidebar-item">
+              <div class="sidebar-icon">📞</div>
+              <div class="sidebar-text">
+                <strong>Citizen Helpline</strong>
+                Tel: +91 826 588 8526<br>
+                Hours: Mon - Sat, 9:00 AM - 6:00 PM IST
+              </div>
+            </div>
+
+            <!-- Social networks -->
+            <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:24px">
+              <strong style="display:block;font-size:13px;color:#fff;margin-bottom:12px;font-family:'Outfit'">Follow Our
+                Journey</strong>
+              <div style="display:flex;gap:12px">
+                <a href="#"
+                  style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;transition:background 0.2s"
+                  onmouseover="this.style.background='var(--g600)'"
+                  onmouseout="this.style.background='rgba(255,255,255,0.06)'">𝕏</a>
+                <a href="#"
+                  style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;transition:background 0.2s"
+                  onmouseover="this.style.background='var(--g600)'"
+                  onmouseout="this.style.background='rgba(255,255,255,0.06)'">🅵</a>
+                <a href="#"
+                  style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;transition:background 0.2s"
+                  onmouseover="this.style.background='var(--g600)'"
+                  onmouseout="this.style.background='rgba(255,255,255,0.06)'">🅸</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- Floating Back Button -->
+      <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
+    </div>
+
+    <!-- ── LIGHTWEIGHT ROUTER FOR STANDALONE SUB-PAGES ── -->
+    <script>
+      // Standalone Toast notification
+      function showToast(msg) {
+        const t = document.getElementById('toast');
+        if (t) {
+          t.textContent = msg;
+          t.classList.add('show');
+          setTimeout(() => t.classList.remove('show'), 2500);
+        }
       }
-    }
 
-    // Referrer-safe back navigation
-    function goBack() {
-      if (document.referrer && document.referrer.includes(window.location.hostname)) {
-        window.history.back();
-      } else {
-        window.location.href = '/';
-      }
-    }
-
-    // Toggle showing standard subpages active status based on URL hash
-    function handleHashChange() {
-      const hash = window.location.hash.substring(1) || 'about';
-      const validPages = ['about', 'impact', 'privacy', 'contact'];
-
-      let targetPage = hash;
-      // Map helper links
-      if (hash === 'ngo-partnership' || hash === 'volunteer-program') {
-        targetPage = 'contact';
+      // Referrer-safe back navigation
+      function goBack() {
+        if (document.referrer && document.referrer.includes(window.location.hostname)) {
+          window.history.back();
+        } else {
+          window.location.href = 'index.html';
+        }
       }
 
-      if (!validPages.includes(targetPage)) {
-        targetPage = 'about';
+      // Toggle showing standard subpages active status based on URL hash
+      function handleHashChange() {
+        const hash = window.location.hash.substring(1) || 'about';
+        const validPages = ['about', 'impact', 'privacy', 'contact'];
+
+        let targetPage = hash;
+        // Map helper links
+        if (hash === 'ngo-partnership' || hash === 'volunteer-program') {
+          targetPage = 'contact';
+        }
+
+        if (!validPages.includes(targetPage)) {
+          targetPage = 'about';
+        }
+
+        // Deactivate all page modules
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+        // Activate correct page
+        const el = document.getElementById('page-' + targetPage);
+        if (el) {
+          el.classList.add('active');
+        }
+
+        // Reset contact forms if changing tabs
+        if (targetPage !== 'contact' && typeof resetContactForm === 'function') {
+          resetContactForm();
+        }
+
+        window.scrollTo(0, 0);
       }
 
-      // Deactivate all page modules
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-
-      // Activate correct page
-      const el = document.getElementById('page-' + targetPage);
-      if (el) {
-        el.classList.add('active');
-      }
-
-      // Reset contact forms if changing tabs
-      if (targetPage !== 'contact' && typeof resetContactForm === 'function') {
-        resetContactForm();
-      }
-
-      window.scrollTo(0, 0);
-    }
-
-    // Run on hash changes or initial page load
-    window.addEventListener('hashchange', handleHashChange);
-    window.addEventListener('DOMContentLoaded', handleHashChange);
-  </script>
+      // Run on hash changes or initial page load
+      window.addEventListener('hashchange', handleHashChange);
+      window.addEventListener('DOMContentLoaded', handleHashChange);
+    </script>
 
 </body>
 

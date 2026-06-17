@@ -114,3 +114,65 @@ CREATE TABLE IF NOT EXISTS activity_logs (
     location VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Table for Alerts
+CREATE TABLE IF NOT EXISTS alerts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    alert_type VARCHAR(50) NOT NULL,
+    severity VARCHAR(50) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    status VARCHAR(50) DEFAULT 'Active',
+    source VARCHAR(100),
+    metadata TEXT,
+    action_required TINYINT(1) DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    resolved_at DATETIME NULL,
+    resolved_by VARCHAR(100) NULL
+);
+
+-- Table for Blocked IPs
+CREATE TABLE IF NOT EXISTS blocked_ips (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ip_address VARCHAR(45) UNIQUE NOT NULL,
+    reason VARCHAR(255),
+    blocked_by VARCHAR(100),
+    blocked_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    expires_at DATETIME NULL,
+    status VARCHAR(20) DEFAULT 'Blocked'
+);
+
+-- Table for Login Sessions
+CREATE TABLE IF NOT EXISTS login_sessions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id VARCHAR(100) NOT NULL,
+    ip_address VARCHAR(45) NOT NULL,
+    device VARCHAR(100),
+    browser VARCHAR(100),
+    location VARCHAR(100),
+    login_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_activity DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    status VARCHAR(50) DEFAULT 'Active'
+);
+
+-- Table for System Logs
+CREATE TABLE IF NOT EXISTS system_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    service_name VARCHAR(100) NOT NULL,
+    log_level VARCHAR(50) NOT NULL,
+    message TEXT,
+    stack_trace TEXT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table for Sync Jobs
+CREATE TABLE IF NOT EXISTS sync_jobs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    report_id VARCHAR(20),
+    status VARCHAR(50) DEFAULT 'Pending',
+    retry_count INT DEFAULT 0,
+    last_attempt DATETIME NULL,
+    next_attempt DATETIME NULL
+);
+

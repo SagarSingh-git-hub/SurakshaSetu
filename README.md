@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
   <h1>🌿 Suraksha Setu </h1>
   <p>
     <b>Community-Powered Citizen Environmental Reporting Platform</b>
@@ -24,16 +24,7 @@ Suraksha Setu is a high-fidelity, privacy-first civic tech platform that bridges
 - **📊 Enterprise-Grade NGO Dashboard**: Provides non-profits and municipal bodies with spatial tracking tables, priority metrics, active HSL charts, and status controls.
 - **⚡ Real-time Updates**: Real-time integration powered by WebSockets (Pusher) ensures live synchronization of reports.
 - **🤖 Smart AI Image Analysis**: Analyzes user-submitted photos using Gemini AI to automatically categorize and extract tags for environmental hazards.
-
----
-
-## 🎨 Premium SaaS Visual Aesthetics
-
-The visual layer features a curated dark-mode forest scheme combined with soft pastel HSL tokens:
-
-- **Typography**: Outfitted with Google Fonts (`Outfit` for bold modern headings, `Nunito` for high-readability copy, and `JetBrains Mono` for cryptographic ID representations).
-- **Glassmorphism Effects**: Transparent header navigation utilizing `-webkit-backdrop-filter` saturation controls.
-- **Micro-Animations**: Custom hover transformations, bouncing successful states, spinning loading loops, and dynamic sliding drawer accordions.
+- **🚨 Advanced Alert Management**: Automated security anomaly detection (brute force, suspicious IPs) and system health monitoring (CPU, Memory, API status) via dedicated cron jobs and worker queues.
 
 ---
 
@@ -44,26 +35,36 @@ The project is structured into fully decoupled frontend and backend environments
 ```text
 suraksha-setu/
 ├── frontend/              # Frontend Web Application (Vercel Ready)
-│   ├── template/
-│   │   ├── index.html       # Main Dashboard SPA (Home, Map, Feed, Admin, Report)
-│   │   └── organisation.html# Isolated Info Hub
-│   ├── css/
-│   │   └── style.css        # Central Design Token System
-│   ├── js/                  # Vanilla ES6 Modular Scripts
-│   │   ├── app.js           # Core App Controller & Router
-│   │   ├── api.js           # Backend API Communication Layer
-│   │   ├── globe.js         # 3D Geographic Trigonometric Canvas
-│   │   ├── map.js           # GIS leaf marker layers
-│   │   └── ...
-│   └── vercel.json          # Vercel deployment configuration
+│   ├── template/          # UI Templates (Dashboard, Alerts, Reporting)
+│   ├── css/               # Central Design Token System
+│   └── js/                # Vanilla ES6 Modular Scripts
 ├── backend/               # PHP RESTful API Backend (Render Ready)
-│   ├── api/                 # Endpoints for reports, statuses, AI
-│   ├── config.php           # Database, Pusher, and Gemini config
-│   ├── database.sql         # MySQL schema for tables
-│   ├── .env                 # Environment variables configuration
-│   └── Dockerfile           # Containerization configuration
-└── render.yaml            # Render full-stack deployment configuration
+│   ├── api/               # Core Endpoints (Reports, Alerts, Auth)
+│   ├── cron/              # Background Monitors & Escalation Workers
+│   ├── logs/              # System & Security Logs Export Directory
+│   ├── config.php         # Database, Pusher, Security & Gemini config
+│   └── database.sql       # MySQL schema for tables
+├── .github/workflows/     # CI/CD & Automation Pipelines
+│   ├── ci-cd.yml          # Automated Testing & Deployment Workflow
+│   └── backup.yml         # Daily Automated MySQL Database Backup Workflow
+└── README.md              # Project Documentation
 ```
+
+---
+
+## 🏗️ Architecture & CI/CD Flow
+
+Suraksha Setu employs a decoupled architecture optimized for scalability and reliability:
+
+1. **Frontend Presentation**: Lightweight HTML5/CSS3/Vanilla JS served via CDN (Vercel), communicating securely via Bearer Tokens to the API.
+2. **Backend API Layer**: PHP 8.x REST API handling request validation, sanitization, business logic, and session state.
+3. **Asynchronous Workers**: Dedicated CLI workers (`test_sync_retry.php`) and cron scripts (`system_monitor.php`, `escalate_alerts.php`) run completely isolated from the web server thread, preventing timeouts and ensuring reliable task processing.
+4. **Real-time Event Bus**: Real-time Pusher WebSockets broadcast alerts and updates instantly to connected clients on secure channels.
+
+### Continuous Integration & Deployment Pipeline
+
+- **`ci-cd.yml`**: Ensures that every commit or PR to the main branch runs automated tests. Upon success, the pipeline triggers secure deployments to staging/production environments. It validates the code formatting, security linting, and unit tests before deployment.
+- **`backup.yml`**: A critical Disaster Recovery (DR) workflow scheduled to run daily. It automatically performs full MySQL dumps of the production database and archives them securely to prevent data loss.
 
 ---
 
@@ -76,7 +77,17 @@ suraksha-setu/
 - **Visualization**: HTML5 Canvas 2D Context
 - **Real-Time Integration**: Pusher WebSockets
 - **AI Integration**: Google Gemini API for image analysis
-- **Deployments**: Vercel (Frontend), Render / Docker (Backend)
+**Deployments**: Vercel (Frontend), Render / Docker (Backend)
+- **CI/CD**: GitHub Actions
+
+---
+
+## 🔒 Security & Privacy Commitments
+
+1.  **Strict Data Isolation**: Organizational files are fully partitioned from active GIS operations, leaving the main platform clean and performant.
+2.  **Zero Personal Identifiable Data (PII)**: The database is built on anonymous civic diagnostics. No emails, phone logins, or trackers are present.
+3.  **Environment Variables**: All sensitive API keys and database credentials are fully abstracted away using `.env` configurations.
+4.  **Enterprise API Security**: All backend routes are protected by robust CSRF validation, Server-Side Session Token enforcement, Rate Limiting, and strict Output Sanitization.
 
 ---
 
@@ -109,44 +120,9 @@ Open **`http://localhost:8000/template/`** inside your web browser.
 
 ---
 
-## 💡 Dynamic NGO Partner Data Schema
-
-Reports logged on the frontend map conform to the following schema stored via the PHP backend API:
-
-```json
-{
-  "id": "ECO-001",
-  "cat": "Garbage",
-  "loc": "Sadar Bazaar, Agra",
-  "lat": 27.195,
-  "lng": 78.006,
-  "desc": "Large pile of household waste near the market entrance, overflowing bins.",
-  "status": "Verified",
-  "priority": "High",
-  "date": "2026-05-28",
-  "photos": 3,
-  "tags": ["garbage bags", "overflowing bin", "organic waste"],
-  "reporter": "Anonymous"
-}
-```
-
----
-
-## 🔒 Security & Privacy Commitments
-
-1.  **Strict Data Isolation**: Organizational files are fully partitioned from active GIS operations, leaving the main platform clean and performant.
-2.  **Zero Personal Identifiable Data (PII)**: The database is built on anonymous civic diagnostics. No emails, phone logins, or trackers are present.
-3.  **Environment Variables**: All sensitive API keys and database credentials are fully abstracted away using `.env` configurations.
-
----
-
 ## 💚 Contributing & Swachh India Core Team
 
 Suraksha Setu is built with love for a cleaner, greener India. We collaborate actively with environmental NGOs, student volunteers, and municipal teams.
-
-- **NGO Partnerships**: [partners@surakshasetu.org](mailto:partners@surakshasetu.org)
-- **General Inquiries**: [support@surakshasetu.org](mailto:support@surakshasetu.org)
-- **Citizen Helpline**: +91 562 284 3922
 
 <br>
 <div align="center">

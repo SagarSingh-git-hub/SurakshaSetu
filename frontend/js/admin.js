@@ -1,6 +1,32 @@
 // ── ADMIN PANEL AND DASHBOARD OPERATIONS ──
 let adminFilter = { status: '', cat: '' };
-// currentAdminPassword is declared in app.js and shared globally
+
+async function adminFetch(url, options = {}) {
+  const token = sessionStorage.getItem('adminToken');
+  if (!options.headers) {
+    options.headers = {};
+  }
+  if (token) {
+    options.headers['Authorization'] = 'Bearer ' + token;
+  }
+  
+  const res = await fetch(url, options);
+  if (res.status === 401) {
+    sessionStorage.removeItem('adminLoggedIn');
+    sessionStorage.removeItem('adminToken');
+    sessionStorage.removeItem('adminRole');
+    sessionStorage.removeItem('adminEmail');
+    
+    const loginWrap = document.getElementById('admin-login-wrap');
+    const dashboard = document.getElementById('admin-dashboard');
+    if (loginWrap) loginWrap.style.display = '';
+    if (dashboard) dashboard.classList.remove('active');
+    
+    showToast('❌ Session expired. Please log in again.');
+    throw new Error('Unauthorized');
+  }
+  return res;
+}
 
 function togglePasswordVisibility() {
   const passInput = document.getElementById('admin-pass');
@@ -50,11 +76,16 @@ async function doAdminLogin() {
     
     if (data.success) {
       adminLoggedIn = true;
-      currentAdminPassword = p; // Store the entered password for API calls
       sessionStorage.setItem('adminLoggedIn', 'true');
-      sessionStorage.setItem('adminPassword', p);
+      sessionStorage.setItem('adminToken', data.token);
+      sessionStorage.setItem('adminRole', data.role);
+      sessionStorage.setItem('adminEmail', data.email);
       document.getElementById('admin-login-wrap').style.display = 'none';
       document.getElementById('admin-dashboard').classList.add('active');
+      
+      if (typeof initRealtime === 'function') {
+        initRealtime();
+      }
       
       const parts = window.location.hash.substring(1).split('/');
       const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : 'overview';
@@ -79,11 +110,26 @@ function adminLogout() {
     'Are you sure you want to log out from the admin dashboard?',
     'Yes, Logout',
     'Cancel',
-    () => {
+    async () => {
+      try {
+        const formData = new FormData();
+        formData.append('action', 'logout');
+        await adminFetch(`${API_URL}/api/login_sessions.php`, {
+          method: 'POST',
+          body: formData
+        });
+      } catch (e) {}
+      
       adminLoggedIn = false;
-      currentAdminPassword = '';
       sessionStorage.removeItem('adminLoggedIn');
-      sessionStorage.removeItem('adminPassword');
+      sessionStorage.removeItem('adminToken');
+      sessionStorage.removeItem('adminRole');
+      sessionStorage.removeItem('adminEmail');
+      
+      if (typeof destroyRealtime === 'function') {
+        destroyRealtime();
+      }
+      
       const loginWrap = document.getElementById('admin-login-wrap');
       const dashboard = document.getElementById('admin-dashboard');
       if (loginWrap) loginWrap.style.display = '';
@@ -98,6 +144,7 @@ async function renderAdminDashboard(initialView = 'overview') {
   // Only fetch if empty, otherwise use currentReports to prevent slow UI
   if (currentReports.length === 0) await fetchReports();
   if (!templatesFetched) fetchTemplates(); // preload templates for instant loading
+  if (typeof fetchAlerts === 'function') fetchAlerts(); // load alert states for dashboard overview widgets
 
   const total = currentReports.length;
   const resolved = currentReports.filter(r => r.status === 'Resolved').length;
@@ -158,6 +205,7 @@ function renderDashboardOverview() {
   // Render new dynamic widgets
   renderActiveZones();
   renderLiveActivityFeed();
+  if (typeof renderAlertWidgets === 'function') renderAlertWidgets();
 }
 
 
@@ -2069,3 +2117,617 @@ async function saveTemplateSetting(key, checkbox) {
     checkbox.nextElementSibling.firstElementChild.style.transform = checkbox.checked ? 'translateX(16px)' : 'translateX(0)';
   }
 }
+
+// ── ALERT MANAGEMENT SYSTEM ──
+function escapeHTML(str) {
+  if (!str) return '';
+  return str.toString()
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+let alertState = {
+  allAlerts: [],
+  intervalId: null
+};
+
+async function fetchAlerts(force = false) {
+  try {
+    const res = await adminFetch(`${API_URL}/api/alerts.php`);
+    const data = await res.json();
+    if (data.success) {
+      alertState.allAlerts = data.alerts;
+      renderAlerts();
+      updateDashboardAlertStats();
+      if (typeof renderAlertWidgets === 'function') renderAlertWidgets();
+    }
+  } catch (err) {
+    console.error("Failed to fetch alerts:", err);
+  }
+}
+
+function renderAlerts() {
+  const container = document.getElementById('active-alerts-container');
+  const historyContainer = document.getElementById('alert-history-container');
+  if (!container || !historyContainer) return;
+
+  const severityFilter = document.getElementById('alert-filter-severity').value;
+  const typeFilter = document.getElementById('alert-filter-type').value;
+  const statusFilter = document.getElementById('alert-filter-status').value;
+  const searchVal = document.getElementById('alert-search-input').value.toLowerCase().trim();
+
+  // Filter alerts
+  const filtered = alertState.allAlerts.filter(alert => {
+    // Severity
+    if (severityFilter !== 'all' && alert.severity !== severityFilter) return false;
+    // Type
+    if (typeFilter !== 'all' && alert.alert_type !== typeFilter) return false;
+    // Status
+    if (statusFilter !== 'all' && alert.status !== statusFilter) return false;
+    // Search
+    if (searchVal) {
+      const title = (alert.title || '').toLowerCase();
+      const desc = (alert.description || '').toLowerCase();
+      const src = (alert.source || '').toLowerCase();
+      if (!title.includes(searchVal) && !desc.includes(searchVal) && !src.includes(searchVal)) return false;
+    }
+    return true;
+  });
+
+  const activeAlerts = filtered.filter(a => a.status === 'Active' || a.status === 'Investigating');
+  const historyAlerts = filtered.filter(a => a.status === 'Resolved' || a.status === 'Dismissed');
+
+  document.getElementById('active-alerts-count').textContent = activeAlerts.length;
+
+  // Render active
+  if (activeAlerts.length === 0) {
+    container.innerHTML = `
+      <div style="padding:40px; text-align:center; background:#fff; border:1px dashed var(--border); border-radius:12px; color:var(--text3);">
+        <i class="ph-duotone ph-shield-check" style="font-size:48px; color:var(--primary); margin-bottom:12px;"></i>
+        <div style="font-family:'Outfit'; font-weight:700; color:var(--text)">All Systems Clear</div>
+        <div style="font-size:12px; margin-top:4px;">No active alerts require attention.</div>
+      </div>`;
+  } else {
+    container.innerHTML = activeAlerts.map(alert => renderAlertCard(alert)).join('');
+  }
+
+  // Render history
+  if (historyAlerts.length === 0) {
+    historyContainer.innerHTML = '<div style="font-size:12px; color:var(--text3); text-align:center; padding:20px;">No alert history found.</div>';
+  } else {
+    historyContainer.innerHTML = historyAlerts.map(alert => renderHistoryCard(alert)).join('');
+  }
+}
+
+function getSeverityColor(sev) {
+  if (sev === 'Critical') return '#ef4444';
+  if (sev === 'High') return '#f97316';
+  return '#eab308'; // Medium
+}
+
+function renderAlertCard(alert) {
+  const borderCol = getSeverityColor(alert.severity);
+  const typeBadgeBg = alert.alert_type === 'security' ? '#fef2f2' : '#fff7ed';
+  const typeBadgeCol = alert.alert_type === 'security' ? '#ef4444' : '#f97316';
+  
+  // Escalation rule badge for critical alerts rendered directly from DB escalation_level
+  let escalationHtml = '';
+  if (alert.severity === 'Critical' && alert.status === 'Active') {
+    const level = alert.escalation_level || 'Super Admin Notified';
+    if (level === 'Super Admin Notified') {
+      escalationHtml = `<span style="font-size:11px; font-weight:700; color:#ef4444; background:#fef2f2; border:1px solid #fca5a5; padding:3px 8px; border-radius:4px; margin-left:8px;">🚨 Super Admin Notified</span>`;
+    } else if (level === 'Escalated to Security Team') {
+      escalationHtml = `<span style="font-size:11px; font-weight:700; color:#b91c1c; background:#fee2e2; border:1px solid #fca5a5; padding:3px 8px; border-radius:4px; margin-left:8px;">⚠️ Escalated to Security Team</span>`;
+    } else if (level === 'Escalated to Platform Owner') {
+      escalationHtml = `<span style="font-size:11px; font-weight:700; color:#7f1d1d; background:#fecaca; border:1px solid #f87171; padding:3px 8px; border-radius:4px; margin-left:8px;">🔥 Escalated to Platform Owner</span>`;
+    } else if (level === 'EMERGENCY UNRESOLVED') {
+      escalationHtml = `<span style="font-size:11px; font-weight:700; color:#fff; background:#ef4444; border:1px solid #dc2626; padding:3px 8px; border-radius:4px; margin-left:8px; animation: pulse 1s infinite;">🚨 EMERGENCY UNRESOLVED</span>`;
+    } else {
+      escalationHtml = `<span style="font-size:11px; font-weight:700; color:#ef4444; background:#fef2f2; border:1px solid #fca5a5; padding:3px 8px; border-radius:4px; margin-left:8px;">🚨 ${escapeHTML(level)}</span>`;
+    }
+  }
+
+  const isSuperAdmin = sessionStorage.getItem('adminRole') === 'Super Admin';
+
+  // Action buttons based on type with Super Admin checks
+  let actionsHtml = '';
+  if (alert.alert_type === 'security') {
+    actionsHtml = `
+      <button class="action-btn" style="padding:8px 16px; background:#fef2f2; color:#ef4444; border:1px solid #fca5a5; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer;" onclick="openReviewSessionsModal()">Review Sessions</button>
+      ${isSuperAdmin 
+        ? `<button class="action-btn" style="padding:8px 16px; background:#fff; color:var(--text); border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:700; cursor:pointer;" onclick="openBlockIpModal('${escapeHTML(alert.source)}')">Block IP</button>` 
+        : `<button class="action-btn" style="padding:8px 16px; background:#f3f4f6; color:#9ca3af; border:1px solid #e5e7eb; border-radius:8px; font-size:13px; font-weight:700; cursor:not-allowed;" disabled title="Super Admin privileges required">Block IP</button>`}
+    `;
+  } else {
+    actionsHtml = `
+      ${isSuperAdmin 
+        ? `<button class="action-btn" style="padding:8px 16px; background:#fff7ed; color:#f97316; border:1px solid #fdba74; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer;" onclick="triggerSyncRetry()">Retry Sync</button>` 
+        : `<button class="action-btn" style="padding:8px 16px; background:#f3f4f6; color:#9ca3af; border:1px solid #e5e7eb; border-radius:8px; font-size:13px; font-weight:700; cursor:not-allowed;" disabled title="Super Admin privileges required">Retry Sync</button>`}
+      ${isSuperAdmin 
+        ? `<button class="action-btn" style="padding:8px 16px; background:#fff; color:var(--text); border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:700; cursor:pointer;" onclick="openLogViewerModal()">View Logs</button>` 
+        : `<button class="action-btn" style="padding:8px 16px; background:#f3f4f6; color:#9ca3af; border:1px solid #e5e7eb; border-radius:8px; font-size:13px; font-weight:700; cursor:not-allowed;" disabled title="Super Admin privileges required">View Logs</button>`}
+    `;
+  }
+
+  return `
+    <div class="admin-alert-card alert-card-timer" data-created="${alert.created_at}" style="background:#fff; border:1px solid var(--border); border-left:4px solid ${borderCol}; border-radius:12px; padding:20px; box-shadow:0 4px 12px rgba(0,0,0,0.03);">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:12px;">
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span style="background:${typeBadgeBg}; color:${typeBadgeCol}; padding:4px 10px; border-radius:6px; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">${alert.alert_type}</span>
+          <span style="background:${borderCol}15; color:${borderCol}; padding:3px 8px; border-radius:4px; font-size:10px; font-weight:800; text-transform:uppercase;">${alert.severity}</span>
+          ${escalationHtml}
+          <h3 style="font-size:16px; font-weight:700; color:var(--text); font-family:'Outfit',sans-serif; margin:0; width:100%; margin-top:6px;">${escapeHTML(alert.title)}</h3>
+        </div>
+        <span class="countdown-display" style="font-size:12px; color:var(--text3); font-weight:600;"><i class="ph-duotone ph-clock" style="position:relative;top:2px;"></i> Loading...</span>
+      </div>
+      
+      <div style="font-size:13px; color:var(--text2); margin-bottom:20px; line-height:1.5;">
+        ${escapeHTML(alert.description)}
+      </div>
+
+      <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+        ${actionsHtml}
+        ${isSuperAdmin 
+          ? `<button class="action-btn" style="padding:8px 16px; background:transparent; color:var(--text3); border:none; font-size:13px; font-weight:600; cursor:pointer; margin-left:auto;" onclick="updateAlertStatus(${alert.id}, 'Dismissed')">Dismiss</button>` 
+          : `<button class="action-btn" style="padding:8px 16px; background:transparent; color:#d1d5db; border:none; font-size:13px; font-weight:600; cursor:not-allowed; margin-left:auto;" disabled title="Super Admin privileges required">Dismiss</button>`}
+      </div>
+    </div>`;
+}
+
+function renderHistoryCard(alert) {
+  const typeBadgeCol = alert.alert_type === 'security' ? '#ef4444' : '#f97316';
+  const statusColor = alert.status === 'Resolved' ? '#16a34a' : '#64748b';
+  
+  return `
+    <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px; font-size:12px; box-shadow:var(--shadow-sm);">
+      <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+        <span style="font-weight:800; color:${typeBadgeCol}; text-transform:uppercase; font-size:10px;">${alert.alert_type}</span>
+        <span style="color:${statusColor}; font-weight:700; text-transform:uppercase; font-size:10px;">● ${escapeHTML(alert.status)}</span>
+      </div>
+      <div style="font-weight:700; color:var(--text); margin-bottom:4px;">${escapeHTML(alert.title)}</div>
+      <div style="color:var(--text3); font-size:11px; margin-bottom:6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Resolved by: ${escapeHTML(alert.resolved_by || 'System')}</div>
+      <div style="font-size:10px; color:var(--text3); display:flex; justify-content:space-between;">
+        <span>${new Date(alert.created_at).toLocaleDateString()}</span>
+        <span>resolved: ${adminTimeAgo(alert.resolved_at)}</span>
+      </div>
+    </div>`;
+}
+
+function updateAlertsCountdown() {
+  document.querySelectorAll('.alert-card-timer').forEach(card => {
+    const createdStr = card.getAttribute('data-created');
+    const created = new Date(createdStr);
+    const diffMs = new Date() - created;
+    const diffSecs = Math.floor(diffMs / 1000);
+    
+    let timeStr = '';
+    if (diffSecs < 60) timeStr = `${diffSecs}s ago`;
+    else if (diffSecs < 3600) timeStr = `${Math.floor(diffSecs / 60)}m ${diffSecs % 60}s ago`;
+    else timeStr = `${Math.floor(diffSecs / 3600)}h ${Math.floor((diffSecs % 3600) / 60)}m ago`;
+    
+    const display = card.querySelector('.countdown-display');
+    if (display) display.innerHTML = `<i class="ph-duotone ph-clock" style="position:relative;top:2px;"></i> ${timeStr}`;
+  });
+}
+
+async function updateAlertStatus(alertId, status) {
+  try {
+    const formData = new FormData();
+    formData.append('id', alertId);
+    formData.append('status', status);
+    formData.append('resolved_by', sessionStorage.getItem('adminEmail') || 'Admin');
+
+    const res = await adminFetch(`${API_URL}/api/alerts.php`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(`Alert marked as ${status}`);
+      fetchAlerts(true);
+    } else {
+      showToast(`Failed to update alert: ${data.message}`);
+    }
+  } catch (err) {
+    console.error("Alert status update failed:", err);
+  }
+}
+
+// ── REVIEW SESSIONS MODAL LOGIC ──
+async function openReviewSessionsModal() {
+  const tbody = document.getElementById('sessions-modal-tbody');
+  if (!tbody) return;
+  
+  tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px;">⏳ Loading sessions...</td></tr>';
+  document.getElementById('review-sessions-modal-overlay').classList.add('open');
+  
+  try {
+    const res = await adminFetch(`${API_URL}/api/login_sessions.php`);
+    const data = await res.json();
+    if (data.success) {
+      if (data.sessions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px;">No sessions logged.</td></tr>';
+        return;
+      }
+      const isSuperAdmin = sessionStorage.getItem('adminRole') === 'Super Admin';
+      tbody.innerHTML = data.sessions.map(s => {
+        let actionBtn = '';
+        if (s.status === 'Active') {
+          if (isSuperAdmin) {
+            actionBtn = `
+              <button class="action-btn" style="background:#fee2e2; color:#dc2626; border:1px solid #fca5a5; padding:4px 8px; font-size:11px; margin-right:4px;" onclick="updateSessionStatus(${s.id}, 'terminate')">Terminate</button>
+              <button class="action-btn" style="background:#fef3c7; color:#d97706; border:1px solid #fde68a; padding:4px 8px; font-size:11px; margin-right:4px;" onclick="updateSessionStatus(${s.id}, 'force_logout')">Force Logout</button>
+              <button class="action-btn" style="background:#dcfce7; color:#16a34a; border:1px solid #bbf7d0; padding:4px 8px; font-size:11px;" onclick="updateSessionStatus(${s.id}, 'mark_safe')">Mark Safe</button>
+            `;
+          } else {
+            actionBtn = `<span style="color:var(--text3); font-style:italic;">Read-Only</span>`;
+          }
+        } else {
+          actionBtn = `<span style="color:var(--text3); font-style:italic;">No Actions Available</span>`;
+        }
+        
+        return `
+          <tr>
+            <td style="padding:10px; border-bottom:1px solid var(--border);">${escapeHTML(s.user_id)}</td>
+            <td style="padding:10px; border-bottom:1px solid var(--border); font-family:monospace;">${escapeHTML(s.ip_address)}</td>
+            <td style="padding:10px; border-bottom:1px solid var(--border);">${escapeHTML(s.browser)}</td>
+            <td style="padding:10px; border-bottom:1px solid var(--border);">${escapeHTML(s.device)}</td>
+            <td style="padding:10px; border-bottom:1px solid var(--border);">${escapeHTML(s.location)}</td>
+            <td style="padding:10px; border-bottom:1px solid var(--border);">${new Date(s.login_time).toLocaleString()}</td>
+            <td style="padding:10px; border-bottom:1px solid var(--border); font-weight:700; color:${s.status==='Active'?'#16a34a':s.status==='Safe'?'#3b82f6':'#ef4444'}">${escapeHTML(s.status)}</td>
+            <td style="padding:10px; border-bottom:1px solid var(--border);">${actionBtn}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+  } catch (err) {
+    console.error("Failed to load sessions:", err);
+  }
+}
+
+async function updateSessionStatus(sessionId, action) {
+  try {
+    const formData = new FormData();
+    formData.append('session_id', sessionId);
+    formData.append('action', action);
+    formData.append('admin_user', sessionStorage.getItem('adminEmail') || 'Admin');
+    
+    const res = await adminFetch(`${API_URL}/api/login_sessions.php`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(`Session status updated: ${action}`);
+      openReviewSessionsModal(); // refresh list
+    } else {
+      showToast(`Failed: ${data.message}`);
+    }
+  } catch (err) {
+    console.error("Failed to update session status:", err);
+  }
+}
+
+// ── BLOCK IP MODAL LOGIC ──
+function openBlockIpModal(ipAddress) {
+  document.getElementById('block-ip-address').value = ipAddress || '';
+  document.getElementById('block-ip-reason').value = '';
+  document.getElementById('block-ip-modal-overlay').classList.add('open');
+  
+  const isSuper = sessionStorage.getItem('adminRole') === 'Super Admin';
+  const submitBtn = document.querySelector('#block-ip-modal-overlay button[onclick*="submitBlockIp"]');
+  const ipField = document.getElementById('block-ip-address');
+  const reasonField = document.getElementById('block-ip-reason');
+  const durField = document.getElementById('block-ip-duration');
+  
+  if (ipField) ipField.disabled = !isSuper;
+  if (reasonField) reasonField.disabled = !isSuper;
+  if (durField) durField.disabled = !isSuper;
+  if (submitBtn) submitBtn.style.display = isSuper ? '' : 'none';
+  
+  fetchBlockedIps();
+}
+
+async function fetchBlockedIps() {
+  const tbody = document.getElementById('blocked-ips-list-tbody');
+  if (!tbody) return;
+  
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:10px;">Loading blocked list...</td></tr>';
+  
+  try {
+    const res = await adminFetch(`${API_URL}/api/blocked_ips.php`);
+    const data = await res.json();
+    if (data.success) {
+      const activeBlocks = data.blocked_ips.filter(b => b.status === 'Blocked');
+      if (activeBlocks.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:10px; color:var(--text3);">No active IP blocks.</td></tr>';
+        return;
+      }
+      const isSuperAdmin = sessionStorage.getItem('adminRole') === 'Super Admin';
+      tbody.innerHTML = activeBlocks.map(b => {
+        const actionBtn = isSuperAdmin 
+          ? `<button class="action-btn" style="background:#dcfce7; color:#16a34a; border:1px solid #bbf7d0; padding:2px 6px; font-size:11px;" onclick="unblockIp('${escapeHTML(b.ip_address)}')">Unblock</button>` 
+          : `<span style="color:var(--text3); font-style:italic;">Banned</span>`;
+        return `
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:8px; font-family:monospace; font-weight:700;">${escapeHTML(b.ip_address)}</td>
+            <td style="padding:8px; color:var(--text3);">${escapeHTML(b.reason)}</td>
+            <td style="padding:8px; color:var(--text3);">${b.expires_at ? new Date(b.expires_at).toLocaleString() : 'Permanent'}</td>
+            <td style="padding:8px; text-align:right;">${actionBtn}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+  } catch (err) {
+    console.error("Failed to fetch blocked IPs:", err);
+  }
+}
+
+async function submitBlockIp() {
+  const ip = document.getElementById('block-ip-address').value;
+  const reason = document.getElementById('block-ip-reason').value;
+  const duration = document.getElementById('block-ip-duration').value;
+  
+  if (!ip || !reason) {
+    showToast("Please enter a reason for the block.");
+    return;
+  }
+  
+  try {
+    const formData = new FormData();
+    formData.append('action', 'block');
+    formData.append('ip_address', ip);
+    formData.append('reason', reason);
+    formData.append('duration', duration);
+    formData.append('blocked_by', sessionStorage.getItem('adminEmail') || 'Admin');
+    
+    const res = await adminFetch(`${API_URL}/api/blocked_ips.php`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(`IP ${ip} blocked successfully.`);
+      fetchBlockedIps(); // refresh list
+      fetchAlerts(true);  // refresh alerts dashboard
+    } else {
+      showToast(`Failed: ${data.message}`);
+    }
+  } catch (err) {
+    console.error("Failed to block IP:", err);
+  }
+}
+
+async function unblockIp(ipAddress) {
+  try {
+    const formData = new FormData();
+    formData.append('action', 'unblock');
+    formData.append('ip_address', ipAddress);
+    formData.append('blocked_by', sessionStorage.getItem('adminEmail') || 'Admin');
+    
+    const res = await adminFetch(`${API_URL}/api/blocked_ips.php`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (data.success) {
+      showToast(`IP ${ipAddress} unblocked.`);
+      fetchBlockedIps(); // refresh list
+      fetchAlerts(true);  // refresh alerts dashboard
+    } else {
+      showToast(`Failed: ${data.message}`);
+    }
+  } catch (err) {
+    console.error("Failed to unblock IP:", err);
+  }
+}
+
+// ── RETRY SYNC ACTION LOGIC ──
+async function triggerSyncRetry() {
+  document.getElementById('sync-progress-bar').style.width = '0%';
+  document.getElementById('sync-progress-text').textContent = '0% Completed';
+  document.getElementById('sync-progress-counts').textContent = 'Initialising...';
+  document.getElementById('sync-success-count').textContent = '0';
+  document.getElementById('sync-failed-count').textContent = '0';
+  document.getElementById('sync-remaining-count').textContent = 'Calculating...';
+  
+  document.getElementById('sync-progress-modal-overlay').classList.add('open');
+  
+  try {
+    const formData = new FormData();
+    formData.append('action', 'retry');
+    formData.append('admin_user', sessionStorage.getItem('adminEmail') || 'Admin');
+    
+    const res = await adminFetch(`${API_URL}/api/sync_jobs.php`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (res.status === 202 || data.success) {
+      showToast("Sync retry job scheduled in background.");
+      // We keep the progress modal open to let the Pusher socket stream progress
+      fetchAlerts(true); 
+    } else {
+      showToast(`Sync retry failed: ${data.message}`);
+      document.getElementById('sync-progress-modal-overlay').classList.remove('open');
+    }
+  } catch (err) {
+    console.error("Sync retry failed:", err);
+    document.getElementById('sync-progress-modal-overlay').classList.remove('open');
+  }
+}
+
+// ── SYSTEM LOG VIEWER MODAL LOGIC ──
+function openLogViewerModal() {
+  document.getElementById('log-search-input').value = '';
+  document.getElementById('log-viewer-modal-overlay').classList.add('open');
+  fetchSystemLogs();
+}
+
+async function fetchSystemLogs() {
+  const tbody = document.getElementById('logs-modal-tbody');
+  if (!tbody) return;
+  
+  const range = document.getElementById('log-filter-time').value;
+  const search = document.getElementById('log-search-input').value;
+  
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">⏳ Querying system logs...</td></tr>';
+  
+  try {
+    const res = await adminFetch(`${API_URL}/api/system_logs.php?time_range=${range}&search=${encodeURIComponent(search)}`);
+    const data = await res.json();
+    if (data.success) {
+      if (data.logs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--text3);">No matching logs found.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.logs.map(l => {
+        const rowBg = l.log_level === 'ERROR' ? '#fef2f2' : l.log_level === 'WARNING' ? '#fffbeb' : '#fff';
+        const levelCol = l.log_level === 'ERROR' ? '#dc2626' : l.log_level === 'WARNING' ? '#d97706' : '#16a34a';
+        
+        let traceHtml = '';
+        if (l.stack_trace) {
+          traceHtml = `
+            <details style="cursor:pointer; color:var(--text3); font-family:monospace; font-size:10px;">
+              <summary>View Stack Trace</summary>
+              <pre style="margin-top:6px; background:#f1f5f9; padding:8px; border-radius:6px; overflow-x:auto; max-width:400px; text-align:left;">${escapeHTML(l.stack_trace)}</pre>
+            </details>
+          `;
+        } else {
+          traceHtml = '<span style="color:var(--text3); font-style:italic;">None</span>';
+        }
+        
+        return `
+          <tr style="background:${rowBg}; border-bottom:1px solid var(--border);">
+            <td style="padding:10px; white-space:nowrap;">${new Date(l.timestamp).toLocaleString()}</td>
+            <td style="padding:10px; font-weight:700;">${escapeHTML(l.service_name)}</td>
+            <td style="padding:10px; font-weight:800; color:${levelCol}">${escapeHTML(l.log_level)}</td>
+            <td style="padding:10px; max-width:250px; word-break:break-word;">${escapeHTML(l.message)}</td>
+            <td style="padding:10px;">${traceHtml}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+  } catch (err) {
+    console.error("Failed to load logs:", err);
+  }
+}
+
+function exportSystemLogsCSV() {
+  const token = sessionStorage.getItem('adminToken') || '';
+  const range = document.getElementById('log-filter-time').value;
+  const search = document.getElementById('log-search-input').value;
+  window.open(`${API_URL}/api/system_logs.php?export=true&token=${token}&time_range=${range}&search=${encodeURIComponent(search)}`);
+  showToast("CSV Export Started!");
+}
+
+// ── UPDATE WIDGET STATS & DASHBOARD DATA ──
+function updateDashboardAlertStats() {
+  const activeSecurity = alertState.allAlerts.filter(a => a.alert_type === 'security' && (a.status === 'Active' || a.status === 'Investigating')).length;
+  const activeSystem = alertState.allAlerts.filter(a => a.alert_type === 'system' && (a.status === 'Active' || a.status === 'Investigating')).length;
+  
+  const failedLoginsToday = alertState.allAlerts
+    .filter(a => a.alert_type === 'security' && (a.title || '').toLowerCase().includes('failed login'))
+    .reduce((sum, a) => {
+      const match = a.title.match(/(\d+) failed/i);
+      return sum + (match ? parseInt(match[1]) : 0);
+    }, 0);
+  
+  const securityWidgetValue = document.getElementById('widget-active-security');
+  if (securityWidgetValue) securityWidgetValue.textContent = activeSecurity;
+
+  const systemWidgetValue = document.getElementById('widget-active-system');
+  if (systemWidgetValue) systemWidgetValue.textContent = activeSystem;
+  
+  const failedLoginsWidget = document.getElementById('widget-failed-logins');
+  if (failedLoginsWidget) failedLoginsWidget.textContent = failedLoginsToday;
+}
+
+async function renderAlertWidgets() {
+  const container = document.getElementById('alert-dashboard-widgets');
+  if (!container) return;
+
+  let blockedIpCount = 0;
+  try {
+    const res = await adminFetch(`${API_URL}/api/blocked_ips.php`);
+    const data = await res.json();
+    if (data.success) {
+      blockedIpCount = data.blocked_ips.filter(b => b.status === 'Blocked').length;
+    }
+  } catch (e) {}
+
+  let queueBacklog = 0;
+  try {
+    const res = await adminFetch(`${API_URL}/api/sync_jobs.php`);
+    const data = await res.json();
+    if (data.success) {
+      queueBacklog = data.total_queue;
+    }
+  } catch (e) {}
+
+  const activeSecurity = alertState.allAlerts.filter(a => a.alert_type === 'security' && (a.status === 'Active' || a.status === 'Investigating')).length;
+  const activeSystem = alertState.allAlerts.filter(a => a.alert_type === 'system' && (a.status === 'Active' || a.status === 'Investigating')).length;
+  
+  const failedLoginsToday = alertState.allAlerts
+    .filter(a => a.alert_type === 'security' && (a.title || '').toLowerCase().includes('failed login'))
+    .reduce((sum, a) => {
+      const match = a.title.match(/(\d+) failed/i);
+      return sum + (match ? parseInt(match[1]) : 0);
+    }, 0);
+
+  let healthScore = 100;
+  alertState.allAlerts.forEach(a => {
+    if (a.status === 'Active') {
+      if (a.severity === 'Critical') healthScore -= 15;
+      else healthScore -= 5;
+    }
+  });
+  if (queueBacklog > 0) healthScore -= 10;
+  healthScore = Math.max(0, healthScore);
+
+  let healthColor = '#16a34a';
+  if (healthScore < 50) healthColor = '#ef4444';
+  else if (healthScore < 85) healthColor = '#f97316';
+
+  container.innerHTML = `
+    <div class="stat-card" onclick="switchAdminView('notification', document.querySelector('[onclick*=\\'notification\\']'))" style="cursor:pointer;">
+      <div class="stat-card-val" style="color:#ef4444" id="widget-active-security">${activeSecurity}</div>
+      <div class="stat-card-label">Active Security Alerts</div>
+      <div class="stat-card-trend">Lockouts & abuse</div>
+    </div>
+    <div class="stat-card" onclick="switchAdminView('notification', document.querySelector('[onclick*=\\'notification\\']'))" style="cursor:pointer;">
+      <div class="stat-card-val" style="color:#f97316" id="widget-active-system">${activeSystem}</div>
+      <div class="stat-card-label">Active System Alerts</div>
+      <div class="stat-card-trend">Service health issues</div>
+    </div>
+    <div class="stat-card" onclick="openBlockIpModal()" style="cursor:pointer;">
+      <div class="stat-card-val" style="color:#64748b">${blockedIpCount}</div>
+      <div class="stat-card-label">Blocked IP Count</div>
+      <div class="stat-card-trend">Banned connections</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-val" style="color:#3b82f6" id="widget-failed-logins">${failedLoginsToday}</div>
+      <div class="stat-card-label">Failed Logins Today</div>
+      <div class="stat-card-trend">Brute force monitor</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-val" style="color:${healthColor}">${healthScore}%</div>
+      <div class="stat-card-label">System Health Score</div>
+      <div class="stat-card-trend">Real-time status</div>
+    </div>
+    <div class="stat-card" onclick="triggerSyncRetry()" style="cursor:pointer;">
+      <div class="stat-card-val" style="color:#eab308">${queueBacklog}</div>
+      <div class="stat-card-label">Queue Backlog Count</div>
+      <div class="stat-card-trend">Pending sync jobs</div>
+    </div>
+  `;
+}
+
+// Initialise countdown loop
+if (!alertState.intervalId) {
+  alertState.intervalId = setInterval(updateAlertsCountdown, 1000);
+}
+

@@ -20,12 +20,14 @@ if ($action === 'revoke') {
 }
 
 if ($new_status) {
-    $sql = "UPDATE certificates SET status = '$new_status' WHERE cert_id = '$cert_id'";
-    if ($conn->query($sql)) {
+    $stmt = $conn->prepare("UPDATE certificates SET status = ? WHERE cert_id = ?");
+    $stmt->bind_param("ss", $new_status, $cert_id);
+    if ($stmt->execute()) {
         echo json_encode(['success' => true]);
     } else {
         echo json_encode(['success' => false, 'error' => $conn->error]);
     }
+    $stmt->close();
 } else {
     echo json_encode(['success' => false, 'error' => 'Invalid action']);
 }

@@ -619,19 +619,19 @@
             style="font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:#ffffff;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:20px">
             Organisation</h4>
           <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:14px">
-            <li><a href="/organisation#about" style="color:#64748b;text-decoration:none;transition:color .2s"
+            <li><a href="organisation.html#about" style="color:#64748b;text-decoration:none;transition:color .2s"
                 onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">About Us</a></li>
-            <li><a href="/organisation#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
+            <li><a href="organisation.html#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
                 onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">NGO Partnership</a>
             </li>
-            <li><a href="/organisation#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
+            <li><a href="organisation.html#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
                 onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Volunteer Program</a>
             </li>
-            <li><a href="/organisation#impact" style="color:#64748b;text-decoration:none;transition:color .2s"
+            <li><a href="organisation.html#impact" style="color:#64748b;text-decoration:none;transition:color .2s"
                 onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Impact Reports</a></li>
-            <li><a href="/organisation#privacy" style="color:#64748b;text-decoration:none;transition:color .2s"
+            <li><a href="organisation.html#privacy" style="color:#64748b;text-decoration:none;transition:color .2s"
                 onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Privacy Policy</a></li>
-            <li><a href="/organisation#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
+            <li><a href="organisation.html#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
                 onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Contact</a></li>
           </ul>
         </div>
@@ -1024,6 +1024,11 @@
         <!-- OVERVIEW VIEW -->
         <div id="admin-view-overview">
           <div class="stat-cards" id="admin-stats"></div>
+          
+          <div style="font-size:15px; font-weight:800; font-family:'Outfit',sans-serif; margin-top:24px; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+            <i class="ph-duotone ph-shield-checkered" style="color:var(--primary); font-size:20px;"></i> Alert & System Management Dashboard
+          </div>
+          <div class="stat-cards" id="alert-dashboard-widgets" style="margin-bottom:24px; grid-template-columns: repeat(3, 1fr);"></div>
           <!-- Analytics chart -->
           <div
             style="background:#fff;border-radius:var(--radius-sm);border:1px solid var(--border);padding:20px;margin-bottom:24px;box-shadow:var(--shadow2)">
@@ -2022,49 +2027,59 @@
             <div style="font-size:14px;color:var(--text3);margin-top:6px;">Critical issues requiring immediate admin attention.</div>
           </div>
 
-          <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:0.5px;">
-            <div style="width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 6px rgba(239, 68, 68, 0.6);"></div>
-            Critical — requires immediate action
+          <!-- Filter & Search Bar -->
+          <div style="display:flex;gap:16px;align-items:center;margin-bottom:20px;flex-wrap:wrap;background:#f8fafc;padding:16px;border-radius:12px;border:1px solid var(--border);">
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;">Severity:</span>
+              <select id="alert-filter-severity" onchange="filterAlerts()" class="filter-select" style="padding:6px 12px;border-radius:8px;border:1px solid var(--border);font-size:13px;font-weight:600;">
+                <option value="all">All Severities</option>
+                <option value="Critical">🔴 Critical</option>
+                <option value="High">🟠 High</option>
+                <option value="Medium">🟡 Medium</option>
+              </select>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;">Type:</span>
+              <select id="alert-filter-type" onchange="filterAlerts()" class="filter-select" style="padding:6px 12px;border-radius:8px;border:1px solid var(--border);font-size:13px;font-weight:600;">
+                <option value="all">All Types</option>
+                <option value="security">Security</option>
+                <option value="system">System</option>
+              </select>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;">Status:</span>
+              <select id="alert-filter-status" onchange="filterAlerts()" class="filter-select" style="padding:6px 12px;border-radius:8px;border:1px solid var(--border);font-size:13px;font-weight:600;">
+                <option value="Active">Active</option>
+                <option value="Investigating">Investigating</option>
+                <option value="Resolved">Resolved</option>
+                <option value="Dismissed">Dismissed</option>
+                <option value="all">All Statuses</option>
+              </select>
+            </div>
+            <div style="flex:1;min-width:200px;display:flex;align-items:center;background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px 12px;gap:8px;">
+              <i class="ph-duotone ph-magnifying-glass" style="color:var(--text3);font-size:16px;"></i>
+              <input type="text" id="alert-search-input" oninput="filterAlerts()" placeholder="Search alerts by title, description or source..." style="border:none;outline:none;font-size:13px;width:100%;">
+            </div>
           </div>
 
-          <div class="admin-alert-card" style="background:#fff;border:1px solid var(--border);border-left:4px solid #ef4444;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,0.03);">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:12px;">
-              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                <span style="background:#fef2f2;color:#ef4444;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;">Security</span>
-                <h3 style="font-size:16px;font-weight:700;color:var(--text);font-family:'Outfit',sans-serif;margin:0;">Security — 8 failed login attempts on admin account</h3>
+          <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;align-items:flex-start;">
+            <!-- Active Alerts Panel -->
+            <div>
+              <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:0.5px;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 6px rgba(239, 68, 68, 0.6);animation:pulse 2s infinite;"></div>
+                Active Alerts Requiring Action (<span id="active-alerts-count">0</span>)
               </div>
-              <span style="font-size:12px;color:var(--text3);font-weight:600;"><i class="ph-duotone ph-clock" style="position:relative;top:2px;"></i> 8 min ago</span>
-            </div>
-            
-            <div style="font-size:13px;color:var(--text2);margin-bottom:20px;display:flex;align-items:center;gap:16px;">
-              <span><i class="ph-duotone ph-globe" style="position:relative;top:2px;"></i> IP: 103.41.xx.xx</span>
-              <span style="color:#ef4444;font-weight:600;"><i class="ph-duotone ph-warning-circle" style="position:relative;top:2px;"></i> Account auto-locked</span>
-            </div>
-
-            <div style="display:flex;gap:12px;flex-wrap:wrap;">
-              <button class="action-btn" style="padding:8px 16px;background:#fef2f2;color:#ef4444;border:1px solid #fca5a5;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;">Review Sessions</button>
-              <button class="action-btn" style="padding:8px 16px;background:#fff;color:var(--text);border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;">Block IP</button>
-              <button class="action-btn" style="padding:8px 16px;background:transparent;color:var(--text3);border:none;font-size:13px;font-weight:600;cursor:pointer;margin-left:auto;transition:all 0.2s;">Dismiss</button>
-            </div>
-          </div>
-
-          <div class="admin-alert-card" style="background:#fff;border:1px solid var(--border);border-left:4px solid #f97316;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,0.03);">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:12px;">
-              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                <span style="background:#fff7ed;color:#f97316;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;">System</span>
-                <h3 style="font-size:16px;font-weight:700;color:var(--text);font-family:'Outfit',sans-serif;margin:0;">System — Real-time report sync failed</h3>
+              <div id="active-alerts-container" style="display:flex;flex-direction:column;gap:16px;">
+                <!-- Active Alerts dynamically populated here -->
               </div>
-              <span style="font-size:12px;color:var(--text3);font-weight:600;"><i class="ph-duotone ph-clock" style="position:relative;top:2px;"></i> 12 min ago</span>
-            </div>
-            
-            <div style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.5;">
-              Database connection timeout during routine sync. 43 reports queued locally and waiting to be pushed to main cluster.
             </div>
 
-            <div style="display:flex;gap:12px;flex-wrap:wrap;">
-              <button class="action-btn" style="padding:8px 16px;background:#fff7ed;color:#f97316;border:1px solid #fdba74;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;">Retry Sync</button>
-              <button class="action-btn" style="padding:8px 16px;background:#fff;color:var(--text);border:1px solid var(--border);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;">View Logs</button>
-              <button class="action-btn" style="padding:8px 16px;background:transparent;color:var(--text3);border:none;font-size:13px;font-weight:600;cursor:pointer;margin-left:auto;transition:all 0.2s;">Dismiss</button>
+            <!-- History / Audit Sidebar -->
+            <div class="admin-widget" style="padding:20px;">
+              <h3 style="font-size:15px;font-weight:800;font-family:'Outfit',sans-serif;margin-bottom:16px;display:flex;align-items:center;gap:8px;"><i class="ph-duotone ph-clock-counter-clockwise"></i> Alert History</h3>
+              <div id="alert-history-container" style="display:flex;flex-direction:column;gap:12px;max-height:500px;overflow-y:auto;">
+                <!-- Resolved/Dismissed alerts dynamically populated here -->
+              </div>
             </div>
           </div>
         </div>
@@ -4033,6 +4048,7 @@
       } else if (viewName === 'notification') {
         title.innerText = 'Urgent Alerts';
         actions.style.display = 'none';
+        if (typeof fetchAlerts === 'function') fetchAlerts();
       } else if (viewName === 'settings-security') {
         title.innerText = 'Security Settings';
         actions.style.display = 'none';
@@ -4250,6 +4266,161 @@
           onclick="document.getElementById('modal-overlay').classList.remove('open')">✕</button>
       </div>
       <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ── REVIEW SESSIONS MODAL ── -->
+  <div class="modal-overlay" id="review-sessions-modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal" style="max-width:800px; width:90%; padding:24px;">
+      <div class="modal-header">
+        <div>
+          <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif">Review Session Status</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:3px">Examine active admin logins and revoke suspicious sessions.</div>
+        </div>
+        <button class="modal-close" onclick="document.getElementById('review-sessions-modal-overlay').classList.remove('open')">✕</button>
+      </div>
+      <div class="modal-body" style="padding:16px 0 0 0;">
+        <div style="overflow-x:auto;">
+          <table class="admin-table" style="width:100%; border-collapse:collapse;">
+            <thead>
+              <tr style="background:#f8fafc;">
+                <th style="padding:10px; text-align:left; font-size:12px; font-weight:700;">User</th>
+                <th style="padding:10px; text-align:left; font-size:12px; font-weight:700;">IP Address</th>
+                <th style="padding:10px; text-align:left; font-size:12px; font-weight:700;">Browser</th>
+                <th style="padding:10px; text-align:left; font-size:12px; font-weight:700;">Device</th>
+                <th style="padding:10px; text-align:left; font-size:12px; font-weight:700;">Location</th>
+                <th style="padding:10px; text-align:left; font-size:12px; font-weight:700;">Login Time</th>
+                <th style="padding:10px; text-align:left; font-size:12px; font-weight:700;">Status</th>
+                <th style="padding:10px; text-align:left; font-size:12px; font-weight:700;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="sessions-modal-tbody">
+              <!-- Dynamically populated sessions -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BLOCK IP MODAL ── -->
+  <div class="modal-overlay" id="block-ip-modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal" style="max-width:480px; width:90%; padding:24px;">
+      <div class="modal-header">
+        <div>
+          <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif">Block IP Address</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:3px">Add IP address to blocklist and reject future traffic.</div>
+        </div>
+        <button class="modal-close" onclick="document.getElementById('block-ip-modal-overlay').classList.remove('open')">✕</button>
+      </div>
+      <div class="modal-body" style="padding:16px 0 0 0; display:flex; flex-direction:column; gap:16px;">
+        <div>
+          <label style="font-size:12px; font-weight:700; color:var(--text2); display:block; margin-bottom:6px;">IP ADDRESS</label>
+          <input type="text" id="block-ip-address" readonly style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); background:#f1f5f9; font-weight:700; outline:none;">
+        </div>
+        <div>
+          <label style="font-size:12px; font-weight:700; color:var(--text2); display:block; margin-bottom:6px;">BLOCK DURATION</label>
+          <select id="block-ip-duration" class="filter-select" style="width:100%; padding:10px; border-radius:8px;">
+            <option value="1 Hour">1 Hour</option>
+            <option value="24 Hours" selected>24 Hours</option>
+            <option value="7 Days">7 Days</option>
+            <option value="Permanent">Permanent</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:12px; font-weight:700; color:var(--text2); display:block; margin-bottom:6px;">REASON FOR BLOCK</label>
+          <input type="text" id="block-ip-reason" placeholder="Brute force attempts, suspicious API abuse, etc." style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); outline:none;">
+        </div>
+        <div style="display:flex; gap:12px; margin-top:8px;">
+          <button class="action-btn" style="flex:1; padding:10px;" onclick="document.getElementById('block-ip-modal-overlay').classList.remove('open')">Cancel</button>
+          <button class="btn-primary" style="flex:1; padding:10px; background:#ef4444; border-color:#ef4444; color:#fff;" onclick="submitBlockIp()">Confirm Block</button>
+        </div>
+        
+        <hr style="border:none; border-top:1px solid var(--border); margin:8px 0;">
+        
+        <div>
+          <div style="font-size:13px; font-weight:800; margin-bottom:8px;">Currently Blocked IPs</div>
+          <div style="max-height:150px; overflow-y:auto; border:1px solid var(--border); border-radius:8px;">
+            <table style="width:100%; border-collapse:collapse; font-size:12px;">
+              <tbody id="blocked-ips-list-tbody">
+                <!-- Dynamically populated list of blocked IPs -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SYNC PROGRESS MODAL ── -->
+  <div class="modal-overlay" id="sync-progress-modal-overlay">
+    <div class="modal" style="max-width:420px; width:90%; padding:24px; text-align:center;">
+      <div style="font-size:36px; margin-bottom:12px;">🔄</div>
+      <h3 style="font-size:18px; font-weight:800; font-family:'Outfit',sans-serif; color:var(--text); margin-bottom:8px;">Retrying Database Sync</h3>
+      <p style="font-size:13px; color:var(--text3); margin-bottom:20px; line-height:1.5;">Reprocessing reports queue and synchronizing with the main cluster. Please wait...</p>
+      
+      <!-- Progress Bar -->
+      <div style="height:12px; background:#e2e8f0; border-radius:6px; overflow:hidden; margin-bottom:12px; position:relative;">
+        <div id="sync-progress-bar" style="height:100%; background:var(--primary); width:0%; transition:width 0.2s;"></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:var(--text2); margin-bottom:20px;">
+        <span id="sync-progress-text">0% Completed</span>
+        <span id="sync-progress-counts">0 / 0 Processed</span>
+      </div>
+
+      <div style="padding:12px; background:#f8fafc; border:1px solid var(--border); border-radius:8px; font-size:12px; text-align:left; display:flex; flex-direction:column; gap:6px;">
+        <div style="display:flex; justify-content:space-between;"><span>Processed Success:</span><span style="color:#16a34a; font-weight:800;" id="sync-success-count">0</span></div>
+        <div style="display:flex; justify-content:space-between;"><span>Processed Failed:</span><span style="color:#ef4444; font-weight:800;" id="sync-failed-count">0</span></div>
+        <div style="display:flex; justify-content:space-between;"><span>Remaining Queue:</span><span style="font-weight:800;" id="sync-remaining-count">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SYSTEM LOGS MODAL ── -->
+  <div class="modal-overlay" id="log-viewer-modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal" style="max-width:900px; width:95%; padding:24px;">
+      <div class="modal-header">
+        <div>
+          <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif">System Log Viewer</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:3px">Browse logs, stack traces, and debug sync job connection errors.</div>
+        </div>
+        <button class="modal-close" onclick="document.getElementById('log-viewer-modal-overlay').classList.remove('open')">✕</button>
+      </div>
+      <div class="modal-body" style="padding:16px 0 0 0; display:flex; flex-direction:column; gap:16px;">
+        <!-- Filter and Search Row -->
+        <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+          <select id="log-filter-time" onchange="fetchSystemLogs()" class="filter-select" style="padding:8px 12px; border-radius:8px; font-size:13px; font-weight:600;">
+            <option value="hour">Last Hour</option>
+            <option value="day" selected>Last 24 Hours</option>
+            <option value="week">Last 7 Days</option>
+            <option value="all">All Time</option>
+          </select>
+          <div style="flex:1; min-width:200px; display:flex; align-items:center; background:#f1f5f9; border-radius:8px; padding:6px 12px; gap:8px;">
+            <i class="ph-duotone ph-magnifying-glass" style="color:var(--text3); font-size:16px;"></i>
+            <input type="text" id="log-search-input" oninput="fetchSystemLogs()" placeholder="Search logs by message, service..." style="border:none; background:transparent; outline:none; font-size:13px; width:100%;">
+          </div>
+          <button class="btn-primary" style="padding:8px 16px; border-radius:8px; font-size:13px; display:flex; align-items:center; gap:6px;" onclick="exportSystemLogsCSV()">
+            <i class="ph-bold ph-download"></i> Export Logs
+          </button>
+        </div>
+
+        <div style="max-height:350px; overflow-y:auto; border:1px solid var(--border); border-radius:8px;">
+          <table class="admin-table" style="width:100%; border-collapse:collapse; font-size:12px;">
+            <thead>
+              <tr style="background:#f8fafc; position:sticky; top:0; z-index:1;">
+                <th style="padding:10px; text-align:left; font-weight:700;">Timestamp</th>
+                <th style="padding:10px; text-align:left; font-weight:700;">Service</th>
+                <th style="padding:10px; text-align:left; font-weight:700;">Level</th>
+                <th style="padding:10px; text-align:left; font-weight:700;">Message</th>
+                <th style="padding:10px; text-align:left; font-weight:700;">Stack Trace</th>
+              </tr>
+            </thead>
+            <tbody id="logs-modal-tbody">
+              <!-- Dynamically populated logs -->
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 

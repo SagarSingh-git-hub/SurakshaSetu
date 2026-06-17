@@ -48,12 +48,15 @@ $seq = str_pad($row['cnt'] + 1, 4, '0', STR_PAD_LEFT);
 $cert_id = "$prefix-$year-$seq";
 
 // Ensure recipient_type column exists
-$conn->query("ALTER TABLE certificates ADD COLUMN recipient_type VARCHAR(50) DEFAULT 'Community Member'");
+$conn->query("ALTER TABLE certificates ADD COLUMN IF NOT EXISTS recipient_type VARCHAR(50) DEFAULT 'Community Member'");
 
 $sql = "INSERT INTO certificates (cert_id, recipient_name, recipient_email, recipient_phone, recipient_zone, certificate_type, issue_date, citation, issuing_authority, co_signatory, template_id, recipient_type) 
-        VALUES ('$cert_id', '$recipient_name', '$recipient_email', '$recipient_phone', '$recipient_zone', '$certificate_type', '$issue_date', '$citation', '$issuing_authority', '$co_signatory', " . ($template_id > 0 ? $template_id : "NULL") . ", '$recipient_type')";
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ssssssssssis", $cert_id, $recipient_name, $recipient_email, $recipient_phone, $recipient_zone, $certificate_type, $issue_date, $citation, $issuing_authority, $co_signatory, $template_id_val, $recipient_type);
+$template_id_val = $template_id > 0 ? $template_id : null;
 
-if ($conn->query($sql)) {
+if ($stmt->execute()) {
     // Update template usage
     if ($template_id > 0) {
         $conn->query("UPDATE certificate_templates SET usage_count = usage_count + 1, last_used = NOW() WHERE id = $template_id");

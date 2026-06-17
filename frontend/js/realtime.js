@@ -1,19 +1,52 @@
 // ── REAL-TIME WEBSOCKETS (PUSHER) ──
 
-// IMPORTANT: Replace 'YOUR_APP_KEY' and 'YOUR_APP_CLUSTER' with your actual Pusher credentials
-// matching the ones in backend/config.php
 const PUSHER_KEY = '850e64cc0944f72172df';
 const PUSHER_CLUSTER = 'ap2';
 
-if (PUSHER_KEY !== 'YOUR_APP_KEY') {
-    // Enable pusher logging for debugging (optional)
+let pusher = null;
+let channel = null;
+
+function initRealtime() {
+    if (PUSHER_KEY === 'YOUR_APP_KEY') {
+        console.warn("Pusher is not configured. Real-time updates are disabled.");
+        return;
+    }
+
+    const token = sessionStorage.getItem('adminToken');
+    if (!token) {
+        console.log("Realtime: No admin session token found. Postponing websocket connection.");
+        return;
+    }
+
+    if (pusher) {
+        console.log("Realtime: Already initialized.");
+        return;
+    }
+
     Pusher.logToConsole = false;
 
-    var pusher = new Pusher(PUSHER_KEY, {
-        cluster: PUSHER_CLUSTER
+    // Initialize Pusher pointing to secure auth endpoint
+    pusher = new Pusher(PUSHER_KEY, {
+        cluster: PUSHER_CLUSTER,
+        authEndpoint: `${API_URL}/api/pusher_auth.php`,
+        auth: {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        }
     });
 
-    var channel = pusher.subscribe('eco-channel');
+    // Subscribe to secure private channel
+    channel = pusher.subscribe('private-eco-channel');
+
+    // Handle subscription authentication failures
+    pusher.connection.bind('error', function(err) {
+        if (err && err.error && err.error.data && err.error.data.code === 401) {
+            console.error("Realtime subscription unauthorized. Disconnecting...", err);
+            destroyRealtime();
+        }
+    });
+
     channel.bind('new-report', function(data) {
         console.log('Real-time report received:', data);
         
@@ -110,6 +143,75 @@ if (PUSHER_KEY !== 'YOUR_APP_KEY') {
         }
     });
 
-} else {
-    console.warn("Pusher is not configured. Real-time updates are disabled.");
+    // --- ALERT MANAGEMENT CHANNELS ---
+    channel.bind('new-alert', function(data) {
+        console.log('New alert received:', data);
+        showToast(`⚠️ Urgent Alert: ${data.title}`);
+        if (typeof fetchAlerts === 'function') fetchAlerts(true);
+    });
+
+    channel.bind('alert-updated', function(data) {
+        console.log('Alert updated received:', data);
+        if (typeof fetchAlerts === 'function') fetchAlerts(true);
+    });
+
+    channel.bind('session-updated', function(data) {
+        console.log('Session updated received:', data);
+        if (typeof openReviewSessionsModal === 'function' && document.getElementById('review-sessions-modal-overlay').classList.contains('open')) {
+            openReviewSessionsModal();
+        }
+    });
+
+    channel.bind('sync-progress', function(data) {
+        console.log('Sync progress received:', data);
+        const bar = document.getElementById('sync-progress-bar');
+        const text = document.getElementById('sync-progress-text');
+        const counts = document.getElementById('sync-progress-counts');
+        const successVal = document.getElementById('sync-success-count');
+        const failedVal = document.getElementById('sync-failed-count');
+        const remainingVal = document.getElementById('sync-remaining-count');
+        
+        if (bar) bar.style.width = data.percent + '%';
+        if (text) text.textContent = data.percent + '% Completed';
+        if (counts) counts.textContent = `${data.success_count + data.failed_count} / ${data.total} Processed`;
+        if (successVal) successVal.textContent = data.success_count;
+        if (failedVal) failedVal.textContent = data.failed_count;
+        if (remainingVal) remainingVal.textContent = data.remaining;
+    });
+
+    channel.bind('sync-completed', function(data) {
+        console.log('Sync completed:', data);
+        showToast(`✅ Sync completed: ${data.success_count} success, ${data.failed_count} failed.`);
+        setTimeout(() => {
+            document.getElementById('sync-progress-modal-overlay').classList.remove('open');
+        }, 1500);
+        if (typeof fetchAlerts === 'function') fetchAlerts(true);
+    });
+
+    channel.bind('ip-blocked', function(data) {
+        console.log('IP Blocked event:', data);
+        showToast(`🔒 IP block status changed: ${data.ip_address} is now ${data.status}`);
+        if (typeof fetchBlockedIps === 'function') fetchBlockedIps();
+        if (typeof fetchAlerts === 'function') fetchAlerts(true);
+    });
 }
+
+function destroyRealtime() {
+    if (pusher) {
+        channel.unsubscribe('private-eco-channel');
+        pusher.disconnect();
+        pusher = null;
+        channel = null;
+        console.log("Realtime: Disconnected successfully.");
+    }
+}
+
+// Auto-initialize if logged in on page load
+document.addEventListener('DOMContentLoaded', () => {
+    // Wait slightly to ensure sessionStorage and config are loaded
+    setTimeout(() => {
+        if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+            initRealtime();
+        }
+    }, 100);
+});

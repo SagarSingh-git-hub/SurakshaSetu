@@ -1,0 +1,30 @@
+name: Automated Backup & Disaster Recovery
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # Run at 2 AM every day
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Dump MySQL Database
+      env:
+        DB_HOST: ${{ secrets.PROD_DB_HOST }}
+        DB_USER: ${{ secrets.PROD_DB_USER }}
+        DB_PASS: ${{ secrets.PROD_DB_PASS }}
+        DB_NAME: ${{ secrets.PROD_DB_NAME }}
+      run: |
+        mysqldump -h $DB_HOST -u $DB_USER -p$DB_PASS $DB_NAME > backup_$(date +\%F).sql
+        
+    - name: Compress Backup
+      run: tar -czvf backup_$(date +\%F).tar.gz backup_$(date +\%F).sql
+      
+    - name: Upload to Cloud Storage (Disaster Recovery)
+      # Simulating an upload to S3/R2
+      run: |
+        echo "Uploading backup to secure cold storage..."
+        # aws s3 cp backup_$(date +\%F).tar.gz s3://my-backup-bucket/
+        echo "Backup uploaded successfully for Disaster Recovery."

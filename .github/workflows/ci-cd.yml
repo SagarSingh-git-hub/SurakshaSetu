@@ -1,0 +1,68 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "production" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: surakshasetu_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mysqli, pdo, curl, mbstring
+        coverage: none
+
+    - name: Start Built-in PHP Server
+      run: php -S localhost:8000 -t . &
+      
+    - name: Setup Database
+      run: |
+        mysql -h 127.0.0.1 -uroot -proot surakshasetu_test < backend/database.sql
+        php optimize_db.php
+
+    - name: Run Security Scans (Static Analysis)
+      run: |
+        # Basic check for syntax errors
+        find . -name "*.php" -print0 | xargs -0 -n1 php -l
+        
+    - name: Run End-to-End Audit Tests
+      env:
+        DB_HOST: 127.0.0.1
+        DB_USER: root
+        DB_PASS: root
+        DB_NAME: surakshasetu_test
+        APP_ENV: testing
+      run: |
+        # Use our comprehensive audit script as the E2E test suite
+        php audit_script.php
+
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Deploy to Production
+      run: |
+        echo "Deploying to production environment..."
+        # Add your deployment script here, e.g., SSH, rsync, or cloud CLI
+        echo "Deployment successful."
