@@ -123,6 +123,11 @@ $create_index_safe('system_logs', 'idx_logs_timestamp', 'timestamp');
 $create_index_safe('system_logs', 'idx_logs_service_level', 'service_name, log_level');
 $create_index_safe('sync_jobs', 'idx_sync_jobs_status', 'status');
 
+// Optimizing reports table
+$create_index_safe('reports', 'idx_reports_status_category', 'status, category');
+$create_index_safe('reports', 'idx_reports_priority', 'priority');
+$create_index_safe('reports', 'idx_reports_created', 'created_at');
+
 // 3. Add foreign key to sync_jobs
 // First, clean up orphan sync jobs where report_id doesn't exist in reports table
 $conn->query("DELETE FROM sync_jobs WHERE report_id NOT IN (SELECT report_id FROM reports)");
