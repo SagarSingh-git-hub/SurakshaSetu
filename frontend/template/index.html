@@ -66,13 +66,14 @@
       }
     }
   </script>
-  <!-- Chrome, Edge, and Safari Theme Color -->
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#dcfce7">
-  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#dcfce7">
+  <!-- Primary Browser UI Theme Color (Chrome, Firefox, Safari, Edge, Samsung Internet) -->
   <meta name="theme-color" content="#dcfce7">
-  <!-- Windows Phone -->
+
+  <!-- Microsoft / Edge / Windows Phone -->
+  <meta name="msapplication-TileColor" content="#dcfce7">
   <meta name="msapplication-navbutton-color" content="#dcfce7">
-  <!-- iOS Safari -->
+
+  <!-- iOS Safari & PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
 </head>
@@ -153,7 +154,7 @@
         <span
           style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;background:#e8faf0;color:#16a34a;border:1px solid #d1fae5;border-radius:99px;padding:6px 14px;display:inline-block;margin-bottom:16px;letter-spacing:0.5px;text-transform:uppercase">How
           It Works</span>
-        <h2
+        <h2 class="reveal-heading"
           style="font-family:'Outfit',sans-serif;font-size:clamp(32px,4.5vw,44px);font-weight:800;color:var(--g900);line-height:1.15;margin-bottom:16px;letter-spacing:-1px">
           Three steps to cleaner communities</h2>
         <p
@@ -233,7 +234,7 @@
         <span
           style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;background:#e8faf0;color:#16a34a;border:1px solid #d1fae5;border-radius:99px;padding:6px 14px;display:inline-block;margin-bottom:16px;letter-spacing:0.5px;text-transform:uppercase">Issue
           Categories</span>
-        <h2
+        <h2 class="reveal-heading"
           style="font-family:'Outfit',sans-serif;font-size:clamp(32px,4.5vw,44px);font-weight:800;color:var(--g900);line-height:1.15;margin-bottom:16px;letter-spacing:-1px">
           What can you report?</h2>
         <p
@@ -334,7 +335,7 @@
           <span
             style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;background:#e8faf0;color:#16a34a;border:1px solid #d1fae5;border-radius:99px;padding:6px 14px;display:inline-block;margin-bottom:16px;letter-spacing:0.5px;text-transform:uppercase">Our
             Impact</span>
-          <h2
+          <h2 class="reveal-heading"
             style="font-family:'Outfit',sans-serif;font-size:clamp(32px,4.5vw,44px);font-weight:800;color:var(--g900);line-height:1.15;margin-bottom:16px;letter-spacing:-1px">
             Real change, powered by citizens</h2>
           <p
@@ -411,7 +412,7 @@
         <span
           style="font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;background:#e8faf0;color:#16a34a;border:1px solid #d1fae5;border-radius:99px;padding:6px 14px;display:inline-block;margin-bottom:16px;letter-spacing:0.5px;text-transform:uppercase">Community
           Voices</span>
-        <h2
+        <h2 class="reveal-heading"
           style="font-family:'Outfit',sans-serif;font-size:clamp(32px,4.5vw,44px);font-weight:800;color:var(--g900);line-height:1.15;margin-bottom:16px;letter-spacing:-1px">
           What people are saying</h2>
         <p
@@ -4837,6 +4838,47 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+  <style>
+    .reveal-heading {
+      opacity: 0;
+      transform: translateY(20px);
+      clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+      transition: clip-path 1.2s cubic-bezier(0.19, 1, 0.22, 1), 
+                  transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), 
+                  opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+      will-change: opacity, transform, clip-path;
+    }
+    .reveal-heading.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const headings = document.querySelectorAll('.reveal-heading');
+      
+      const observer = new IntersectionObserver((entries) => {
+        let delay = 0;
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (delay > 0) {
+              entry.target.style.transitionDelay = `${delay}ms`;
+            }
+            requestAnimationFrame(() => {
+              entry.target.classList.add('is-visible');
+            });
+            delay += 200; // 0.2s stagger
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+
+      headings.forEach(heading => {
+        observer.observe(heading);
+      });
+    });
+  </script>
 </body>
 
 </html>
