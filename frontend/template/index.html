@@ -4842,15 +4842,18 @@
     .reveal-heading {
       opacity: 0;
       transform: translateY(20px);
+      -webkit-clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
       clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
       transition: clip-path 1.2s cubic-bezier(0.19, 1, 0.22, 1), 
+                  -webkit-clip-path 1.2s cubic-bezier(0.19, 1, 0.22, 1), 
                   transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), 
                   opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-      will-change: opacity, transform, clip-path;
+      will-change: opacity, transform, clip-path, -webkit-clip-path;
     }
     .reveal-heading.is-visible {
       opacity: 1;
       transform: translateY(0);
+      -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
       clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
     }
   </style>
@@ -4865,6 +4868,7 @@
             if (delay > 0) {
               entry.target.style.transitionDelay = `${delay}ms`;
             }
+            // Use requestAnimationFrame to ensure layout is ready
             requestAnimationFrame(() => {
               entry.target.classList.add('is-visible');
             });
@@ -4872,11 +4876,14 @@
             observer.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.2 });
+      }, { threshold: 0.1 });
 
-      headings.forEach(heading => {
-        observer.observe(heading);
-      });
+      // Small timeout to allow SPA logic to set active pages
+      setTimeout(() => {
+        headings.forEach(heading => {
+          observer.observe(heading);
+        });
+      }, 300);
     });
   </script>
 </body>

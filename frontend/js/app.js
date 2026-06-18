@@ -366,7 +366,6 @@ function mountAdminLogin() {
 let homeVisitCount = 0;
 
 const HOME_SR_TARGETS = [
-  '#page-home section h2',
   '#page-home section > p',
   '#page-home .step-card',
   '#page-home .cat-card',
@@ -375,7 +374,7 @@ const HOME_SR_TARGETS = [
 
 const HOME_VISIBILITY_SELECTORS = [
   '.hero-h1', '.hero-tagline', '.hero-cta', '.hero-stats', '#hero-globe-wrapper',
-  '.step-card', '.cat-card', '.testimonial-card', 'section h2', 'section > p', '.reveal-line'
+  '.step-card', '.cat-card', '.testimonial-card', 'section > p', '.reveal-line'
 ];
 
 function resetHomeVisibility() {
@@ -488,7 +487,6 @@ function initHomeScrollReveal(isRevisit = false) {
     });
   }
 
-  window.sr.reveal('#page-home section h2', { origin: 'left' });
   window.sr.reveal('#page-home section > p', { delay: 80, origin: 'left' });
   window.sr.reveal('#page-home .step-card', { interval: 120, origin: 'bottom' });
   window.sr.reveal('#page-home .cat-card', { interval: 80, origin: 'bottom', scale: 0.95 });
