@@ -2,7 +2,7 @@
   "name": "SurakshaSetu",
   "short_name": "SurakshaSetu",
   "description": "SurakshaSetu - Environment Protection Portal",
-  "start_url": "/",
+  "start_url": "/frontend/template/index.html",
   "display": "standalone",
   "background_color": "#dcfce7",
   "theme_color": "#dcfce7",
