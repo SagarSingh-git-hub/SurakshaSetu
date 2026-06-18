@@ -393,6 +393,11 @@ function resetHomeVisibility() {
       el.style.removeProperty('visibility');
     });
   });
+
+  // Reset custom reveal headings
+  home.querySelectorAll('.reveal-heading').forEach(el => {
+    el.classList.remove('is-visible');
+  });
 }
 
 function bootGlobe(attempts = 0) {
@@ -406,6 +411,13 @@ function mountHomePage() {
   homeVisitCount++;
 
   resetHomeVisibility();
+
+  // Reveal headings on every home visit
+  setTimeout(() => {
+    document.querySelectorAll('#page-home .reveal-heading').forEach(el => {
+      el.classList.add('is-visible');
+    });
+  }, 300);
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
