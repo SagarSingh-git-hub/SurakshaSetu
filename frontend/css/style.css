@@ -1897,8 +1897,26 @@ textarea.form-input{resize:vertical;min-height:100px}
   background: #fff;
 }
 #preview-wrapper.mobile-mode {
+  transform: scale(0.45);
   width: 375px;
   height: 667px;
+}
+
+/* ── HEADING REVEAL ANIMATION ── */
+.reveal-heading {
+  opacity: 0;
+  transform: translateY(20px);
+  clip-path: inset(0 100% 0 0); /* Hidden, masked from the right */
+  will-change: opacity, transform, clip-path;
+}
+
+.reveal-heading.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  clip-path: inset(0 0 0 0);
+  transition: opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1),
+              transform 1.2s cubic-bezier(0.19, 1, 0.22, 1),
+              clip-path 1.2s cubic-bezier(0.19, 1, 0.22, 1);
 }
 /* Ensure CodeMirror fits its container */
 .CodeMirror {

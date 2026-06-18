@@ -382,7 +382,7 @@ const HOME_SR_TARGETS = [
 
 const HOME_VISIBILITY_SELECTORS = [
   '.hero-h1', '.hero-tagline', '.hero-cta', '.hero-stats', '#hero-globe-wrapper',
-  '.step-card', '.cat-card', '.testimonial-card', 'section > p', '.reveal-line'
+  '.step-card', '.cat-card', '.testimonial-card', 'section > p', '.reveal-line', '.reveal-heading'
 ];
 
 function resetHomeVisibility() {
@@ -416,32 +416,36 @@ function mountHomePage() {
 
   resetHomeVisibility();
 
-  // Reveal headings on every home visit with GSAP
-  setTimeout(() => {
-    const headings = document.querySelectorAll('#page-home .reveal-heading');
-    if (typeof gsap !== 'undefined') {
-      gsap.fromTo(headings,
-        { opacity: 0, y: 24, clipPath: 'inset(0 100% 0 0)' },
-        {
-          opacity: 1,
-          y: 0,
-          clipPath: 'inset(0 0% 0 0)',
-          duration: 1.2,
-          ease: 'power4.out',
-          stagger: {
-            each: 0.2,
-            from: 'start'
-          },
-          scrollTrigger: null
+  // Reveal headings on scroll with IntersectionObserver
+  const headings = document.querySelectorAll('#page-home .reveal-heading');
+  headings.forEach(el => {
+    el.classList.remove('is-visible');
+    el.style.transitionDelay = '0s';
+  });
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.15
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    let delay = 0;
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        if (delay > 0) {
+          entry.target.style.transitionDelay = `${delay}s`;
         }
-      );
-    } else {
-      headings.forEach(el => {
-        el.style.opacity = '1';
-        el.style.transform = 'none';
-      });
-    }
-  }, 200);
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+        delay += 0.2;
+      }
+    });
+  }, observerOptions);
+
+  headings.forEach(heading => {
+    observer.observe(heading);
+  });
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
