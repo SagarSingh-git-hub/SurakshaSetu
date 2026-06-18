@@ -47,13 +47,15 @@ initialPage = resolveInitialPage();
 
 function ensureThemeColor() {
   const hex = '#dcfce7';
-  let metaTheme = document.querySelector('meta[name="theme-color"]');
-  if (!metaTheme) {
-    metaTheme = document.createElement('meta');
+  let metaThemes = document.querySelectorAll('meta[name="theme-color"]');
+  if (metaThemes.length === 0) {
+    let metaTheme = document.createElement('meta');
     metaTheme.name = 'theme-color';
+    metaTheme.content = hex;
     document.head.appendChild(metaTheme);
+  } else {
+    metaThemes.forEach(meta => meta.setAttribute('content', hex));
   }
-  metaTheme.setAttribute('content', hex);
   
   let msTile = document.querySelector('meta[name="msapplication-TileColor"]');
   if (msTile) msTile.setAttribute('content', hex);
