@@ -1906,20 +1906,26 @@ textarea.form-input{resize:vertical;min-height:100px}
 .reveal-heading {
   opacity: 0;
   transform: translateY(20px);
-  -webkit-clip-path: inset(0 100% 0 0);
-  clip-path: inset(0 100% 0 0); /* Hidden, masked from the right */
   will-change: opacity, transform, clip-path;
-  transition: opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1),
-              transform 1.2s cubic-bezier(0.19, 1, 0.22, 1),
-              -webkit-clip-path 1.2s cubic-bezier(0.19, 1, 0.22, 1),
-              clip-path 1.2s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .reveal-heading.is-visible {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-  -webkit-clip-path: inset(0 0 0 0) !important;
-  clip-path: inset(0 0 0 0) !important;
+  animation: revealHeadingAnim 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes revealHeadingAnim {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    -webkit-clip-path: inset(0 100% 0 0);
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    -webkit-clip-path: inset(0 0 0 0);
+    clip-path: inset(0 0 0 0);
+  }
 }
 /* Ensure CodeMirror fits its container */
 .CodeMirror {
@@ -1979,4 +1985,29 @@ textarea.form-input{resize:vertical;min-height:100px}
   font-size: 12px;
   font-weight: 700;
   margin: 4px;
+}
+
+/* ── HERO SPLIT REVEAL ANIMATION INITIAL STATES ── */
+.hero-h1-line {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+.reveal-line {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(120%);
+  will-change: transform, opacity;
+}
+.hero-tagline,
+.hero-cta,
+.hero-stats {
+  opacity: 0;
+  transform: translateY(30px);
+  will-change: transform, opacity;
+}
+#hero-globe-wrapper {
+  opacity: 0;
+  transform: translateX(50px);
+  will-change: transform, opacity;
 }

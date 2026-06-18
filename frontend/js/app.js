@@ -45,16 +45,30 @@ function resolveInitialPage() {
 
 initialPage = resolveInitialPage();
 
+function ensureThemeColor() {
+  const hex = '#dcfce7';
+  let metaTheme = document.querySelector('meta[name="theme-color"]');
+  if (!metaTheme) {
+    metaTheme = document.createElement('meta');
+    metaTheme.name = 'theme-color';
+    document.head.appendChild(metaTheme);
+  }
+  metaTheme.setAttribute('content', hex);
+  
+  let msTile = document.querySelector('meta[name="msapplication-TileColor"]');
+  if (msTile) msTile.setAttribute('content', hex);
+  
+  let msNav = document.querySelector('meta[name="msapplication-navbutton-color"]');
+  if (msNav) msNav.setAttribute('content', hex);
+}
+
 function bootstrapApp() {
   localStorage.removeItem('eco_warrior_last_page');
+  ensureThemeColor();
   showPage(initialPage, false);
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', bootstrapApp);
-} else {
-  bootstrapApp();
-}
+// bootstrapApp initialization moved to bottom of file
 
 function showPage(id, pushHistory = true) {
   // Push the previous page onto the history stack
@@ -421,6 +435,7 @@ function mountHomePage() {
   headings.forEach(el => {
     el.classList.remove('is-visible');
     el.style.transitionDelay = '0s';
+    el.style.animationDelay = '0s';
   });
 
   const observerOptions = {
@@ -435,6 +450,7 @@ function mountHomePage() {
       if (entry.isIntersecting) {
         if (delay > 0) {
           entry.target.style.transitionDelay = `${delay}s`;
+          entry.target.style.animationDelay = `${delay}s`;
         }
         entry.target.classList.add('is-visible');
         observer.unobserve(entry.target);
@@ -449,65 +465,92 @@ function mountHomePage() {
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      if (typeof initGlobe === 'function') {
-        if (typeof globeScene === 'undefined' || !globeScene) {
-          initGlobe();
-        } else {
-          bootGlobe();
+      try {
+        if (typeof initGlobe === 'function') {
+          try {
+            if (typeof globeScene === 'undefined' || !globeScene) {
+              initGlobe();
+            } else {
+              bootGlobe();
+            }
+          } catch (globeErr) {
+            console.error('Failed to initialize globe:', globeErr);
+          }
         }
-      }
 
-      if (typeof updateHeroStats === 'function') updateHeroStats();
-      fetchReports().then(() => {
-        if (typeof updateHeroStats === 'function') updateHeroStats();
-        if (typeof updateGlobeMarkers === 'function') updateGlobeMarkers(currentReports);
-      });
-      animateHeroSection(isRevisit);
-      initHomeScrollReveal(isRevisit);
+        if (typeof updateHeroStats === 'function') {
+          try {
+            updateHeroStats();
+          } catch (statsErr) {
+            console.error('Failed to update stats initially:', statsErr);
+          }
+        }
+        
+        try {
+          fetchReports().then(() => {
+            try {
+              if (typeof updateHeroStats === 'function') updateHeroStats();
+              if (typeof updateGlobeMarkers === 'function') updateGlobeMarkers(currentReports);
+            } catch (postFetchErr) {
+              console.error('Failed to update stats/markers post fetch:', postFetchErr);
+            }
+          }).catch(err => {
+            console.error('Failed in fetchReports promise:', err);
+          });
+        } catch (fetchErr) {
+          console.error('Failed to trigger fetchReports:', fetchErr);
+        }
+
+        animateHeroSection(isRevisit);
+        initHomeScrollReveal(isRevisit);
+      } catch (err) {
+        console.error('General error in mountHomePage requestAnimationFrame:', err);
+      }
     });
   });
 }
 
 function animateHeroSection(isRevisit = false) {
-  const targets = ['.hero-h1', '.hero-tagline', '.hero-cta', '.hero-stats', '#hero-globe-wrapper'];
+  try {
+    const targets = ['.hero-h1', '.hero-tagline', '.hero-cta', '.hero-stats', '#hero-globe-wrapper'];
 
-  if (typeof gsap === 'undefined') {
-    document.querySelectorAll(targets.join(',')).forEach(el => {
-      el.style.opacity = '1';
-      el.style.transform = 'none';
-    });
-    return;
+    if (typeof gsap === 'undefined') {
+      document.querySelectorAll(targets.join(',')).forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+      document.querySelectorAll('.reveal-line').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+      return;
+    }
+
+    gsap.killTweensOf(targets);
+    gsap.killTweensOf('.reveal-line');
+
+    if (isRevisit) {
+      gsap.set(targets, { opacity: 1, y: 0, x: 0 });
+      gsap.set('.reveal-line', { opacity: 1, y: 0 });
+      return;
+    }
+
+    // Set initial states (matches CSS initial states, ensuring clean reset)
+    gsap.set('.hero-h1', { opacity: 1 });
+    gsap.set('.reveal-line', { y: '120%', opacity: 0 });
+    gsap.set(['.hero-tagline', '.hero-cta', '.hero-stats'], { opacity: 0, y: 30 });
+    gsap.set('#hero-globe-wrapper', { x: 50, opacity: 0 });
+
+    // Premium text reveal animation
+    gsap.to('.reveal-line', { y: '0%', opacity: 1, duration: 1.0, stagger: 0.15, ease: 'power4.out', delay: 0.1 });
+    
+    gsap.to('.hero-tagline', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.6 });
+    gsap.to('.hero-cta', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.7 });
+    gsap.to('.hero-stats', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.8 });
+    gsap.to('#hero-globe-wrapper', { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 0.5 });
+  } catch (err) {
+    console.error('Exception in animateHeroSection: ' + err.message);
   }
-
-  gsap.killTweensOf(targets);
-  gsap.killTweensOf('.reveal-line');
-
-  // Split the H1 into lines for a premium text reveal
-  const h1 = document.querySelector('.hero-h1');
-  if (h1 && !h1.classList.contains('split-done')) {
-    h1.classList.add('split-done');
-    h1.innerHTML = h1.innerHTML.split('<br>').map(line => `<span style="display:inline-block; overflow:hidden; vertical-align:top;"><span class="reveal-line" style="display:inline-block;">${line}</span></span>`).join('<br>');
-  }
-
-  if (isRevisit) {
-    gsap.set(targets, { opacity: 1, y: 0, x: 0 });
-    gsap.set('.reveal-line', { opacity: 1, y: 0 });
-    return;
-  }
-
-  // Set initial states
-  gsap.set('.hero-h1', { opacity: 1 }); // Main container visible
-  gsap.set('.reveal-line', { y: '120%', opacity: 0 }); // Lines hidden below
-  gsap.set(['.hero-tagline', '.hero-cta', '.hero-stats'], { opacity: 0, y: 30 });
-  gsap.set('#hero-globe-wrapper', { x: 50, opacity: 0 });
-
-  // Premium text reveal animation
-  gsap.to('.reveal-line', { y: '0%', opacity: 1, duration: 1.0, stagger: 0.15, ease: 'power4.out', delay: 0.1 });
-  
-  gsap.to('.hero-tagline', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.6 });
-  gsap.to('.hero-cta', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.7 });
-  gsap.to('.hero-stats', { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 0.8 });
-  gsap.to('#hero-globe-wrapper', { x: 0, opacity: 1, duration: 1.2, ease: 'power3.out', delay: 0.5 });
 }
 
 function initHomeScrollReveal(isRevisit = false) {
@@ -600,3 +643,9 @@ function updateCategoryCounts() {
   });
 }
 
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootstrapApp);
+} else {
+  bootstrapApp();
+}
