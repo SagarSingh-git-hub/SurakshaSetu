@@ -417,7 +417,7 @@ function mountHomePage() {
     document.querySelectorAll('#page-home .reveal-heading').forEach(el => {
       el.classList.add('is-visible');
     });
-  }, 300);
+  }, 150);
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {

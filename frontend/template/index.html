@@ -4841,51 +4841,14 @@
   <style>
     .reveal-heading {
       opacity: 0;
-      transform: translateY(20px);
-      -webkit-clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
-      clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
-      transition: clip-path 1.2s cubic-bezier(0.19, 1, 0.22, 1), 
-                  -webkit-clip-path 1.2s cubic-bezier(0.19, 1, 0.22, 1), 
-                  transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), 
-                  opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1);
-      will-change: opacity, transform, clip-path, -webkit-clip-path;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
     }
     .reveal-heading.is-visible {
       opacity: 1;
       transform: translateY(0);
-      -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
     }
   </style>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const headings = document.querySelectorAll('.reveal-heading');
-      
-      const observer = new IntersectionObserver((entries) => {
-        let delay = 0;
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            if (delay > 0) {
-              entry.target.style.transitionDelay = `${delay}ms`;
-            }
-            // Use requestAnimationFrame to ensure layout is ready
-            requestAnimationFrame(() => {
-              entry.target.classList.add('is-visible');
-            });
-            delay += 200; // 0.2s stagger
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1 });
-
-      // Small timeout to allow SPA logic to set active pages
-      setTimeout(() => {
-        headings.forEach(heading => {
-          observer.observe(heading);
-        });
-      }, 300);
-    });
-  </script>
 </body>
 
 </html>
