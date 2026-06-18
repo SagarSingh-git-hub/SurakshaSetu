@@ -1906,17 +1906,20 @@ textarea.form-input{resize:vertical;min-height:100px}
 .reveal-heading {
   opacity: 0;
   transform: translateY(20px);
+  -webkit-clip-path: inset(0 100% 0 0);
   clip-path: inset(0 100% 0 0); /* Hidden, masked from the right */
   will-change: opacity, transform, clip-path;
+  transition: opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1),
+              transform 1.2s cubic-bezier(0.19, 1, 0.22, 1),
+              -webkit-clip-path 1.2s cubic-bezier(0.19, 1, 0.22, 1),
+              clip-path 1.2s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .reveal-heading.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-  clip-path: inset(0 0 0 0);
-  transition: opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1),
-              transform 1.2s cubic-bezier(0.19, 1, 0.22, 1),
-              clip-path 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  -webkit-clip-path: inset(0 0 0 0) !important;
+  clip-path: inset(0 0 0 0) !important;
 }
 /* Ensure CodeMirror fits its container */
 .CodeMirror {
