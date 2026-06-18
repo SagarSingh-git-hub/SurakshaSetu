@@ -394,10 +394,6 @@ function resetHomeVisibility() {
     });
   });
 
-  // Reset custom reveal headings
-  home.querySelectorAll('.reveal-heading').forEach(el => {
-    el.classList.remove('is-visible');
-  });
 }
 
 function bootGlobe(attempts = 0) {
@@ -412,12 +408,32 @@ function mountHomePage() {
 
   resetHomeVisibility();
 
-  // Reveal headings on every home visit
+  // Reveal headings on every home visit with GSAP
   setTimeout(() => {
-    document.querySelectorAll('#page-home .reveal-heading').forEach(el => {
-      el.classList.add('is-visible');
-    });
-  }, 150);
+    const headings = document.querySelectorAll('#page-home .reveal-heading');
+    if (typeof gsap !== 'undefined') {
+      gsap.fromTo(headings,
+        { opacity: 0, y: 24, clipPath: 'inset(0 100% 0 0)' },
+        {
+          opacity: 1,
+          y: 0,
+          clipPath: 'inset(0 0% 0 0)',
+          duration: 1.2,
+          ease: 'power4.out',
+          stagger: {
+            each: 0.2,
+            from: 'start'
+          },
+          scrollTrigger: null
+        }
+      );
+    } else {
+      headings.forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    }
+  }, 200);
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
