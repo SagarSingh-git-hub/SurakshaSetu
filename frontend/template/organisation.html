@@ -809,6 +809,8 @@
       // Run on hash changes or initial page load
       window.addEventListener('hashchange', handleHashChange);
       window.addEventListener('DOMContentLoaded', handleHashChange);
+      // Failsafe execution for initial load if DOM is already ready
+      handleHashChange();
     </script>
 
 </body>
