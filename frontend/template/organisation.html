@@ -786,6 +786,11 @@
         }
 
         if (!validPages.includes(targetPage)) {
+          const indexPages = ['home', 'map', 'feed', 'admin', 'report'];
+          if (indexPages.includes(targetPage)) {
+            window.location.href = 'index.html#' + targetPage;
+            return;
+          }
           targetPage = 'about';
         }
 

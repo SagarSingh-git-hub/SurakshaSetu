@@ -21,6 +21,14 @@ function getRouteFromHash() {
   if (validPages.includes(page)) {
     return { page, subView };
   }
+  
+  // Cross-page redirect for organisation routes
+  const orgPages = ['about', 'impact', 'privacy', 'contact', 'ngo-partnership', 'volunteer-program'];
+  if (orgPages.includes(page)) {
+    window.location.href = 'organisation.html#' + page;
+    return { page: 'home', subView: '' };
+  }
+  
   return { page: 'home', subView: '' };
 }
 
