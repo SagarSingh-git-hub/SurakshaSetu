@@ -1,31 +1,16 @@
 // Accordion Logic
 function togglePrivacyAccordion(element) {
   const item = element.parentElement;
+  const isActive = item.classList.contains('active');
   
-  // Toggle the current one
-  const content = item.querySelector('.accordion-content');
-  const icon = element.querySelector('.accordion-icon');
+  // Close all other accordions
+  document.querySelectorAll('.accordion-item.active').forEach(acc => {
+    acc.classList.remove('active');
+  });
 
-  if (item.classList.contains('active')) {
-    item.classList.remove('active');
-    if (content) content.style.display = 'none';
-    if (icon) icon.textContent = '▼';
-  } else {
-    // Optional: close all other accordions
-    /*
-    const allItems = document.querySelectorAll('.accordion-item');
-    allItems.forEach(acc => {
-      acc.classList.remove('active');
-      const cont = acc.querySelector('.accordion-content');
-      const ic = acc.querySelector('.accordion-icon');
-      if (cont) cont.style.display = 'none';
-      if (ic) ic.textContent = '▼';
-    });
-    */
-    
+  // If the clicked one wasn't active, open it
+  if (!isActive) {
     item.classList.add('active');
-    if (content) content.style.display = 'block';
-    if (icon) icon.textContent = '▲';
   }
 }
 
@@ -151,12 +136,3 @@ function resetContactForm() {
   if (formWrap) formWrap.style.display = 'block';
 }
 
-// Initializing display for accordions (ensuring content is hidden initially)
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.accordion-content').forEach(content => {
-    // If we want them hidden initially, we can do it via JS just in case CSS doesn't handle it
-    if (!content.parentElement.classList.contains('active')) {
-      content.style.display = 'none';
-    }
-  });
-});

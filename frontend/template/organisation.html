@@ -10,24 +10,328 @@
   <title>Suraksha Setu – Organisation &amp; Info</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Nunito:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css?v=6">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Nunito:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css?v=7">
 
   <script src="../js/config.js?v=9" defer></script>
   <script src="../js/data.js?v=9" defer></script>
-  <script src="../js/subpages.js?v=6" defer></script>
+  <script src="../js/subpages.js?v=7" defer></script>
 
   <style>
-    /* Custom styling to keep active tabs in navbar aligned with hash */
-    .nav-tab-link {
-      text-decoration: none;
-      display: inline-block;
+    .nav-tab-link { text-decoration: none; display: inline-block; }
+
+    /* ── SCROLL REVEAL SYSTEM ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1);
+      will-change: opacity, transform;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-28px);
+      transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal-left.visible { opacity: 1; transform: none; }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.94);
+      transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal-scale.visible { opacity: 1; transform: none; }
+
+    /* stagger children */
+    .stagger-parent .stagger-child { opacity:0; transform:translateY(28px); transition: opacity 0.55s ease, transform 0.55s ease; }
+    .stagger-parent.visible .stagger-child:nth-child(1) { opacity:1; transform:none; transition-delay:0.05s; }
+    .stagger-parent.visible .stagger-child:nth-child(2) { opacity:1; transform:none; transition-delay:0.15s; }
+    .stagger-parent.visible .stagger-child:nth-child(3) { opacity:1; transform:none; transition-delay:0.25s; }
+    .stagger-parent.visible .stagger-child:nth-child(4) { opacity:1; transform:none; transition-delay:0.35s; }
+
+    /* ── AMBIENT FLOATING ORBS ── */
+    .ambient-orbs { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+    .orb {
+      position:absolute; border-radius:50%; filter:blur(70px); opacity:0;
+      animation: orbFloat 8s ease-in-out infinite;
+    }
+    .orb-1 { width:280px;height:280px; background:rgba(46,204,113,.13); top:-40px;right:-60px; animation-duration:9s; animation-delay:0s; }
+    .orb-2 { width:180px;height:180px; background:rgba(0,180,160,.09); bottom:20px;left:-40px; animation-duration:7s; animation-delay:1.5s; }
+    .orb-3 { width:140px;height:140px; background:rgba(46,204,113,.07); top:40%;right:10%; animation-duration:11s; animation-delay:3s; }
+    @keyframes orbFloat {
+      0%,100%  { opacity:0.6; transform:translateY(0px) scale(1); }
+      33%      { opacity:0.9; transform:translateY(-18px) scale(1.04); }
+      66%      { opacity:0.5; transform:translateY(10px) scale(0.97); }
+    }
+
+    /* ── HERO ENHANCEMENTS ── */
+    .subpage-hero { animation: heroEntry 0.8s cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes heroEntry {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:none; }
+    }
+    .sp-eyebrow { animation: eyebrowPop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.2s both; }
+    @keyframes eyebrowPop {
+      from { opacity:0; transform:scale(0.8) translateY(8px); }
+      to   { opacity:1; transform:none; }
+    }
+    .subpage-hero-title { animation: titleSlide 0.7s cubic-bezier(0.22,1,0.36,1) 0.3s both; }
+    @keyframes titleSlide {
+      from { opacity:0; transform:translateX(-16px); }
+      to   { opacity:1; transform:none; }
+    }
+    .subpage-hero-tagline { animation: taglineFade 0.6s ease 0.5s both; }
+    @keyframes taglineFade {
+      from { opacity:0; transform:translateY(10px); }
+      to   { opacity:1; transform:none; }
+    }
+
+    /* ── PILLAR CARDS – glassmorphism upgrade ── */
+    .pillar-card-enhanced {
+      background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(237,250,242,0.7) 100%);
+      border: 1px solid rgba(143,229,172,0.35);
+      border-radius: 20px;
+      padding: 36px 32px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 4px 24px rgba(20,122,61,.06), 0 1px 4px rgba(0,0,0,.04);
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease, border-color 0.3s ease;
+      display: flex; flex-direction: column; gap: 16px; text-align: left;
+      position: relative; overflow: hidden;
+      will-change: transform;
+    }
+    .pillar-card-enhanced::before {
+      content:''; position:absolute; inset:0;
+      background: radial-gradient(circle at 80% 10%, rgba(46,204,113,.08) 0%, transparent 60%);
+      pointer-events:none;
+    }
+    .pillar-card-enhanced:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 16px 48px rgba(20,122,61,.14), 0 4px 12px rgba(0,0,0,.06);
+      border-color: rgba(143,229,172,0.7);
+    }
+    .pillar-icon-ring {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, var(--g50), var(--g100));
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+      border: 1px solid var(--border2);
+      box-shadow: 0 2px 8px rgba(20,122,61,.1);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .pillar-card-enhanced:hover .pillar-icon-ring { transform: scale(1.12) rotate(-4deg); }
+
+    /* ── TEAM CARDS – 3D tilt ── */
+    .team-card-3d {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,.06);
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+      transform-style: preserve-3d;
+      cursor: default;
+      position: relative;
+    }
+    .team-card-3d::after {
+      content:''; position:absolute; inset:0; border-radius:20px;
+      background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(46,204,113,.06) 0%, transparent 60%);
+      opacity:0; transition:opacity 0.3s;
+      pointer-events:none;
+    }
+    .team-card-3d:hover::after { opacity:1; }
+    .team-card-3d:hover { box-shadow:0 20px 50px rgba(20,122,61,.12); border-color:var(--g200); }
+    .team-avatar-ring {
+      width: 88px; height: 88px;
+      background: linear-gradient(135deg, var(--g50), var(--g100));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 40px;
+      margin: 0 auto 16px;
+      border: 3px solid var(--border2);
+      box-shadow: 0 4px 16px rgba(20,122,61,.12);
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+    }
+    .team-card-3d:hover .team-avatar-ring {
+      transform: scale(1.1) translateY(-4px);
+      box-shadow: 0 8px 24px rgba(20,122,61,.2);
+    }
+
+    /* ── VALUE CARDS ── */
+    .value-card {
+      background:#fff; border:1px solid var(--border); border-radius:14px;
+      padding:22px; box-shadow:0 2px 8px rgba(0,0,0,.04);
+      display:flex; align-items:flex-start; gap:14px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .value-card:hover {
+      transform:translateY(-3px);
+      box-shadow:0 8px 24px rgba(20,122,61,.1);
+      border-color:var(--g200);
+    }
+
+    /* ── STAT CARDS – animated counter ── */
+    .stat-card-impact {
+      background:#fff; border-radius:18px; border:1px solid var(--border);
+      padding:28px 24px; box-shadow:0 4px 16px rgba(0,0,0,.05); text-align:left;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position:relative; overflow:hidden;
+    }
+    .stat-card-impact::before {
+      content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
+      background: linear-gradient(90deg, var(--g400), var(--g600));
+      transform:scaleX(0); transform-origin:left;
+      transition:transform 0.6s cubic-bezier(0.22,1,0.36,1);
+    }
+    .stat-card-impact:hover { transform:translateY(-5px); box-shadow:0 12px 36px rgba(20,122,61,.1); }
+    .stat-card-impact:hover::before { transform:scaleX(1); }
+    .stat-num {
+      font-family:'Outfit',sans-serif; font-size:36px; font-weight:800;
+      color:var(--g700); line-height:1.1; margin-bottom:8px;
+    }
+    .stat-label {
+      font-family:'Outfit',sans-serif; font-size:11px; font-weight:800;
+      color:var(--text3); letter-spacing:0.5px; text-transform:uppercase;
+    }
+    .stat-delta { font-size:12px; color:#16a34a; font-weight:700; margin-top:8px; }
+
+    /* ── TIMELINE – animated line draw ── */
+    .timeline-wrap {
+      position:relative; padding-left:32px;
+      border-left:3px solid var(--g100);
+      margin-bottom:60px; display:flex; flex-direction:column; gap:0;
+    }
+    .timeline-line-fill {
+      position:absolute; left:-3px; top:0; bottom:0; width:3px;
+      background:linear-gradient(to bottom, var(--g400), var(--g600));
+      transform-origin:top; transform:scaleY(0);
+      transition:transform 1.2s cubic-bezier(0.22,1,0.36,1);
+    }
+    .timeline-line-fill.drawn { transform:scaleY(1); }
+    .timeline-dot {
+      position:absolute; left:-8px; width:14px; height:14px;
+      border-radius:50%; background:var(--g500); border:3px solid #fff;
+      box-shadow:0 0 0 3px rgba(46,204,113,.2);
+      transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+    }
+    .timeline-dot.future { background:var(--g300); }
+    .timeline-dot:hover { transform:scale(1.4); box-shadow:0 0 0 6px rgba(46,204,113,.15); }
+    .timeline-item {
+      margin-bottom:36px; opacity:0; transform:translateX(14px);
+      transition:opacity 0.5s ease, transform 0.5s ease;
+    }
+    .timeline-item.visible { opacity:1; transform:none; }
+
+    /* ── CASE STORY CARDS ── */
+    .case-card {
+      background:#fff; border-radius:16px; border:1px solid var(--border);
+      overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.05);
+      transition:transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .case-card:hover { transform:translateY(-5px); box-shadow:0 16px 40px rgba(20,122,61,.1); }
+    .case-card-head {
+      padding:16px; background:var(--g50); border-bottom:1px solid var(--border2);
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .case-card-body { padding:24px; text-align:left; }
+
+    /* ── ACCORDION – smooth max-height ── */
+    .accordion-content {
+      max-height:0 !important;
+      overflow:hidden;
+      transition:max-height 0.4s cubic-bezier(0.22,1,0.36,1) !important;
+    }
+    .accordion-item.active .accordion-content { max-height:600px !important; }
+    .accordion-header {
+      transition:background 0.2s, color 0.2s;
+    }
+    .accordion-item.active .accordion-header { color:var(--g800); background:var(--g50); }
+    .accordion-icon { display:inline-block; transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1) !important; }
+    .accordion-item.active .accordion-icon { transform:rotate(180deg) !important; color:var(--g700); }
+
+    /* badge pulse on privacy page */
+    .badge-pulse {
+      display:inline-flex; align-items:center; gap:6px;
+      background:var(--g50); border:1px solid var(--border2);
+      border-radius:99px; padding:6px 14px;
+      font-family:'Outfit',sans-serif; font-size:12px; font-weight:700; color:var(--g700);
+      margin:4px; cursor:default;
+      transition:transform 0.2s, box-shadow 0.2s;
+    }
+    .badge-pulse:hover { transform:scale(1.06); box-shadow:0 4px 16px rgba(20,122,61,.15); }
+
+    /* ── PDF DOWNLOAD BOX ── */
+    .download-pdf-box { position:relative; overflow:hidden; }
+    .download-pdf-box::before {
+      content:''; position:absolute;
+      width:400px; height:400px; border-radius:50%;
+      background:rgba(46,204,113,.06); filter:blur(60px);
+      top:-100px; right:-100px; pointer-events:none;
+      animation:orbFloat 8s ease-in-out infinite;
+    }
+    .download-progress-container {
+      display:none; max-width:380px; margin:24px auto 0;
+      background:rgba(255,255,255,.12); height:10px;
+      border-radius:99px; overflow:hidden;
+    }
+    .download-progress-bar {
+      height:100%;
+      background:linear-gradient(90deg, var(--g300), var(--g500), var(--g300));
+      background-size:200% 100%;
+      animation:shimmer 1.4s linear infinite;
+      width:0%; transition:width 0.15s linear;
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    /* ── CONTACT FORM FOCUS GLOW ── */
+    .form-input:focus {
+      outline:none;
+      border-color:var(--g400) !important;
+      box-shadow:0 0 0 3px rgba(46,204,113,.15) !important;
+    }
+
+    /* ── SIDEBAR SOCIAL HOVER ── */
+    .social-circle {
+      width:36px; height:36px; border-radius:50%;
+      background:rgba(255,255,255,.07); color:#fff;
+      display:inline-flex; align-items:center; justify-content:center;
+      text-decoration:none; font-size:13px;
+      transition:background 0.25s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .social-circle:hover { background:var(--g600); transform:scale(1.18) translateY(-2px); }
+
+    /* ── THANK-YOU BOUNCE ── */
+    @keyframes thankBounce {
+      0%   { transform:scale(0.5) rotate(-10deg); opacity:0; }
+      60%  { transform:scale(1.15) rotate(4deg); opacity:1; }
+      80%  { transform:scale(0.95) rotate(-2deg); }
+      100% { transform:scale(1) rotate(0deg); opacity:1; }
+    }
+    .thankyou-icon { display:inline-block; animation:thankBounce 0.7s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+
+    /* ── FLOATING BACK BTN PULSE ── */
+    .btn-floating-back {
+      animation:floatPulse 3s ease-in-out infinite;
+    }
+    @keyframes floatPulse {
+      0%,100% { box-shadow:0 6px 20px rgba(10,61,31,.35); }
+      50%      { box-shadow:0 8px 28px rgba(10,61,31,.5); }
+    }
+
+    /* ── PAGE TRANSITION ── */
+    .page.active { animation:pageIn 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes pageIn {
+      from { opacity:0; transform:translateY(12px); }
+      to   { opacity:1; transform:none; }
+    }
+
+    /* Disable animations for reduced-motion users */
+    @media (prefers-reduced-motion:reduce) {
+      *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
     }
   </style>
 
-  <!-- Primary Browser UI Theme Color -->
   <meta name="theme-color" content="#dcfce7">
 </head>
 
@@ -43,25 +347,26 @@
       <a class="nav-tab nav-tab-link" href="index.html#feed">Community Feed</a>
       <a class="nav-tab nav-tab-link" href="index.html#admin">Admin</a>
     </div>
-    <a class="btn-report-nav" href="index.html#report"
-      style="text-decoration:none;display:inline-flex;align-items:center;line-height:1">+ Report Issue</a>
+    <a class="btn-report-nav" href="index.html#report" style="text-decoration:none;display:inline-flex;align-items:center;line-height:1">+ Report Issue</a>
   </nav>
 
-  <!-- TOAST (Required for PDF simulator and Contact forms) -->
   <div class="toast" id="toast"></div>
 
   <!-- ══════════════════ ABOUT US PAGE ══════════════════ -->
   <div class="page" id="page-about">
     <div class="subpage-layout">
-      <!-- Subpage Navigation Header -->
       <div class="subpage-nav-header">
         <button class="btn-subpage-back" onclick="goBack()">← Go Back</button>
         <span style="font-family:'Outfit';font-size:13px;font-weight:700;color:var(--text3)">Platform / About Us</span>
       </div>
 
-      <!-- Subpage Hero -->
-      <div class="subpage-hero">
-        <div class="hero-bg-orb o1" style="width:300px;height:300px;top:-50px;right:-50px"></div>
+      <!-- Hero with ambient orbs -->
+      <div class="subpage-hero" style="position:relative;overflow:hidden">
+        <div class="ambient-orbs">
+          <div class="orb orb-1"></div>
+          <div class="orb orb-2"></div>
+          <div class="orb orb-3"></div>
+        </div>
         <div class="sp-eyebrow">🌿 Our Mission</div>
         <div class="subpage-hero-title">Pioneering Civic Climate Action</div>
         <div class="subpage-hero-tagline">
@@ -70,36 +375,32 @@
         </div>
       </div>
 
-      <!-- Section Title -->
-      <div class="sec-tag">Our Foundation</div>
-      <h2 class="subpage-section-title">Three Core Pillars</h2>
-      <p class="sec-sub">Everything we build is rooted in these three principles that drive genuine environmental
-        change.</p>
-      <!-- Pillars Grid -->
-      <div class="pillars-grid">
-        <!-- Pillar 1 -->
-        <div class="pillar-card">
-          <div class="pillar-card-icon">📍</div>
+      <!-- Three Core Pillars -->
+      <div class="reveal">
+        <div class="sec-tag">Our Foundation</div>
+        <h2 class="subpage-section-title">Three Core Pillars</h2>
+        <p class="sec-sub">Everything we build is rooted in these three principles that drive genuine environmental change.</p>
+      </div>
+
+      <div class="pillars-grid stagger-parent reveal">
+        <div class="pillar-card-enhanced stagger-child">
+          <div class="pillar-icon-ring">📍</div>
           <h3 style="font-size:18px;font-weight:800;color:var(--text)">Civic Empowerment</h3>
           <p style="font-size:14px;color:var(--text3);line-height:1.6">
             We believe every citizen is an active guardian of their city. Our anonymous one-click reporting puts the
             power of change directly in your pocket — making civic action simple and seamless.
           </p>
         </div>
-
-        <!-- Pillar 2 -->
-        <div class="pillar-card">
-          <div class="pillar-card-icon">🤖</div>
+        <div class="pillar-card-enhanced stagger-child">
+          <div class="pillar-icon-ring">🤖</div>
           <h3 style="font-size:18px;font-weight:800;color:var(--text)">AI Diagnostics</h3>
           <p style="font-size:14px;color:var(--text3);line-height:1.6">
             No manual categorization needed. Our integrated neural network tags the issue type, estimates severity, and
             routes it to the nearest NGO automatically, reducing administrative delay to zero.
           </p>
         </div>
-
-        <!-- Pillar 3 -->
-        <div class="pillar-card">
-          <div class="pillar-card-icon">🌳</div>
+        <div class="pillar-card-enhanced stagger-child">
+          <div class="pillar-icon-ring">🌳</div>
           <h3 style="font-size:18px;font-weight:800;color:var(--text)">Volunteer Mobilization</h3>
           <p style="font-size:14px;color:var(--text3);line-height:1.6">
             We coordinate in real-time with over 12 green NGOs and 1,200 local volunteers to convert reports into
@@ -108,63 +409,52 @@
         </div>
       </div>
 
-      <!-- Section Title -->
-      <div class="sec-tag">The People</div>
-      <h2 class="sec-h2">Meet the Core Team</h2>
-      <p class="sec-sub">A small, passionate team of technologists, scientists, and activists building digital
-        infrastructure for public good.</p>
+      <!-- Team -->
+      <div class="reveal">
+        <div class="sec-tag">The People</div>
+        <h2 class="sec-h2">Meet the Core Team</h2>
+        <p class="sec-sub">A small, passionate team of technologists, scientists, and activists building digital infrastructure for public good.</p>
+      </div>
 
-      <!-- Team Grid -->
-      <div class="team-grid">
-        <!-- Team Member 1 -->
-        <div class="team-card">
-          <div class="team-avatar">👨‍💻</div>
+      <div class="team-grid stagger-parent reveal" style="margin-bottom:56px">
+        <div class="team-card-3d stagger-child">
+          <div class="team-avatar-ring">👨‍💻</div>
           <div class="team-name">Aarav Goel</div>
           <div class="team-role">Founder &amp; Lead Architect</div>
-          <div class="team-bio">Visionary software engineer building digital tools for public good. Believes code can
-            heal communities.</div>
+          <div class="team-bio">Visionary software engineer building digital tools for public good. Believes code can heal communities.</div>
           <div class="team-socials">
             <a href="#" class="team-social-a">🐙</a>
             <a href="#" class="team-social-a">𝕏</a>
             <a href="#" class="team-social-a">💼</a>
           </div>
         </div>
-
-        <!-- Team Member 2 -->
-        <div class="team-card">
-          <div class="team-avatar">👩‍🔬</div>
+        <div class="team-card-3d stagger-child">
+          <div class="team-avatar-ring">👩‍🔬</div>
           <div class="team-name">Meera Patel</div>
           <div class="team-role">Head of NGO Operations</div>
-          <div class="team-bio">Environmental scientist coordinating local green networks. Keeps the platform grounded
-            in physical action.</div>
+          <div class="team-bio">Environmental scientist coordinating local green networks. Keeps the platform grounded in physical action.</div>
           <div class="team-socials">
             <a href="#" class="team-social-a">🐙</a>
             <a href="#" class="team-social-a">𝕏</a>
             <a href="#" class="team-social-a">💼</a>
           </div>
         </div>
-
-        <!-- Team Member 3 -->
-        <div class="team-card">
-          <div class="team-avatar">👩‍💻</div>
+        <div class="team-card-3d stagger-child">
+          <div class="team-avatar-ring">👩‍💻</div>
           <div class="team-name">Sanya Sen</div>
           <div class="team-role">Lead AI Researcher</div>
-          <div class="team-bio">Machine learning engineer specializing in computer vision for real-time environmental
-            diagnostics.</div>
+          <div class="team-bio">Machine learning engineer specializing in computer vision for real-time environmental diagnostics.</div>
           <div class="team-socials">
             <a href="#" class="team-social-a">🐙</a>
             <a href="#" class="team-social-a">𝕏</a>
             <a href="#" class="team-social-a">💼</a>
           </div>
         </div>
-
-        <!-- Team Member 4 -->
-        <div class="team-card">
-          <div class="team-avatar">🧑‍💼</div>
+        <div class="team-card-3d stagger-child">
+          <div class="team-avatar-ring">🧑‍💼</div>
           <div class="team-name">Kabir Das</div>
           <div class="team-role">Community Growth Lead</div>
-          <div class="team-bio">Activist mobilizing youth clusters and student volunteers for environmental hygiene
-            drives.</div>
+          <div class="team-bio">Activist mobilizing youth clusters and student volunteers for environmental hygiene drives.</div>
           <div class="team-socials">
             <a href="#" class="team-social-a">🐙</a>
             <a href="#" class="team-social-a">𝕏</a>
@@ -173,65 +463,53 @@
         </div>
       </div>
 
-      <!-- VALUES -->
-      <div class="sec-tag">Our Values</div>
-      <h2 class="sec-h2">What We Stand For</h2>
-      <p class="sec-sub">Principles that guide every decision we make — from code to community.</p>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:60px">
-        <div
-          style="background:#fff;border:1px solid var(--border);border-radius:var(--r-sm);padding:22px;box-shadow:var(--shadow-sm);display:flex;align-items:flex-start;gap:14px">
+      <!-- Values -->
+      <div class="reveal">
+        <div class="sec-tag">Our Values</div>
+        <h2 class="sec-h2">What We Stand For</h2>
+        <p class="sec-sub">Principles that guide every decision we make — from code to community.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:60px" class="stagger-parent reveal">
+        <div class="value-card stagger-child">
           <div style="font-size:24px;flex-shrink:0">🌐</div>
           <div>
-            <div
-              style="font-size:14px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin-bottom:4px">
-              Open Source</div>
-            <div style="font-size:13px;color:var(--text3);line-height:1.6">All our code is publicly auditable. No black
-              boxes, no hidden agendas.</div>
+            <div style="font-size:14px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin-bottom:4px">Open Source</div>
+            <div style="font-size:13px;color:var(--text3);line-height:1.6">All our code is publicly auditable. No black boxes, no hidden agendas.</div>
           </div>
         </div>
-        <div
-          style="background:#fff;border:1px solid var(--border);border-radius:var(--r-sm);padding:22px;box-shadow:var(--shadow-sm);display:flex;align-items:flex-start;gap:14px">
+        <div class="value-card stagger-child">
           <div style="font-size:24px;flex-shrink:0">🔒</div>
           <div>
-            <div
-              style="font-size:14px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin-bottom:4px">
-              Privacy First</div>
-            <div style="font-size:13px;color:var(--text3);line-height:1.6">No accounts. No cookies. No tracking. Only
-              the
-              data needed to fix the issue.</div>
+            <div style="font-size:14px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin-bottom:4px">Privacy First</div>
+            <div style="font-size:13px;color:var(--text3);line-height:1.6">No accounts. No cookies. No tracking. Only the data needed to fix the issue.</div>
           </div>
         </div>
-        <div
-          style="background:#fff;border:1px solid var(--border);border-radius:var(--r-sm);padding:22px;box-shadow:var(--shadow-sm);display:flex;align-items:flex-start;gap:14px">
+        <div class="value-card stagger-child">
           <div style="font-size:24px;flex-shrink:0">💚</div>
           <div>
-            <div
-              style="font-size:14px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin-bottom:4px">
-              Non-Commercial</div>
-            <div style="font-size:13px;color:var(--text3);line-height:1.6">We never monetise civic data. Zero ads. Zero
-              third-party data sales.</div>
+            <div style="font-size:14px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin-bottom:4px">Non-Commercial</div>
+            <div style="font-size:13px;color:var(--text3);line-height:1.6">We never monetise civic data. Zero ads. Zero third-party data sales.</div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- Floating Back Button -->
-  <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
+    <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
   </div>
 
   <!-- ══════════════════ IMPACT REPORTS PAGE ══════════════════ -->
   <div class="page" id="page-impact">
     <div class="subpage-layout">
-      <!-- Subpage Navigation Header -->
       <div class="subpage-nav-header">
         <button class="btn-subpage-back" onclick="goBack()">← Go Back</button>
-        <span style="font-family:'Outfit';font-size:13px;font-weight:700;color:var(--text3)">Platform / Impact
-          Reports</span>
+        <span style="font-family:'Outfit';font-size:13px;font-weight:700;color:var(--text3)">Platform / Impact Reports</span>
       </div>
 
-      <!-- Subpage Hero -->
-      <div class="subpage-hero">
-        <div class="hero-bg-orb o2" style="width:300px;height:300px;bottom:-50px;left:-50px"></div>
+      <div class="subpage-hero" style="position:relative;overflow:hidden">
+        <div class="ambient-orbs">
+          <div class="orb orb-2"></div>
+          <div class="orb orb-3"></div>
+        </div>
         <div class="sp-eyebrow">📊 Q2 2026 Data</div>
         <div class="subpage-hero-title">Real Change, Quantified</div>
         <div class="subpage-hero-tagline">
@@ -240,237 +518,159 @@
         </div>
       </div>
 
-      <!-- IMPACT STATS -->
-      <div class="sec-tag">Live Metrics</div>
-      <h2 class="sec-h2">By the Numbers</h2>
-      <p class="sec-sub">All figures independently verified by partner NGOs and updated weekly.</p>
-      <div class="impact-stats-grid">
-        <!-- Stats Grid -->
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-bottom:56px">
-          <!-- Stat Card 1 -->
-          <div
-            style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
-            <div style="font-size:32px;margin-bottom:12px">🗑️</div>
-            <div
-              style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
-              142 Tons</div>
-            <div
-              style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
-              Trash Diverted</div>
-            <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">↑
-              12.4T this week</div>
-          </div>
+      <!-- Stats Grid -->
+      <div class="reveal">
+        <div class="sec-tag">Live Metrics</div>
+        <h2 class="sec-h2">By the Numbers</h2>
+        <p class="sec-sub">All figures independently verified by partner NGOs and updated weekly.</p>
+      </div>
 
-          <!-- Stat Card 2 -->
-          <div
-            style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
-            <div style="font-size:32px;margin-bottom:12px">🌳</div>
-            <div
-              style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
-              480 Trees</div>
-            <div
-              style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
-              Planted &amp; Nurtured</div>
-            <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">↑
-              94%
-              Survival Rate</div>
-          </div>
-
-          <!-- Stat Card 3 -->
-          <div
-            style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
-            <div style="font-size:32px;margin-bottom:12px">🧴</div>
-            <div
-              style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
-              88,400+</div>
-            <div
-              style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
-              Plastics Recycled</div>
-            <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">
-              Partnered with local recyclers</div>
-          </div>
-
-          <!-- Stat Card 4 -->
-          <div
-            style="background:#fff;border-radius:18px;border:1px solid var(--border);padding:28px 24px;box-shadow:var(--shadow2);text-align:left">
-            <div style="font-size:32px;margin-bottom:12px">✨</div>
-            <div
-              style="font-family:'Outfit',sans-serif;font-size:36px;font-weight:800;color:var(--g700);line-height:1.1;margin-bottom:8px">
-              89 Areas</div>
-            <div
-              style="font-family:'Outfit',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase">
-              Dirty Spaces Sanitized</div>
-            <div style="font-family:'Nunito',sans-serif;font-size:12px;color:#16a34a;font-weight:700;margin-top:8px">
-              ~4.8
-              days avg. resolution</div>
-          </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-bottom:56px" class="stagger-parent reveal">
+        <div class="stat-card-impact stagger-child">
+          <div style="font-size:32px;margin-bottom:12px">🗑️</div>
+          <div class="stat-num" data-target="142" data-suffix=" Tons">0</div>
+          <div class="stat-label">Trash Diverted</div>
+          <div class="stat-delta">↑ 12.4T this week</div>
         </div>
-
-        <!-- PDF Download Area -->
-        <div class="download-pdf-box">
-          <h3 style="font-family:'Outfit';font-size:24px;font-weight:800;margin-bottom:12px;color:#fff">📄 Download Full
-            Q2
-            2026 Impact Audit Report</h3>
-          <p style="font-size:14px;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 28px;line-height:1.6">
-            Get the comprehensive, verified environmental data audit, including spatial analysis maps of hot-spots,
-            volunteer timesheet logs, and government response comparisons.
-          </p>
-          <button id="btn-download-pdf" class="btn-primary" onclick="simulatePdfDownload()">📥 Download Q2 Report
-            PDF</button>
-
-          <!-- Progress Bar Container -->
-          <div class="download-progress-container" id="download-progress-container">
-            <div class="download-progress-bar" id="download-progress-bar"></div>
-            <span class="download-progress-text" id="download-progress-text">0%</span>
-          </div>
+        <div class="stat-card-impact stagger-child">
+          <div style="font-size:32px;margin-bottom:12px">🌳</div>
+          <div class="stat-num" data-target="480" data-suffix=" Trees">0</div>
+          <div class="stat-label">Planted &amp; Nurtured</div>
+          <div class="stat-delta">↑ 94% Survival Rate</div>
         </div>
+        <div class="stat-card-impact stagger-child">
+          <div style="font-size:32px;margin-bottom:12px">🧴</div>
+          <div class="stat-num" data-target="88400" data-suffix="+">0</div>
+          <div class="stat-label">Plastics Recycled</div>
+          <div class="stat-delta">Partnered with local recyclers</div>
+        </div>
+        <div class="stat-card-impact stagger-child">
+          <div style="font-size:32px;margin-bottom:12px">✨</div>
+          <div class="stat-num" data-target="89" data-suffix=" Areas">0</div>
+          <div class="stat-label">Dirty Spaces Sanitized</div>
+          <div class="stat-delta">~4.8 days avg. resolution</div>
+        </div>
+      </div>
 
-        <!-- Section Title -->
+      <!-- PDF Download -->
+      <div class="download-pdf-box reveal">
+        <h3 style="font-family:'Outfit';font-size:24px;font-weight:800;margin-bottom:12px;color:#fff">📄 Download Full Q2 2026 Impact Audit Report</h3>
+        <p style="font-size:14px;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 28px;line-height:1.6">
+          Get the comprehensive, verified environmental data audit, including spatial analysis maps of hot-spots,
+          volunteer timesheet logs, and government response comparisons.
+        </p>
+        <button id="btn-download-pdf" class="btn-primary" onclick="simulatePdfDownload()">📥 Download Q2 Report PDF</button>
+        <div class="download-progress-container" id="download-progress-container">
+          <div class="download-progress-bar" id="download-progress-bar"></div>
+          <span class="download-progress-text" id="download-progress-text">0%</span>
+        </div>
+      </div>
+
+      <!-- Case Studies -->
+      <div class="reveal">
         <div class="sec-tag">Success Stories</div>
         <h2 class="subpage-section-title">Case Study Success Stories</h2>
         <p class="sec-sub">Real reports that became real action — documented from submission to resolution.</p>
-        <!-- Success Case Grid -->
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px">
-          <!-- Story 1 -->
-          <div
-            style="background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow2)">
-            <div
-              style="padding:16px;background:var(--g50);border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center">
-              <span class="badge-summary" style="margin:0">✓ Resolved</span>
-              <span style="font-size:11px;font-weight:700;color:var(--text3)">May 2026</span>
-            </div>
-            <div style="padding:24px;text-align:left">
-              <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Sadar
-                Market Oasis</h3>
-              <p style="font-size:13px;color:var(--text2);line-height:1.6">
-                A massive, 2-ton commercial garbage dump that blocked the entrance of Sadar Market for over two years
-                was
-                reported on Suraksha Setu. In partnership with GreenHaldwani, volunteers cleared the space in 3 days,
-                sanitised
-                the soil, and planted native bushes, transforming it into a micro green zone.
-              </p>
-            </div>
-          </div>
+      </div>
 
-          <!-- Story 2 -->
-          <div
-            style="background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow2)">
-            <div
-              style="padding:16px;background:var(--g50);border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center">
-              <span class="badge-summary" style="margin:0">✓ Cleaned</span>
-              <span style="font-size:11px;font-weight:700;color:var(--text3)">April 2026</span>
-            </div>
-            <div style="padding:24px;text-align:left">
-              <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Yamuna
-                Ghat Restoration</h3>
-              <p style="font-size:13px;color:var(--text2);line-height:1.6">
-                A high-priority water pollution report flagged a toxic plastic and foam barrier building up along Yamuna
-                riverbanks. Within 48 hours, over 120 volunteer students were mobilised. Using safety gear, they removed
-                1,800kg of plastic bottles, restoring local river flow.
-              </p>
-            </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px" class="stagger-parent reveal">
+        <div class="case-card stagger-child">
+          <div class="case-card-head">
+            <span class="badge-summary" style="margin:0">✓ Resolved</span>
+            <span style="font-size:11px;font-weight:700;color:var(--text3)">May 2026</span>
           </div>
-
-          <!-- Story 3 -->
-          <div
-            style="background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow2)">
-            <div
-              style="padding:16px;background:var(--g50);border-bottom:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center">
-              <span class="badge-summary" style="margin:0">✓ Segregated</span>
-              <span style="font-size:11px;font-weight:700;color:var(--text3)">March 2026</span>
-            </div>
-            <div style="padding:24px;text-align:left">
-              <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Taj
-                Nagri Segment B Drive</h3>
-              <p style="font-size:13px;color:var(--text2);line-height:1.6">
-                A neighborhood report highlighted scattered plastic packets that filled local children parks. In
-                response,
-                SwachhBharat volunteers helped setup colored segregation bins across the park, training children on
-                active
-                sorting while clearing the existing playground trash.
-              </p>
-            </div>
+          <div class="case-card-body">
+            <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Sadar Market Oasis</h3>
+            <p style="font-size:13px;color:var(--text2);line-height:1.6">
+              A massive, 2-ton commercial garbage dump that blocked the entrance of Sadar Market for over two years was
+              reported on Suraksha Setu. In partnership with GreenHaldwani, volunteers cleared the space in 3 days,
+              sanitised the soil, and planted native bushes, transforming it into a micro green zone.
+            </p>
+          </div>
+        </div>
+        <div class="case-card stagger-child">
+          <div class="case-card-head">
+            <span class="badge-summary" style="margin:0">✓ Cleaned</span>
+            <span style="font-size:11px;font-weight:700;color:var(--text3)">April 2026</span>
+          </div>
+          <div class="case-card-body">
+            <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Yamuna Ghat Restoration</h3>
+            <p style="font-size:13px;color:var(--text2);line-height:1.6">
+              A high-priority water pollution report flagged a toxic plastic and foam barrier building up along Yamuna
+              riverbanks. Within 48 hours, over 120 volunteer students were mobilised. Using safety gear, they removed
+              1,800kg of plastic bottles, restoring local river flow.
+            </p>
+          </div>
+        </div>
+        <div class="case-card stagger-child">
+          <div class="case-card-head">
+            <span class="badge-summary" style="margin:0">✓ Segregated</span>
+            <span style="font-size:11px;font-weight:700;color:var(--text3)">March 2026</span>
+          </div>
+          <div class="case-card-body">
+            <h3 style="font-family:'Outfit';font-size:18px;font-weight:800;margin-bottom:8px;color:var(--g900)">Taj Nagri Segment B Drive</h3>
+            <p style="font-size:13px;color:var(--text2);line-height:1.6">
+              A neighborhood report highlighted scattered plastic packets that filled local children parks. In response,
+              SwachhBharat volunteers helped setup colored segregation bins across the park, training children on active
+              sorting while clearing the existing playground trash.
+            </p>
           </div>
         </div>
       </div>
 
-      <!-- PROGRESS TIMELINE -->
-      <div class="sec-tag">Our Journey</div>
-      <h2 class="sec-h2">Platform Timeline</h2>
-      <p class="sec-sub">Key milestones from launch to today.</p>
-      <div
-        style="position:relative;padding-left:32px;border-left:3px solid var(--g200);margin-bottom:60px;display:flex;flex-direction:column;gap:0">
-        <div
-          style="position:absolute;left:-8px;top:0;width:14px;height:14px;border-radius:50%;background:var(--g500);border:3px solid #fff;box-shadow:var(--shadow-sm)">
+      <!-- Timeline -->
+      <div class="reveal" style="margin-top:56px">
+        <div class="sec-tag">Our Journey</div>
+        <h2 class="sec-h2">Platform Timeline</h2>
+        <p class="sec-sub">Key milestones from launch to today.</p>
+      </div>
+
+      <div class="timeline-wrap reveal" id="timeline-wrap">
+        <div class="timeline-line-fill" id="timeline-fill"></div>
+
+        <div class="timeline-dot" style="top:0"></div>
+        <div class="timeline-item" style="margin-left:0">
+          <div style="font-size:11px;font-weight:800;color:var(--g600);text-transform:uppercase;letter-spacing:.5px;font-family:'Outfit',sans-serif">Jan 2026</div>
+          <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin:4px 0">Platform Beta Launch</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.6">First 50 reports submitted in Haldwani. 3 NGOs onboarded. AI image tagging goes live.</div>
         </div>
-        <div style="margin-bottom:36px">
-          <div
-            style="font-size:11px;font-weight:800;color:var(--g600);text-transform:uppercase;letter-spacing:.5px;font-family:'Outfit',sans-serif">
-            Jan 2026</div>
-          <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin:4px 0">
-            Platform Beta Launch</div>
-          <div style="font-size:13px;color:var(--text3);line-height:1.6">First 50 reports submitted in Haldwani. 3 NGOs
-            onboarded. AI image tagging goes live.</div>
+
+        <div class="timeline-dot" style="top:112px"></div>
+        <div class="timeline-item" style="margin-bottom:36px">
+          <div style="font-size:11px;font-weight:800;color:var(--g600);text-transform:uppercase;letter-spacing:.5px;font-family:'Outfit',sans-serif">March 2026</div>
+          <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin:4px 0">100 Reports Milestone</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.6">Taj Nagri playground drive becomes first national media-covered cleanup facilitated by citizen data.</div>
         </div>
-        <div
-          style="position:absolute;left:-8px;top:112px;width:14px;height:14px;border-radius:50%;background:var(--g500);border:3px solid #fff;box-shadow:var(--shadow-sm)">
+
+        <div class="timeline-dot" style="top:224px"></div>
+        <div class="timeline-item" style="margin-bottom:36px">
+          <div style="font-size:11px;font-weight:800;color:var(--g600);text-transform:uppercase;letter-spacing:.5px;font-family:'Outfit',sans-serif">May 2026</div>
+          <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin:4px 0">12 NGO Partners</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.6">GreenAgra, Yamuna Bachao, SwachhBharat chapters and 9 others join the dashboard network.</div>
         </div>
-        <div style="margin-bottom:36px">
-          <div
-            style="font-size:11px;font-weight:800;color:var(--g600);text-transform:uppercase;letter-spacing:.5px;font-family:'Outfit',sans-serif">
-            March 2026</div>
-          <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin:4px 0">100
-            Reports Milestone</div>
-          <div style="font-size:13px;color:var(--text3);line-height:1.6">Taj Nagri playground drive becomes first
-            national
-            media-covered cleanup facilitated by citizen data.</div>
-        </div>
-        <div
-          style="position:absolute;left:-8px;top:224px;width:14px;height:14px;border-radius:50%;background:var(--g500);border:3px solid #fff;box-shadow:var(--shadow-sm)">
-        </div>
-        <div style="margin-bottom:36px">
-          <div
-            style="font-size:11px;font-weight:800;color:var(--g600);text-transform:uppercase;letter-spacing:.5px;font-family:'Outfit',sans-serif">
-            May 2026</div>
-          <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin:4px 0">12
-            NGO Partners</div>
-          <div style="font-size:13px;color:var(--text3);line-height:1.6">GreenAgra, Yamuna Bachao, SwachhBharat chapters
-            and 9 others join the dashboard network.</div>
-        </div>
-        <div
-          style="position:absolute;left:-8px;top:336px;width:14px;height:14px;border-radius:50%;background:var(--g300);border:3px solid #fff;box-shadow:var(--shadow-sm)">
-        </div>
-        <div>
-          <div
-            style="font-size:11px;font-weight:800;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;font-family:'Outfit',sans-serif">
-            Q3 2026 — Upcoming</div>
-          <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin:4px 0">
-            Mobile App + Hindi Language Support</div>
-          <div style="font-size:13px;color:var(--text3);line-height:1.6">Native Android/iOS app and full Hindi UI
-            rollout
-            across tier-2 cities in Uttarakhand.</div>
+
+        <div class="timeline-dot future" style="top:336px"></div>
+        <div class="timeline-item">
+          <div style="font-size:11px;font-weight:800;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;font-family:'Outfit',sans-serif">Q3 2026 — Upcoming</div>
+          <div style="font-size:16px;font-weight:800;color:var(--text);font-family:'Outfit',sans-serif;margin:4px 0">Mobile App + Hindi Language Support</div>
+          <div style="font-size:13px;color:var(--text3);line-height:1.6">Native Android/iOS app and full Hindi UI rollout across tier-2 cities in Uttarakhand.</div>
         </div>
       </div>
+
     </div>
-  </div>
-
-  <!-- Floating Back Button -->
-  <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
+    <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
   </div>
 
   <!-- ══════════════════ PRIVACY POLICY PAGE ══════════════════ -->
   <div class="page" id="page-privacy">
     <div class="subpage-layout">
-      <!-- Subpage Navigation Header -->
       <div class="subpage-nav-header">
         <button class="btn-subpage-back" onclick="goBack()">← Go Back</button>
-        <span style="font-family:'Outfit';font-size:13px;font-weight:700;color:var(--text3)">Platform / Privacy
-          Policy</span>
+        <span style="font-family:'Outfit';font-size:13px;font-weight:700;color:var(--text3)">Platform / Privacy Policy</span>
       </div>
 
-      <!-- Subpage Hero -->
-      <div class="subpage-hero">
-        <div class="hero-bg-orb o1" style="width:300px;height:300px;top:-50px;right:-50px"></div>
+      <div class="subpage-hero" style="position:relative;overflow:hidden">
+        <div class="ambient-orbs"><div class="orb orb-1"></div><div class="orb orb-3"></div></div>
         <div class="sp-eyebrow">🔒 Data Safety</div>
         <div class="subpage-hero-title">Privacy First, Always</div>
         <div class="subpage-hero-tagline">
@@ -479,21 +679,21 @@
         </div>
       </div>
 
-      <!-- Highlight tags -->
-      <div style="text-align:center;margin-bottom:36px">
-        <span class="badge-summary">🚫 Zero Login Required</span>
-        <span class="badge-summary">📍 Location Anonymisation</span>
-        <span class="badge-summary">🤖 Face Blur Technology</span>
-        <span class="badge-summary">🍪 Cookie-Free Platform</span>
-        <span class="badge-summary">🔐 No Data Sales — Ever</span>
+      <div style="text-align:center;margin-bottom:36px" class="reveal">
+        <span class="badge-pulse">🚫 Zero Login Required</span>
+        <span class="badge-pulse">📍 Location Anonymisation</span>
+        <span class="badge-pulse">🤖 Face Blur Technology</span>
+        <span class="badge-pulse">🍪 Cookie-Free Platform</span>
+        <span class="badge-pulse">🔐 No Data Sales — Ever</span>
       </div>
 
-      <div class="sec-tag">Policy Details</div>
-      <h2 class="sec-h2">Full Privacy Policy</h2>
-      <p class="sec-sub">Last updated: June 1, 2026. Tap any section to expand.</p>
-      <!-- Accordion Container -->
-      <div class="accordion-container">
-        <!-- Accordion Item 1 -->
+      <div class="reveal">
+        <div class="sec-tag">Policy Details</div>
+        <h2 class="sec-h2">Full Privacy Policy</h2>
+        <p class="sec-sub">Last updated: June 1, 2026. Tap any section to expand.</p>
+      </div>
+
+      <div class="accordion-container reveal">
         <div class="accordion-item">
           <div class="accordion-header" onclick="togglePrivacyAccordion(this)">
             1. What data does Suraksha Setu collect?
@@ -502,20 +702,15 @@
           <div class="accordion-content">
             <div class="accordion-body">
               We are built on a strict privacy-first philosophy. We do not require accounts, phone numbers, email
-              registration, or social sign-ins. When you report an issue, we only store:
-              <br><br>
+              registration, or social sign-ins. When you report an issue, we only store:<br><br>
               • The text description you write<br>
               • The selected issue category<br>
               • The latitude and longitude of the issue<br>
-              • The uploaded photo(s)
-              <br><br>
-              No user browser metadata, session cookies, tracking pixels, or device fingerprints are compiled or
-              recorded.
+              • The uploaded photo(s)<br><br>
+              No user browser metadata, session cookies, tracking pixels, or device fingerprints are compiled or recorded.
             </div>
           </div>
         </div>
-
-        <!-- Accordion Item 2 -->
         <div class="accordion-item">
           <div class="accordion-header" onclick="togglePrivacyAccordion(this)">
             2. How is my GPS location used?
@@ -524,16 +719,12 @@
           <div class="accordion-content">
             <div class="accordion-body">
               When you snap a photo or request coordinates, the platform prompts for standard browser GPS coordinates to
-              place the issue pin accurately on the Live Map.
-              <br><br>
+              place the issue pin accurately on the Live Map.<br><br>
               This spatial data is used solely to route reports to local NGOs. We never run background location
-              services, track your movement, or store personal coordinates outside the specific, visible reported issue
-              area.
+              services, track your movement, or store personal coordinates outside the specific, visible reported issue area.
             </div>
           </div>
         </div>
-
-        <!-- Accordion Item 3 -->
         <div class="accordion-item">
           <div class="accordion-header" onclick="togglePrivacyAccordion(this)">
             3. How does the AI image scanner protect my identity?
@@ -542,15 +733,12 @@
           <div class="accordion-content">
             <div class="accordion-body">
               Your uploaded images are processed by our localized computer vision module to classify categories (e.g.
-              plastic waste, water discoloration) and score priorities.
-              <br><br>
+              plastic waste, water discoloration) and score priorities.<br><br>
               To protect public identity, our AI automatically blurs any detected human faces, license plates, or
               legible resident address numbers before they are saved to our public community database.
             </div>
           </div>
         </div>
-
-        <!-- Accordion Item 4 -->
         <div class="accordion-item">
           <div class="accordion-header" onclick="togglePrivacyAccordion(this)">
             4. How is data shared with NGOs and Municipalities?
@@ -559,15 +747,12 @@
           <div class="accordion-content">
             <div class="accordion-body">
               All submitted reports are displayed on the public Live Map and Community Feed. Partner NGOs and green
-              municipalities receive access to these coordinates and photos so they can plan cleanup logistics.
-              <br><br>
+              municipalities receive access to these coordinates and photos so they can plan cleanup logistics.<br><br>
               We are non-commercial and open source. We never sell, lease, or rent any reported data to advertising
               networks, corporate agencies, or third-party data hubs.
             </div>
           </div>
         </div>
-
-        <!-- Accordion Item 5 -->
         <div class="accordion-item">
           <div class="accordion-header" onclick="togglePrivacyAccordion(this)">
             5. How long is my data retained?
@@ -577,13 +762,10 @@
             <div class="accordion-body">
               Active reports are retained indefinitely on the public map to maintain historical community records.
               Resolved reports are archived after 180 days and removed from the live map view.<br><br>
-              Unverified reports (not confirmed by an admin within 30 days) are automatically purged, including any
-              uploaded images.
+              Unverified reports (not confirmed by an admin within 30 days) are automatically purged, including any uploaded images.
             </div>
           </div>
         </div>
-
-        <!-- Accordion Item 6 -->
         <div class="accordion-item">
           <div class="accordion-header" onclick="togglePrivacyAccordion(this)">
             6. How can I request deletion of my report?
@@ -598,7 +780,6 @@
           </div>
         </div>
       </div>
-      <!-- Floating Back Button -->
       <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
     </div>
   </div>
@@ -606,50 +787,36 @@
   <!-- ══════════════════ CONTACT US PAGE ══════════════════ -->
   <div class="page" id="page-contact">
     <div class="subpage-layout">
-      <!-- Subpage Navigation Header -->
       <div class="subpage-nav-header">
         <button class="btn-subpage-back" onclick="goBack()">← Go Back</button>
         <span style="font-family:'Outfit';font-size:13px;font-weight:700;color:var(--text3)">Platform / Contact</span>
       </div>
 
-      <!-- Contact Two Column Grid -->
-      <div class="contact-grid">
-
-        <!-- Left Column: Dynamic Interactive Form -->
+      <div class="contact-grid reveal">
+        <!-- Left: Form -->
         <div class="contact-card">
           <div id="contact-form-wrap">
-            <h2 style="font-family:'Outfit';font-size:24px;font-weight:800;color:var(--g900);margin-bottom:6px">Send
-              Us
-              a Message</h2>
-            <p style="font-size:13px;color:var(--text3);margin-bottom:28px">Have any questions, partnership proposals,
-              or feedback? Drop us a line.</p>
+            <h2 style="font-family:'Outfit';font-size:24px;font-weight:800;color:var(--g900);margin-bottom:6px">Send Us a Message</h2>
+            <p style="font-size:13px;color:var(--text3);margin-bottom:28px">Have any questions, partnership proposals, or feedback? Drop us a line.</p>
 
             <form id="contact-form" onsubmit="handleContactSubmit(event)">
-              <!-- Subject Field -->
               <div class="form-group">
                 <label class="form-label" for="contact-subject">Subject *</label>
                 <input type="text" class="form-input" id="contact-subject" placeholder="What is this regarding?">
                 <div class="error-feedback" id="contact-subject-error"></div>
               </div>
-
-              <!-- Flex Name & Email -->
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-                <!-- Name -->
                 <div class="form-group">
                   <label class="form-label" for="contact-name">Full Name *</label>
                   <input type="text" class="form-input" id="contact-name" placeholder="Aarav Sharma">
                   <div class="error-feedback" id="contact-name-error"></div>
                 </div>
-
-                <!-- Email -->
                 <div class="form-group">
                   <label class="form-label" for="contact-email">Email Address *</label>
                   <input type="email" class="form-input" id="contact-email" placeholder="aarav@gmail.com">
                   <div class="error-feedback" id="contact-email-error"></div>
                 </div>
               </div>
-
-              <!-- Role Selector -->
               <div class="form-group">
                 <label class="form-label" for="contact-role">Who are you? *</label>
                 <select class="form-input" id="contact-role" style="cursor:pointer">
@@ -662,47 +829,34 @@
                 </select>
                 <div class="error-feedback" id="contact-role-error"></div>
               </div>
-
-              <!-- Message -->
               <div class="form-group" style="margin-bottom:28px">
                 <label class="form-label" for="contact-msg">Message *</label>
                 <textarea class="form-input" id="contact-msg" placeholder="Write your message here..."></textarea>
                 <div class="error-feedback" id="contact-msg-error"></div>
               </div>
-
-              <!-- Submit Button -->
               <button type="submit" id="btn-contact-submit" class="btn-primary" style="width:100%;padding:14px">
                 Send Secure Message →
               </button>
             </form>
           </div>
 
-          <!-- Thank You Panel (Initially Hidden) -->
           <div class="thankyou-panel" id="contact-thankyou">
-            <div style="font-size:64px;margin-bottom:16px;animation:bounce 0.6s ease">✉️</div>
-            <h2 style="font-family:'Outfit';font-size:26px;font-weight:800;color:var(--g700);margin-bottom:8px">
-              Message
-              Sent Successfully!</h2>
+            <div class="thankyou-icon" style="font-size:64px;margin-bottom:16px">✉️</div>
+            <h2 style="font-family:'Outfit';font-size:26px;font-weight:800;color:var(--g700);margin-bottom:8px">Message Sent Successfully!</h2>
             <p style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:24px">
               Thank you, <strong id="thankyou-name"></strong>. We have received your query. A community coordinator
-              will
-              reach out to your email address (<span id="thankyou-email"
-                style="font-weight:600;color:var(--g800)"></span>) within 12 hours.
+              will reach out to your email address (<span id="thankyou-email" style="font-weight:600;color:var(--g800)"></span>) within 12 hours.
             </p>
             <button class="btn-secondary" onclick="resetContactForm()">Send Another Message</button>
           </div>
         </div>
 
-        <!-- Right Column: Support Details & Sidebar -->
+        <!-- Right: Sidebar -->
         <div class="sidebar-card">
-          <!-- Item 1 -->
           <div>
             <h3>Connect Directly</h3>
-            <p style="font-size:12px;color:#a3b8cc;margin-top:4px">We support decentralised localized community
-              response.</p>
+            <p style="font-size:12px;color:#a3b8cc;margin-top:4px">We support decentralised localized community response.</p>
           </div>
-
-          <!-- Item 2: HQ -->
           <div class="sidebar-item">
             <div class="sidebar-icon">📍</div>
             <div class="sidebar-text">
@@ -710,20 +864,14 @@
               Suraksha Setu Center, Nainital Road,<br>Haldwani, UK - 263139
             </div>
           </div>
-
-          <!-- Item 3: Support Emails -->
           <div class="sidebar-item">
             <div class="sidebar-icon">✉️</div>
             <div class="sidebar-text">
               <strong>Support Channels</strong>
-              General queries: <a href="mailto:support@surakshasetu.org"
-                style="color:var(--g300);text-decoration:none">support@surakshasetu.org</a><br>
-              NGO partnerships: <a href="mailto:partners@surakshasetu.org"
-                style="color:var(--g300);text-decoration:none">partners@surakshasetu.org</a>
+              General queries: <a href="mailto:support@surakshasetu.org" style="color:var(--g300);text-decoration:none">support@surakshasetu.org</a><br>
+              NGO partnerships: <a href="mailto:partners@surakshasetu.org" style="color:var(--g300);text-decoration:none">partners@surakshasetu.org</a>
             </div>
           </div>
-
-          <!-- Item 4: Helpline -->
           <div class="sidebar-item">
             <div class="sidebar-icon">📞</div>
             <div class="sidebar-text">
@@ -732,47 +880,29 @@
               Hours: Mon - Sat, 9:00 AM - 6:00 PM IST
             </div>
           </div>
-
-          <!-- Social networks -->
           <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:24px">
-            <strong style="display:block;font-size:13px;color:#fff;margin-bottom:12px;font-family:'Outfit'">Follow Our
-              Journey</strong>
+            <strong style="display:block;font-size:13px;color:#fff;margin-bottom:12px;font-family:'Outfit'">Follow Our Journey</strong>
             <div style="display:flex;gap:12px">
-              <a href="#"
-                style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;transition:background 0.2s"
-                onmouseover="this.style.background='var(--g600)'"
-                onmouseout="this.style.background='rgba(255,255,255,0.06)'">𝕏</a>
-              <a href="#"
-                style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;transition:background 0.2s"
-                onmouseover="this.style.background='var(--g600)'"
-                onmouseout="this.style.background='rgba(255,255,255,0.06)'">🅵</a>
-              <a href="#"
-                style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.06);color:#fff;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-size:13px;transition:background 0.2s"
-                onmouseover="this.style.background='var(--g600)'"
-                onmouseout="this.style.background='rgba(255,255,255,0.06)'">🅸</a>
+              <a href="#" class="social-circle">𝕏</a>
+              <a href="#" class="social-circle">🅵</a>
+              <a href="#" class="social-circle">🅸</a>
             </div>
           </div>
         </div>
-
       </div>
     </div>
-    <!-- Floating Back Button -->
     <button class="btn-floating-back" onclick="goBack()">← Go Back</button>
   </div>
 
-  <!-- ── LIGHTWEIGHT ROUTER FOR STANDALONE SUB-PAGES ── -->
+  <!-- ── ROUTER + ANIMATION ENGINE ── -->
   <script>
-    // Standalone Toast notification
+    // ── Toast
     function showToast(msg) {
       const t = document.getElementById('toast');
-      if (t) {
-        t.textContent = msg;
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 2500);
-      }
+      if (t) { t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
     }
 
-    // Referrer-safe back navigation
+    // ── Back navigation
     function goBack() {
       if (document.referrer && document.referrer.includes(window.location.hostname)) {
         window.history.back();
@@ -781,50 +911,117 @@
       }
     }
 
-    // Toggle showing standard subpages active status based on URL hash
+    // ── Hash Router
     function handleHashChange() {
       const hash = window.location.hash.substring(1) || 'about';
       const validPages = ['about', 'impact', 'privacy', 'contact'];
-
       let targetPage = hash;
-      // Map helper links
-      if (hash === 'ngo-partnership' || hash === 'volunteer-program') {
-        targetPage = 'contact';
-      }
-
+      if (hash === 'ngo-partnership' || hash === 'volunteer-program') targetPage = 'contact';
       if (!validPages.includes(targetPage)) {
         const indexPages = ['home', 'map', 'feed', 'admin', 'report'];
-        if (indexPages.includes(targetPage)) {
-          window.location.href = 'index.html#' + targetPage;
-          return;
-        }
+        if (indexPages.includes(targetPage)) { window.location.href = 'index.html#' + targetPage; return; }
         targetPage = 'about';
       }
-
-      // Deactivate all page modules
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-
-      // Activate correct page
       const el = document.getElementById('page-' + targetPage);
-      if (el) {
-        el.classList.add('active');
-      }
-
-      // Reset contact forms if changing tabs
-      if (targetPage !== 'contact' && typeof resetContactForm === 'function') {
-        resetContactForm();
-      }
-
+      if (el) el.classList.add('active');
+      if (targetPage !== 'contact' && typeof resetContactForm === 'function') resetContactForm();
       window.scrollTo(0, 0);
+
+      // Re-run reveal after page switch
+      setTimeout(() => initReveals(), 60);
+      // Special: trigger timeline & counters when impact page is shown
+      if (targetPage === 'impact') setTimeout(() => { triggerTimeline(); triggerCounters(); }, 200);
     }
 
-    // Run on hash changes or initial page load
     window.addEventListener('hashchange', handleHashChange);
-    window.addEventListener('DOMContentLoaded', handleHashChange);
-    // Failsafe execution for initial load if DOM is already ready
+    window.addEventListener('DOMContentLoaded', () => { handleHashChange(); initReveals(); initTilt(); });
     handleHashChange();
+
+    // ── SCROLL REVEAL ENGINE (IntersectionObserver)
+    function initReveals() {
+      const els = document.querySelectorAll('.reveal, .reveal-left, .reveal-scale, .stagger-parent');
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      els.forEach(el => io.observe(el));
+    }
+
+    // ── ANIMATED COUNTERS
+    function triggerCounters() {
+      document.querySelectorAll('.stat-num[data-target]').forEach(el => {
+        const target = parseInt(el.dataset.target);
+        const suffix = el.dataset.suffix || '';
+        const duration = 1600;
+        const start = performance.now();
+        function step(now) {
+          const p = Math.min((now - start) / duration, 1);
+          const ease = 1 - Math.pow(1 - p, 3);
+          const val = Math.floor(ease * target);
+          el.textContent = val.toLocaleString('en-IN') + suffix;
+          if (p < 1) requestAnimationFrame(step);
+          else el.textContent = target.toLocaleString('en-IN') + suffix;
+        }
+        requestAnimationFrame(step);
+      });
+    }
+
+    // ── ANIMATED TIMELINE LINE
+    function triggerTimeline() {
+      const fill = document.getElementById('timeline-fill');
+      if (fill) fill.classList.add('drawn');
+      document.querySelectorAll('.timeline-item').forEach((item, i) => {
+        setTimeout(() => item.classList.add('visible'), i * 180 + 200);
+      });
+    }
+
+    // Watch for impact page stats coming into view
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { triggerCounters(); statObserver.unobserve(e.target); }
+      });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('.stat-card-impact').forEach(c => statObserver.observe(c));
+
+    const timelineObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { triggerTimeline(); timelineObserver.unobserve(e.target); }
+      });
+    }, { threshold: 0.15 });
+    const tw = document.getElementById('timeline-wrap');
+    if (tw) timelineObserver.observe(tw);
+
+    // ── 3D TILT on team cards
+    function initTilt() {
+      document.querySelectorAll('.team-card-3d').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          const dx = (e.clientX - cx) / (rect.width / 2);
+          const dy = (e.clientY - cy) / (rect.height / 2);
+          card.style.transform = `perspective(600px) rotateY(${dx * 7}deg) rotateX(${-dy * 5}deg) scale(1.02)`;
+          card.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
+          card.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+        });
+      });
+    }
+
+    // ── error-feedback display fix
+    document.querySelectorAll('.error-feedback').forEach(el => {
+      new MutationObserver(() => {
+        el.style.display = el.textContent.trim() ? 'block' : 'none';
+      }).observe(el, { childList: true, characterData: true, subtree: true });
+    });
   </script>
 
 </body>
-
 </html>
