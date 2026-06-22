@@ -129,56 +129,48 @@ async function doAdminLogin() {
 }
 
 function adminLogout() {
-  showConfirmModal(
-    'Logout?',
-    'Are you sure you want to log out from the admin dashboard?',
-    'Yes, Logout',
-    'Cancel',
-    async () => {
-      try {
-        const formData = new FormData();
-        formData.append('action', 'logout');
-        await adminFetch(`${API_URL}/api/login_sessions.php`, {
-          method: 'POST',
-          body: formData
-        });
-      } catch (e) {}
-      
-      adminLoggedIn = false;
-      sessionStorage.clear(); // Clear all session storage
-      
-      // Clear specific localStorage auth items as requested
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      localStorage.removeItem('auth');
-      
-      // Reset form state
-      const emailField = document.getElementById('admin-email');
-      const passField = document.getElementById('admin-pass');
-      const rememberCheckbox = document.getElementById('admin-remember');
-      
-      if (passField) passField.value = '';
-      if (emailField) emailField.value = '';
-      if (rememberCheckbox) rememberCheckbox.checked = false;
-      
-      // Restore email if explicitly remembered
-      if (localStorage.getItem('adminRememberMe') === 'true') {
-        if (emailField) emailField.value = localStorage.getItem('savedAdminEmail') || '';
-        if (rememberCheckbox) rememberCheckbox.checked = true;
-      }
-      
-      if (typeof destroyRealtime === 'function') {
-        destroyRealtime();
-      }
-      
-      const loginWrap = document.getElementById('admin-login-wrap');
-      const dashboard = document.getElementById('admin-dashboard');
-      if (loginWrap) loginWrap.style.display = '';
-      if (dashboard) dashboard.classList.remove('active');
-      showToast('Logged out successfully.');
-      showPage('home');
-    }
-  );
+  // 1. Fire-and-forget server logout (Background)
+  try {
+    const formData = new FormData();
+    formData.append('action', 'logout');
+    adminFetch(`${API_URL}/api/login_sessions.php`, {
+      method: 'POST',
+      body: formData
+    }).catch(() => {}); // Do not await to prevent blocking UI
+  } catch (e) {}
+  
+  // 2. Clear state instantly
+  adminLoggedIn = false;
+  sessionStorage.clear();
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  localStorage.removeItem('auth');
+  
+  // 3. Reset form state instantly
+  const emailField = document.getElementById('admin-email');
+  const passField = document.getElementById('admin-pass');
+  const rememberCheckbox = document.getElementById('admin-remember');
+  
+  if (passField) passField.value = '';
+  if (emailField) emailField.value = '';
+  if (rememberCheckbox) rememberCheckbox.checked = false;
+  
+  if (localStorage.getItem('adminRememberMe') === 'true') {
+    if (emailField) emailField.value = localStorage.getItem('savedAdminEmail') || '';
+    if (rememberCheckbox) rememberCheckbox.checked = true;
+  }
+  
+  if (typeof destroyRealtime === 'function') {
+    destroyRealtime();
+  }
+  
+  // 4. Instant UI navigation to login page
+  const loginWrap = document.getElementById('admin-login-wrap');
+  const dashboard = document.getElementById('admin-dashboard');
+  if (loginWrap) loginWrap.style.display = '';
+  if (dashboard) dashboard.classList.remove('active');
+  showToast('Logged out successfully.');
+  showPage('admin');
 }
 
 async function renderAdminDashboard(initialView = 'overview') {
