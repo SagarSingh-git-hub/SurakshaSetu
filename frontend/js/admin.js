@@ -127,6 +127,46 @@ async function doAdminLogin() {
   }
 }
 
+function toggleAdminAuthView(view) {
+  const loginCard = document.getElementById('login-form-card');
+  const forgotCard = document.getElementById('forgot-password-card');
+  if (!loginCard || !forgotCard) return;
+
+  if (view === 'forgot') {
+    loginCard.style.display = 'none';
+    forgotCard.style.display = 'block';
+  } else {
+    forgotCard.style.display = 'none';
+    loginCard.style.display = 'block';
+  }
+}
+
+async function doAdminForgotPassword() {
+  const e = document.getElementById('admin-forgot-email').value.trim();
+  if (!e) {
+    showToast('Please enter your email address.');
+    return;
+  }
+
+  const btn = document.getElementById('admin-forgot-submit-btn');
+  const oldText = btn.innerHTML;
+  btn.innerHTML = `
+    <span class="font-['Poppins',sans-serif] flex items-center gap-2 justify-center w-full">
+      <i class="ph-bold ph-spinner animate-spin text-[18px]"></i> Sending...
+    </span>
+  `;
+  btn.disabled = true;
+
+  // Simulate network request
+  setTimeout(() => {
+    showToast('Reset link sent to ' + e);
+    btn.innerHTML = oldText;
+    btn.disabled = false;
+    document.getElementById('admin-forgot-email').value = '';
+    toggleAdminAuthView('login');
+  }, 1000);
+}
+
 function adminLogout() {
   showConfirmModal(
     'Logout?',
