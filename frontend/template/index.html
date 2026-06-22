@@ -929,6 +929,10 @@
 
         /* Password Eye Button inside Input */
         .neu-eye-btn {
+          position: absolute;
+          right: 8px;
+          top: 50%;
+          transform: translateY(-50%);
           width: 38px;
           height: 38px;
           border-radius: 50%;
@@ -941,6 +945,7 @@
           color: #64748B;
           box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.06), -4px -4px 8px rgba(255, 255, 255, 1);
           transition: all 0.3s;
+          z-index: 10;
         }
 
         .neu-eye-btn:hover {
@@ -1139,12 +1144,12 @@
             </div>
 
             <!-- Password Input -->
-            <div class="neu-input-group pr-2">
+            <div class="neu-input-group">
               <div class="icon-badge">
                 <i class="ph-bold ph-lock-key"></i>
               </div>
               <input type="password" id="admin-pass" class="neu-input font-['Poppins',sans-serif]"
-                placeholder="Password" autocomplete="new-password">
+                style="padding-right: 56px;" placeholder="Password" autocomplete="new-password">
               <!-- Inline Eye Button -->
               <button type="button" class="neu-eye-btn flex-shrink-0" onclick="togglePasswordVisibility()">
                 <i id="eye-icon" class="ph ph-eye-slash text-[22px]"></i>
