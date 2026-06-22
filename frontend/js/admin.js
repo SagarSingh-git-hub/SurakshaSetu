@@ -53,10 +53,19 @@ async function doAdminLogin() {
     return;
   }
 
-  const btn = document.querySelector('#login-form-card button');
+  const btn = document.querySelector('#login-form-card .login-cta');
+  const emailInput = document.getElementById('admin-email');
+  const passInput = document.getElementById('admin-pass');
+  
   const oldText = btn.innerHTML;
-  btn.innerHTML = 'Signing In...';
+  btn.innerHTML = `
+    <span class="font-['Poppins',sans-serif] flex items-center gap-2">
+      <i class="ph-bold ph-spinner animate-spin text-[18px]"></i> Signing In...
+    </span>
+  `;
   btn.disabled = true;
+  if (emailInput) emailInput.disabled = true;
+  if (passInput) passInput.disabled = true;
 
   const formData = new FormData();
   formData.append('email', e);
@@ -84,6 +93,15 @@ async function doAdminLogin() {
       sessionStorage.setItem('adminToken', data.token);
       sessionStorage.setItem('adminRole', data.role);
       sessionStorage.setItem('adminEmail', data.email);
+      
+      const rememberCheckbox = document.getElementById('admin-remember');
+      if (rememberCheckbox && rememberCheckbox.checked) {
+        localStorage.setItem('savedAdminEmail', e);
+        localStorage.setItem('adminRememberMe', 'true');
+      } else {
+        localStorage.removeItem('savedAdminEmail');
+        localStorage.removeItem('adminRememberMe');
+      }
       document.getElementById('admin-login-wrap').style.display = 'none';
       document.getElementById('admin-dashboard').classList.add('active');
       
@@ -105,6 +123,8 @@ async function doAdminLogin() {
   } finally {
     btn.innerHTML = oldText;
     btn.disabled = false;
+    if (emailInput) emailInput.disabled = false;
+    if (passInput) passInput.disabled = false;
   }
 }
 
@@ -125,10 +145,27 @@ function adminLogout() {
       } catch (e) {}
       
       adminLoggedIn = false;
-      sessionStorage.removeItem('adminLoggedIn');
-      sessionStorage.removeItem('adminToken');
-      sessionStorage.removeItem('adminRole');
-      sessionStorage.removeItem('adminEmail');
+      sessionStorage.clear(); // Clear all session storage
+      
+      // Clear specific localStorage auth items as requested
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('auth');
+      
+      // Reset form state
+      const emailField = document.getElementById('admin-email');
+      const passField = document.getElementById('admin-pass');
+      const rememberCheckbox = document.getElementById('admin-remember');
+      
+      if (passField) passField.value = '';
+      if (emailField) emailField.value = '';
+      if (rememberCheckbox) rememberCheckbox.checked = false;
+      
+      // Restore email if explicitly remembered
+      if (localStorage.getItem('adminRememberMe') === 'true') {
+        if (emailField) emailField.value = localStorage.getItem('savedAdminEmail') || '';
+        if (rememberCheckbox) rememberCheckbox.checked = true;
+      }
       
       if (typeof destroyRealtime === 'function') {
         destroyRealtime();
@@ -2735,3 +2772,21 @@ if (!alertState.intervalId) {
   alertState.intervalId = setInterval(updateAlertsCountdown, 1000);
 }
 
+// --- Admin Login Initialization ---
+document.addEventListener('DOMContentLoaded', () => {
+  const emailField = document.getElementById('admin-email');
+  const passField = document.getElementById('admin-pass');
+  const rememberCheckbox = document.getElementById('admin-remember');
+  
+  // Password must never be retained
+  if (passField) passField.value = '';
+  
+  if (localStorage.getItem('adminRememberMe') === 'true') {
+    if (emailField) emailField.value = localStorage.getItem('savedAdminEmail') || '';
+    if (rememberCheckbox) rememberCheckbox.checked = true;
+  } else {
+    // Clear everything if remember me is not intentionally enabled
+    if (emailField) emailField.value = '';
+    if (rememberCheckbox) rememberCheckbox.checked = false;
+  }
+});
