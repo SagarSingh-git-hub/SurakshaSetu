@@ -22,7 +22,6 @@ async function adminFetch(url, options = {}) {
     if (loginWrap) loginWrap.style.display = '';
     if (dashboard) dashboard.classList.remove('active');
 
-    showToast('❌ Session expired. Please log in again.');
     throw new Error('Unauthorized');
   }
   return res;
