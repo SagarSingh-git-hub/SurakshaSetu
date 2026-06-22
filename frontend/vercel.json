@@ -4,6 +4,7 @@
     { "source": "/css/(.*)", "destination": "/css/$1" },
     { "source": "/js/(.*)", "destination": "/js/$1" },
     { "source": "/L_SurakshaSetu.svg", "destination": "/template/L_SurakshaSetu.svg" },
+    { "source": "/model.svg", "destination": "/template/model.svg" },
     { "source": "/organisation.html", "destination": "/template/organisation.html" },
     { "source": "/organisation", "destination": "/template/organisation.html" },
     { "source": "/(.*)", "destination": "/template/index.html" }

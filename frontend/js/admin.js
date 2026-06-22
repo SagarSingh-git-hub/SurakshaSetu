@@ -33,10 +33,14 @@ function togglePasswordVisibility() {
   const eyeIcon = document.getElementById('eye-icon');
   if (passInput.type === 'password') {
     passInput.type = 'text';
-    eyeIcon.textContent = '🙈'; // Closed eye/different icon to indicate hide
+    eyeIcon.classList.remove('ph-eye-slash');
+    eyeIcon.classList.add('ph-eye');
+    eyeIcon.textContent = '';
   } else {
     passInput.type = 'password';
-    eyeIcon.textContent = '👁️';
+    eyeIcon.classList.remove('ph-eye');
+    eyeIcon.classList.add('ph-eye-slash');
+    eyeIcon.textContent = '';
   }
 }
 
