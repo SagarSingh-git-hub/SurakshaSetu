@@ -651,3 +651,32 @@ if (document.readyState === 'loading') {
 } else {
   bootstrapApp();
 }
+
+function handleNewsletterSubmit(event) {
+  event.preventDefault();
+  const btn = document.getElementById('newsletter-btn');
+  const emailInput = document.getElementById('newsletter-email');
+  const successMsg = document.getElementById('newsletter-success');
+
+  if (!emailInput || !emailInput.value) return;
+
+  const originalContent = btn.innerHTML;
+  btn.innerHTML = `<i class="ph-bold ph-spinner animate-spin"></i> Subscribing...`;
+  btn.disabled = true;
+  emailInput.disabled = true;
+
+  // Simulate API call
+  setTimeout(() => {
+    btn.innerHTML = originalContent;
+    btn.disabled = false;
+    emailInput.disabled = false;
+    emailInput.value = '';
+    
+    if (successMsg) {
+      successMsg.classList.remove('hidden');
+      setTimeout(() => {
+        successMsg.classList.add('hidden');
+      }, 5000);
+    }
+  }, 1200);
+}
