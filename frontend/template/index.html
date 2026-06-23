@@ -102,7 +102,7 @@
   <!-- ══════════════════ HOME PAGE ══════════════════ -->
   <div class="page" id="page-home" style="position: relative; background: #000; padding-top: 0;">
     <div id="home-main-wrapper"
-      style="background: var(--bg); position: relative; z-index: 20; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-bottom-left-radius: clamp(40px, 5vw, 60px); border-bottom-right-radius: clamp(40px, 5vw, 60px); overflow: hidden; padding-top: 64px;">
+      style="background: linear-gradient(to bottom, var(--bg) 0%, var(--bg) calc(100% - 200px), #0b0f19 calc(100% - 200px), #0b0f19 100%); position: relative; z-index: 20; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-bottom-left-radius: clamp(40px, 5vw, 60px); border-bottom-right-radius: clamp(40px, 5vw, 60px); overflow: hidden; padding-top: 64px; transform: translateZ(0);">
       <section class="hero">
         <div class="hero-bg-orb o1"></div>
         <div class="hero-bg-orb o2"></div>
@@ -533,9 +533,10 @@
       </div>
 
       <!-- Ready to Make a Difference CTA Section -->
-      <div
-        style="background-color:#16a34a;background-image:radial-gradient(rgba(255,255,255,0.15) 2px,transparent 0);background-size:24px 24px;padding:90px 24px;text-align:center;color:#fff;position:relative">
-        <div style="max-width:800px;margin:0 auto">
+      <div id="cta-animated-section"
+        style="background-color:#16a34a;padding:90px 24px;text-align:center;color:#fff;position:relative;overflow:hidden;">
+        <canvas id="cta-particles" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+        <div style="max-width:800px;margin:0 auto;position:relative;z-index:1;">
           <h2
             style="font-family:'Outfit',sans-serif;font-size:clamp(32px,5vw,48px);font-weight:800;color:#ffffff;line-height:1.15;margin-bottom:16px;letter-spacing:-1px">
             Ready to make a difference?</h2>
@@ -555,6 +556,294 @@
               onmouseout="this.style.background='transparent'">🗺️ Explore the Map</button>
           </div>
         </div>
+        <script>
+          (function() {
+            const section = document.getElementById('cta-animated-section');
+            const canvas = document.getElementById('cta-particles');
+            const ctx = canvas.getContext('2d');
+            let width = 0, height = 0;
+            let particles = [];
+            let grid = [];
+            let cols = 0, rows = 0;
+            let animationFrameId;
+            let isAnimating = false;
+            let ripples = [];
+            let cursor = { x: -1000, y: -1000 };
+            let lastSpawn = 0;
+            
+            const dotSpacing = 24;
+            const dotRadius = 1.5; 
+            
+            function resize() {
+              if (section.offsetWidth === 0 || section.offsetHeight === 0) return;
+              width = section.offsetWidth;
+              height = section.offsetHeight;
+              const dpr = window.devicePixelRatio || 1;
+              canvas.width = width * dpr;
+              canvas.height = height * dpr;
+              ctx.scale(dpr, dpr);
+              initParticles();
+            }
+            
+            function initParticles() {
+              particles = [];
+              grid = [];
+              cols = Math.ceil(width / dotSpacing) + 2;
+              rows = Math.ceil(height / dotSpacing) + 2;
+              
+              for(let i = 0; i < cols; i++) {
+                grid[i] = [];
+                for(let j = 0; j < rows; j++) {
+                  const p = {
+                    col: i,
+                    row: j,
+                    x: i * dotSpacing,
+                    y: j * dotSpacing,
+                    targetX: i * dotSpacing,
+                    targetY: j * dotSpacing,
+                    opacityOffset: Math.random() * Math.PI * 2,
+                    opacitySpeed: 0.01 + Math.random() * 0.015,
+                    isNativeGlow: Math.random() > 0.95, // 5% native glow
+                    moving: false
+                  };
+                  particles.push(p);
+                  grid[i][j] = p;
+                }
+              }
+            }
+            
+            function animate() {
+              if (width === 0 || height === 0) {
+                animationFrameId = requestAnimationFrame(animate);
+                return;
+              }
+              
+              ctx.clearRect(0, 0, width, height);
+              
+              // Update ripples
+              for(let i = ripples.length - 1; i >= 0; i--) {
+                let r = ripples[i];
+                r.life -= r.decay;
+                
+                if (r.life <= 0) {
+                  ripples.splice(i, 1);
+                  continue;
+                }
+                
+                // Ease out expansion
+                const ease = 1 - Math.pow(1 - (1 - r.life), 3);
+                r.radius = r.maxRadius * ease;
+              }
+              
+              // Intelligent Traversing Flow: Attempt neighbor swap
+              if (Math.random() < 0.6) { // Probability of initiating a swap per frame
+                const p1 = particles[Math.floor(Math.random() * particles.length)];
+                if (!p1.moving) {
+                  // Diagonal and straight paths
+                  const dirs = [[0,1], [1,0], [0,-1], [-1,0], [1,1], [-1,-1], [1,-1], [-1,1]];
+                  const d = dirs[Math.floor(Math.random() * dirs.length)];
+                  const nCol = p1.col + d[0];
+                  const nRow = p1.row + d[1];
+                  
+                  if (nCol >= 0 && nCol < cols && nRow >= 0 && nRow < rows) {
+                    const p2 = grid[nCol][nRow];
+                    if (p2 && !p2.moving) {
+                      // Swap their logical positions in grid
+                      grid[nCol][nRow] = p1;
+                      grid[p1.col][p1.row] = p2;
+                      
+                      // Update targets and flags
+                      p1.col = nCol;
+                      p1.row = nRow;
+                      p1.targetX = nCol * dotSpacing;
+                      p1.targetY = nRow * dotSpacing;
+                      p1.moving = true;
+                      
+                      p2.col = nCol - d[0];
+                      p2.row = nRow - d[1];
+                      p2.targetX = p2.col * dotSpacing;
+                      p2.targetY = p2.row * dotSpacing;
+                      p2.moving = true;
+                    }
+                  }
+                }
+              }
+              
+              particles.forEach(p => {
+                // Smooth interpolation for movement
+                const dx = p.targetX - p.x;
+                const dy = p.targetY - p.y;
+                
+                if (p.moving) {
+                  p.x += dx * 0.06;
+                  p.y += dy * 0.06;
+                  
+                  // Snap to target if very close
+                  if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) {
+                    p.x = p.targetX;
+                    p.y = p.targetY;
+                    p.moving = false;
+                  }
+                }
+                
+                p.opacityOffset += p.opacitySpeed;
+                let opacity = 0.10 + (Math.sin(p.opacityOffset) + 1) / 2 * 0.15;
+                let glow = p.isNativeGlow;
+                
+                // Highlight moving dots for the "data transmission" effect
+                if (p.moving) {
+                  opacity += 0.25; 
+                  glow = true;
+                }
+                
+                let rippleOffsetX = 0;
+                let rippleOffsetY = 0;
+                let waveIntensity = 0;
+                
+                ripples.forEach(r => {
+                  const rdx = p.x - r.x;
+                  const rdy = p.y - r.y;
+                  if (Math.abs(rdx) > r.radius + 30 || Math.abs(rdy) > r.radius + 30) return;
+                  
+                  const dist = Math.sqrt(rdx*rdx + rdy*rdy);
+                  const waveDist = r.radius - dist;
+                  
+                  if (waveDist > -20) {
+                     const nx = dist > 0 ? rdx / dist : 0;
+                     const ny = dist > 0 ? rdy / dist : 0;
+                     
+                     // Realistic damped concentric rings
+                     const damping = Math.exp(-Math.abs(waveDist) * 0.04);
+                     const peakForce = r.isTrail ? 12 : 35;
+                     
+                     const waveCos = Math.cos(waveDist * 0.25); 
+                     const force = waveCos * damping * (r.life * peakForce);
+                     
+                     rippleOffsetX += nx * force;
+                     rippleOffsetY += ny * force;
+                     
+                     // Add to visual intensity (highest on wave peaks)
+                     waveIntensity += Math.max(0, waveCos) * damping * r.life;
+                  }
+                });
+                
+                // Liquid glass continuous cursor field
+                const cdx = p.x - cursor.x;
+                const cdy = p.y - cursor.y;
+                if (Math.abs(cdx) < 120 && Math.abs(cdy) < 120) {
+                  const cdist = Math.sqrt(cdx*cdx + cdy*cdy);
+                  if (cdist < 120) {
+                    const force = (1 - cdist / 120) * 15;
+                    const nx = cdist > 0 ? cdx / cdist : 0;
+                    const ny = cdist > 0 ? cdy / cdist : 0;
+                    rippleOffsetX += nx * force;
+                    rippleOffsetY += ny * force;
+                  }
+                }
+                
+                // Add caustic highlight from ripples
+                if (waveIntensity > 0) {
+                   opacity = Math.min(1.0, opacity + waveIntensity * 0.4);
+                   glow = true;
+                }
+                
+                ctx.beginPath();
+                ctx.arc(p.x + rippleOffsetX, p.y + rippleOffsetY, dotRadius, 0, Math.PI * 2);
+                
+                if (glow) {
+                  ctx.shadowBlur = p.moving ? 12 : 6;
+                  ctx.shadowColor = `rgba(255, 255, 255, ${opacity * 1.5})`;
+                } else {
+                  ctx.shadowBlur = 0;
+                }
+                
+                ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+                ctx.fill();
+              });
+              
+              animationFrameId = requestAnimationFrame(animate);
+            }
+            
+            const observer = new ResizeObserver(entries => {
+              for (let entry of entries) {
+                if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
+                  resize();
+                  if (!isAnimating) {
+                    isAnimating = true;
+                    animate();
+                  }
+                }
+              }
+            });
+            observer.observe(section);
+            
+            function addRipple(e) {
+              const rect = canvas.getBoundingClientRect();
+              let clientX, clientY;
+              
+              if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+              } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+              }
+              
+              const x = clientX - rect.left;
+              const y = clientY - rect.top;
+              
+              ripples.push({
+                x: x,
+                y: y,
+                radius: 0,
+                maxRadius: 280 + Math.random() * 80, // Large expanding rings
+                life: 1.0, 
+                decay: 0.008 + Math.random() * 0.003, // Slow fade
+                isTrail: false
+              });
+            }
+            
+            function handleMove(e) {
+              const rect = canvas.getBoundingClientRect();
+              let clientX, clientY;
+              
+              if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+              } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+              }
+              
+              const x = clientX - rect.left;
+              const y = clientY - rect.top;
+              
+              cursor.x = x;
+              cursor.y = y;
+              
+              const now = performance.now();
+              if (now - lastSpawn > 30) { // Fast spawn for fluid trail
+                ripples.push({
+                  x: x,
+                  y: y,
+                  radius: 0,
+                  maxRadius: 80 + Math.random() * 20,
+                  life: 1.0, 
+                  decay: 0.02 + Math.random() * 0.005,
+                  isTrail: true
+                });
+                lastSpawn = now;
+              }
+            }
+            
+            section.addEventListener('mousedown', addRipple);
+            section.addEventListener('touchstart', (e) => { addRipple(e); }, {passive: true});
+            section.addEventListener('mousemove', handleMove);
+            section.addEventListener('touchmove', handleMove, {passive: true});
+            section.addEventListener('mouseleave', () => { cursor.x = -1000; cursor.y = -1000; });
+            
+          })();
+        </script>
       </div>
 
       <!-- Footer Section -->
@@ -699,40 +988,72 @@
       <div id="newsletter-inner" style="width: 100%; max-width: 1100px; padding: 100px 24px; text-align: center;">
         <div
           class="max-w-6xl mx-auto rounded-3xl backdrop-blur-md border border-green-500/20 bg-white/5 px-6 md:px-10 py-8 md:py-12 transition-all duration-500 hover:border-green-500/40 shadow-xl"
-          style="background: rgba(255,255,255,0.03);">
+          style="background: rgba(251, 249, 249, 0.03);">
           <div class="flex flex-col md:flex-row items-center justify-between gap-8">
 
             <div class="flex-1 text-center md:text-left">
-              <h3 class="text-2xl md:text-3xl font-bold text-white mb-2 font-['Outfit',sans-serif]">Stay Updated with
-                SurakshaSetu</h3>
-              <p class="text-slate-400 text-sm md:text-base max-w-xl mx-auto md:mx-0">Get environmental alerts, NGO
-                updates, community impact stories and platform improvements.</p>
+              <p class="text-white text-sm md:text-base max-w-xl mx-auto md:mx-0">Get environmental alerts, NGO
+                updates, community impact stories and inspiration in your inbox every month.</p>
             </div>
 
             <div class="w-full md:w-auto flex-shrink-0">
-              <form id="newsletter-form-reveal"
-                class="relative flex flex-col sm:flex-row items-center gap-3 w-full sm:w-[400px]"
+              <style>
+                .neu-dark-input {
+                  background: #0B1120;
+                  border: 1px solid transparent;
+                  box-shadow: 0 0 15px 1px rgba(255, 255, 255, 0.2), 6px 6px 12px rgba(0, 0, 0, 0.8), -3px -3px 8px rgba(255, 255, 255, 0.02);
+                  transition: all 0.3s ease;
+                }
+
+                .neu-dark-input:hover,
+                .neu-dark-input:focus {
+                  border-color: transparent;
+                  box-shadow: 0 0 20px 2px rgba(34, 197, 94, 0.6), 6px 6px 12px rgba(0, 0, 0, 0.8), -3px -3px 8px rgba(255, 255, 255, 0.01);
+                  outline: none;
+                }
+
+                .neu-dark-btn {
+                  background: linear-gradient(135deg, #22C55E, #16A34A);
+                  color: white;
+                  box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.6), -5px -5px 12px rgba(255, 255, 255, 0.05), inset 2px 2px 4px rgba(255, 255, 255, 0.3), inset -2px -2px 4px rgba(0, 0, 0, 0.15);
+                  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+                }
+
+                .neu-dark-btn:hover {
+                  transform: translateY(-2px);
+                  box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.7), -8px -8px 16px rgba(255, 255, 255, 0.06), inset 2px 2px 4px rgba(255, 255, 255, 0.4), inset -2px -2px 4px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(34, 197, 94, 0.2);
+                }
+
+                .neu-dark-btn:active {
+                  transform: translateY(1px);
+                  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6), -2px -2px 6px rgba(255, 255, 255, 0.03), inset 3px 3px 6px rgba(0, 0, 0, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.1);
+                }
+              </style>
+              <form id="newsletter-form-reveal" class="relative w-full sm:w-[400px]"
                 onsubmit="handleNewsletterSubmit(event)">
-                <div class="relative w-full">
-                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <i class="ph ph-envelope-simple text-slate-400 text-lg"></i>
+                <div class="relative w-full group">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                    <i
+                      class="ph ph-envelope-simple text-slate-400 text-lg transition-colors group-focus-within:text-green-500"></i>
                   </div>
                   <input type="email" id="newsletter-email-reveal" required
-                    class="w-full bg-slate-900/50 border border-slate-700 text-white rounded-xl pl-11 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500 transition-all placeholder:text-slate-500 font-['Poppins',sans-serif]"
-                    placeholder="Enter your email address">
+                    class="neu-dark-input w-full text-white rounded-full pl-11 pr-[140px] py-3 outline-none placeholder:text-slate-500 font-['Poppins',sans-serif]"
+                    placeholder="Your email">
+                  <button type="submit" id="newsletter-btn-reveal"
+                    class="neu-dark-btn absolute right-1 top-1 bottom-1 px-5 sm:px-6 font-semibold rounded-full flex items-center justify-center font-['Poppins',sans-serif]">
+                    <span>Subscribe</span>
+                  </button>
                 </div>
-                <button type="submit" id="newsletter-btn-reveal"
-                  class="w-full sm:w-auto px-6 py-3 bg-green-500 hover:bg-green-400 text-slate-900 font-semibold rounded-xl transition-all shadow-[0_0_15px_rgba(34,197,94,0.2)] hover:shadow-[0_0_25px_rgba(34,197,94,0.5)] flex items-center justify-center gap-2 flex-shrink-0 font-['Poppins',sans-serif]">
-                  <span>Subscribe</span>
-                </button>
               </form>
-              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-3">
-                <p class="text-xs text-slate-500 text-center md:text-left"><i
-                    class="ph-bold ph-shield-check text-green-500 mr-1"></i> No spam. Unsubscribe anytime.</p>
+              <div class="flex justify-center mt-3 w-full sm:w-[400px]">
+                <p class="text-xs text-white text-center"><i class="ph-bold ph-shield-check text-green-500 mr-1"></i> No
+                  spam. Unsubscribe anytime.</p>
               </div>
-              <p id="newsletter-success-reveal"
-                class="hidden text-sm text-green-400 mt-2 text-center sm:text-left font-medium">✓ Thanks for subscribing
-                to SurakshaSetu updates.</p>
+              <div class="flex justify-center w-full sm:w-[400px]">
+                <p id="newsletter-success-reveal" class="hidden text-sm text-green-400 mt-2 text-center font-medium">✓
+                  Thanks for subscribing
+                  to SurakshaSetu updates.</p>
+              </div>
             </div>
 
           </div>
