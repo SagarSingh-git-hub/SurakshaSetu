@@ -93,10 +93,14 @@ function showPage(id, pushHistory = true) {
 
   if (window.location.hash !== targetHash) {
     const newUrl = window.location.pathname + queryParams + targetHash;
-    if (pushHistory) {
-      window.history.pushState({ page: id, hash: targetHash }, '', newUrl);
-    } else {
-      window.history.replaceState({ page: id, hash: targetHash }, '', newUrl);
+    try {
+      if (pushHistory) {
+        window.history.pushState({ page: id, hash: targetHash }, '', newUrl);
+      } else {
+        window.history.replaceState({ page: id, hash: targetHash }, '', newUrl);
+      }
+    } catch (e) {
+      console.warn('History API not supported on file:// protocol, skipping state update.');
     }
   }
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
