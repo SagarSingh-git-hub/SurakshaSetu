@@ -12,17 +12,8 @@ async function adminFetch(url, options = {}) {
 
   const res = await fetch(url, options);
   if (res.status === 401) {
-    sessionStorage.removeItem('adminLoggedIn');
-    sessionStorage.removeItem('adminToken');
-    sessionStorage.removeItem('adminRole');
-    sessionStorage.removeItem('adminEmail');
-
-    const loginWrap = document.getElementById('admin-login-wrap');
-    const dashboard = document.getElementById('admin-dashboard');
-    if (loginWrap) loginWrap.style.display = '';
-    if (dashboard) dashboard.classList.remove('active');
-
-    throw new Error('Unauthorized');
+    // Return the response instead of clearing session to prevent auto-logout
+    return res;
   }
   return res;
 }
@@ -764,7 +755,7 @@ const chartInstances = {};
       const formData = new FormData();
       formData.append('report_id', id);
       formData.append('priority', priority);
-      formData.append('admin_password', currentAdminPassword);
+
 
       const res = await adminFetch(`${API_URL}/api/update_priority.php`, {
         method: 'POST',
@@ -822,9 +813,9 @@ const chartInstances = {};
         // 5. Fire async API request in background
         const formData = new FormData();
         formData.append('report_id', id);
-        formData.append('admin_password', currentAdminPassword);
+  
 
-        fetch(`${API_URL}/api/delete_report.php`, {
+        adminFetch(`${API_URL}/api/delete_report.php`, {
           method: 'POST',
           body: formData
         })
