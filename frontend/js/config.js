@@ -1,5 +1,7 @@
 let API_URL;
-if (window.location.hostname.includes("localhost") || window.location.hostname === "127.0.0.1" || window.location.hostname.startsWith("192.168.")) {
+if (window.location.protocol === "file:") {
+    API_URL = "http://localhost/SurakshaSetu/backend";
+} else if (window.location.hostname.includes("localhost") || window.location.hostname === "127.0.0.1" || window.location.hostname.startsWith("192.168.")) {
     // Localhost XAMPP URL (Dynamically detects subfolder to handle SurakshaSetu / eco-warrior automatically)
     const pathParts = window.location.pathname.split('/');
     const frontendIndex = pathParts.indexOf('frontend');
