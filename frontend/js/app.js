@@ -283,11 +283,11 @@ function initCustomSelects() {
       
       const isOpen = wrapper.classList.toggle('open');
       if (isOpen) {
-        optionsContainer.classList.add('show-dropdown');
         const rect = trigger.getBoundingClientRect();
         optionsContainer.style.top = `${rect.bottom + window.scrollY + 8}px`;
         optionsContainer.style.left = `${rect.left + window.scrollX}px`;
         optionsContainer.style.width = `${rect.width}px`;
+        optionsContainer.classList.add('show-dropdown');
       } else {
         optionsContainer.classList.remove('show-dropdown');
       }
