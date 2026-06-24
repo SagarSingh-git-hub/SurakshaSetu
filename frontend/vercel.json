@@ -7,6 +7,7 @@
     { "source": "/model.svg", "destination": "/template/model.svg" },
     { "source": "/organisation.html", "destination": "/template/organisation.html" },
     { "source": "/organisation", "destination": "/template/organisation.html" },
+    { "source": "/Video/(.*)", "destination": "/Video/$1" },
     { "source": "/(.*)", "destination": "/template/index.html" }
   ]
 }
