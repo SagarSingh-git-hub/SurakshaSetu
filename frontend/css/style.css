@@ -319,7 +319,8 @@ textarea.form-input{resize:vertical;min-height:100px}
   z-index: 100;
   overflow: hidden;
 }
-.custom-select-wrapper.open .custom-select-options {
+.custom-select-wrapper.open .custom-select-options,
+.custom-select-options.show-dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);

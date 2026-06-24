@@ -243,11 +243,13 @@ function initCustomSelects() {
         optionsContainer.querySelectorAll('.custom-select-option').forEach(el => el.classList.remove('selected'));
         optionDiv.classList.add('selected');
         wrapper.classList.remove('open');
+        optionsContainer.classList.remove('show-dropdown');
       });
       optionsContainer.appendChild(optionDiv);
     });
 
-    wrapper.appendChild(optionsContainer);
+    optionsContainer.addEventListener('click', (e) => e.stopPropagation());
+    document.body.appendChild(optionsContainer);
 
     // Listen to programmatic updates on the select
     const syncUI = () => {
@@ -275,8 +277,29 @@ function initCustomSelects() {
       document.querySelectorAll('.custom-select-wrapper').forEach(w => {
         if (w !== wrapper) w.classList.remove('open');
       });
-      wrapper.classList.toggle('open');
+      document.querySelectorAll('.custom-select-options').forEach(o => {
+        if (o !== optionsContainer) o.classList.remove('show-dropdown');
+      });
+      
+      const isOpen = wrapper.classList.toggle('open');
+      if (isOpen) {
+        optionsContainer.classList.add('show-dropdown');
+        const rect = trigger.getBoundingClientRect();
+        optionsContainer.style.top = `${rect.bottom + window.scrollY + 8}px`;
+        optionsContainer.style.left = `${rect.left + window.scrollX}px`;
+        optionsContainer.style.width = `${rect.width}px`;
+      } else {
+        optionsContainer.classList.remove('show-dropdown');
+      }
     });
+
+    // Close on scroll
+    window.addEventListener('scroll', () => {
+      if (optionsContainer.classList.contains('show-dropdown')) {
+        optionsContainer.classList.remove('show-dropdown');
+        wrapper.classList.remove('open');
+      }
+    }, true);
 
     select.parentNode.insertBefore(wrapper, select.nextSibling);
   });
@@ -299,6 +322,7 @@ function refreshCustomSelect(select) {
 // Close custom selects on click outside
 document.addEventListener('click', () => {
   document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
+  document.querySelectorAll('.custom-select-options').forEach(o => o.classList.remove('show-dropdown'));
 });
 
 // ── CONFIRM MODAL ──

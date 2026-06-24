@@ -722,7 +722,7 @@ const chartInstances = {};
       formData.append('status', status);
       formData.append('admin_password', currentAdminPassword);
 
-      const res = await fetch(`${API_URL}/api/update_status.php`, {
+      const res = await adminFetch(`${API_URL}/api/update_status.php`, {
         method: 'POST',
         body: formData
       });
@@ -730,7 +730,19 @@ const chartInstances = {};
       if (data.success) {
         showToast(`✅ ${id} → ${status}`);
         const report = currentReports.find(r => r.id === id);
-        if (report) report.status = status;
+        if (report) {
+          report.status = status;
+          if (alertState && alertState.actionHistory) {
+            alertState.actionHistory.unshift({
+              type: report.cat === 'Medical' || report.cat === 'Fire' ? 'system' : 'security',
+              status: status,
+              title: `Report ${id} - ${report.cat}`,
+              description: `Status updated to ${status}`,
+              time: Date.now()
+            });
+            if (typeof renderAlerts === 'function') renderAlerts();
+          }
+        }
         if (adminLoggedIn) {
           renderAdminDashboard();
           // Also re-render map details if open
@@ -754,7 +766,7 @@ const chartInstances = {};
       formData.append('priority', priority);
       formData.append('admin_password', currentAdminPassword);
 
-      const res = await fetch(`${API_URL}/api/update_priority.php`, {
+      const res = await adminFetch(`${API_URL}/api/update_priority.php`, {
         method: 'POST',
         body: formData
       });
@@ -1207,7 +1219,7 @@ const chartInstances = {};
     <div class="m-dp-row"><span class="m-dp-lbl">Reporter</span><span class="m-dp-val">${issue.reporter || 'Anonymous'}</span></div>
     <div class="m-dp-actions" style="display:flex;gap:8px;margin-top:16px;">
       <div class="m-dp-btn m-dp-btn-success" style="flex:1" onclick="updateStatus('${issue.id}', 'Resolved')"><i class="ph-bold ph-check" style="margin-right:4px;"></i> Resolve</div>
-      <div class="m-dp-btn m-dp-btn-warning" style="flex:1" onclick="updatePriority('${issue.id}', 'High')"><i class="ph-bold ph-arrow-up" style="margin-right:4px;"></i> Escalate</div>
+      <div class="m-dp-btn m-dp-btn-warning" style="flex:1" onclick="updateStatus('${issue.id}', 'Escalated')"><i class="ph-bold ph-arrow-up" style="margin-right:4px;"></i> Escalate</div>
       <div class="m-dp-btn m-dp-btn-danger" style="flex:1" onclick="deleteReport('${issue.id}')"><i class="ph-bold ph-trash" style="margin-right:4px;"></i> Delete</div>
     </div>
   `;
@@ -2211,7 +2223,9 @@ const chartInstances = {};
 
   let alertState = {
     allAlerts: [],
-    intervalId: null
+    intervalId: null,
+    actionHistory: [],
+    isInitialFetch: true
   };
 
   async function fetchAlerts(force = false) {
@@ -2219,6 +2233,54 @@ const chartInstances = {};
       const res = await adminFetch(`${API_URL}/api/alerts.php`);
       const data = await res.json();
       if (data.success) {
+        if (alertState.isInitialFetch) {
+          data.alerts.forEach(a => {
+            if (a.status === 'Resolved' || a.status === 'Dismissed') {
+               alertState.actionHistory.push({
+                 type: a.alert_type,
+                 status: a.status,
+                 title: a.title,
+                 description: `Status updated to ${a.status}`,
+                 time: new Date(a.created_at || Date.now()).getTime()
+               });
+            }
+          });
+          alertState.isInitialFetch = false;
+        } else {
+          const oldMap = new Map(alertState.allAlerts.map(a => [a.id, a]));
+          data.alerts.forEach(newAlert => {
+            const oldAlert = oldMap.get(newAlert.id);
+            if (!oldAlert) {
+              alertState.actionHistory.unshift({
+                type: newAlert.alert_type,
+                status: newAlert.status,
+                title: newAlert.title,
+                description: `Alert created with severity ${newAlert.severity}`,
+                time: Date.now()
+              });
+            } else {
+              if (oldAlert.severity !== newAlert.severity) {
+                alertState.actionHistory.unshift({
+                  type: newAlert.alert_type,
+                  status: newAlert.status,
+                  title: newAlert.title,
+                  description: `Severity changed from ${oldAlert.severity} to ${newAlert.severity}`,
+                  time: Date.now()
+                });
+              }
+              if (oldAlert.status !== newAlert.status) {
+                alertState.actionHistory.unshift({
+                  type: newAlert.alert_type,
+                  status: newAlert.status,
+                  title: newAlert.title,
+                  description: `Status updated to ${newAlert.status}`,
+                  time: Date.now()
+                });
+              }
+            }
+          });
+          if (alertState.actionHistory.length > 50) alertState.actionHistory = alertState.actionHistory.slice(0, 50);
+        }
         alertState.allAlerts = data.alerts;
         renderAlerts();
         updateDashboardAlertStats();
@@ -2258,7 +2320,6 @@ const chartInstances = {};
     });
 
     const activeAlerts = filtered.filter(a => a.status === 'Active' || a.status === 'Investigating');
-    const historyAlerts = filtered.filter(a => a.status === 'Resolved' || a.status === 'Dismissed');
 
     document.getElementById('active-alerts-count').textContent = activeAlerts.length;
 
@@ -2275,12 +2336,13 @@ const chartInstances = {};
     }
 
     // Render history
-    if (historyAlerts.length === 0) {
+    if (alertState.actionHistory.length === 0) {
       historyContainer.innerHTML = '<div style="font-size:12px; color:var(--text3); text-align:center; padding:20px;">No alert history found.</div>';
     } else {
-      historyContainer.innerHTML = historyAlerts.map(alert => renderHistoryCard(alert)).join('');
+      historyContainer.innerHTML = alertState.actionHistory.map(log => renderHistoryCard(log)).join('');
     }
   }
+  window.filterAlerts = renderAlerts;
 
   function getSeverityColor(sev) {
     if (sev === 'Critical') return '#ef4444';
@@ -2357,22 +2419,23 @@ const chartInstances = {};
     </div>`;
   }
 
-  function renderHistoryCard(alert) {
-    const typeBadgeCol = alert.alert_type === 'security' ? '#ef4444' : '#f97316';
-    const statusColor = alert.status === 'Resolved' ? '#16a34a' : '#64748b';
+  function renderHistoryCard(log) {
+    const typeBadgeCol = log.type === 'security' ? '#ef4444' : '#f97316';
+    const statusColor = log.status === 'Resolved' ? '#16a34a' : (log.status === 'Escalated' ? '#ef4444' : '#64748b');
+
+    const diffSecs = Math.floor((Date.now() - log.time) / 1000);
+    let timeStr = 'Just now';
+    if (diffSecs > 60 && diffSecs < 3600) timeStr = `${Math.floor(diffSecs / 60)}m ago`;
+    else if (diffSecs >= 3600) timeStr = `${Math.floor(diffSecs / 3600)}h ago`;
 
     return `
     <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px; font-size:12px; box-shadow:var(--shadow-sm);">
       <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-        <span style="font-weight:800; color:${typeBadgeCol}; text-transform:uppercase; font-size:10px;">${alert.alert_type}</span>
-        <span style="color:${statusColor}; font-weight:700; text-transform:uppercase; font-size:10px;">● ${escapeHTML(alert.status)}</span>
+        <span style="font-weight:800; color:${typeBadgeCol}; text-transform:uppercase; font-size:10px;">${log.type}</span>
+        <span style="color:${statusColor}; font-weight:700; text-transform:uppercase; font-size:10px;">● ${escapeHTML(log.status)}</span>
       </div>
-      <div style="font-weight:700; color:var(--text); margin-bottom:4px;">${escapeHTML(alert.title)}</div>
-      <div style="color:var(--text3); font-size:11px; margin-bottom:6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Resolved by: ${escapeHTML(alert.resolved_by || 'System')}</div>
-      <div style="font-size:10px; color:var(--text3); display:flex; justify-content:space-between;">
-        <span>${new Date(alert.created_at).toLocaleDateString()}</span>
-        <span>resolved: ${adminTimeAgo(alert.resolved_at)}</span>
-      </div>
+      <div style="font-weight:700; color:var(--text); margin-bottom:4px;">${escapeHTML(log.title)}</div>
+      <div style="color:var(--text3); font-size:11px;">${escapeHTML(log.description)} · ${timeStr}</div>
     </div>`;
   }
 

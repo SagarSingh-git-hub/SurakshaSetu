@@ -3035,9 +3035,10 @@
               <div
                 style="flex:1;min-width:200px;display:flex;align-items:center;background:#fff;border:1px solid var(--border);border-radius:8px;padding:6px 12px;gap:8px;">
                 <i class="ph-duotone ph-magnifying-glass" style="color:var(--text3);font-size:16px;"></i>
-                <input type="text" id="alert-search-input" oninput="filterAlerts()"
+                <input type="text" id="alert-search-input" oninput="filterAlerts(); document.getElementById('alert-search-clear').style.display = this.value ? 'block' : 'none';"
                   placeholder="Search alerts by title, description or source..."
                   style="border:none;outline:none;font-size:13px;width:100%;">
+                <i class="ph-bold ph-x" id="alert-search-clear" onclick="document.getElementById('alert-search-input').value=''; filterAlerts(); this.style.display='none';" style="color:var(--text3);font-size:14px;cursor:pointer;display:none;"></i>
               </div>
             </div>
 
