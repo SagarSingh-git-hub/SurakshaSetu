@@ -711,7 +711,7 @@ const chartInstances = {};
       const formData = new FormData();
       formData.append('report_id', id);
       formData.append('status', status);
-      formData.append('admin_password', currentAdminPassword);
+      
 
       const res = await adminFetch(`${API_URL}/api/update_status.php`, {
         method: 'POST',
@@ -1626,7 +1626,7 @@ const chartInstances = {};
     }
 
     const formData = new FormData();
-    formData.append('admin_password', currentAdminPassword);
+    
     formData.append('name', name);
     formData.append('award_type', awardType);
     formData.append('mode', currentBuilderMode);
@@ -1700,7 +1700,7 @@ const chartInstances = {};
     if (!htmlContent) return;
 
     const formData = new FormData();
-    formData.append('admin_password', currentAdminPassword);
+    
     formData.append('name', name);
     formData.append('award_type', awardType);
     formData.append('mode', currentBuilderMode);
@@ -1890,7 +1890,7 @@ const chartInstances = {};
     showToast('✅ Default template set successfully!');
 
     const formData = new FormData();
-    formData.append('admin_password', currentAdminPassword);
+    
     formData.append('id', id);
 
     adminFetch(`${API_URL}/api/certificates/set_default_template.php`, {
@@ -1965,7 +1965,7 @@ const chartInstances = {};
     showCustomConfirm("Delete Template?", msg, () => {
 
       const formData = new FormData();
-      formData.append('admin_password', currentAdminPassword);
+      
       formData.append('id', id);
 
       adminFetch(`${API_URL}/api/certificates/delete_template.php`, {
@@ -2174,7 +2174,7 @@ const chartInstances = {};
     checkbox.nextElementSibling.firstElementChild.style.transform = checkbox.checked ? 'translateX(16px)' : 'translateX(0)';
 
     const formData = new FormData();
-    formData.append('admin_password', currentAdminPassword);
+    
     formData.append('setting_key', key);
     formData.append('setting_value', value);
 
