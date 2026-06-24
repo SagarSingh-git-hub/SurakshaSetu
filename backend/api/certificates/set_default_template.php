@@ -4,14 +4,8 @@ require_once __DIR__ . '/../../config.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $admin_password = $_POST['admin_password'] ?? '';
-
-    // Verify Admin Password
-    if ($admin_password !== ADMIN_PASSWORD) {
-        http_response_code(401);
-        echo json_encode(['success' => false, 'message' => 'Unauthorized: Invalid Admin Credentials']);
-        exit;
-    }
+    // Verify Admin Session via JWT token
+    $current_user = check_admin_session('Admin');
 
     $id = $_POST['id'] ?? '';
 
@@ -47,3 +41,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $conn->close();
 ?>
+

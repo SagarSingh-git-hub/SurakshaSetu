@@ -1641,7 +1641,7 @@ const chartInstances = {};
     const endpoint = currentEditingTemplateId ? `${API_URL}/api/certificates/update_template.php` : `${API_URL}/api/certificates/create_template.php`;
 
     try {
-      const res = await fetch(endpoint, {
+      const res = await adminFetch(endpoint, {
         method: 'POST',
         body: formData
       });
@@ -1893,7 +1893,7 @@ const chartInstances = {};
     formData.append('admin_password', currentAdminPassword);
     formData.append('id', id);
 
-    fetch(`${API_URL}/api/certificates/set_default_template.php`, {
+    adminFetch(`${API_URL}/api/certificates/set_default_template.php`, {
       method: 'POST',
       body: formData
     })
@@ -1968,7 +1968,7 @@ const chartInstances = {};
       formData.append('admin_password', currentAdminPassword);
       formData.append('id', id);
 
-      fetch(`${API_URL}/api/certificates/delete_template.php`, {
+      adminFetch(`${API_URL}/api/certificates/delete_template.php`, {
         method: 'POST',
         body: formData
       })
@@ -2001,7 +2001,7 @@ const chartInstances = {};
     }
 
     try {
-      const res = await fetch(`${API_URL}/api/certificates/get_templates.php?t=${new Date().getTime()}`);
+      const res = await adminFetch(`${API_URL}/api/certificates/get_templates.php?t=${new Date().getTime()}`);
       const data = await res.json();
       if (data.success && data.templates.length > 0) {
         allTemplates = data.templates.sort((a, b) => Number(b.is_default) - Number(a.is_default));
@@ -2141,7 +2141,7 @@ const chartInstances = {};
 
   async function loadTemplateSettings() {
     try {
-      const res = await fetch(`${API_URL}/api/certificates/get_settings.php`);
+      const res = await adminFetch(`${API_URL}/api/certificates/get_settings.php`);
       const data = await res.json();
       if (data.success && data.settings) {
         const autoSelect = data.settings['auto_select'] === '1';
@@ -2179,7 +2179,7 @@ const chartInstances = {};
     formData.append('setting_value', value);
 
     try {
-      const res = await fetch(`${API_URL}/api/certificates/update_settings.php`, {
+      const res = await adminFetch(`${API_URL}/api/certificates/update_settings.php`, {
         method: 'POST',
         body: formData
       });
