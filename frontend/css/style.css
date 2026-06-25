@@ -1547,7 +1547,7 @@ textarea.form-input{resize:vertical;min-height:100px}
 
 .admin-content-wrap {
   margin-left: 280px;
-  padding: 80px 40px 40px;
+  padding: 24px 40px 40px;
   min-height: 100vh;
   transition: margin-left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   background: var(--bg);
