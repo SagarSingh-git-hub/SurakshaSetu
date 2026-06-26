@@ -1392,17 +1392,17 @@ textarea.form-input{resize:vertical;min-height:100px}
   scrollbar-color: transparent transparent !important;
 }
 .admin-sidebar-nav:hover {
-  scrollbar-color: var(--g300) transparent !important;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent !important;
 }
 .admin-sidebar-nav::-webkit-scrollbar { width: 6px !important; }
 .admin-sidebar-nav::-webkit-scrollbar-track { background: transparent !important; }
 .admin-sidebar-nav::-webkit-scrollbar-thumb { 
   background-color: transparent !important; 
-  border-radius: 9999px !important; 
-  border: 1.5px solid transparent !important; 
-  background-clip: content-box !important; 
+  border-radius: 10px !important; 
+  border: 1px solid transparent !important; 
+  background-clip: padding-box !important; 
 }
-.admin-sidebar-nav:hover::-webkit-scrollbar-thumb { background-color: var(--g300) !important; }
+.admin-sidebar-nav:hover::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, 0.15) !important; }
 .admin-sidebar-nav::-webkit-scrollbar-button { display: none !important; width: 0 !important; height: 0 !important; }
 
 .admin-nav-item { display: block; }
