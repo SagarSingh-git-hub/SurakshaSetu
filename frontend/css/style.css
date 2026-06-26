@@ -2062,3 +2062,8 @@ textarea.form-input{resize:vertical;min-height:100px}
 .admin-sidebar.hover-expanded {
   width: 280px;
 }
+
+/* Disable body scroll when admin page is active */
+body:has(#page-admin.active) {
+  overflow: hidden;
+}
