@@ -1388,18 +1388,21 @@ textarea.form-input{resize:vertical;min-height:100px}
   display: flex;
   flex-direction: column;
   gap: 4px;
-}
-.admin-sidebar-nav {
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
+  scrollbar-width: thin !important;
+  scrollbar-color: transparent transparent !important;
 }
 .admin-sidebar-nav:hover {
-  scrollbar-color: var(--g300) transparent;
+  scrollbar-color: var(--g300) transparent !important;
 }
-.admin-sidebar-nav::-webkit-scrollbar { width: 2px !important; }
+.admin-sidebar-nav::-webkit-scrollbar { width: 6px !important; }
 .admin-sidebar-nav::-webkit-scrollbar-track { background: transparent !important; }
-.admin-sidebar-nav::-webkit-scrollbar-thumb { background: transparent !important; border-radius: 4px !important; }
-.admin-sidebar-nav:hover::-webkit-scrollbar-thumb { background: var(--g300) !important; }
+.admin-sidebar-nav::-webkit-scrollbar-thumb { 
+  background-color: transparent !important; 
+  border-radius: 9999px !important; 
+  border: 1.5px solid transparent !important; 
+  background-clip: content-box !important; 
+}
+.admin-sidebar-nav:hover::-webkit-scrollbar-thumb { background-color: var(--g300) !important; }
 .admin-sidebar-nav::-webkit-scrollbar-button { display: none !important; width: 0 !important; height: 0 !important; }
 
 .admin-nav-item { display: block; }
