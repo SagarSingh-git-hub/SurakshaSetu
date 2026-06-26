@@ -18,7 +18,6 @@
 html{scroll-behavior:smooth}
 body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 h1,h2,h3,h4,button,.nav-logo,.category-label{font-family:'Outfit',sans-serif}
-body.no-scroll { overflow: hidden !important; }
 
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:6px;height:6px}
@@ -42,7 +41,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;backdrop-filter:blur(20px) 
 .page{display:none;padding-top:64px;min-height:100vh}
 .page.active{display:block}
 
-/* ── HERO ── */
+/* \u2500\u2500 HERO \u2500\u2500 */
 .hero{position:relative;min-height:clamp(600px, 100vh - 64px, 850px);display:flex;align-items:center;overflow:hidden;background:linear-gradient(-45deg, #f0fdf4, #e0f2fe, #fdf4ff, #dcfce7);background-size:400% 400%;animation:heroGradient 15s ease infinite;box-shadow:inset 0 -20px 40px rgba(0,0,0,0.02)}
 @keyframes heroGradient {
   0% { background-position: 0% 50%; }
@@ -164,14 +163,14 @@ textarea.form-input{resize:vertical;min-height:100px}
 .success-id{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text3);background:var(--bg);padding:6px 14px;border-radius:6px;display:inline-block;margin-top:8px;border:1px solid var(--border)}
 
 /* ── MAP PAGE ── */
-.map-page-wrap{height:calc(100vh - 64px);display:flex;flex-direction:column;overflow:hidden;}
+.map-page-wrap{height:calc(100vh - 64px);display:flex;flex-direction:column}
 .map-filters{background:#fff;border-bottom:1px solid var(--border);padding:12px 20px;display:flex;gap:8px;align-items:center;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
 .map-filters::-webkit-scrollbar{display:none}
 .filter-pill{padding:6px 14px;border-radius:99px;border:1.5px solid var(--border);font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap;transition:all .18s;color:var(--text3);background:#fff}
 .filter-pill.active{background:var(--g700);color:#fff!important;border-color:var(--g700)}
 .filter-pill:hover:not(.active){border-color:var(--g300);color:var(--g700)}
 .filter-pill-resolved:not(.active){color:var(--g700)}
-#main-map{flex:1; height: 100%; width: 100%; min-height: 0;}
+#main-map{flex:1}
 
 /* ── FEED ── */
 .feed-page{max-width:1100px;margin:0 auto;padding:32px 24px}
@@ -1389,22 +1388,18 @@ textarea.form-input{resize:vertical;min-height:100px}
   display: flex;
   flex-direction: column;
   gap: 4px;
-  scrollbar-width: thin !important;
-  scrollbar-color: transparent transparent !important;
+}
+.admin-sidebar-nav {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
 }
 .admin-sidebar-nav:hover {
-  scrollbar-color: rgba(0, 0, 0, 0.15) transparent !important;
+  scrollbar-color: rgba(0,0,0,0.2) transparent;
 }
-.admin-sidebar-nav::-webkit-scrollbar { width: 6px !important; }
-.admin-sidebar-nav::-webkit-scrollbar-track { background: transparent !important; }
-.admin-sidebar-nav::-webkit-scrollbar-thumb { 
-  background-color: transparent !important; 
-  border-radius: 10px !important; 
-  border: 1px solid transparent !important; 
-  background-clip: padding-box !important; 
-}
-.admin-sidebar-nav:hover::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, 0.15) !important; }
-.admin-sidebar-nav::-webkit-scrollbar-button { display: none !important; width: 0 !important; height: 0 !important; }
+.admin-sidebar-nav::-webkit-scrollbar { width: 4px; }
+.admin-sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+.admin-sidebar-nav::-webkit-scrollbar-thumb { background: transparent; border-radius: 4px; }
+.admin-sidebar-nav:hover::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); }
 
 .admin-nav-item { display: block; }
 .admin-nav-link {
@@ -1577,7 +1572,7 @@ textarea.form-input{resize:vertical;min-height:100px}
 .admin-content-wrap {
   margin-left: 280px;
   padding: 24px 40px 40px;
-  min-height: calc(100vh - 64px);
+  min-height: 100vh;
   transition: margin-left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   background: var(--bg);
 }
@@ -2062,9 +2057,4 @@ textarea.form-input{resize:vertical;min-height:100px}
 
 .admin-sidebar.hover-expanded {
   width: 280px;
-}
-
-/* Disable body scroll when admin page is active */
-body:has(#page-admin.active) {
-  overflow: hidden;
 }

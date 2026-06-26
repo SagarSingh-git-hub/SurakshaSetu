@@ -708,22 +708,3 @@ function handleNewsletterSubmit(event) {
     }
   }, 1200);
 }
-
-// ── GLOBAL MODAL OBSERVER ──
-// Automatically toggles no-scroll on body when any modal-overlay is opened/closed
-document.addEventListener('DOMContentLoaded', () => {
-  const observer = new MutationObserver(() => {
-    const hasOpenModal = document.querySelector('.modal-overlay.open') !== null;
-    if (hasOpenModal) {
-      document.body.classList.add('no-scroll');
-    } else {
-      document.body.classList.remove('no-scroll');
-    }
-  });
-
-  observer.observe(document.body, {
-    attributes: true,
-    attributeFilter: ['class'],
-    subtree: true
-  });
-});
