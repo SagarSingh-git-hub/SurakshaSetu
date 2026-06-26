@@ -1836,6 +1836,7 @@
               <i class="ph-duotone ph-caret-down admin-nav-arrow" style="font-size: 16px;"></i>
             </button>
             <div class="admin-subnav">
+              <div class="admin-subnav-inner">
               <a href="#" class="admin-subnav-link" title="Overview"
                 onclick="switchAdminView('overview', this); return false;"><i class="ph-duotone ph-layout"></i><span
                   class="admin-subnav-text">Overview</span></a>
@@ -1845,6 +1846,7 @@
               <a href="#" class="admin-subnav-link" title="Analytics"
                 onclick="switchAdminView('analytics', this); return false;"><i
                   class="ph-duotone ph-chart-line-up"></i><span class="admin-subnav-text">Analytics</span></a>
+            </div>
             </div>
           </div>
           <!-- Item 2 -->
@@ -1875,6 +1877,7 @@
               <i class="ph-duotone ph-caret-down admin-nav-arrow" style="font-size: 16px;"></i>
             </button>
             <div class="admin-subnav">
+              <div class="admin-subnav-inner">
               <a href="#" class="admin-subnav-link" title="Active Users"><i class="ph-duotone ph-user-circle"></i><span
                   class="admin-subnav-text">Active Users</span></a>
               <a href="#" class="admin-subnav-link" title="Comments Management"><i
@@ -1887,6 +1890,7 @@
               <a href="#" class="admin-subnav-link" title="Volunteers"><i class="ph-duotone ph-users-three"></i><span
                   class="admin-subnav-text">Volunteers</span></a>
             </div>
+            </div>
           </div>
           <!-- Item 5 -->
           <div class="admin-nav-item">
@@ -1898,6 +1902,7 @@
               <i class="ph-duotone ph-caret-down admin-nav-arrow" style="font-size: 16px;"></i>
             </button>
             <div class="admin-subnav">
+              <div class="admin-subnav-inner">
               <a href="#" class="admin-subnav-link" title="Issue Certificates"
                 onclick="switchAdminView('cert-issue', this); return false;"><i
                   class="ph-duotone ph-file-plus"></i><span class="admin-subnav-text">Issue Certificates</span></a>
@@ -1908,6 +1913,7 @@
                 onclick="switchAdminView('cert-templates', this); return false;"><i
                   class="ph-duotone ph-paint-brush"></i><span class="admin-subnav-text">Certificate
                   Templates</span></a>
+            </div>
             </div>
           </div>
           <!-- Item 6 -->
@@ -1929,12 +1935,14 @@
               <i class="ph-duotone ph-caret-down admin-nav-arrow" style="font-size: 16px;"></i>
             </button>
             <div class="admin-subnav">
+              <div class="admin-subnav-inner">
               <a href="#" class="admin-subnav-link" title="General"
                 onclick="switchAdminView('settings-general', this); return false;"><i
                   class="ph-duotone ph-sliders-horizontal"></i><span class="admin-subnav-text">General</span></a>
               <a href="#" class="admin-subnav-link" title="Security"
                 onclick="switchAdminView('settings-security', this); return false;"><i
                   class="ph-duotone ph-shield-check"></i><span class="admin-subnav-text">Security</span></a>
+            </div>
             </div>
           </div>
         </div>
@@ -5857,6 +5865,69 @@
       }
     });
   </script>
+
+    <!-- Sidebar Interactions -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('admin-sidebar');
+      const sidebarNav = document.querySelector('.admin-sidebar-nav');
+      
+      if (sidebar && sidebarNav) {
+        // Top and Bottom Fade Masks
+        const topFade = document.createElement('div');
+        topFade.className = 'sidebar-scroll-fade top';
+        const bottomFade = document.createElement('div');
+        bottomFade.className = 'sidebar-scroll-fade bottom';
+        
+        sidebar.insertBefore(topFade, sidebarNav);
+        sidebar.insertBefore(bottomFade, sidebarNav.nextSibling);
+        
+        const updateScrollFades = () => {
+          if (sidebarNav.scrollTop > 0) {
+            topFade.style.opacity = '1';
+          } else {
+            topFade.style.opacity = '0';
+          }
+          if (sidebarNav.scrollTop + sidebarNav.clientHeight < sidebarNav.scrollHeight - 1) {
+            bottomFade.style.opacity = '1';
+          } else {
+            bottomFade.style.opacity = '0';
+          }
+        };
+        
+        sidebarNav.addEventListener('scroll', updateScrollFades);
+        window.addEventListener('resize', updateScrollFades);
+        
+        const observer = new ResizeObserver(() => updateScrollFades());
+        observer.observe(sidebarNav);
+        setTimeout(updateScrollFades, 100);
+        
+        // Smart Auto-Expand on Hover (Collapsed Mode Only)
+        let hoverTimer;
+        let leaveTimer;
+        
+        sidebar.addEventListener('mouseenter', () => {
+          if (sidebar.classList.contains('collapsed')) {
+            clearTimeout(leaveTimer);
+            hoverTimer = setTimeout(() => {
+              sidebar.classList.add('hover-expanded');
+              updateScrollFades();
+            }, 50);
+          }
+        });
+        
+        sidebar.addEventListener('mouseleave', () => {
+          if (sidebar.classList.contains('collapsed')) {
+            clearTimeout(hoverTimer);
+            leaveTimer = setTimeout(() => {
+              sidebar.classList.remove('hover-expanded');
+            }, 250);
+          }
+        });
+      }
+    });
+    </script>
+
 </body>
 
 </html>
