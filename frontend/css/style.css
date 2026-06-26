@@ -2063,11 +2063,7 @@ textarea.form-input{resize:vertical;min-height:100px}
   width: 280px;
 }
 
-/* Disable visible body scrollbar when admin page is active */
-body:has(#page-admin.active)::-webkit-scrollbar {
-  display: none !important;
-}
+/* Disable body scroll when admin page is active */
 body:has(#page-admin.active) {
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
+  overflow: hidden;
 }
