@@ -1394,12 +1394,12 @@ textarea.form-input{resize:vertical;min-height:100px}
   scrollbar-color: transparent transparent;
 }
 .admin-sidebar-nav:hover {
-  scrollbar-color: rgba(0,0,0,0.2) transparent;
+  scrollbar-color: var(--g300) transparent;
 }
-.admin-sidebar-nav::-webkit-scrollbar { width: 4px; }
+.admin-sidebar-nav::-webkit-scrollbar { width: 3px; }
 .admin-sidebar-nav::-webkit-scrollbar-track { background: transparent; }
 .admin-sidebar-nav::-webkit-scrollbar-thumb { background: transparent; border-radius: 4px; }
-.admin-sidebar-nav:hover::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); }
+.admin-sidebar-nav:hover::-webkit-scrollbar-thumb { background: var(--g300); }
 
 .admin-nav-item { display: block; }
 .admin-nav-link {
