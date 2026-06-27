@@ -1275,7 +1275,7 @@
   </div>
 
   <!-- ══════════════════ MAP PAGE ══════════════════ -->
-  <div class="page" id="page-map" style="overflow: hidden;">
+  <div class="page" id="page-map">
     <div class="map-page-wrap">
       <div class="map-filters">
         <span
@@ -2276,7 +2276,7 @@
                 style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif"
                 onclick="exportReportsExcel()">📄 Export Excel</button>
             </div>
-            <div style="overflow-x:auto;">
+            <div style="overflow-x:auto; overflow-y:auto; max-height: 580px;">
               <table class="admin-table" id="admin-table">
                 <thead>
                   <tr>
@@ -2355,7 +2355,7 @@
             .m-layout {
               display: grid;
               grid-template-columns: 1fr 340px;
-              height: calc(100vh - 240px);
+              min-height: 560px;
               background: #fff;
               border: 1px solid var(--border);
               border-radius: 12px;
@@ -2372,6 +2372,7 @@
             .m-map-canvas {
               width: 100%;
               height: 100%;
+              min-height: 560px;
               position: relative;
               background: #f8fafc;
               z-index: 1;
@@ -2553,6 +2554,7 @@
             .m-list {
               flex: 1;
               overflow-y: auto;
+              max-height: 515px;
             }
 
             .m-list::-webkit-scrollbar {
@@ -2806,7 +2808,7 @@
 
           <div class="m-layout">
             <div class="m-map-panel" style="position: relative;">
-              <div id="live-leaflet-map" style="width: 100%; height: 100%;"></div>
+              <div id="live-leaflet-map" style="width: 100%; height: 100%; min-height: 560px;"></div>
 
               <div class="m-legend"
                 style="position: absolute; bottom: 24px; left: 16px; height: fit-content; z-index: 1000; background: rgba(255,255,255,0.9); padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; pointer-events: none;">
@@ -5028,16 +5030,6 @@
       document.getElementById('btn-export-pdf').style.display = 'none';
       document.getElementById('btn-export-csv').style.display = 'none';
       document.getElementById('btn-export-analytics').style.display = 'none';
-
-      if (viewName === 'monitoring') {
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.body.style.overflow = '';
-      }
-
-      const contentWrap = document.querySelector('.admin-content-wrap');
-      // min-height is now managed strictly via CSS calc(100vh - 64px)
-
 
       if (viewName === 'overview') {
         title.innerText = 'Admin Dashboard';
