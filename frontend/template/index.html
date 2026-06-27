@@ -5380,7 +5380,8 @@
 
   <!-- ── SYNC PROGRESS MODAL ── -->
   <div class="modal-overlay" id="sync-progress-modal-overlay">
-    <div class="modal" style="max-width:420px; width:90%; padding:24px; text-align:center;">
+    <div class="modal" style="max-width:420px; width:90%; padding:24px; text-align:center; position:relative;">
+      <button class="modal-close" onclick="document.getElementById('sync-progress-modal-overlay').classList.remove('open')">✕</button>
       <div style="font-size:36px; margin-bottom:12px;">🔄</div>
       <h3
         style="font-size:18px; font-weight:800; font-family:'Outfit',sans-serif; color:var(--text); margin-bottom:8px;">
@@ -5415,7 +5416,7 @@
   <!-- ── SYSTEM LOGS MODAL ── -->
   <div class="modal-overlay" id="log-viewer-modal-overlay"
     onclick="if(event.target===this) this.classList.remove('open')">
-    <div class="modal" style="max-width:900px; width:95%; padding:24px;">
+    <div class="modal" style="max-width:900px; width:95%; padding:24px; overflow:visible; position:relative;">
       <div class="modal-header">
         <div>
           <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif">System Log Viewer</div>
@@ -5425,7 +5426,7 @@
         <button class="modal-close"
           onclick="document.getElementById('log-viewer-modal-overlay').classList.remove('open')">✕</button>
       </div>
-      <div class="modal-body" style="padding:16px 0 0 0; display:flex; flex-direction:column; gap:16px;">
+      <div class="modal-body" style="padding:16px 0 0 0; display:flex; flex-direction:column; gap:16px; overflow:visible;">
         <!-- Filter and Search Row -->
         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
           <select id="log-filter-time" onchange="fetchSystemLogs()" class="filter-select"
@@ -5438,9 +5439,10 @@
           <div
             style="flex:1; min-width:200px; display:flex; align-items:center; background:#f1f5f9; border-radius:8px; padding:6px 12px; gap:8px;">
             <i class="ph-duotone ph-magnifying-glass" style="color:var(--text3); font-size:16px;"></i>
-            <input type="text" id="log-search-input" oninput="fetchSystemLogs()"
+            <input type="text" id="log-search-input" oninput="renderSystemLogs()"
               placeholder="Search logs by message, service..."
               style="border:none; background:transparent; outline:none; font-size:13px; width:100%;">
+            <i class="ph-bold ph-x" style="color:var(--text3); font-size:14px; cursor:pointer;" onclick="document.getElementById('log-search-input').value=''; renderSystemLogs();" title="Clear Search"></i>
           </div>
           <button class="btn-primary"
             style="padding:8px 16px; border-radius:8px; font-size:13px; display:flex; align-items:center; gap:6px;"

@@ -2383,7 +2383,7 @@ const chartInstances = {};
           ? `<button class="action-btn" style="padding:8px 16px; background:#fff7ed; color:#f97316; border:1px solid #fdba74; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer;" onclick="triggerSyncRetry()">Retry Sync</button>`
           : `<button class="action-btn" style="padding:8px 16px; background:#f3f4f6; color:#9ca3af; border:1px solid #e5e7eb; border-radius:8px; font-size:13px; font-weight:700; cursor:not-allowed;" disabled title="Super Admin privileges required">Retry Sync</button>`}
       ${isSuperAdmin
-          ? `<button class="action-btn" style="padding:8px 16px; background:#fff; color:var(--text); border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:700; cursor:pointer;" onclick="openLogViewerModal()">View Logs</button>`
+          ? `<button class="action-btn" style="padding:8px 16px; background:#fff; color:var(--text); border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:700; cursor:pointer;" onclick="openLogViewerModal('${escapeHTML(alert.source || alert.title || '')}')">View Logs</button>`
           : `<button class="action-btn" style="padding:8px 16px; background:#f3f4f6; color:#9ca3af; border:1px solid #e5e7eb; border-radius:8px; font-size:13px; font-weight:700; cursor:not-allowed;" disabled title="Super Admin privileges required">View Logs</button>`}
     `;
     }
@@ -2452,6 +2452,23 @@ const chartInstances = {};
 
   async function updateAlertStatus(alertId, status) {
     try {
+      // Optimistic UI Update for Dismissed
+      if (status === 'Dismissed') {
+        const idx = alertState.activeAlerts.findIndex(a => a.id === alertId);
+        if (idx !== -1) {
+          const alert = alertState.activeAlerts[idx];
+          alertState.activeAlerts.splice(idx, 1);
+          alertState.actionHistory.unshift({
+            title: alert.title,
+            description: alert.description,
+            type: alert.alert_type,
+            status: 'Dismissed',
+            time: Date.now()
+          });
+          renderAlerts(); // re-render instantly without waiting
+        }
+      }
+
       const formData = new FormData();
       formData.append('id', alertId);
       formData.append('status', status);
@@ -2464,9 +2481,11 @@ const chartInstances = {};
       const data = await res.json();
       if (data.success) {
         showToast(`Alert marked as ${status}`);
-        fetchAlerts(true);
+        if (status !== 'Dismissed') fetchAlerts(true);
       } else {
-        showToast(`Failed to update alert: ${data.message}`);
+        // Rollback on failure (simplified)
+        showToast(`❌ Failed: ${data.message}`);
+        fetchAlerts(true);
       }
     } catch (err) {
       console.error("Alert status update failed:", err);
@@ -2698,60 +2717,89 @@ const chartInstances = {};
   }
 
   // ── SYSTEM LOG VIEWER MODAL LOGIC ──
-  function openLogViewerModal() {
-    document.getElementById('log-search-input').value = '';
+  let currentSystemLogs = [];
+
+  function openLogViewerModal(defaultSearch = '') {
+    document.getElementById('log-search-input').value = defaultSearch;
     document.getElementById('log-viewer-modal-overlay').classList.add('open');
     fetchSystemLogs();
   }
+  window.openLogViewerModal = openLogViewerModal;
 
   async function fetchSystemLogs() {
     const tbody = document.getElementById('logs-modal-tbody');
     if (!tbody) return;
 
     const range = document.getElementById('log-filter-time').value;
-    const search = document.getElementById('log-search-input').value;
 
     tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">⏳ Querying system logs...</td></tr>';
 
     try {
-      const res = await adminFetch(`${API_URL}/api/system_logs.php?time_range=${range}&search=${encodeURIComponent(search)}`);
+      const res = await adminFetch(`${API_URL}/api/system_logs.php?time_range=${range}`);
       const data = await res.json();
       if (data.success) {
-        if (data.logs.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--text3);">No matching logs found.</td></tr>';
-          return;
-        }
-        tbody.innerHTML = data.logs.map(l => {
-          const rowBg = l.log_level === 'ERROR' ? '#fef2f2' : l.log_level === 'WARNING' ? '#fffbeb' : '#fff';
-          const levelCol = l.log_level === 'ERROR' ? '#dc2626' : l.log_level === 'WARNING' ? '#d97706' : '#16a34a';
-
-          let traceHtml = '';
-          if (l.stack_trace) {
-            traceHtml = `
-            <details style="cursor:pointer; color:var(--text3); font-family:monospace; font-size:10px;">
-              <summary>View Stack Trace</summary>
-              <pre style="margin-top:6px; background:#f1f5f9; padding:8px; border-radius:6px; overflow-x:auto; max-width:400px; text-align:left;">${escapeHTML(l.stack_trace)}</pre>
-            </details>
-          `;
-          } else {
-            traceHtml = '<span style="color:var(--text3); font-style:italic;">None</span>';
-          }
-
-          return `
-          <tr style="background:${rowBg}; border-bottom:1px solid var(--border);">
-            <td style="padding:10px; white-space:nowrap;">${new Date(l.timestamp).toLocaleString()}</td>
-            <td style="padding:10px; font-weight:700;">${escapeHTML(l.service_name)}</td>
-            <td style="padding:10px; font-weight:800; color:${levelCol}">${escapeHTML(l.log_level)}</td>
-            <td style="padding:10px; max-width:250px; word-break:break-word;">${escapeHTML(l.message)}</td>
-            <td style="padding:10px;">${traceHtml}</td>
-          </tr>
-        `;
-        }).join('');
+        currentSystemLogs = data.logs || [];
+        renderSystemLogs();
+      } else {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--text3);">❌ Error: ${escapeHTML(data.message)}</td></tr>`;
       }
     } catch (err) {
       console.error("Failed to load logs:", err);
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--text3);">❌ Connection failed.</td></tr>';
     }
   }
+  window.fetchSystemLogs = fetchSystemLogs;
+
+  function renderSystemLogs() {
+    const tbody = document.getElementById('logs-modal-tbody');
+    if (!tbody) return;
+
+    let search = document.getElementById('log-search-input').value.toLowerCase().trim();
+    let filtered = currentSystemLogs;
+
+    if (search) {
+      filtered = currentSystemLogs.filter(l => 
+        (l.service_name || '').toLowerCase().includes(search) ||
+        (l.log_level || '').toLowerCase().includes(search) ||
+        (l.message || '').toLowerCase().includes(search) ||
+        (l.stack_trace || '').toLowerCase().includes(search) ||
+        new Date(l.timestamp).toLocaleString().toLowerCase().includes(search)
+      );
+    }
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:var(--text3);">No matching logs found.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(l => {
+      const rowBg = l.log_level === 'ERROR' ? '#fef2f2' : l.log_level === 'WARNING' ? '#fffbeb' : '#fff';
+      const levelCol = l.log_level === 'ERROR' ? '#dc2626' : l.log_level === 'WARNING' ? '#d97706' : '#16a34a';
+
+      let traceHtml = '';
+      if (l.stack_trace) {
+        traceHtml = `
+        <details style="cursor:pointer; color:var(--text3); font-family:monospace; font-size:10px;">
+          <summary>View Stack Trace</summary>
+          <pre style="margin-top:6px; background:#f1f5f9; padding:8px; border-radius:6px; overflow-x:auto; max-width:400px; text-align:left;">${escapeHTML(l.stack_trace)}</pre>
+        </details>
+      `;
+      } else {
+        traceHtml = '<span style="color:var(--text3); font-style:italic;">None</span>';
+      }
+
+      return `
+      <tr style="background:${rowBg}; border-bottom:1px solid var(--border);">
+        <td style="padding:10px; white-space:nowrap;">${new Date(l.timestamp).toLocaleString()}</td>
+        <td style="padding:10px; font-weight:700;">${escapeHTML(l.service_name)}</td>
+        <td style="padding:10px; font-weight:800; color:${levelCol}">${escapeHTML(l.log_level)}</td>
+        <td style="padding:10px; max-width:250px; word-break:break-word;">${escapeHTML(l.message)}</td>
+        <td style="padding:10px;">${traceHtml}</td>
+      </tr>
+    `;
+    }).join('');
+  }
+  window.renderSystemLogs = renderSystemLogs;
 
   function exportSystemLogsCSV() {
     const token = sessionStorage.getItem('adminToken') || '';

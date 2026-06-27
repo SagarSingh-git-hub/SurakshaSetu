@@ -24,6 +24,12 @@ if ($jobs_res) {
 
 $total = count($jobs);
 if ($total === 0) {
+    // Broadcast sync completed so the frontend doesn't hang
+    triggerPusherEvent('private-eco-channel', 'sync-completed', [
+        'success_count' => 0,
+        'failed_count' => 0,
+        'total' => 0
+    ]);
     exit();
 }
 
