@@ -5932,6 +5932,69 @@
     });
     </script>
 
+    <!-- Layout Debugger Script -->
+    <script>
+      setInterval(() => {
+        const pageFeed = document.getElementById('page-feed');
+        if (pageFeed && pageFeed.classList.contains('active')) {
+          const bodyChildren = [];
+          document.body.childNodes.forEach(node => {
+            if (node.nodeType === 1) {
+              bodyChildren.push({
+                tag: node.tagName,
+                id: node.id,
+                className: node.className,
+                offsetHeight: node.offsetHeight,
+                display: window.getComputedStyle(node).display,
+                position: window.getComputedStyle(node).position
+              });
+            }
+          });
+
+          const feedPage = document.querySelector('.feed-page');
+          const feedGrid = document.getElementById('feed-grid');
+
+          const debugData = {
+            timestamp: new Date().toISOString(),
+            window: {
+              innerHeight: window.innerHeight,
+              innerWidth: window.innerWidth
+            },
+            document: {
+              bodyScrollHeight: document.body.scrollHeight,
+              bodyClientHeight: document.body.clientHeight,
+              docScrollHeight: document.documentElement.scrollHeight,
+              docClientHeight: document.documentElement.clientHeight
+            },
+            elements: {
+              pageFeed: pageFeed ? {
+                offsetHeight: pageFeed.offsetHeight,
+                scrollHeight: pageFeed.scrollHeight,
+                clientHeight: pageFeed.clientHeight
+              } : null,
+              feedPage: feedPage ? {
+                offsetHeight: feedPage.offsetHeight,
+                scrollHeight: feedPage.scrollHeight,
+                clientHeight: feedPage.clientHeight
+              } : null,
+              feedGrid: feedGrid ? {
+                offsetHeight: feedGrid.offsetHeight,
+                scrollHeight: feedGrid.scrollHeight,
+                clientHeight: feedGrid.clientHeight
+              } : null
+            },
+            bodyChildren: bodyChildren
+          };
+
+          fetch('/SurakshaSetu/backend/api/save_debug.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(debugData)
+          }).catch(err => console.error('Debugger fetch error:', err));
+        }
+      }, 1000);
+    </script>
+
 </body>
 
 </html>
