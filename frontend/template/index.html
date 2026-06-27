@@ -5001,6 +5001,8 @@
   <script>
     // Sidebar View Routing
     function switchAdminView(viewName, linkElement) {
+      sessionStorage.setItem('lastAdminPage', viewName);
+      
       // Update hash silently in the URL to preserve route on refresh
       const queryParams = window.location.search;
       const targetHash = '#admin/' + viewName;

@@ -52,8 +52,6 @@ function initRealtime() {
         console.log(`Pusher State changed: ${states.previous} -> ${states.current}`);
         if (states.current === 'unavailable' || states.current === 'failed') {
             showToast('⚠️ Real-time connection lost. Attempting to reconnect...');
-        } else if (states.current === 'connected' && states.previous !== 'initialized') {
-            showToast('✅ Real-time connection restored.');
         }
     });
 

@@ -8,7 +8,6 @@ let pageHistory = [];
 // Determine initial page and sub-view synchronously
 const validPages = ['home', 'map', 'feed', 'admin', 'report'];
 let initialPage = 'home';
-let initialAdminSubView = 'overview';
 
 function getRouteFromHash() {
   const hash = window.location.hash.substring(1);
@@ -35,7 +34,6 @@ function getRouteFromHash() {
 function resolveInitialPage() {
   if (window.location.hash) {
     const route = getRouteFromHash();
-    initialAdminSubView = route.subView || 'overview';
     return route.page;
   }
   const pageParam = new URLSearchParams(window.location.search).get('page');
@@ -83,7 +81,8 @@ function showPage(id, pushHistory = true) {
   if (id === 'admin') {
     const currentHash = window.location.hash.substring(1);
     const parts = currentHash.split('/');
-    const subView = (parts[0] === 'admin' && parts[1]) ? parts[1] : (initialAdminSubView || 'overview');
+    let savedAdminPage = sessionStorage.getItem('lastAdminPage');
+    const subView = (parts[0] === 'admin' && parts[1]) ? parts[1] : (savedAdminPage || 'overview');
     routeHash = `admin/${subView}`;
   }
 
@@ -160,7 +159,8 @@ function showPage(id, pushHistory = true) {
       if (dashboard) dashboard.classList.add('active');
 
       const parts = window.location.hash.substring(1).split('/');
-      const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : 'overview';
+      let savedAdminPage = sessionStorage.getItem('lastAdminPage');
+      const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : (savedAdminPage || 'overview');
       renderAdminDashboard(sub);
     } else {
       mountAdminLogin();
