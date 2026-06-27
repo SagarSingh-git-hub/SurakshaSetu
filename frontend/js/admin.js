@@ -799,6 +799,7 @@ const chartInstances = {};
       return;
     }
 
+    // 2. Ensure only ONE delete request is sent by disabling double clicks (handled by modal logic)
     showConfirmModal(
       'Delete Report?',
       `Are you sure you want to permanently delete report ${id}? This action cannot be undone.`,
@@ -806,12 +807,14 @@ const chartInstances = {};
       'Cancel',
       async () => {
         try {
-          // 8. Debugging console logs
+          // 9. Add temporary debugging logs
           console.log("--- Delete Report Debugging ---");
-          console.log("Current admin token:", token.substring(0, 10) + '...[MASKED]');
-          console.log("Authorization header:", 'Bearer ' + token);
+          console.log("Delete button clicked");
+          console.log("DELETE request started");
           console.log("Request URL:", `${API_URL}/api/delete_report.php`);
           console.log("Report ID:", id);
+          console.log("Current admin token:", token.substring(0, 10) + '...[MASKED]');
+          console.log("Authorization header:", 'Bearer ' + token);
 
           const formData = new FormData();
           formData.append('report_id', id);
@@ -832,13 +835,18 @@ const chartInstances = {};
              return;
           }
 
+          if (!res.ok) {
+             throw new Error(`HTTP error! status: ${res.status}`);
+          }
+
           const data = await res.json();
           console.log("Response body:", data);
 
           if (data.success) {
-            // 7. UI Update: Only remove after successful deletion
+            console.log("Success handler executed");
             showToast(`✅ Report ${id} deleted`);
             
+            // 7. Optimistic UI: Only remove after successful server confirmation
             const tableRow = document.querySelector(`tr[data-report-id="${id}"]`);
             if (tableRow) tableRow.remove();
 
@@ -854,15 +862,21 @@ const chartInstances = {};
               switchMapPanel('list', document.querySelectorAll('.m-ptab')[0]);
             }
             
-            // Refresh state
-            await fetchReports(true);
-            if (adminLoggedIn) renderReportsList();
+            // Re-render dashboard stats to reflect the removed report without fetching all data again
+            if (adminLoggedIn) renderAdminDashboard();
+            
+            // 4. Stop executing further code after success. Exits immediately.
+            return;
           } else {
             showToast('❌ Failed to delete: ' + (data.message || 'Unknown error'));
           }
         } catch (e) {
+          // 8. Only show Network error if it actually failed or network exception occurred
+          console.log("Catch block executed");
           console.error("Delete error:", e);
           showToast('❌ Network error during deletion');
+        } finally {
+          console.log("Finally block executed");
         }
       }
     );
