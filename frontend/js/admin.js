@@ -2908,27 +2908,57 @@ const chartInstances = {};
     if (failedLoginsWidget) failedLoginsWidget.textContent = failedLoginsToday;
   }
 
+  let alertWidgetsDataCache = {
+    blockedIpCount: 0,
+    queueBacklog: 0,
+    lastFetched: 0
+  };
+
   async function renderAlertWidgets() {
     const container = document.getElementById('alert-dashboard-widgets');
     if (!container) return;
 
-    let blockedIpCount = 0;
-    try {
-      const res = await adminFetch(`${API_URL}/api/blocked_ips.php`);
-      const data = await res.json();
-      if (data.success) {
-        blockedIpCount = data.blocked_ips.filter(b => b.status === 'Blocked').length;
-      }
-    } catch (e) { }
+    // Show skeletons immediately if we don't have the data yet
+    if (alertWidgetsDataCache.lastFetched === 0 || alertState.isInitialFetch) {
+      container.innerHTML = `
+        <div class="stat-card"><div class="stat-card-val skeleton-text" style="width:40px;height:28px;margin-bottom:8px;background:#e2e8f0;border-radius:4px;animation:pulse 1.5s infinite;"></div><div class="stat-card-label">Active Security Alerts</div><div class="stat-card-trend">Lockouts & abuse</div></div>
+        <div class="stat-card"><div class="stat-card-val skeleton-text" style="width:40px;height:28px;margin-bottom:8px;background:#e2e8f0;border-radius:4px;animation:pulse 1.5s infinite;"></div><div class="stat-card-label">Active System Alerts</div><div class="stat-card-trend">Service health issues</div></div>
+        <div class="stat-card"><div class="stat-card-val skeleton-text" style="width:40px;height:28px;margin-bottom:8px;background:#e2e8f0;border-radius:4px;animation:pulse 1.5s infinite;"></div><div class="stat-card-label">Blocked IP Count</div><div class="stat-card-trend">Banned connections</div></div>
+        <div class="stat-card"><div class="stat-card-val skeleton-text" style="width:40px;height:28px;margin-bottom:8px;background:#e2e8f0;border-radius:4px;animation:pulse 1.5s infinite;"></div><div class="stat-card-label">Failed Logins Today</div><div class="stat-card-trend">Brute force monitor</div></div>
+        <div class="stat-card"><div class="stat-card-val skeleton-text" style="width:60px;height:28px;margin-bottom:8px;background:#e2e8f0;border-radius:4px;animation:pulse 1.5s infinite;"></div><div class="stat-card-label">System Health Score</div><div class="stat-card-trend">Real-time status</div></div>
+        <div class="stat-card"><div class="stat-card-val skeleton-text" style="width:40px;height:28px;margin-bottom:8px;background:#e2e8f0;border-radius:4px;animation:pulse 1.5s infinite;"></div><div class="stat-card-label">Queue Backlog Count</div><div class="stat-card-trend">Pending sync jobs</div></div>
+      `;
+      // Don't return here; we want to fetch the data and then replace the skeletons!
+    }
 
-    let queueBacklog = 0;
-    try {
-      const res = await adminFetch(`${API_URL}/api/sync_jobs.php`);
-      const data = await res.json();
-      if (data.success) {
-        queueBacklog = data.total_queue;
-      }
-    } catch (e) { }
+    const now = Date.now();
+    // Cache for 30 seconds
+    if (now - alertWidgetsDataCache.lastFetched > 30000) {
+      try {
+        const [blockedRes, syncRes] = await Promise.all([
+          adminFetch(`${API_URL}/api/blocked_ips.php`).catch(() => null),
+          adminFetch(`${API_URL}/api/sync_jobs.php`).catch(() => null)
+        ]);
+
+        if (blockedRes) {
+          const blockedData = await blockedRes.json().catch(() => null);
+          if (blockedData && blockedData.success) {
+            alertWidgetsDataCache.blockedIpCount = blockedData.blocked_ips.filter(b => b.status === 'Blocked').length;
+          }
+        }
+
+        if (syncRes) {
+          const syncData = await syncRes.json().catch(() => null);
+          if (syncData && syncData.success) {
+            alertWidgetsDataCache.queueBacklog = syncData.total_queue;
+          }
+        }
+        alertWidgetsDataCache.lastFetched = Date.now();
+      } catch (e) { }
+    }
+
+    const blockedIpCount = alertWidgetsDataCache.blockedIpCount;
+    const queueBacklog = alertWidgetsDataCache.queueBacklog;
 
     const activeSecurity = alertState.allAlerts.filter(a => a.alert_type === 'security' && (a.status === 'Active' || a.status === 'Investigating')).length;
     const activeSystem = alertState.allAlerts.filter(a => a.alert_type === 'system' && (a.status === 'Active' || a.status === 'Investigating')).length;
