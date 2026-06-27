@@ -5877,6 +5877,17 @@
       const sidebarNav = document.querySelector('.admin-sidebar-nav');
       
       if (sidebar && sidebarNav) {
+        // Collapse Sidebar on Tablet Size
+        const checkTabletCollapse = () => {
+          if (window.innerWidth >= 769 && window.innerWidth <= 1024) {
+            sidebar.classList.add('collapsed');
+          } else if (window.innerWidth > 1024) {
+            sidebar.classList.remove('collapsed');
+          }
+        };
+        checkTabletCollapse();
+        window.addEventListener('resize', checkTabletCollapse);
+
         // Top and Bottom Fade Masks
         const topFade = document.createElement('div');
         topFade.className = 'sidebar-scroll-fade top';

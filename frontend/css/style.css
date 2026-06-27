@@ -2193,3 +2193,23 @@ body:has(#page-map.active) {
 #admin-live-activity-feed::-webkit-scrollbar-thumb:hover {
   background-color: #16a34a;
 }
+
+/* Disable page-level scrolling on desktop and tablet for admin page */
+@media (min-width: 769px) {
+  #page-admin.active {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calc(100vh - 64px);
+    overflow: hidden;
+    z-index: 100;
+  }
+  #page-admin.active .admin-content-wrap {
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+    min-height: 0;
+  }
+}
+
