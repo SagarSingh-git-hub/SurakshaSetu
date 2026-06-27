@@ -11,13 +11,19 @@ function renderFeed(reports){
   const grid=document.getElementById('feed-grid');
   if(!grid)return;
   if(reports.length === 0) {
-    grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text3);">
+    grid.innerHTML = `<div class="feed-empty-state">
       <div style="font-size: 48px; margin-bottom: 16px;">🌿</div>
       <div style="font-size: 18px; font-weight: 700; font-family: 'Outfit', sans-serif; color: var(--text2);">No reports found</div>
       <p style="margin-top: 8px;">Try adjusting your search or filter criteria.</p>
     </div>`;
+    grid.style.display = 'flex';
+    grid.style.alignItems = 'center';
+    grid.style.justifyContent = 'center';
     return;
   }
+  grid.style.display = 'grid';
+  grid.style.alignItems = '';
+  grid.style.justifyContent = '';
   grid.innerHTML=reports.map(r=>{
     const col=CAT_COLORS[r.cat]||CAT_COLORS.Other;
     let img;
