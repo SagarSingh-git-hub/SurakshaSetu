@@ -319,7 +319,8 @@ textarea.form-input{resize:vertical;min-height:100px}
   z-index: 100;
   overflow: hidden;
 }
-.area-dropdown-menu {
+.area-dropdown-menu,
+#alert-history-container {
   max-height: 230px;
   overflow-y: auto !important;
   overscroll-behavior: contain;
@@ -327,20 +328,28 @@ textarea.form-input{resize:vertical;min-height:100px}
   scrollbar-width: thin;
   scrollbar-color: var(--g400) transparent;
 }
-.area-dropdown-menu::-webkit-scrollbar {
+#alert-history-container {
+  max-height: 500px;
+  padding-right: 4px;
+}
+.area-dropdown-menu::-webkit-scrollbar,
+#alert-history-container::-webkit-scrollbar {
   width: 14px;
 }
-.area-dropdown-menu::-webkit-scrollbar-track {
+.area-dropdown-menu::-webkit-scrollbar-track,
+#alert-history-container::-webkit-scrollbar-track {
   background: transparent;
   margin: 6px 0;
 }
-.area-dropdown-menu::-webkit-scrollbar-thumb {
+.area-dropdown-menu::-webkit-scrollbar-thumb,
+#alert-history-container::-webkit-scrollbar-thumb {
   background: var(--g400);
   border-radius: 10px;
   border: 4px solid #fff;
   background-clip: padding-box;
 }
-.area-dropdown-menu::-webkit-scrollbar-thumb:hover {
+.area-dropdown-menu::-webkit-scrollbar-thumb:hover,
+#alert-history-container::-webkit-scrollbar-thumb:hover {
   background: var(--g500);
   border: 4px solid #fff;
   background-clip: padding-box;

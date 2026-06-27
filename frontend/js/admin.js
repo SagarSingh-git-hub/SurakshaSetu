@@ -2326,11 +2326,12 @@ const chartInstances = {};
       container.innerHTML = activeAlerts.map(alert => renderAlertCard(alert)).join('');
     }
 
-    // Render history
+    // Render history (Limit to 6 most recent)
     if (alertState.actionHistory.length === 0) {
       historyContainer.innerHTML = '<div style="font-size:12px; color:var(--text3); text-align:center; padding:20px;">No alert history found.</div>';
     } else {
-      historyContainer.innerHTML = alertState.actionHistory.map(log => renderHistoryCard(log)).join('');
+      const latestHistory = alertState.actionHistory.slice(0, 6);
+      historyContainer.innerHTML = latestHistory.map(log => renderHistoryCard(log)).join('');
     }
   }
   window.filterAlerts = renderAlerts;
