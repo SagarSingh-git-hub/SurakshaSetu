@@ -297,7 +297,12 @@ function initCustomSelects() {
     });
 
     // Close on scroll
-    window.addEventListener('scroll', () => {
+    window.addEventListener('scroll', (e) => {
+      // If this is the cert-area dropdown, and the scroll is inside its options container, do not close.
+      if (select.id === 'cert-area' && (e.target === optionsContainer || optionsContainer.contains(e.target))) {
+        return;
+      }
+
       if (optionsContainer.classList.contains('show-dropdown')) {
         optionsContainer.classList.remove('show-dropdown');
         wrapper.classList.remove('open');

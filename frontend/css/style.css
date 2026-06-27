@@ -322,6 +322,7 @@ textarea.form-input{resize:vertical;min-height:100px}
 .area-dropdown-menu {
   max-height: 230px;
   overflow-y: auto !important;
+  overscroll-behavior: contain;
 }
 .custom-select-wrapper.open .custom-select-options,
 .custom-select-options.show-dropdown {
