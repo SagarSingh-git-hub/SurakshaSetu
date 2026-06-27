@@ -1661,6 +1661,45 @@
           align-items: center;
           gap: 12px;
         }
+        
+        /* --- Responsive Admin Login Layout --- */
+        @media (min-width: 1024px) {
+          html:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])),
+          body:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])) {
+            height: 100%;
+            overflow: hidden;
+          }
+          #page-admin.active:has(#admin-login-wrap:not([style*="display: none"])) .admin-page {
+            height: 100vh;
+            overflow: hidden;
+          }
+        }
+        
+        @media (max-width: 1023px) {
+          html:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])),
+          body:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])) {
+            overflow-y: auto;
+          }
+          #page-admin.active:has(#admin-login-wrap:not([style*="display: none"])) .admin-page {
+            min-height: 100vh;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            padding: 32px 24px;
+          }
+        }
+        
+        @media (max-width: 767px) {
+          html:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])),
+          body:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])) {
+            overflow-y: auto;
+          }
+          #page-admin.active:has(#admin-login-wrap:not([style*="display: none"])) .admin-page {
+            min-height: 100vh;
+            height: auto;
+            padding: 20px 16px 40px;
+          }
+        }
       </style>
 
       <!-- LEFT SIDE (65%) -->
@@ -5877,17 +5916,6 @@
       const sidebarNav = document.querySelector('.admin-sidebar-nav');
       
       if (sidebar && sidebarNav) {
-        // Collapse Sidebar on Tablet Size
-        const checkTabletCollapse = () => {
-          if (window.innerWidth >= 769 && window.innerWidth <= 1024) {
-            sidebar.classList.add('collapsed');
-          } else if (window.innerWidth > 1024) {
-            sidebar.classList.remove('collapsed');
-          }
-        };
-        checkTabletCollapse();
-        window.addEventListener('resize', checkTabletCollapse);
-
         // Top and Bottom Fade Masks
         const topFade = document.createElement('div');
         topFade.className = 'sidebar-scroll-fade top';
