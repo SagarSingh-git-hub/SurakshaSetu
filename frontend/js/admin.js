@@ -2454,7 +2454,7 @@ const chartInstances = {};
     try {
       // Optimistic UI Update for Dismissed
       if (status === 'Dismissed') {
-        const idx = alertState.activeAlerts.findIndex(a => a.id === alertId);
+        const idx = alertState.activeAlerts.findIndex(a => String(a.id) === String(alertId));
         if (idx !== -1) {
           const alert = alertState.activeAlerts[idx];
           alertState.activeAlerts.splice(idx, 1);
@@ -2708,9 +2708,13 @@ const chartInstances = {};
     showToast("Sync retry job scheduled in background.");
 
     try {
+      const formData = new FormData();
+      formData.append('action', 'retry');
+      formData.append('admin_user', sessionStorage.getItem('adminEmail') || 'Admin');
+
       const res = await adminFetch(`${API_URL}/api/sync_jobs.php`, {
         method: 'POST',
-        body: JSON.stringify({ action: 'retry' })
+        body: formData
       });
       const data = await res.json();
       
@@ -2810,7 +2814,15 @@ const chartInstances = {};
     const tbody = document.getElementById('logs-modal-tbody');
     if (!tbody) return;
 
-    let search = document.getElementById('log-search-input').value.toLowerCase().trim();
+    const searchInput = document.getElementById('log-search-input');
+    const searchClear = document.getElementById('log-search-clear');
+    
+    let search = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    
+    if (searchClear) {
+      searchClear.style.display = search.length > 0 ? 'block' : 'none';
+    }
+
     let filtered = currentSystemLogs;
 
     if (search) {

@@ -5442,7 +5442,7 @@
             <input type="text" id="log-search-input" oninput="renderSystemLogs()"
               placeholder="Search logs by message, service..."
               style="border:none; background:transparent; outline:none; font-size:13px; width:100%;">
-            <i class="ph-bold ph-x" style="color:var(--text3); font-size:14px; cursor:pointer;" onclick="document.getElementById('log-search-input').value=''; renderSystemLogs();" title="Clear Search"></i>
+            <i id="log-search-clear" class="ph-bold ph-x" style="color:var(--text3); font-size:14px; cursor:pointer; display:none;" onclick="document.getElementById('log-search-input').value=''; renderSystemLogs();" title="Clear Search"></i>
           </div>
           <button class="btn-primary"
             style="padding:8px 16px; border-radius:8px; font-size:13px; display:flex; align-items:center; gap:6px;"
