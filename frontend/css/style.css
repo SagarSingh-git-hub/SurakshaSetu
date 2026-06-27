@@ -243,13 +243,13 @@ body:has(#page-map.active) {
 /* ── FEED ── */
 #page-feed { display: none; padding-top: 64px; flex-direction: column; min-height: 100vh; }
 #page-feed.active { display: flex; }
-.feed-page{max-width:1100px;width:100%;margin:0 auto;padding:32px 24px;display:flex;flex-direction:column;flex:1}
+.feed-page{max-width:1100px;width:100%;margin:0 auto;padding:32px 24px;display:flex;flex-direction:column;flex:1;min-height:0}
 .feed-header{display:flex;align-items:center;gap:16px;margin-bottom:28px;flex-wrap:wrap}
 .feed-header h2{font-size:26px;font-weight:800;color:var(--text);flex:1}
 .search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--border);border-radius:99px;padding:8px 16px;min-width:220px}
 .search-box input{border:none;outline:none;font-size:13px;font-family:'Nunito',sans-serif;color:var(--text);background:transparent;width:100%}
 .search-box input::placeholder{color:var(--text3)}
-.feed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;flex:1;align-content:start}
+.feed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;flex:1;align-content:start;min-height:0}
 .feed-empty-state{text-align:center;color:var(--text3)}
 .feed-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow2);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:all .2s}
 .feed-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
