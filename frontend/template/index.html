@@ -2276,7 +2276,7 @@
                 style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif"
                 onclick="exportReportsExcel()">📄 Export Excel</button>
             </div>
-            <div style="overflow-x:auto; overflow-y:auto; max-height: 580px;">
+            <div style="overflow-x:auto;">
               <table class="admin-table" id="admin-table">
                 <thead>
                   <tr>
@@ -5033,6 +5033,15 @@
         document.body.style.overflow = 'hidden';
       } else {
         document.body.style.overflow = '';
+      }
+
+      const contentWrap = document.querySelector('.admin-content-wrap');
+      if (contentWrap) {
+        if (viewName === 'reports') {
+          contentWrap.style.minHeight = 'auto';
+        } else {
+          contentWrap.style.minHeight = '100vh';
+        }
       }
 
       if (viewName === 'overview') {
