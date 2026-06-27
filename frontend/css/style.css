@@ -319,6 +319,10 @@ textarea.form-input{resize:vertical;min-height:100px}
   z-index: 100;
   overflow: hidden;
 }
+.area-dropdown-menu {
+  max-height: 230px;
+  overflow-y: auto !important;
+}
 .custom-select-wrapper.open .custom-select-options,
 .custom-select-options.show-dropdown {
   opacity: 1;

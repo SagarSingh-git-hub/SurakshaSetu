@@ -224,6 +224,9 @@ function initCustomSelects() {
 
     const optionsContainer = document.createElement('div');
     optionsContainer.className = 'custom-select-options';
+    if (select.id === 'cert-area') {
+      optionsContainer.classList.add('area-dropdown-menu');
+    }
 
     Array.from(select.options).forEach((option, index) => {
       const optionDiv = document.createElement('div');
