@@ -103,7 +103,7 @@
   <!-- ══════════════════ HOME PAGE ══════════════════ -->
   <div class="page" id="page-home" style="position: relative; background: #000; padding-top: 0;">
     <div id="home-main-wrapper"
-      style="background: linear-gradient(to bottom, var(--bg) 0%, var(--bg) calc(100% - 200px), #0b0f19 calc(100% - 200px), #0b0f19 100%); position: relative; z-index: 20; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-bottom-left-radius: clamp(40px, 5vw, 60px); border-bottom-right-radius: clamp(40px, 5vw, 60px); padding-top: 64px; transform: translateZ(0);">
+      style="background: linear-gradient(to bottom, var(--bg) 0%, var(--bg) calc(100% - 200px), #0b0f19 calc(100% - 200px), #0b0f19 100%); position: relative; z-index: 20; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-bottom-left-radius: clamp(40px, 5vw, 60px); border-bottom-right-radius: clamp(40px, 5vw, 60px); overflow: hidden; padding-top: 64px; transform: translateZ(0);">
       <section class="hero">
         <div class="hero-bg-orb o1"></div>
         <div class="hero-bg-orb o2"></div>
@@ -1347,7 +1347,7 @@
   <div class="page" id="page-admin">
     <!-- Login -->
     <div id="admin-login-wrap"
-      class="relative min-h-[calc(100vh-64px)] flex flex-col lg:flex-row items-center justify-start lg:justify-center py-8 lg:py-0 font-['Poppins',sans-serif] bg-gradient-to-br from-[#F4F8F4] to-[#EDF5EF]">
+      class="relative min-h-[calc(100vh-64px)] lg:h-[calc(100vh-64px)] flex flex-col lg:flex-row items-center justify-start lg:justify-center py-8 lg:py-0 overflow-y-auto lg:overflow-hidden font-['Poppins',sans-serif] bg-gradient-to-br from-[#F4F8F4] to-[#EDF5EF]">
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
@@ -2022,7 +2022,7 @@
                 style="font-size:16px;font-weight:800;font-family:'Outfit',sans-serif;margin-bottom:20px;color:var(--text);">
                 Live Activity Feed</h3>
 
-              <div style="display:flex;flex-direction:column;gap:16px;"
+              <div style="display:flex;flex-direction:column;gap:16px;overflow-y:auto;max-height:260px;"
                 id="admin-live-activity-feed">
                 <!-- Dynamic Feed Items will be injected here -->
               </div>
@@ -2276,7 +2276,7 @@
                 style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif"
                 onclick="exportReportsExcel()">📄 Export Excel</button>
             </div>
-            <div style="overflow-x:auto;">
+            <div style="overflow-x:auto; overflow-y:auto; max-height: 580px;">
               <table class="admin-table" id="admin-table">
                 <thead>
                   <tr>
@@ -3063,7 +3063,7 @@
                 <i class="ph-duotone ph-clock-counter-clockwise"></i> Alert History
               </h3>
               <div id="alert-history-container"
-                style="display:flex;flex-direction:column;gap:12px;">
+                style="display:flex;flex-direction:column;gap:12px;max-height:500px;overflow-y:auto;">
                 <!-- Resolved/Dismissed alerts dynamically populated here -->
               </div>
             </div>
