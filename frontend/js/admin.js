@@ -786,54 +786,84 @@ const chartInstances = {};
   }
 
   async function deleteReport(id) {
+    // 1. Verify Authentication & Token Management
+    const token = sessionStorage.getItem('adminToken');
+    if (!token || token === 'undefined' || token === 'null') {
+      showToast('❌ Session expired. Please login again.');
+      // Handle logout flow
+      adminLoggedIn = false;
+      sessionStorage.removeItem('adminToken');
+      // Render login page if function exists or just reload
+      if (typeof handleLogout === 'function') handleLogout();
+      else window.location.reload();
+      return;
+    }
+
     showConfirmModal(
       'Delete Report?',
       `Are you sure you want to permanently delete report ${id}? This action cannot be undone.`,
       'Yes, Delete',
       'Cancel',
-      () => {
-        // 1. Optimistic UI: Immediately remove from DOM if we are on the Reports List
-        const tableRow = document.querySelector(`tr[data-report-id="${id}"]`);
-        if (tableRow) tableRow.remove();
+      async () => {
+        try {
+          // 8. Debugging console logs
+          console.log("--- Delete Report Debugging ---");
+          console.log("Current admin token:", token.substring(0, 10) + '...[MASKED]');
+          console.log("Authorization header:", 'Bearer ' + token);
+          console.log("Request URL:", `${API_URL}/api/delete_report.php`);
+          console.log("Report ID:", id);
 
-        // 2. Remove from state arrays immediately
-        if (window.ecoReports) {
-          window.ecoReports = window.ecoReports.filter(r => r.id !== id);
-        }
-        if (typeof currentReports !== 'undefined') {
-          currentReports = currentReports.filter(r => r.id !== id);
-        }
+          const formData = new FormData();
+          formData.append('report_id', id);
 
-        // 3. Show success toast instantly
-        showToast(`✅ Report ${id} deleted`);
-
-        // 4. Update Overview Dashboard Stats if it's visible, but don't redirect
-        if (adminLoggedIn && selectedMapIssue === id) {
-          selectedMapIssue = null;
-          switchMapPanel('list', document.querySelectorAll('.m-ptab')[0]);
-        }
-
-        // 5. Fire async API request in background
-        const formData = new FormData();
-        formData.append('report_id', id);
-  
-
-        adminFetch(`${API_URL}/api/delete_report.php`, {
-          method: 'POST',
-          body: formData
-        })
-          .then(res => res.json())
-          .then(data => {
-            if (!data.success) {
-              showToast('❌ Failed to delete: ' + data.message + ' (Reverting)');
-              fetchReports(true).then(() => { if (adminLoggedIn) renderReportsList(); });
-            }
-          })
-          .catch(e => {
-            console.error("Delete error", e);
-            showToast('❌ Network error during deletion (Reverting)');
-            fetchReports(true).then(() => { if (adminLoggedIn) renderReportsList(); });
+          const res = await adminFetch(`${API_URL}/api/delete_report.php`, {
+            method: 'POST',
+            body: formData
           });
+
+          console.log("Response status:", res.status);
+          
+          if (res.status === 401) {
+             console.log("Response body (401 intercepted):", "Unauthorized");
+             showToast('❌ Session expired. Please login again.');
+             adminLoggedIn = false;
+             sessionStorage.removeItem('adminToken');
+             window.location.reload();
+             return;
+          }
+
+          const data = await res.json();
+          console.log("Response body:", data);
+
+          if (data.success) {
+            // 7. UI Update: Only remove after successful deletion
+            showToast(`✅ Report ${id} deleted`);
+            
+            const tableRow = document.querySelector(`tr[data-report-id="${id}"]`);
+            if (tableRow) tableRow.remove();
+
+            if (window.ecoReports) {
+              window.ecoReports = window.ecoReports.filter(r => r.id !== id);
+            }
+            if (typeof currentReports !== 'undefined') {
+              currentReports = currentReports.filter(r => r.id !== id);
+            }
+
+            if (adminLoggedIn && selectedMapIssue === id) {
+              selectedMapIssue = null;
+              switchMapPanel('list', document.querySelectorAll('.m-ptab')[0]);
+            }
+            
+            // Refresh state
+            await fetchReports(true);
+            if (adminLoggedIn) renderReportsList();
+          } else {
+            showToast('❌ Failed to delete: ' + (data.message || 'Unknown error'));
+          }
+        } catch (e) {
+          console.error("Delete error:", e);
+          showToast('❌ Network error during deletion');
+        }
       }
     );
   }
