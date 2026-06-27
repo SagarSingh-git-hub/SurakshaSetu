@@ -138,3 +138,4 @@ function closeLightbox() {
     }, 300);
   }
 }
+setInterval(() => { if (document.getElementById('page-feed').classList.contains('active')) { console.log('--- LAYOUT CHECK ---'); console.log('body.scrollHeight:', document.body.scrollHeight); console.log('window.innerHeight:', window.innerHeight); console.log('doc.scrollHeight:', document.documentElement.scrollHeight); console.log('page-feed height:', document.getElementById('page-feed').offsetHeight); console.log('feed-page height:', document.querySelector('.feed-page').offsetHeight); console.log('feed-grid height:', document.getElementById('feed-grid').offsetHeight); } }, 1000);
