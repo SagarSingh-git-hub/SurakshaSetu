@@ -329,12 +329,16 @@ textarea.form-input{resize:vertical;min-height:100px}
   scrollbar-color: var(--g400) transparent;
 }
 #alert-history-container {
-  max-height: 500px;
+  max-height: 564px !important;
   padding-right: 4px;
 }
 .area-dropdown-menu::-webkit-scrollbar,
 #alert-history-container::-webkit-scrollbar {
   width: 14px;
+}
+.area-dropdown-menu::-webkit-scrollbar-button,
+#alert-history-container::-webkit-scrollbar-button {
+  display: none;
 }
 .area-dropdown-menu::-webkit-scrollbar-track,
 #alert-history-container::-webkit-scrollbar-track {
