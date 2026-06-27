@@ -2458,6 +2458,9 @@ const chartInstances = {};
         if (idx !== -1) {
           const alert = alertState.activeAlerts[idx];
           alertState.activeAlerts.splice(idx, 1);
+          
+          const allIdx = alertState.allAlerts.findIndex(a => String(a.id) === String(alertId));
+          if (allIdx !== -1) alertState.allAlerts[allIdx].status = 'Dismissed';
           alertState.actionHistory.unshift({
             title: alert.title,
             description: alert.description,
