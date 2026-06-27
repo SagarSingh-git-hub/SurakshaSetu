@@ -1275,7 +1275,7 @@
   </div>
 
   <!-- ══════════════════ MAP PAGE ══════════════════ -->
-  <div class="page" id="page-map">
+  <div class="page" id="page-map" style="overflow: hidden;">
     <div class="map-page-wrap">
       <div class="map-filters">
         <span
@@ -5036,13 +5036,8 @@
       }
 
       const contentWrap = document.querySelector('.admin-content-wrap');
-      if (contentWrap) {
-        if (viewName === 'reports') {
-          contentWrap.style.minHeight = '0px';
-        } else {
-          contentWrap.style.minHeight = '100vh';
-        }
-      }
+      // min-height is now managed strictly via CSS calc(100vh - 64px)
+
 
       if (viewName === 'overview') {
         title.innerText = 'Admin Dashboard';
