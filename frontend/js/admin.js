@@ -2450,7 +2450,7 @@ const chartInstances = {};
     });
   }
 
-  async function updateAlertStatus(alertId, status) {
+  window.updateAlertStatus = async function(alertId, status) {
     try {
       // Optimistic UI Update for Dismissed
       if (status === 'Dismissed') {
@@ -2684,7 +2684,7 @@ const chartInstances = {};
   // ── RETRY SYNC ACTION LOGIC ──
   let syncPollingInterval = null;
 
-  async function triggerSyncRetry() {
+  window.triggerSyncRetry = async function() {
     document.getElementById('sync-progress-bar').style.width = '0%';
     document.getElementById('sync-progress-text').textContent = '0% Completed';
     // Show modal immediately
@@ -2736,12 +2736,18 @@ const chartInstances = {};
       const res = await adminFetch(`${API_URL}/api/sync_jobs.php`);
       const data = await res.json();
       if (data.success) {
-        const total = data.total_queue;
-        const remaining = data.pending_count;
-        const success = data.success_count;
-        const failed = data.failed_count;
-        const processed = total - remaining;
-        const percent = total > 0 ? Math.round((processed / total) * 100) : (remaining === 0 ? 100 : 0);
+        const remaining = parseInt(data.pending_count) || 0;
+        const success = parseInt(data.success_count) || 0;
+        const failed = parseInt(data.failed_count) || 0;
+        const processed = success + failed;
+        const total = remaining + processed;
+        
+        let percent = 100;
+        if (total > 0) {
+           percent = Math.round((processed / total) * 100);
+        } else if (remaining > 0) {
+           percent = 0;
+        }
 
         const bar = document.getElementById('sync-progress-bar');
         const text = document.getElementById('sync-progress-text');
