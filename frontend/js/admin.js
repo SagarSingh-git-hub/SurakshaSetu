@@ -99,9 +99,9 @@ async function doAdminLogin() {
         initRealtime();
       }
 
-      const parts = window.location.hash.substring(1).split('/');
-      const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : 'overview';
-      renderAdminDashboard(sub);
+      // Always force Overview on fresh login
+      window.location.hash = '#admin/overview';
+      renderAdminDashboard('overview');
       showToast('Welcome back, Admin!');
     } else {
       const msg = data.message || data.error || 'Invalid credentials';
@@ -234,11 +234,14 @@ async function renderAdminDashboard(initialView = 'overview') {
       const inprog = currentReports.filter(r => r.status === 'In Progress').length;
       const high = currentReports.filter(r => r.priority === 'High').length;
 
-      let filtered = currentReports;
-      if (adminFilter.status) filtered = filtered.filter(r => r.status === adminFilter.status);
-      if (adminFilter.cat) filtered = filtered.filter(r => r.cat === adminFilter.cat);
-      renderAdminTable(filtered);
-      initCustomSelects(); // Initialize header selects
+      // Defer heavy table generation so the UI paints the overview instantly
+      setTimeout(() => {
+        let filtered = currentReports;
+        if (adminFilter.status) filtered = filtered.filter(r => r.status === adminFilter.status);
+        if (adminFilter.cat) filtered = filtered.filter(r => r.cat === adminFilter.cat);
+        if (typeof renderAdminTable === 'function') renderAdminTable(filtered);
+        if (typeof initCustomSelects === 'function') initCustomSelects(); // Initialize header selects
+      }, 50);
     }
 
 function renderDashboardOverview() {
