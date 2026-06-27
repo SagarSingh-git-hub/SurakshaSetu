@@ -2383,7 +2383,7 @@ const chartInstances = {};
           ? `<button class="action-btn" style="padding:8px 16px; background:#fff7ed; color:#f97316; border:1px solid #fdba74; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer;" onclick="triggerSyncRetry()">Retry Sync</button>`
           : `<button class="action-btn" style="padding:8px 16px; background:#f3f4f6; color:#9ca3af; border:1px solid #e5e7eb; border-radius:8px; font-size:13px; font-weight:700; cursor:not-allowed;" disabled title="Super Admin privileges required">Retry Sync</button>`}
       ${isSuperAdmin
-          ? `<button class="action-btn" style="padding:8px 16px; background:#fff; color:var(--text); border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:700; cursor:pointer;" onclick="openLogViewerModal('${escapeHTML(alert.source || alert.title || '')}')">View Logs</button>`
+          ? `<button class="action-btn" style="padding:8px 16px; background:#fff; color:var(--text); border:1px solid var(--border); border-radius:8px; font-size:13px; font-weight:700; cursor:pointer;" onclick="openLogViewerModal(${alert.id})">View Logs</button>`
           : `<button class="action-btn" style="padding:8px 16px; background:#f3f4f6; color:#9ca3af; border:1px solid #e5e7eb; border-radius:8px; font-size:13px; font-weight:700; cursor:not-allowed;" disabled title="Super Admin privileges required">View Logs</button>`}
     `;
     }
@@ -2682,30 +2682,41 @@ const chartInstances = {};
   }
 
   // ── RETRY SYNC ACTION LOGIC ──
+  let syncPollingInterval = null;
+
   async function triggerSyncRetry() {
     document.getElementById('sync-progress-bar').style.width = '0%';
     document.getElementById('sync-progress-text').textContent = '0% Completed';
-    document.getElementById('sync-progress-counts').textContent = 'Initialising...';
-    document.getElementById('sync-success-count').textContent = '0';
-    document.getElementById('sync-failed-count').textContent = '0';
-    document.getElementById('sync-remaining-count').textContent = 'Calculating...';
-
+    // Show modal immediately
     document.getElementById('sync-progress-modal-overlay').classList.add('open');
+    
+    const bar = document.getElementById('sync-progress-bar');
+    const text = document.getElementById('sync-progress-text');
+    const counts = document.getElementById('sync-progress-counts');
+    const successVal = document.getElementById('sync-success-count');
+    const failedVal = document.getElementById('sync-failed-count');
+    const remainingVal = document.getElementById('sync-remaining-count');
+
+    if (bar) bar.style.width = '0%';
+    if (text) text.textContent = '0% Completed';
+    if (counts) counts.textContent = '0 / 0 Processed';
+    if (successVal) successVal.textContent = '0';
+    if (failedVal) failedVal.textContent = '0';
+    if (remainingVal) remainingVal.textContent = 'Calculating...';
+
+    // Show toast immediately before backend processing
+    showToast("Sync retry job scheduled in background.");
 
     try {
-      const formData = new FormData();
-      formData.append('action', 'retry');
-      formData.append('admin_user', sessionStorage.getItem('adminEmail') || 'Admin');
-
       const res = await adminFetch(`${API_URL}/api/sync_jobs.php`, {
         method: 'POST',
-        body: formData
+        body: JSON.stringify({ action: 'retry' })
       });
       const data = await res.json();
+      
       if (res.status === 202 || data.success) {
-        showToast("Sync retry job scheduled in background.");
-        // We keep the progress modal open to let the Pusher socket stream progress
-        fetchAlerts(true);
+        if (syncPollingInterval) clearInterval(syncPollingInterval);
+        syncPollingInterval = setInterval(pollSyncProgress, 1000);
       } else {
         showToast(`Sync retry failed: ${data.message}`);
         document.getElementById('sync-progress-modal-overlay').classList.remove('open');
@@ -2716,11 +2727,54 @@ const chartInstances = {};
     }
   }
 
+  async function pollSyncProgress() {
+    try {
+      const res = await adminFetch(`${API_URL}/api/sync_jobs.php`);
+      const data = await res.json();
+      if (data.success) {
+        const total = data.total_queue;
+        const remaining = data.pending_count;
+        const success = data.success_count;
+        const failed = data.failed_count;
+        const processed = total - remaining;
+        const percent = total > 0 ? Math.round((processed / total) * 100) : (remaining === 0 ? 100 : 0);
+
+        const bar = document.getElementById('sync-progress-bar');
+        const text = document.getElementById('sync-progress-text');
+        const counts = document.getElementById('sync-progress-counts');
+        const successVal = document.getElementById('sync-success-count');
+        const failedVal = document.getElementById('sync-failed-count');
+        const remainingVal = document.getElementById('sync-remaining-count');
+
+        if (bar) bar.style.width = percent + '%';
+        if (text) text.textContent = percent + '% Completed';
+        if (counts) counts.textContent = `${processed} / ${total} Processed`;
+        if (successVal) successVal.textContent = success;
+        if (failedVal) failedVal.textContent = failed;
+        if (remainingVal) remainingVal.textContent = remaining;
+
+        if (remaining === 0 && total >= 0) {
+          clearInterval(syncPollingInterval);
+          syncPollingInterval = null;
+          showToast(`✅ Database Sync completed successfully.`);
+          setTimeout(() => {
+            document.getElementById('sync-progress-modal-overlay').classList.remove('open');
+            fetchAlerts(true);
+          }, 1500);
+        }
+      }
+    } catch (e) {
+      console.error("Polling error:", e);
+    }
+  }
+
   // ── SYSTEM LOG VIEWER MODAL LOGIC ──
   let currentSystemLogs = [];
+  let currentLogAlertId = null;
 
-  function openLogViewerModal(defaultSearch = '') {
-    document.getElementById('log-search-input').value = defaultSearch;
+  function openLogViewerModal(alertId = null) {
+    currentLogAlertId = alertId;
+    document.getElementById('log-search-input').value = '';
     document.getElementById('log-viewer-modal-overlay').classList.add('open');
     fetchSystemLogs();
   }
@@ -2731,11 +2785,13 @@ const chartInstances = {};
     if (!tbody) return;
 
     const range = document.getElementById('log-filter-time').value;
+    let url = `${API_URL}/api/system_logs.php?time_range=${range}`;
+    if (currentLogAlertId) url += `&alert_id=${currentLogAlertId}`;
 
     tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">⏳ Querying system logs...</td></tr>';
 
     try {
-      const res = await adminFetch(`${API_URL}/api/system_logs.php?time_range=${range}`);
+      const res = await adminFetch(url);
       const data = await res.json();
       if (data.success) {
         currentSystemLogs = data.logs || [];

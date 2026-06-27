@@ -15,12 +15,30 @@ if (!$export) {
 check_rate_limit('view_system_logs', 30, 60);
 
 $time_range = $_GET['time_range'] ?? 'all';
-$search = $_GET['search'] ?? '';
+$alert_id = $_GET['alert_id'] ?? null;
 
 // Build SQL query utilizing indexes
 $sql = "SELECT * FROM system_logs WHERE 1=1";
 $params = [];
 $types = '';
+
+if ($alert_id) {
+    $stmt = $conn->prepare("SELECT source, title FROM alerts WHERE id = ?");
+    $stmt->bind_param("i", $alert_id);
+    $stmt->execute();
+    $alert_res = $stmt->get_result();
+    if ($alert_res && $alert = $alert_res->fetch_assoc()) {
+        $source = $alert['source'] ?: $alert['title'];
+        $sql .= " AND (service_name LIKE ? OR message LIKE ?)";
+        $search_param = "%$source%";
+        $params[] = $search_param;
+        $params[] = $search_param;
+        $types .= 'ss';
+    }
+    $stmt->close();
+}
+
+$search = $_GET['search'] ?? '';
 
 if ($time_range === 'hour') {
     $sql .= " AND timestamp > NOW() - INTERVAL 1 HOUR";
