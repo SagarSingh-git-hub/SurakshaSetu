@@ -323,6 +323,27 @@ textarea.form-input{resize:vertical;min-height:100px}
   max-height: 230px;
   overflow-y: auto !important;
   overscroll-behavior: contain;
+  padding: 6px 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--g400) transparent;
+}
+.area-dropdown-menu::-webkit-scrollbar {
+  width: 14px;
+}
+.area-dropdown-menu::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 6px 0;
+}
+.area-dropdown-menu::-webkit-scrollbar-thumb {
+  background: var(--g400);
+  border-radius: 10px;
+  border: 4px solid #fff;
+  background-clip: padding-box;
+}
+.area-dropdown-menu::-webkit-scrollbar-thumb:hover {
+  background: var(--g500);
+  border: 4px solid #fff;
+  background-clip: padding-box;
 }
 .custom-select-wrapper.open .custom-select-options,
 .custom-select-options.show-dropdown {

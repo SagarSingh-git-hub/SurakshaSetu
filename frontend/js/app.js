@@ -237,16 +237,31 @@ function initCustomSelects() {
       optionDiv.addEventListener('click', () => {
         // Update native select
         select.selectedIndex = index;
-        // Dispatch events to trigger original handlers
-        select.dispatchEvent(new Event('change'));
-        select.dispatchEvent(new Event('input'));
 
-        // Update custom UI
-        triggerText.textContent = option.text;
-        optionsContainer.querySelectorAll('.custom-select-option').forEach(el => el.classList.remove('selected'));
-        optionDiv.classList.add('selected');
-        wrapper.classList.remove('open');
-        optionsContainer.classList.remove('show-dropdown');
+        if (select.id === 'cert-area') {
+          // 1. Update UI optimistically and instantly
+          triggerText.textContent = option.text;
+          optionsContainer.querySelectorAll('.custom-select-option').forEach(el => el.classList.remove('selected'));
+          optionDiv.classList.add('selected');
+          wrapper.classList.remove('open');
+          optionsContainer.classList.remove('show-dropdown');
+
+          // 2. Perform backend/heavy operations asynchronously
+          setTimeout(() => {
+            select.dispatchEvent(new Event('change'));
+            select.dispatchEvent(new Event('input'));
+          }, 0);
+        } else {
+          // Standard behavior for other selects
+          select.dispatchEvent(new Event('change'));
+          select.dispatchEvent(new Event('input'));
+
+          triggerText.textContent = option.text;
+          optionsContainer.querySelectorAll('.custom-select-option').forEach(el => el.classList.remove('selected'));
+          optionDiv.classList.add('selected');
+          wrapper.classList.remove('open');
+          optionsContainer.classList.remove('show-dropdown');
+        }
       });
       optionsContainer.appendChild(optionDiv);
     });

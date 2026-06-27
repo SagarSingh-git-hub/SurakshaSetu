@@ -212,27 +212,27 @@ function adminLogout() {
 }
 
 async function renderAdminDashboard(initialView = 'overview') {
-      // Only fetch if empty, otherwise use currentReports to prevent slow UI
-      if (currentReports.length === 0) await fetchReports();
+      // Execute fetches in parallel and do not block the initial UI render
+      if (currentReports.length === 0) fetchReports();
       if (!templatesFetched) fetchTemplates(); // preload templates for instant loading
       if (typeof fetchAlerts === 'function') fetchAlerts(); // load alert states for dashboard overview widgets
 
-      const total = currentReports.length;
-      const resolved = currentReports.filter(r => r.status === 'Resolved').length;
-      const inprog = currentReports.filter(r => r.status === 'In Progress').length;
-      const high = currentReports.filter(r => r.priority === 'High').length;
-
-      // LAZY LOADING CHARTS: We do NOT render overview, stat, analytics, and heatmaps here.
-      // Instead, they are called inside switchAdminView when their tab is displayed.
       const activeSubView = initialView || 'overview';
       const linkElement = document.querySelector(`.admin-subnav-link[onclick*="'${activeSubView}'"]`) ||
         document.querySelector(`.admin-subnav-link[onclick*="${activeSubView}"]`) ||
         document.querySelector(`.admin-nav-link[onclick*="'${activeSubView}'"]`) ||
         document.querySelector(`.admin-nav-link[onclick*="${activeSubView}"]`);
 
+      // Switch view instantly before data processing
       if (typeof switchAdminView === 'function') {
         switchAdminView(activeSubView, linkElement);
       }
+
+      // If reports are already loaded (or we render with 0 initially to show skeleton), update DOM
+      const total = currentReports.length;
+      const resolved = currentReports.filter(r => r.status === 'Resolved').length;
+      const inprog = currentReports.filter(r => r.status === 'In Progress').length;
+      const high = currentReports.filter(r => r.priority === 'High').length;
 
       let filtered = currentReports;
       if (adminFilter.status) filtered = filtered.filter(r => r.status === adminFilter.status);
