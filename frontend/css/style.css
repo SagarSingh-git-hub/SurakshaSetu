@@ -24,6 +24,12 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);over
 h1,h2,h3,h4,button,.nav-logo,.category-label{font-family:'Outfit',sans-serif}
 :focus-visible { outline: 2px solid var(--g400); outline-offset: 2px; }
 
+/* ── UTILITIES ── */
+.resize-animation-stopper * {
+  animation: none !important;
+  transition: none !important;
+}
+
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -47,7 +53,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;backdrop-filter:blur(20px) 
 .page.active{display:block}
 
 /* \u2500\u2500 HERO \u2500\u2500 */
-.hero{position:relative;min-height:clamp(600px, 100vh - 64px, 850px);display:flex;align-items:center;overflow:hidden;background:linear-gradient(-45deg, #f0fdf4, #e0f2fe, #fdf4ff, #dcfce7);background-size:400% 400%;animation:heroGradient 15s ease infinite;box-shadow:inset 0 -20px 40px rgba(0,0,0,0.02)}
+.hero{position:relative;min-height:clamp(600px, 100dvh - 64px, 850px);display:flex;align-items:center;overflow:hidden;background:linear-gradient(-45deg, #f0fdf4, #e0f2fe, #fdf4ff, #dcfce7);background-size:400% 400%;animation:heroGradient 15s ease infinite;box-shadow:inset 0 -20px 40px rgba(0,0,0,0.02)}
 @keyframes heroGradient {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }

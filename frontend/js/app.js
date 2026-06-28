@@ -638,7 +638,15 @@ function debounce(func, wait) {
   };
 }
 
-window.addEventListener('resize', debounce(updateNavIndicator, 150));
+let resizeTimer;
+window.addEventListener('resize', () => {
+  document.body.classList.add('resize-animation-stopper');
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    document.body.classList.remove('resize-animation-stopper');
+    updateNavIndicator();
+  }, 150);
+});
 
 // Listen for browser Back/Forward navigation
 window.addEventListener('popstate', (e) => {
