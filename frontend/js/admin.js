@@ -91,8 +91,17 @@ async function doAdminLogin() {
         localStorage.removeItem('savedAdminEmail');
         localStorage.removeItem('adminRememberMe');
       }
+      const dashboard = document.getElementById('admin-dashboard');
       document.getElementById('admin-login-wrap').style.display = 'none';
-      document.getElementById('admin-dashboard').classList.add('active');
+      if (dashboard) {
+        dashboard.classList.add('active');
+        dashboard.style.display = 'block';
+        
+        // Add smooth fade-in for premium feel
+        dashboard.style.opacity = '0';
+        dashboard.style.transition = 'opacity 0.4s ease';
+        setTimeout(() => dashboard.style.opacity = '1', 50);
+      }
 
       if (typeof initRealtime === 'function') {
         initRealtime();
