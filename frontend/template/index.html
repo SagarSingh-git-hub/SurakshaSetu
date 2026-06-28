@@ -1662,6 +1662,20 @@
           gap: 12px;
         }
         
+        /* --- Admin Login Scroll Lock --- */
+        html:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])),
+        body:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])) {
+          height: 100%;
+          overflow: hidden;
+        }
+
+        @media (max-width: 1023px) {
+          html:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])),
+          body:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])) {
+            height: auto;
+            overflow-y: auto;
+          }
+        }
       </style>
 
       <!-- LEFT SIDE (65%) -->
