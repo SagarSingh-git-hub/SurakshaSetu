@@ -157,7 +157,10 @@ function showPage(id, pushHistory = true) {
       const loginWrap = document.getElementById('admin-login-wrap');
       const dashboard = document.getElementById('admin-dashboard');
       if (loginWrap) loginWrap.style.display = 'none';
-      if (dashboard) dashboard.classList.add('active');
+      if (dashboard) {
+        dashboard.classList.add('active');
+        dashboard.style.display = 'block'; // Ensure it mounts
+      }
 
       const parts = window.location.hash.substring(1).split('/');
       let savedAdminPage = sessionStorage.getItem('lastAdminPage');
@@ -410,7 +413,10 @@ function resetAdminLoginUI() {
   if (loginWrap) loginWrap.style.display = '';
 
   const dashboard = document.getElementById('admin-dashboard');
-  if (dashboard) dashboard.classList.remove('active');
+  if (dashboard) {
+    dashboard.classList.remove('active');
+    dashboard.style.display = 'none'; // Force unmount completely
+  }
 
   targets.forEach(sel => {
     const el = document.querySelector(sel);

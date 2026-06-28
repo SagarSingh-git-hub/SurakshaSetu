@@ -203,7 +203,10 @@ function adminLogout() {
       const loginWrap = document.getElementById('admin-login-wrap');
       const dashboard = document.getElementById('admin-dashboard');
       if (loginWrap) loginWrap.style.display = '';
-      if (dashboard) dashboard.classList.remove('active');
+      if (dashboard) {
+        dashboard.classList.remove('active');
+        dashboard.style.display = 'none';
+      }
       showToast('Logged out successfully.');
       showPage('admin');
     }
@@ -211,6 +214,14 @@ function adminLogout() {
 }
 
 async function renderAdminDashboard(initialView = 'overview') {
+      const adminToken = sessionStorage.getItem('adminToken');
+      if (!adminToken) {
+        console.error('Security Check Failed: Unauthorized access to Admin Dashboard rendering.');
+        adminLoggedIn = false;
+        showPage('admin'); // This will trigger mountAdminLogin()
+        return;
+      }
+
       // Execute fetches in parallel and do not block the initial UI render
       if (currentReports.length === 0) fetchReports();
       if (!templatesFetched) fetchTemplates(); // preload templates for instant loading
