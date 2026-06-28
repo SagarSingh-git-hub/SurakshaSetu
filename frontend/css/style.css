@@ -453,7 +453,7 @@ body:has(#page-map.active) {
 
 /* ── ADMIN ── */
 .admin-page{display:none;max-width:100%;margin:0;padding:0;}
-.admin-page.active{display:block;}
+.admin-page.active{display:block;background:var(--bg);}
 .dashboard-header{display:flex;align-items:center;gap:16px;margin-bottom:28px;flex-wrap:wrap}
 .dashboard-header h2{font-size:24px;font-weight:800;flex:1}
 .stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:24px;margin-bottom:36px;perspective:1000px}
