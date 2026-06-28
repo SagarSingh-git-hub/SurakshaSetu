@@ -1347,7 +1347,7 @@
   <div class="page" id="page-admin">
     <!-- Login -->
     <div id="admin-login-wrap"
-      class="relative min-h-[calc(100dvh-64px)] w-full flex flex-col lg:flex-row items-center justify-center py-10 overflow-x-hidden font-['Poppins',sans-serif] bg-gradient-to-br from-[#F4F8F4] to-[#EDF5EF]">
+      class="relative min-h-[calc(100dvh-64px)] lg:h-[calc(100vh-64px)] w-full flex flex-col lg:flex-row items-center justify-center py-10 lg:py-0 overflow-x-hidden lg:overflow-y-auto font-['Poppins',sans-serif] bg-gradient-to-br from-[#F4F8F4] to-[#EDF5EF]">
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
@@ -1665,6 +1665,15 @@
         /* --- Admin Login Background Fallback --- */
         #page-admin.active {
           background: linear-gradient(to bottom right, #F4F8F4, #EDF5EF);
+        }
+
+        /* --- Admin Login Desktop Scroll Lock --- */
+        @media (min-width: 1024px) {
+          html:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])),
+          body:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])) {
+            height: 100%;
+            overflow: hidden;
+          }
         }
       </style>
 
