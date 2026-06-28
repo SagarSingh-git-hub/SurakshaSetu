@@ -79,7 +79,6 @@ async function doAdminLogin() {
 
     if (data.success) {
       adminLoggedIn = true;
-      sessionStorage.setItem('adminLoggedIn', 'true');
       sessionStorage.setItem('adminToken', data.token);
       sessionStorage.setItem('adminRole', data.role);
       sessionStorage.setItem('adminEmail', data.email);

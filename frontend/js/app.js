@@ -1,7 +1,7 @@
 // ── MAIN APPLICATION CONTROLLER & ROUTER ──
 let currentPage = '';
 let mapInit = false;
-let adminLoggedIn = sessionStorage.getItem('adminLoggedIn') === 'true';
+let adminLoggedIn = !!sessionStorage.getItem('adminToken');
 let currentAdminPassword = sessionStorage.getItem('adminPassword') || '';
 let pageHistory = [];
 
@@ -151,6 +151,7 @@ function showPage(id, pushHistory = true) {
     initReportForm();
   }
   if (id === 'admin') {
+    adminLoggedIn = !!sessionStorage.getItem('adminToken'); // Re-evaluate on route change
     if (adminLoggedIn) {
       if (typeof stopLoginAnimation === 'function') stopLoginAnimation();
       const loginWrap = document.getElementById('admin-login-wrap');
@@ -629,7 +630,15 @@ function initHomeScrollReveal(isRevisit = false) {
   window.sr.reveal('#page-home .testimonial-card', { interval: 120, origin: 'bottom' });
   requestAnimationFrame(() => window.sr.sync());
 }
-window.addEventListener('resize', updateNavIndicator);
+function debounce(func, wait) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, args), wait);
+  };
+}
+
+window.addEventListener('resize', debounce(updateNavIndicator, 150));
 
 // Listen for browser Back/Forward navigation
 window.addEventListener('popstate', (e) => {

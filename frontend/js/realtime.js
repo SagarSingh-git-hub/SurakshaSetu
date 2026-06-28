@@ -218,7 +218,8 @@ function destroyRealtime() {
 document.addEventListener('DOMContentLoaded', () => {
     // Wait slightly to ensure sessionStorage and config are loaded
     setTimeout(() => {
-        if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+        // Show browser notification if authorized
+        if (!!sessionStorage.getItem('adminToken')) {
             initRealtime();
         }
     }, 100);
