@@ -1347,7 +1347,7 @@
   <div class="page" id="page-admin">
     <!-- Login -->
     <div id="admin-login-wrap"
-      class="relative h-auto lg:h-[calc(100vh-64px)] flex flex-col lg:flex-row items-center justify-start lg:justify-center pt-8 pb-[max(32px,env(safe-area-inset-bottom))] lg:py-0 overflow-x-hidden overflow-y-auto lg:overflow-hidden font-['Poppins',sans-serif] bg-gradient-to-br from-[#F4F8F4] to-[#EDF5EF]">
+      class="relative min-h-[calc(100dvh-64px)] lg:h-[calc(100vh-64px)] flex flex-col lg:flex-row items-center justify-start lg:justify-center pt-8 pb-[max(32px,env(safe-area-inset-bottom))] lg:py-0 overflow-x-hidden overflow-y-auto lg:overflow-hidden font-['Poppins',sans-serif] bg-gradient-to-br from-[#F4F8F4] to-[#EDF5EF]">
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
@@ -1672,6 +1672,14 @@
         body:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])) {
           height: 100%;
           overflow: hidden;
+        }
+
+        @media (max-width: 1023px) {
+          html:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])),
+          body:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])) {
+            height: auto;
+            overflow-y: auto;
+          }
         }
       </style>
 
