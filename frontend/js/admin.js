@@ -1616,12 +1616,31 @@ const chartInstances = {};
 
     const availableWidth = container.clientWidth - 48;
     const availableHeight = container.clientHeight - 48; // Updated for 24px padding top/bottom
-    // Use standard certificate size (A4 Landscape 1123x794)
-    const baseWidth = 1123;
-    const baseHeight = 794;
+    
+    const iframe = document.getElementById('live-preview-frame');
+    const doc = iframe ? iframe.contentWindow.document : null;
+
+    // Reset transform to accurately read scrollWidth
+    wrapper.style.transform = 'none';
+    
+    // Set to standard A4 landscape initially to establish baseline
+    let baseWidth = 1123;
+    let baseHeight = 794;
+    wrapper.style.width = baseWidth + 'px';
+    wrapper.style.height = baseHeight + 'px';
+
+    if (doc && doc.documentElement) {
+        const sWidth = doc.documentElement.scrollWidth;
+        const sHeight = doc.documentElement.scrollHeight;
+        if (sWidth > 0 && sHeight > 0) {
+            baseWidth = Math.max(sWidth, baseWidth);
+            baseHeight = Math.max(sHeight, baseHeight);
+        }
+    }
+
     const scaleX = availableWidth / baseWidth;
     const scaleY = availableHeight / baseHeight;
-    const scale = Math.max(0.1, Math.min(scaleX, scaleY, 1));
+    const scale = Math.max(0.01, Math.min(scaleX, scaleY, 1));
 
     // Fix scaling overflow by using absolute positioning for the scaled element
     wrapper.style.transformOrigin = 'top left';
@@ -1669,7 +1688,7 @@ const chartInstances = {};
     const doc = iframe.contentWindow.document;
     doc.open();
     
-    const injectStyle = '<style>html, body {margin:0 !important;padding:0 !important;box-sizing:border-box !important;overflow:hidden !important;width:1123px !important;height:794px !important;} *{box-sizing:inherit;}</style>';
+    const injectStyle = '<style>html, body { margin:0; padding:0; } html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; } html, body { -ms-overflow-style: none; scrollbar-width: none; } *{box-sizing:border-box;}</style>';
     let finalHtml = content;
     
     if (finalHtml.includes('<body')) {
@@ -1684,6 +1703,9 @@ const chartInstances = {};
     
     doc.write(finalHtml);
     doc.close();
+
+    // Wait for the browser to parse and layout the new HTML before calculating the true size
+    setTimeout(updatePreviewScale, 50);
   }
 
   // Global click to close var dropdown
