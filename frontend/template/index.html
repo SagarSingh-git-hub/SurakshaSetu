@@ -3945,6 +3945,10 @@
             .help-page {
               display: none;
               flex: 1;
+              max-width: 1100px;
+              width: 100%;
+              margin: 0 auto;
+              padding: 0 0 60px;
             }
 
             .help-page.active {
@@ -3966,9 +3970,10 @@
             }
 
             .help-hero-band {
-              padding: 32px 28px 24px;
-              border-bottom: 1px solid #e2e8f0;
+              padding: 40px 32px 32px;
               background: #fff;
+              border-bottom: 1px solid #e2e8f0;
+              margin-bottom: 24px;
             }
 
             .help-hero-title {
@@ -4576,23 +4581,29 @@
             <div class="help-sidebar">
               <div class="help-sb-head">
                 <div class="help-sb-logo"><i class="ph-duotone ph-lifebuoy"
-                    style="font-size: 12px; margin-right: 4px;"></i>Help Center</div>
+                    style="font-size: 14px; margin-right: 4px;"></i>Help Center</div>
                 <div class="help-sb-sub">Suraksha Setu Support</div>
               </div>
-              <div class="help-nav-group">Support</div>
+              
+              <div class="help-nav-group">Dashboard</div>
               <div class="help-nav-item active" id="help-nav-home" onclick="switchHelpPage('home', this)"><i
-                  class="ph-duotone ph-house"></i>Home</div>
+                  class="ph-duotone ph-squares-four"></i>Overview</div>
+                  
+              <div class="help-nav-group">Knowledge Base</div>
               <div class="help-nav-item" id="help-nav-faq" onclick="switchHelpPage('faq', this)"><i
                   class="ph-duotone ph-question"></i>FAQs</div>
               <div class="help-nav-item" id="help-nav-guides" onclick="switchHelpPage('guides', this)"><i
-                  class="ph-duotone ph-book"></i>Guides & tutorials</div>
+                  class="ph-duotone ph-book-open"></i>Guides & Tutorials</div>
+                  
+              <div class="help-nav-group">Support Hub</div>
               <div class="help-nav-item" id="help-nav-contact" onclick="switchHelpPage('contact', this)"><i
-                  class="ph-duotone ph-headset"></i>Contact support</div>
+                  class="ph-duotone ph-headset"></i>Contact Support</div>
               <div class="help-nav-item" id="help-nav-tickets" onclick="switchHelpPage('tickets', this)"><i
-                  class="ph-duotone ph-ticket"></i>My tickets</div>
+                  class="ph-duotone ph-ticket"></i>My Tickets</div>
+                  
               <div class="help-nav-group">Quick links</div>
-              <div class="help-nav-item help-nav-sub"><i class="ph-duotone ph-map-pin"></i>Report an issue</div>
-              <div class="help-nav-item help-nav-sub"><i class="ph-duotone ph-shield"></i>Privacy policy</div>
+              <div class="help-nav-item help-nav-sub"><i class="ph-duotone ph-arrow-square-out"></i>Report an issue</div>
+              <div class="help-nav-item help-nav-sub"><i class="ph-duotone ph-shield-check"></i>Privacy policy</div>
               <div class="help-nav-item help-nav-sub"><i class="ph-duotone ph-file-text"></i>Terms of use</div>
             </div>
 
@@ -4600,16 +4611,38 @@
               <!-- HOME PAGE -->
               <div class="help-page active" id="help-page-home">
                 <div class="help-hero-band">
-                  <div class="help-hero-title"><i class="ph-duotone ph-lifebuoy"
-                      style="font-size: 20px; margin-right: 8px; color: #16a34a;"></i>How can we help you?</div>
-                  <div class="help-hero-sub">Search our knowledge base or browse categories below.</div>
-                  <div class="help-search-hero">
-                    <i class="ph-bold ph-magnifying-glass"></i>
-                    <input type="text" placeholder="Search: how to report an issue, map not loading...">
-                    <button onclick="showToast('Search functionality coming soon!')">Search</button>
+                  <div class="help-hero-title">How can we help you?</div>
+                  <div class="help-hero-sub">Search our knowledge base, guides, FAQs and support resources.</div>
+                  
+                  <div style="position: relative; max-width: 600px; width: 100%; margin-top: 24px;">
+                    <div class="help-search-hero" style="max-width: 100%;">
+                      <i class="ph-bold ph-magnifying-glass" style="font-size: 18px;"></i>
+                      <input type="text" id="helpGlobalSearch" placeholder="Search anything: 'Report Issue', 'Certificate'..." style="font-size: 15px; padding: 4px 0;" onkeyup="performHelpSearch(this.value)">
+                      <button onclick="performHelpSearch(document.getElementById('helpGlobalSearch').value)">Search</button>
+                    </div>
+                    <!-- Search Results Dropdown -->
+                    <div id="helpSearchResults" style="display: none; position: absolute; top: 110%; left: 0; right: 0; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 100; max-height: 400px; overflow-y: auto;">
+                    </div>
                   </div>
                 </div>
-                <div class="help-body-area">
+                
+                <div class="help-body-area" style="padding-top: 0;">
+                  
+                  <!-- QUICK ACTIONS -->
+                  <div style="display: flex; gap: 16px; margin-top: -24px; position: relative; z-index: 10; margin-bottom: 36px;">
+                    <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.02);" onclick="switchHelpPage('contact', document.getElementById('help-nav-contact'))" onmouseover="this.style.borderColor='#16a34a';this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='none';">
+                      <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(34, 197, 94, 0.1); color: #16a34a; display: flex; align-items: center; justify-content: center; font-size: 22px;"><i class="ph-duotone ph-chat-circle-text"></i></div>
+                      <div><div style="font-size: 15px; font-weight: 700; color: #1e293b;">Contact Support</div><div style="font-size: 12px; color: #64748b; margin-top: 2px;">Get help instantly</div></div>
+                    </div>
+                    <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.02);" onclick="switchHelpPage('tickets', document.getElementById('help-nav-tickets'))" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='none';">
+                      <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 22px;"><i class="ph-duotone ph-ticket"></i></div>
+                      <div><div style="font-size: 15px; font-weight: 700; color: #1e293b;">Track Ticket</div><div style="font-size: 12px; color: #64748b; margin-top: 2px;">Check issue status</div></div>
+                    </div>
+                    <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.02);" onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))" onmouseover="this.style.borderColor='#f59e0b';this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='none';">
+                      <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(245, 158, 11, 0.1); color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 22px;"><i class="ph-duotone ph-book-open"></i></div>
+                      <div><div style="font-size: 15px; font-weight: 700; color: #1e293b;">User Guides</div><div style="font-size: 12px; color: #64748b; margin-top: 2px;">Detailed manuals</div></div>
+                    </div>
+                  </div>
                   <div class="help-section-title"><i class="ph-duotone ph-squares-four"
                       style="font-size: 14px;"></i>Browse by category</div>
                   <div class="help-cat-grid">
@@ -4668,51 +4701,63 @@
                     </div>
                   </div>
 
-                  <div class="help-section-title"><i class="ph-duotone ph-flame"
-                      style="font-size: 14px; color: #f97316;"></i>Popular articles</div>
-                  <div class="help-faq-list">
-                    <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                      <div class="help-faq-q"><span class="help-faq-q-text">How do I submit a new environmental issue
-                          report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                      <div class="help-faq-a">
-                        <div class="help-faq-a-inner">Click the green "+ Report Issue" button in the top navigation
-                          bar.
-                          Fill in the category (Garbage, Plastic, Water, etc.), add a photo or description, pin the
-                          location on the map, and set the priority. Your report will be visible on the live map
-                          immediately after submission.</div>
-                      </div>
-                    </div>
-                    <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                      <div class="help-faq-q"><span class="help-faq-q-text">Why is my report showing "In Progress" but
-                          no update from the team?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                      <div class="help-faq-a">
-                        <div class="help-faq-a-inner">In Progress means a moderator or field officer has picked up the
-                          issue for review. Resolution timelines depend on priority — High priority issues are
-                          typically
-                          resolved within 24–48 hours. You can track status in real time from your report detail page.
+                  <div style="display: flex; gap: 24px;">
+                    <div style="flex: 2;">
+                      <div class="help-section-title"><i class="ph-duotone ph-flame"
+                          style="font-size: 14px; color: #f97316;"></i>Popular Articles</div>
+                      <div class="help-faq-list">
+                        <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                          <div class="help-faq-q"><span class="help-faq-q-text">How do I submit a new environmental issue
+                              report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                          <div class="help-faq-a">
+                            <div class="help-faq-a-inner">Click the green "+ Report Issue" button in the top navigation
+                              bar. Fill in the category (Garbage, Plastic, Water, etc.), add a photo or description, pin the
+                              location on the map, and set the priority.</div>
+                          </div>
+                        </div>
+                        <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                          <div class="help-faq-q"><span class="help-faq-q-text">Why is my report showing "In Progress" but
+                              no update from the team?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                          <div class="help-faq-a">
+                            <div class="help-faq-a-inner">In Progress means a moderator or field officer has picked up the
+                              issue for review. Resolution timelines depend on priority. You can track status in real time from your report detail page.</div>
+                          </div>
+                        </div>
+                        <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                          <div class="help-faq-q"><span class="help-faq-q-text">How do I access the Admin
+                              Dashboard?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                          <div class="help-faq-a">
+                            <div class="help-faq-a-inner">The Admin Dashboard is accessible only to Super Admins and
+                              Moderators. Click the "Admin" button in the top navigation.</div>
+                          </div>
+                        </div>
+                        <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                          <div class="help-faq-q"><span class="help-faq-q-text">How do I download or share a community
+                              certificate?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                          <div class="help-faq-a">
+                            <div class="help-faq-a-inner">Go to Certificate → View Certificates, find your certificate by
+                              name or ID, and click the download icon to save as PDF. Each certificate includes a QR code
+                              for instant verification.</div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                      <div class="help-faq-q"><span class="help-faq-q-text">How do I access the Admin
-                          Dashboard?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                      <div class="help-faq-a">
-                        <div class="help-faq-a-inner">The Admin Dashboard is accessible only to Super Admins and
-                          Moderators. Click the "Admin" button in the top navigation. If the button is not visible,
-                          your
-                          account does not have the required role. Contact your Super Admin to request elevated
-                          access.
+                    
+                    <div style="flex: 1;">
+                      <div class="help-section-title"><i class="ph-duotone ph-clock-counter-clockwise"
+                          style="font-size: 14px; color: #8b5cf6;"></i>Recently Updated</div>
+                      <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
+                        <div style="margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid #f1f5f9; cursor: pointer;" onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))" onmouseover="this.querySelector('.ru-title').style.color='#16a34a'" onmouseout="this.querySelector('.ru-title').style.color='#1e293b'">
+                          <div class="ru-title" style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 4px; transition: 0.2s;">New Certificate Templates</div>
+                          <div style="font-size: 11px; color: #64748b;">Added 2 days ago in Guides</div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                      <div class="help-faq-q"><span class="help-faq-q-text">How do I download or share a community
-                          certificate?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                      <div class="help-faq-a">
-                        <div class="help-faq-a-inner">Go to Certificate → View Certificates, find your certificate by
-                          name or ID, and click the download icon to save as PDF. Each certificate includes a QR code
-                          for instant verification. You can also resend it to your registered email from the same
-                          page.
+                        <div style="margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid #f1f5f9; cursor: pointer;" onclick="switchHelpPage('faq', document.getElementById('help-nav-faq'))" onmouseover="this.querySelector('.ru-title').style.color='#16a34a'" onmouseout="this.querySelector('.ru-title').style.color='#1e293b'">
+                          <div class="ru-title" style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 4px; transition: 0.2s;">Live Map Filtering Fix</div>
+                          <div style="font-size: 11px; color: #64748b;">Updated 4 days ago in FAQs</div>
+                        </div>
+                        <div style="cursor: pointer;" onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))" onmouseover="this.querySelector('.ru-title').style.color='#16a34a'" onmouseout="this.querySelector('.ru-title').style.color='#1e293b'">
+                          <div class="ru-title" style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 4px; transition: 0.2s;">Managing Role Permissions</div>
+                          <div style="font-size: 11px; color: #64748b;">Updated last week in Admin</div>
                         </div>
                       </div>
                     </div>
@@ -4760,34 +4805,103 @@
 
                   <div class="help-subpage active" id="faq-reporting">
                     <div class="help-faq-list">
+                      <!-- 1 -->
                       <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">How do I submit a new environmental
-                            issue
-                            report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-q"><span class="help-faq-q-text">How do I submit a new environmental issue report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
                         <div class="help-faq-a">
-                          <div class="help-faq-a-inner">Click "+ Report Issue" in the top nav. Select the issue
-                            category, upload a photo, pin your location on the map, write a brief description, and set
-                            the priority level. Submit — your report goes live on the map instantly and notifies the
-                            nearest moderator.</div>
+                          <div class="help-faq-a-inner">
+                            Click "+ Report Issue" in the top nav. Select the issue category, upload a photo, pin your location on the map, write a brief description, and set the priority level. Submit — your report goes live on the map instantly and notifies the nearest moderator.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
+                      <!-- 2 -->
                       <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">Can I report anonymously?</span><i
-                            class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-q"><span class="help-faq-q-text">Can I report anonymously?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
                         <div class="help-faq-a">
-                          <div class="help-faq-a-inner">Anonymous reporting can be enabled or disabled by the platform
-                            admin. If enabled, your name won't appear on the public report, but your account is still
-                            logged internally for moderation purposes.</div>
+                          <div class="help-faq-a-inner">
+                            Anonymous reporting can be enabled or disabled by the platform admin. If enabled, your name won't appear on the public report, but your account is still logged internally for moderation purposes.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
+                      <!-- 3 -->
                       <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">How do I track the status of my
-                            report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-q"><span class="help-faq-q-text">How do I track the status of my report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
                         <div class="help-faq-a">
-                          <div class="help-faq-a-inner">Go to the Community Feed or your profile and find your
-                            submitted
-                            report. Status updates (Open → In Progress → Resolved) are shown in real time. You'll also
-                            receive email notifications if email alerts are enabled in your settings.</div>
+                          <div class="help-faq-a-inner">
+                            Go to the Community Feed or your profile and find your submitted report. Status updates (Open → In Progress → Resolved) are shown in real time. You'll also receive email notifications if email alerts are enabled in your settings.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- 4 -->
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">What do the different status labels mean?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">
+                            <strong>Open:</strong> Report is submitted but not yet reviewed.<br>
+                            <strong>In Progress:</strong> A team member is actively working on resolving the issue.<br>
+                            <strong>Resolved:</strong> The issue has been fixed and verified.<br>
+                            <strong>Rejected:</strong> The report was deemed invalid or a duplicate.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- 5 -->
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">How can I add more photos to an existing report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">
+                            Currently, you cannot edit a report after submission. However, you can leave a comment on your report thread and attach additional context or links there. Our moderators review all comments associated with active reports.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- 6 -->
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">Why was my report rejected?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">
+                            Reports are typically rejected if they are duplicates of an existing issue, lack sufficient evidence/clear photos, or fall outside the jurisdiction of Suraksha Setu. You will receive an automated email detailing the specific reason for rejection.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -4795,25 +4909,68 @@
 
                   <div class="help-subpage" id="faq-admin">
                     <div class="help-faq-list">
+                      <!-- 7 -->
                       <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">How do I export all reports as CSV or
-                            PDF?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-q"><span class="help-faq-q-text">How do I export all reports as CSV or PDF?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
                         <div class="help-faq-a">
-                          <div class="help-faq-a-inner">In the Admin Dashboard, click "Export PDF" for the current
-                            view,
-                            or go to Reports & Exports → select date range and filters → click "Export CSV". Data
-                            includes all report fields: ID, category, location, priority, status, and timestamps.
+                          <div class="help-faq-a-inner">
+                            In the Admin Dashboard, click "Export PDF" for the current view, or go to Reports & Exports → select date range and filters → click "Export CSV". Data includes all report fields: ID, category, location, priority, status, and timestamps.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
+                      <!-- 8 -->
                       <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">How do I change a report's
-                            priority?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-q"><span class="help-faq-q-text">How do I change a report's priority?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
                         <div class="help-faq-a">
-                          <div class="help-faq-a-inner">Open the report from the Live Map or Active Issues list, click
-                            the priority badge, and select the new level (Low / Medium / High). Moderators can
-                            escalate;
-                            only Super Admins can downgrade High priority issues.</div>
+                          <div class="help-faq-a-inner">
+                            Open the report from the Live Map or Active Issues list, click the priority badge, and select the new level (Low / Medium / High). Moderators can escalate; only Super Admins can downgrade High priority issues.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- 9 -->
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">Can I assign an issue to a specific field officer?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">
+                            Yes. In the report detail modal, click the "Assignee" dropdown. You can search by name or role. Assigning an officer triggers an immediate push notification to their device.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- 10 -->
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">How do I approve or reject a pending report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">
+                            Under the "Pending Approval" queue, you'll see reports awaiting moderation. Review the image and description, then click the green "Approve" (moves to Live Map) or red "Reject" (removes from public view) button.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -4821,13 +4978,68 @@
 
                   <div class="help-subpage" id="faq-account">
                     <div class="help-faq-list">
+                      <!-- 11 -->
                       <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">How do I reset my password?</span><i
-                            class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-q"><span class="help-faq-q-text">How do I reset my password?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
                         <div class="help-faq-a">
-                          <div class="help-faq-a-inner">Click "Forgot password" on the login page and enter your
-                            registered email. You'll receive a password reset link valid for 1 hour. If you don't
-                            receive the email within 5 minutes, check your spam folder or contact support.</div>
+                          <div class="help-faq-a-inner">
+                            Click "Forgot password" on the login page and enter your registered email. You'll receive a password reset link valid for 1 hour. If you don't receive the email within 5 minutes, check your spam folder or contact support.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- 12 -->
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">How do I change my email address?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">
+                            Navigate to Settings → Account. Enter your new email address and click "Update". You will be sent an OTP to the new email address to verify ownership before the change takes effect.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- 13 -->
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">Can I have multiple admin roles assigned to my account?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">
+                            Roles are strictly hierarchical. An account can only hold one primary role (e.g., Moderator OR Super Admin), but higher roles automatically inherit all permissions of lower roles.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- 14 -->
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">How do I delete my account?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">
+                            Go to Settings → Danger Zone. You must type "DELETE" and confirm with your password to permanently delete your account. This action cannot be undone, and your historical reports will be anonymized.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -4835,15 +5047,36 @@
 
                   <div class="help-subpage" id="faq-tech">
                     <div class="help-faq-list">
+                      <!-- 15 -->
                       <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">The live map is not loading — what
-                            should
-                            I do?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-q"><span class="help-faq-q-text">The live map is not loading — what should I do?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
                         <div class="help-faq-a">
-                          <div class="help-faq-a-inner">First, check your internet connection. The live map uses
-                            OpenStreetMap/Leaflet which requires an active connection. Try a hard refresh
-                            (Ctrl+Shift+R). If the issue persists, clear browser cache or try a different browser.
-                            Contact support if the problem continues.</div>
+                          <div class="help-faq-a-inner">
+                            First, check your internet connection. The live map uses OpenStreetMap/Leaflet which requires an active connection. Try a hard refresh (Ctrl+Shift+R). If the issue persists, clear your browser cache or try a different browser.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- 16 -->
+                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+                        <div class="help-faq-q"><span class="help-faq-q-text">I am not receiving email notifications.</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                        <div class="help-faq-a">
+                          <div class="help-faq-a-inner">
+                            Check your spam or junk folder and whitelist "no-reply@surakshasetu.in". Verify that your notification preferences in Settings → Account are turned ON for "Status Updates". If you still do not receive emails, contact technical support.
+                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                              <div style="display: flex; gap: 8px;">
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -4852,31 +5085,67 @@
               </div>
 
               <!-- GUIDES PAGE -->
-              <div class="help-page" id="help-page-guides">
-                <div class="help-hero-band">
-                  <div class="help-hero-title">Guides & tutorials</div>
-                  <div class="help-hero-sub">Step-by-step walkthroughs for every feature of Suraksha Setu.</div>
+              <div class="help-page" id="help-page-guides" style="padding-bottom: 0;">
+                <div class="help-hero-band" style="margin-bottom: 0; border-bottom: 1px solid #e2e8f0; padding: 32px 32px 24px;">
+                  <div class="help-hero-title">Guides & Tutorials</div>
+                  <div class="help-hero-sub" style="margin-bottom: 0;">Step-by-step walkthroughs to master the platform.</div>
                 </div>
-                <div class="help-body-area">
-                  <div class="help-section-title"><i class="ph-duotone ph-star"
-                      style="font-size: 14px; color: #f59e0b;"></i>Getting started</div>
-                  <div class="help-guide-grid" style="margin-bottom: 20px;">
-                    <div class="help-guide-card">
-                      <div class="help-guide-icon" style="background: rgba(34, 197, 94, 0.1);"><i
-                          class="ph-duotone ph-play" style="color: #16a34a; font-size: 16px;"></i></div>
-                      <div>
-                        <div class="help-guide-title">Platform overview — 5 min tour</div>
-                        <div class="help-guide-meta">For new users · Video guide</div><span class="help-guide-badge"
-                          style="background: rgba(34, 197, 94, 0.1); color: #16a34a;">Beginner</span>
+                
+                <div style="display: flex; flex: 1; min-height: 600px;">
+                  <!-- Docs Sidebar -->
+                  <div style="width: 240px; border-right: 1px solid #e2e8f0; padding: 24px 16px; background: #f8fafc; overflow-y: auto;">
+                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">Getting Started</div>
+                    <div style="padding: 8px 12px; font-size: 13px; font-weight: 600; color: #16a34a; background: rgba(34, 197, 94, 0.1); border-radius: 6px; cursor: pointer; margin-bottom: 4px;">Platform Overview</div>
+                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 16px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Create Account</div>
+                    
+                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">Reporting</div>
+                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Submit a Report</div>
+                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Issue Workflow</div>
+                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 16px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Live Map Filters</div>
+                    
+                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">Admin Tasks</div>
+                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Manage Users</div>
+                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Certificates</div>
+                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Notifications</div>
+                  </div>
+                  
+                  <!-- Docs Content -->
+                  <div style="flex: 1; padding: 32px 48px; background: #fff; max-width: 800px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                      <div style="display: flex; gap: 8px; font-size: 12px; color: #64748b; font-weight: 500;">
+                        <span>Help Center</span>
+                        <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i>
+                        <span>Guides</span>
+                        <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i>
+                        <span style="color: #16a34a;">Getting Started</span>
                       </div>
+                      <div style="font-size: 12px; color: #64748b;"><i class="ph-duotone ph-clock" style="margin-right: 4px;"></i>5 min read</div>
                     </div>
-                    <div class="help-guide-card">
-                      <div class="help-guide-icon" style="background: rgba(96, 165, 250, 0.1);"><i
-                          class="ph-duotone ph-map-pin" style="color: #3b82f6; font-size: 16px;"></i></div>
-                      <div>
-                        <div class="help-guide-title">How to submit your first report</div>
-                        <div class="help-guide-meta">Step-by-step · 3 min read</div><span class="help-guide-badge"
-                          style="background: rgba(96, 165, 250, 0.1); color: #3b82f6;">Beginner</span>
+                    
+                    <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">Platform Overview</h1>
+                    <div style="font-size: 15px; color: #475569; margin-bottom: 32px; line-height: 1.6;">Welcome to Suraksha Setu! This guide will give you a quick 5-minute tour of the main features so you can start contributing to your community immediately.</div>
+                    
+                    <div style="width: 100%; height: 360px; background: #0f172a; border-radius: 12px; margin-bottom: 32px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                      <i class="ph-fill ph-play-circle" style="font-size: 64px; color: #fff; cursor: pointer; opacity: 0.9; transition: 0.2s;" onmouseover="this.style.opacity='1';this.style.transform='scale(1.05)'" onmouseout="this.style.opacity='0.9';this.style.transform='scale(1)'" onclick="showToast('Video playback initializing...')"></i>
+                      <div style="position: absolute; bottom: 16px; left: 16px; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 500;">▶ Suraksha Setu Masterclass (5:20)</div>
+                    </div>
+                    
+                    <h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">1. The Live Map</h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">The Live Map is the core of our platform. It clusters environmental issues submitted by users into interactive zones. You can filter the map by category (e.g., Plastic Waste, Water Leak) or by status (Open, In Progress, Resolved).</p>
+                    
+                    <div style="padding: 16px; border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.05); border-radius: 0 8px 8px 0; margin-bottom: 32px;">
+                      <div style="font-weight: 600; color: #1e293b; font-size: 14px; margin-bottom: 4px;">Pro Tip: Heatmaps</div>
+                      <div style="font-size: 13px; color: #475569; line-height: 1.5;">Zoom out on the Live Map to automatically trigger the Heatmap view. This is incredibly useful for admins trying to identify high-density problem areas in the city.</div>
+                    </div>
+                    
+                    <h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">2. Community Feed</h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Switch to the Community Feed if you prefer a social media style timeline. You can upvote (Support) issues reported by others. Issues with high upvotes are automatically escalated in priority for the admin team.</p>
+                    
+                    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                      <div style="font-size: 13px; color: #64748b; font-weight: 500;">Was this guide helpful?</div>
+                      <div style="display: flex; gap: 8px;">
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👍 Yes, thanks</button>
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👎 No, needs work</button>
                       </div>
                     </div>
                   </div>
@@ -4885,130 +5154,207 @@
 
               <!-- CONTACT PAGE -->
               <div class="help-page" id="help-page-contact">
-                <div class="help-hero-band">
-                  <div class="help-hero-title">Contact support</div>
-                  <div class="help-hero-sub">Reach out via live chat, email, or submit a support ticket.</div>
+                <div class="help-hero-band" style="padding-bottom: 24px;">
+                  <div class="help-hero-title">Contact Support</div>
+                  <div class="help-hero-sub">Our team is available to assist you across multiple channels.</div>
                 </div>
+                
                 <div class="help-body-area">
-                  <div class="help-contact-grid" style="margin-bottom: 24px;">
-                    <div class="help-contact-card">
-                      <div class="help-contact-icon" style="background: rgba(34, 197, 94, 0.1);"><i
-                          class="ph-duotone ph-chat-circle-text" style="color: #16a34a; font-size: 20px;"></i></div>
-                      <div class="help-contact-title">Live chat</div>
-                      <div class="help-contact-desc">Chat with our support team in real time. Available Mon–Sat
-                        9AM–6PM
-                        IST.</div>
-                      <div class="help-contact-btn"
-                        style="background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3); color: #16a34a;">
-                        <i class="ph-bold ph-arrow-right" style="font-size: 13px;"></i>Start chat
+                  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px;">
+                    <!-- Email -->
+                    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.3s;" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='#3b82f6'" onmouseout="this.style.transform='translateY(0)';this.style.borderColor='#e2e8f0'">
+                      <div style="width: 56px; height: 56px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 16px;">
+                        <i class="ph-duotone ph-envelope"></i>
                       </div>
+                      <div style="font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Email Support</div>
+                      <div style="font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 16px; height: 60px;">Best for detailed queries and technical assistance. Response in ~2 hours.</div>
+                      <a href="mailto:support@surakshasetu.in" style="display: block; width: 100%; padding: 10px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; color: #3b82f6; font-size: 13px; font-weight: 600; text-decoration: none; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">Write to Us</a>
                     </div>
-                    <div class="help-contact-card">
-                      <div class="help-contact-icon" style="background: rgba(96, 165, 250, 0.1);"><i
-                          class="ph-duotone ph-envelope" style="color: #3b82f6; font-size: 20px;"></i></div>
-                      <div class="help-contact-title">Email support</div>
-                      <div class="help-contact-desc">Send a detailed query. Response within 2 business hours on
-                        working
-                        days.</div>
-                      <div class="help-contact-btn"
-                        style="background: rgba(96, 165, 250, 0.1); border-color: rgba(96, 165, 250, 0.3); color: #3b82f6;">
-                        <i class="ph-duotone ph-envelope" style="font-size: 13px;"></i>support@surakshasetu.in
+                    
+                    <!-- WhatsApp -->
+                    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.3s;" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='#22c55e'" onmouseout="this.style.transform='translateY(0)';this.style.borderColor='#e2e8f0'">
+                      <div style="width: 56px; height: 56px; background: rgba(34, 197, 94, 0.1); color: #22c55e; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 16px;">
+                        <i class="ph-duotone ph-whatsapp-logo"></i>
                       </div>
+                      <div style="font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">WhatsApp</div>
+                      <div style="font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 16px; height: 60px;">Quick responses for urgent environmental issues. Available 24/7.</div>
+                      <a href="https://wa.me/911234567890" target="_blank" style="display: block; width: 100%; padding: 10px; background: #22c55e; border: 1px solid #22c55e; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 600; text-decoration: none; transition: 0.2s;" onmouseover="this.style.background='#16a34a'" onmouseout="this.style.background='#22c55e'">Message on WhatsApp</a>
                     </div>
-                    <div class="help-contact-card">
-                      <div class="help-contact-icon" style="background: rgba(251, 191, 36, 0.1);"><i
-                          class="ph-duotone ph-ticket" style="color: #f59e0b; font-size: 20px;"></i></div>
-                      <div class="help-contact-title">Submit a ticket</div>
-                      <div class="help-contact-desc">For complex issues or bugs. Track progress in the My Tickets
-                        section.</div>
-                      <div class="help-contact-btn"
-                        style="background: rgba(251, 191, 36, 0.1); border-color: rgba(251, 191, 36, 0.3); color: #f59e0b;"
-                        onclick="switchHelpPage('tickets', document.getElementById('help-nav-tickets'))"><i
-                          class="ph-bold ph-plus" style="font-size: 13px;"></i>New ticket</div>
+                    
+                    <!-- Ticket -->
+                    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.3s;" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='#f59e0b'" onmouseout="this.style.transform='translateY(0)';this.style.borderColor='#e2e8f0'">
+                      <div style="width: 56px; height: 56px; background: rgba(245, 158, 11, 0.1); color: #f59e0b; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 16px;">
+                        <i class="ph-duotone ph-ticket"></i>
+                      </div>
+                      <div style="font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Support Ticket</div>
+                      <div style="font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 16px; height: 60px;">Submit a formal ticket to track the progress of complex issues.</div>
+                      <button onclick="switchHelpPage('tickets', document.getElementById('help-nav-tickets'))" style="display: block; width: 100%; padding: 10px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; color: #f59e0b; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">Open a Ticket</button>
                     </div>
                   </div>
 
-                  <div class="help-section-title"><i class="ph-duotone ph-chat-circle-text"
-                      style="font-size: 14px;"></i>Live chat</div>
-                  <div class="help-chat-widget">
+                  <div class="help-section-title"><i class="ph-duotone ph-chat-circle-text" style="font-size: 14px;"></i>Live Chat Support</div>
+                  <div class="help-chat-widget" style="margin-top: 16px;">
                     <div class="help-chat-header">
-                      <div class="help-chat-avatar"><i class="ph-duotone ph-robot"
-                          style="color: #16a34a; font-size: 18px;"></i></div>
+                      <div class="help-chat-avatar"><i class="ph-duotone ph-robot" style="color: #16a34a; font-size: 18px;"></i></div>
                       <div>
-                        <div style="font-size: 13px; font-weight: 500; color: #1e293b;">Suraksha Setu Support</div>
+                        <div style="font-size: 13px; font-weight: 500; color: #1e293b;">Suraksha Setu Bot</div>
                         <div class="help-chat-status">
-                          <div class="help-pulse-dot"></div>Online · Avg. response 4 min
+                          <div class="help-pulse-dot"></div>Online · Avg. response 1 sec
                         </div>
                       </div>
                     </div>
                     <div class="help-chat-messages" id="helpChatMessages">
                       <div class="help-msg help-msg-bot">
-                        <div class="help-msg-avatar-sm" style="background: rgba(34, 197, 94, 0.1); color: #16a34a;">SS
-                        </div>
+                        <div class="help-msg-avatar-sm" style="background: rgba(34, 197, 94, 0.1); color: #16a34a;">SS</div>
                         <div>
-                          <div class="help-msg-bubble">Namaste! I'm the Suraksha Setu support bot. How can I help you
-                            today? You can ask about reporting issues, admin features, certificates, or anything else.
-                          </div>
+                          <div class="help-msg-bubble">Namaste! I'm the Suraksha Setu support bot. How can I help you today? You can ask about reporting issues, admin features, certificates, or anything else.</div>
                           <div class="help-msg-time">Just now</div>
                         </div>
                       </div>
                     </div>
                     <div class="help-chat-input-row">
-                      <input class="help-chat-input" id="helpChatInput" type="text" placeholder="Type your question..."
-                        onkeydown="if(event.key==='Enter')sendHelpChat()">
-                      <button class="help-chat-send" onclick="sendHelpChat()"><i class="ph-bold ph-paper-plane-right"
-                          style="font-size: 15px;"></i></button>
+                      <input class="help-chat-input" id="helpChatInput" type="text" placeholder="Type your question..." onkeydown="if(event.key==='Enter')sendHelpChat()">
+                      <button class="help-chat-send" onclick="sendHelpChat()"><i class="ph-bold ph-paper-plane-right" style="font-size: 15px;"></i></button>
                     </div>
                   </div>
                 </div>
               </div>
 
               <!-- TICKETS PAGE -->
-              <div class="help-page" id="help-page-tickets">
-                <div class="help-hero-band">
-                  <div class="help-hero-title">My support tickets</div>
+              <div class="help-page" id="help-page-tickets" style="padding-bottom: 0;">
+                <div class="help-hero-band" style="padding-bottom: 24px;">
+                  <div class="help-hero-title">My Support Tickets</div>
                   <div class="help-hero-sub">Track the status of your submitted support requests.</div>
                 </div>
                 <div class="help-body-area">
-                  <div class="help-glass-card">
-                    <table class="help-ticket-table">
+                  <!-- Ticket Filters -->
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 16px;">
+                    <div style="position: relative; width: 300px;">
+                      <i class="ph-bold ph-magnifying-glass" style="position: absolute; left: 12px; top: 10px; color: #94a3b8; font-size: 14px;"></i>
+                      <input type="text" placeholder="Search tickets..." style="width: 100%; height: 34px; padding-left: 36px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; color: #1e293b; background: #fff;">
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                      <select style="height: 34px; padding: 0 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; color: #475569; background: #fff; cursor: pointer;">
+                        <option>Status: All</option>
+                        <option>Status: Open</option>
+                        <option>Status: In Progress</option>
+                        <option>Status: Resolved</option>
+                      </select>
+                      <button style="height: 34px; padding: 0 16px; background: #16a34a; border: none; border-radius: 6px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#15803d'" onclick="showToast('Creating new ticket...')"><i class="ph-bold ph-plus" style="margin-right: 6px;"></i>New Ticket</button>
+                    </div>
+                  </div>
+
+                  <!-- Ticket Table -->
+                  <div class="help-glass-card" style="padding: 0; overflow: hidden; border-radius: 8px;">
+                    <table class="help-ticket-table" style="width: 100%; border-collapse: collapse;">
                       <thead>
-                        <tr>
-                          <th>Ticket ID</th>
-                          <th>Subject</th>
-                          <th>Category</th>
-                          <th>Priority</th>
-                          <th>Created</th>
-                          <th>Status</th>
+                        <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                          <th style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">Ticket ID</th>
+                          <th style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">Subject</th>
+                          <th style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">Category</th>
+                          <th style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">Priority</th>
+                          <th style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">Created</th>
+                          <th style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">Status</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td style="font-family: 'Outfit', sans-serif; font-size: 11px; color: #64748b;">TKT-0018
+                        <!-- Row 1 -->
+                        <tr style="border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'" onclick="document.getElementById('ticketModal').style.display='flex'">
+                          <td style="padding: 16px; font-family: 'Outfit', sans-serif; font-size: 12px; color: #64748b; font-weight: 500;">TKT-0018</td>
+                          <td style="padding: 16px;">
+                            <div style="font-size: 13px; font-weight: 600; color: #1e293b;">Live map not loading on mobile Chrome</div>
+                            <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Last updated 2 hours ago</div>
                           </td>
-                          <td>
-                            <div style="font-size: 13px; font-weight: 500; color: #1e293b;">Live map not loading on
-                              mobile Chrome</div>
-                          </td>
-                          <td><span class="help-badge help-badge-low">Technical</span></td>
-                          <td><span class="help-badge help-badge-med">Medium</span></td>
-                          <td style="font-size: 11px; color: #64748b;">Jun 5, 2024</td>
-                          <td><span class="help-badge help-badge-progress">In progress</span></td>
+                          <td style="padding: 16px;"><span class="help-badge help-badge-low">Technical</span></td>
+                          <td style="padding: 16px;"><span class="help-badge help-badge-med">Medium</span></td>
+                          <td style="padding: 16px; font-size: 12px; color: #64748b;">Jun 5, 2024</td>
+                          <td style="padding: 16px;"><span class="help-badge help-badge-progress">In progress</span></td>
                         </tr>
-                        <tr>
-                          <td style="font-family: 'Outfit', sans-serif; font-size: 11px; color: #64748b;">TKT-0015
+                        <!-- Row 2 -->
+                        <tr style="border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">
+                          <td style="padding: 16px; font-family: 'Outfit', sans-serif; font-size: 12px; color: #64748b; font-weight: 500;">TKT-0015</td>
+                          <td style="padding: 16px;">
+                            <div style="font-size: 13px; font-weight: 600; color: #1e293b;">Certificate PDF not downloading in Safari</div>
+                            <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Last updated May 29, 2024</div>
                           </td>
-                          <td>
-                            <div style="font-size: 13px; font-weight: 500; color: #1e293b;">Certificate PDF not
-                              downloading in Safari</div>
+                          <td style="padding: 16px;"><span class="help-badge help-badge-low">Certificate</span></td>
+                          <td style="padding: 16px;"><span class="help-badge help-badge-high">High</span></td>
+                          <td style="padding: 16px; font-size: 12px; color: #64748b;">May 28, 2024</td>
+                          <td style="padding: 16px;"><span class="help-badge help-badge-open">Open</span></td>
+                        </tr>
+                        <!-- Row 3 -->
+                        <tr style="cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">
+                          <td style="padding: 16px; font-family: 'Outfit', sans-serif; font-size: 12px; color: #64748b; font-weight: 500;">TKT-0004</td>
+                          <td style="padding: 16px;">
+                            <div style="font-size: 13px; font-weight: 600; color: #1e293b;">How to add a secondary admin?</div>
+                            <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Last updated Apr 12, 2024</div>
                           </td>
-                          <td><span class="help-badge help-badge-low">Certificate</span></td>
-                          <td><span class="help-badge help-badge-high">High</span></td>
-                          <td style="font-size: 11px; color: #64748b;">May 28, 2024</td>
-                          <td><span class="help-badge help-badge-open">Open</span></td>
+                          <td style="padding: 16px;"><span class="help-badge help-badge-low" style="background: rgba(148, 163, 184, 0.1); color: #64748b;">Account</span></td>
+                          <td style="padding: 16px;"><span class="help-badge help-badge-low">Low</span></td>
+                          <td style="padding: 16px; font-size: 12px; color: #64748b;">Apr 10, 2024</td>
+                          <td style="padding: 16px;"><span class="help-badge" style="background: rgba(34, 197, 94, 0.1); color: #16a34a;">Resolved</span></td>
                         </tr>
                       </tbody>
                     </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- TICKET MODAL (Static) -->
+              <div id="ticketModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+                <div style="background: #fff; width: 600px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column;">
+                  <!-- Header -->
+                  <div style="padding: 24px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; background: #f8fafc;">
+                    <div>
+                      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                        <span style="font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase;">TKT-0018</span>
+                        <span class="help-badge help-badge-progress">In progress</span>
+                        <span class="help-badge help-badge-med">Medium Priority</span>
+                      </div>
+                      <div style="font-size: 18px; font-weight: 700; color: #0f172a;">Live map not loading on mobile Chrome</div>
+                    </div>
+                    <i class="ph-bold ph-x" style="font-size: 20px; color: #64748b; cursor: pointer;" onclick="document.getElementById('ticketModal').style.display='none'"></i>
+                  </div>
+                  <!-- Body -->
+                  <div style="padding: 24px; max-height: 400px; overflow-y: auto; background: #fff;">
+                    <!-- Original Request -->
+                    <div style="display: flex; gap: 16px; margin-bottom: 24px;">
+                      <div style="width: 32px; height: 32px; background: #3b82f6; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; flex-shrink: 0;">You</div>
+                      <div>
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                          <div style="font-size: 13px; font-weight: 700; color: #1e293b;">You</div>
+                          <div style="font-size: 11px; color: #94a3b8;">Jun 5, 2024 at 10:23 AM</div>
+                        </div>
+                        <div style="font-size: 13px; color: #475569; line-height: 1.6;">
+                          Hi team,<br><br>
+                          I'm trying to view the live map on my Android phone using Google Chrome, but the map tiles aren't loading. It just shows a grey grid. It works perfectly on my desktop.<br><br>
+                          Browser: Chrome 114.0.0.0<br>
+                          OS: Android 13<br><br>
+                          Thanks!
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Support Reply -->
+                    <div style="display: flex; gap: 16px;">
+                      <div style="width: 32px; height: 32px; background: #16a34a; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;"><i class="ph-duotone ph-robot"></i></div>
+                      <div>
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                          <div style="font-size: 13px; font-weight: 700; color: #1e293b;">Support Team</div>
+                          <div style="font-size: 11px; color: #94a3b8;">Jun 5, 2024 at 2:45 PM</div>
+                        </div>
+                        <div style="font-size: 13px; color: #475569; line-height: 1.6;">
+                          Hello,<br><br>
+                          Thank you for reporting this issue. We are currently investigating a potential CORS issue with our map tile provider specifically affecting mobile browsers. Our engineering team is looking into it.<br><br>
+                          We will update this ticket as soon as we have a fix deployed.<br><br>
+                          Regards,<br>Suraksha Setu Support
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Reply Footer -->
+                  <div style="padding: 16px 24px; border-top: 1px solid #e2e8f0; background: #f8fafc; display: flex; gap: 12px;">
+                    <input type="text" placeholder="Type a reply..." style="flex: 1; height: 38px; padding-left: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
+                    <button style="height: 38px; padding: 0 16px; background: #3b82f6; color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#2563eb'" onclick="showToast('Reply submitted.')">Reply</button>
                   </div>
                 </div>
               </div>
@@ -5212,6 +5558,70 @@
     }
 
     // Help Center Functions
+    const helpSearchData = [
+      { type: 'faq', title: 'How do I submit a new environmental issue report?', desc: 'Learn how to use the Report Issue button to add a marker on the map.' },
+      { type: 'faq', title: 'Why is my report showing "In Progress"?', desc: 'Understanding report statuses and resolution timelines.' },
+      { type: 'faq', title: 'How do I access the Admin Dashboard?', desc: 'Admin roles and permissions required for dashboard access.' },
+      { type: 'faq', title: 'How do I download or share a community certificate?', desc: 'Saving your certificate as a PDF or sharing it.' },
+      { type: 'guide', title: 'Platform overview — 5 min tour', desc: 'Video guide for new users.' },
+      { type: 'guide', title: 'How to submit your first report', desc: 'Step-by-step 3 min read.' },
+      { type: 'category', title: 'Reporting issues', desc: 'How to submit, track, and update environmental reports.' },
+      { type: 'category', title: 'Admin dashboard', desc: 'Navigating the admin panel, managing reports and exports.' },
+      { type: 'category', title: 'Team & accounts', desc: 'User roles, inviting members, permissions, and profile management.' },
+      { type: 'category', title: 'Certificates', desc: 'Issuing, downloading, and verifying community certificates.' },
+      { type: 'category', title: 'Live map & zones', desc: 'Understanding issue markers, filters, zone clustering.' },
+      { type: 'category', title: 'Troubleshooting', desc: 'Login issues, map not loading, notifications not working.' }
+    ];
+
+    function performHelpSearch(query) {
+      const resultsDiv = document.getElementById('helpSearchResults');
+      if (!query || query.trim().length < 2) {
+        resultsDiv.style.display = 'none';
+        return;
+      }
+      
+      const lowerQ = query.toLowerCase();
+      const matches = helpSearchData.filter(item => 
+        item.title.toLowerCase().includes(lowerQ) || 
+        item.desc.toLowerCase().includes(lowerQ)
+      );
+
+      if (matches.length === 0) {
+        resultsDiv.innerHTML = `<div style="padding: 16px; color: #64748b; font-size: 13px; text-align: center;">No results found for "${query}"</div>`;
+      } else {
+        let html = '';
+        matches.forEach(m => {
+          let icon = 'ph-file-text';
+          let color = '#64748b';
+          let action = '';
+          
+          if (m.type === 'faq') { icon = 'ph-question'; color = '#3b82f6'; action = "switchHelpPage('faq', document.getElementById('help-nav-faq'))"; }
+          if (m.type === 'guide') { icon = 'ph-book-open'; color = '#f59e0b'; action = "switchHelpPage('guides', document.getElementById('help-nav-guides'))"; }
+          if (m.type === 'category') { icon = 'ph-squares-four'; color = '#16a34a'; action = "switchHelpPage('home', document.getElementById('help-nav-home'))"; }
+          
+          html += `
+            <div style="padding: 12px 16px; border-bottom: 1px solid #f1f5f9; cursor: pointer; display: flex; gap: 12px; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'" onclick="${action}; document.getElementById('helpSearchResults').style.display='none';">
+              <div style="font-size: 18px; color: ${color}; margin-top: 2px;"><i class="ph-duotone ${icon}"></i></div>
+              <div>
+                <div style="font-size: 13px; font-weight: 600; color: #1e293b;">${m.title}</div>
+                <div style="font-size: 11px; color: #64748b; margin-top: 2px;">${m.desc}</div>
+              </div>
+            </div>
+          `;
+        });
+        resultsDiv.innerHTML = html;
+      }
+      resultsDiv.style.display = 'block';
+    }
+    
+    document.addEventListener('click', (e) => {
+      const searchHero = document.querySelector('.help-search-hero');
+      const resultsDiv = document.getElementById('helpSearchResults');
+      if (resultsDiv && searchHero && !searchHero.contains(e.target) && !resultsDiv.contains(e.target)) {
+        resultsDiv.style.display = 'none';
+      }
+    });
+
     function switchHelpPage(name, navEl) {
       document.querySelectorAll('.help-nav-item').forEach(n => n.classList.remove('active'));
       if (navEl) navEl.classList.add('active');
