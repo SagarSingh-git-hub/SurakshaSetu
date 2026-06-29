@@ -5184,7 +5184,7 @@
       messages.scrollTop = messages.scrollHeight;
 
       try {
-        const response = await fetch('/backend/api/chat.php', {
+        const response = await fetch(`${API_URL}/api/chat.php`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ messages: helpChatHistory })

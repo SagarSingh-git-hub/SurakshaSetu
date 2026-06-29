@@ -3342,7 +3342,7 @@ const chartInstances = {};
     if (!tableBody) return;
 
     try {
-      const res = await fetch('/backend/api/tickets.php');
+      const res = await fetch(`${API_URL}/api/tickets.php`);
       const data = await res.json();
 
       if (data.success && data.tickets) {
@@ -3401,7 +3401,7 @@ const chartInstances = {};
     btn.innerHTML = 'Submitting...';
 
     try {
-      const res = await fetch('/backend/api/tickets.php', {
+      const res = await fetch(`${API_URL}/api/tickets.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
