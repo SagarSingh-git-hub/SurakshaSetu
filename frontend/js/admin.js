@@ -1609,9 +1609,13 @@ const chartInstances = {};
     const container = scaleContainer.parentElement;
 
     container.style.overflow = 'hidden';
+    container.style.display = 'flex';
+    container.style.alignItems = 'center';
+    container.style.justifyContent = 'center';
+    container.style.padding = '24px'; // Override the hardcoded 80px top padding for true centering
 
     const availableWidth = container.clientWidth - 48;
-    const availableHeight = container.clientHeight - 100;
+    const availableHeight = container.clientHeight - 48; // Updated for 24px padding top/bottom
     // Use standard certificate size (A4 Landscape 1123x794)
     const baseWidth = 1123;
     const baseHeight = 794;
@@ -1619,9 +1623,18 @@ const chartInstances = {};
     const scaleY = availableHeight / baseHeight;
     const scale = Math.max(0.1, Math.min(scaleX, scaleY, 1));
 
+    // Fix scaling overflow by using absolute positioning for the scaled element
+    wrapper.style.transformOrigin = 'top left';
     wrapper.style.transform = `scale(${scale})`;
+    wrapper.style.position = 'absolute';
+    wrapper.style.top = '0';
+    wrapper.style.left = '0';
+
     scaleContainer.style.width = `${baseWidth * scale}px`;
     scaleContainer.style.height = `${baseHeight * scale}px`;
+    scaleContainer.style.position = 'relative';
+    scaleContainer.style.margin = '0'; // Flexbox handles centering now
+
     wrapper.style.width = `${baseWidth}px`;
     wrapper.style.height = `${baseHeight}px`;
   }
@@ -1701,8 +1714,9 @@ const chartInstances = {};
       return showToast('⚠️ Template content cannot be empty');
     }
 
-    // Disable button to prevent duplicates
+    // Disable button to prevent duplicates and early return if already saving
     if (saveBtn) {
+      if (saveBtn.disabled) return;
       saveBtn.disabled = true;
       saveBtn.innerHTML = '<i class="ph-duotone ph-spinner animate-spin"></i> Saving...';
     }
@@ -1730,6 +1744,8 @@ const chartInstances = {};
       const data = await res.json();
       if (data.success) {
         const tplId = data.id || currentEditingTemplateId;
+        currentEditingTemplateId = tplId; // Lock the ID so further saves don't duplicate
+        
         const newTpl = {
            id: tplId,
            name: name,
