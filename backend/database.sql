@@ -176,3 +176,19 @@ CREATE TABLE IF NOT EXISTS sync_jobs (
     next_attempt DATETIME NULL
 );
 
+-- Table for Support Tickets
+CREATE TABLE IF NOT EXISTS support_tickets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ticket_id VARCHAR(20) UNIQUE NOT NULL,
+    subject VARCHAR(255) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    priority VARCHAR(50) NOT NULL,
+    description TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'Open',
+    reporter_name VARCHAR(100),
+    email VARCHAR(100),
+    phone VARCHAR(20),
+    location VARCHAR(255),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

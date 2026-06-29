@@ -3194,3 +3194,258 @@ const chartInstances = {};
       if (rememberCheckbox) rememberCheckbox.checked = false;
     }
   });
+
+  // --- Help Center FAQs Logic ---
+  const helpFaqsData = [
+    { id: 1, tab: 'faq-reporting', q: 'How do I submit a new environmental issue report?', a: 'Click "+ Report Issue" in the top nav. Select the issue category, upload a photo, pin your location on the map, write a brief description, and set the priority level. Submit — your report goes live on the map instantly and notifies the nearest moderator.' },
+    { id: 2, tab: 'faq-reporting', q: 'Can I report anonymously?', a: 'Anonymous reporting can be enabled or disabled by the platform admin. If enabled, your name won\'t appear on the public report, but your account is still logged internally for moderation purposes.' },
+    { id: 3, tab: 'faq-reporting', q: 'How do I track the status of my report?', a: 'Go to the Community Feed or your profile and find your submitted report. Status updates (Open → In Progress → Resolved) are shown in real time. You\'ll also receive email notifications if email alerts are enabled in your settings.' },
+    { id: 4, tab: 'faq-reporting', q: 'What do the different status labels mean?', a: '<strong>Open:</strong> Report is submitted but not yet reviewed.<br><strong>In Progress:</strong> A team member is actively working on resolving the issue.<br><strong>Resolved:</strong> The issue has been fixed and verified.<br><strong>Rejected:</strong> The report was deemed invalid or a duplicate.' },
+    { id: 5, tab: 'faq-reporting', q: 'How can I add more photos to an existing report?', a: 'Currently, you cannot edit a report after submission. However, you can leave a comment on your report thread and attach additional context or links there. Our moderators review all comments associated with active reports.' },
+    { id: 6, tab: 'faq-reporting', q: 'Why was my report rejected?', a: 'Reports are typically rejected if they are duplicates of an existing issue, lack sufficient evidence/clear photos, or fall outside the jurisdiction of Suraksha Setu. You will receive an automated email detailing the specific reason for rejection.' },
+    { id: 7, tab: 'faq-admin', q: 'How do I export all reports as CSV or PDF?', a: 'In the Admin Dashboard, click "Export PDF" for the current view, or go to Reports & Exports → select date range and filters → click "Export CSV". Data includes all report fields: ID, category, location, priority, status, and timestamps.' },
+    { id: 8, tab: 'faq-admin', q: 'How do I change a report\'s priority?', a: 'Open the report from the Live Map or Active Issues list, click the priority badge, and select the new level (Low / Medium / High). Moderators can escalate; only Super Admins can downgrade High priority issues.' },
+    { id: 9, tab: 'faq-admin', q: 'Can I assign an issue to a specific field officer?', a: 'Yes. In the report detail modal, click the "Assignee" dropdown. You can search by name or role. Assigning an officer triggers an immediate push notification to their device.' },
+    { id: 10, tab: 'faq-admin', q: 'How do I approve or reject a pending report?', a: 'Under the "Pending Approval" queue, you\'ll see reports awaiting moderation. Review the image and description, then click the green "Approve" (moves to Live Map) or red "Reject" (removes from public view) button.' },
+    { id: 11, tab: 'faq-account', q: 'How do I reset my password?', a: 'Click "Forgot password" on the login page and enter your registered email. You\'ll receive a password reset link valid for 1 hour. If you don\'t receive the email within 5 minutes, check your spam folder or contact support.' },
+    { id: 12, tab: 'faq-account', q: 'How do I change my email address?', a: 'Navigate to Settings → Account. Enter your new email address and click "Update". You will be sent an OTP to the new email address to verify ownership before the change takes effect.' },
+    { id: 13, tab: 'faq-account', q: 'Can I have multiple admin roles assigned to my account?', a: 'Roles are strictly hierarchical. An account can only hold one primary role (e.g., Moderator OR Super Admin), but higher roles automatically inherit all permissions of lower roles.' },
+    { id: 14, tab: 'faq-account', q: 'How do I delete my account?', a: 'Go to Settings → Danger Zone. You must type "DELETE" and confirm with your password to permanently delete your account. This action cannot be undone, and your historical reports will be anonymized.' },
+    { id: 15, tab: 'faq-tech', q: 'The live map is not loading — what should I do?', a: 'First, check your internet connection. The live map uses OpenStreetMap/Leaflet which requires an active connection. Try a hard refresh (Ctrl+Shift+R). If the issue persists, clear your browser cache or try a different browser.' },
+    { id: 16, tab: 'faq-tech', q: 'I am not receiving email notifications.', a: 'Check your spam or junk folder and whitelist "no-reply@surakshasetu.in". Verify that your notification preferences in Settings → Account are turned ON for "Status Updates". If you still do not receive emails, contact technical support.' }
+  ];
+
+  let currentFaqTab = 'faq-reporting';
+
+  window.toggleHelpFaq = function(element) {
+    const icon = element.querySelector('.help-faq-icon');
+    const answer = element.querySelector('.help-faq-a');
+    const isExpanded = icon.classList.contains('ph-minus');
+
+    document.querySelectorAll('.help-faq-icon').forEach(el => {
+      el.classList.remove('ph-minus');
+      el.classList.add('ph-plus');
+    });
+    document.querySelectorAll('.help-faq-a').forEach(el => {
+      el.style.maxHeight = null;
+    });
+
+    if (!isExpanded) {
+      icon.classList.remove('ph-plus');
+      icon.classList.add('ph-minus');
+      answer.style.maxHeight = answer.scrollHeight + "px";
+    }
+  };
+
+  window.switchHelpSubpage = function(tabId, btnElement) {
+    currentFaqTab = tabId;
+    document.querySelectorAll('.help-tab-btn').forEach(btn => btn.classList.remove('active'));
+    if (btnElement) btnElement.classList.add('active');
+    
+    const searchInput = document.getElementById('faq-search-input');
+    if (!searchInput || !searchInput.value.trim()) {
+      renderFAQs(helpFaqsData.filter(faq => faq.tab === currentFaqTab));
+    }
+  };
+
+  function renderFAQs(faqs, highlightText = '') {
+    const container = document.getElementById('faq-dynamic-container');
+    const noResults = document.getElementById('faq-no-results');
+    
+    if (!container) return;
+    
+    if (faqs.length === 0) {
+      container.style.display = 'none';
+      noResults.style.display = 'block';
+      return;
+    }
+
+    container.style.display = 'block';
+    noResults.style.display = 'none';
+
+    let html = '';
+    faqs.forEach(faq => {
+      let q = faq.q;
+      let a = faq.a;
+      
+      if (highlightText) {
+        const regex = new RegExp(`(${highlightText})`, 'gi');
+        q = q.replace(regex, '<mark style="background:#fef08a;color:inherit;padding:0 2px;border-radius:2px;">$1</mark>');
+        a = a.replace(regex, '<mark style="background:#fef08a;color:inherit;padding:0 2px;border-radius:2px;">$1</mark>');
+      }
+
+      html += `
+        <div class="help-faq-item" onclick="toggleHelpFaq(this)">
+          <div class="help-faq-q"><span class="help-faq-q-text">${q}</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+          <div class="help-faq-a">
+            <div class="help-faq-a-inner">
+              ${a}
+              <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
+                <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
+                <div style="display: flex; gap: 8px;">
+                  <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
+                  <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    container.innerHTML = html;
+  }
+
+  let faqSearchDebounce;
+  window.handleFaqSearch = function() {
+    clearTimeout(faqSearchDebounce);
+    faqSearchDebounce = setTimeout(() => {
+      const input = document.getElementById('faq-search-input');
+      const clearBtn = document.getElementById('faq-search-clear');
+      const term = input.value.trim().toLowerCase();
+
+      if (term.length > 0) {
+        clearBtn.style.display = 'block';
+        document.querySelectorAll('.help-tab-btn').forEach(btn => btn.classList.remove('active'));
+        
+        const filtered = helpFaqsData.filter(faq => 
+          faq.q.toLowerCase().includes(term) || faq.a.toLowerCase().includes(term)
+        );
+        renderFAQs(filtered, term);
+      } else {
+        clearFaqSearch();
+      }
+    }, 300);
+  };
+
+  window.handleFaqSearchSubmit = function() {
+    handleFaqSearch();
+  };
+
+  window.clearFaqSearch = function() {
+    const input = document.getElementById('faq-search-input');
+    const clearBtn = document.getElementById('faq-search-clear');
+    input.value = '';
+    clearBtn.style.display = 'none';
+    
+    const tabBtns = document.querySelectorAll('.help-tab-btn');
+    if(tabBtns.length > 0) {
+       const targetBtn = Array.from(tabBtns).find(b => b.innerText.toLowerCase().includes(currentFaqTab.replace('faq-', ''))) || tabBtns[0];
+       targetBtn.click();
+    } else {
+       renderFAQs(helpFaqsData.filter(faq => faq.tab === currentFaqTab));
+    }
+  };
+
+  // --- Help Center Tickets Logic ---
+  window.fetchTickets = async function() {
+    const tableBody = document.getElementById('ticket-table-body');
+    if (!tableBody) return;
+
+    try {
+      const res = await fetch('/backend/api/tickets.php');
+      const data = await res.json();
+
+      if (data.success && data.tickets) {
+        if (data.tickets.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="6" style="padding: 24px; text-align: center; color: #64748b; font-size: 13px;">No tickets found.</td></tr>`;
+          return;
+        }
+
+        let html = '';
+        data.tickets.forEach(t => {
+          let badgeClass = 'help-badge-low';
+          if (t.priority === 'High') badgeClass = 'help-badge-high';
+          else if (t.priority === 'Medium') badgeClass = 'help-badge-med';
+
+          let statusBadgeClass = 'help-badge-open';
+          if (t.status === 'In Progress') statusBadgeClass = 'help-badge-progress';
+          else if (t.status === 'Resolved' || t.status === 'Closed') statusBadgeClass = 'help-badge';
+
+          const d = new Date(t.created_at);
+          const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+          html += `
+            <tr style="border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'" onclick="viewTicket('${t.ticket_id}')">
+              <td style="padding: 16px; font-family: 'Outfit', sans-serif; font-size: 12px; color: #64748b; font-weight: 500;">${t.ticket_id}</td>
+              <td style="padding: 16px;">
+                <div style="font-size: 13px; font-weight: 600; color: #1e293b;">${t.subject}</div>
+              </td>
+              <td style="padding: 16px;"><span class="help-badge ${t.category === 'Technical' ? 'help-badge-low' : (t.category === 'Certificate' ? 'help-badge-med' : 'help-badge-high')}">${t.category}</span></td>
+              <td style="padding: 16px;"><span class="help-badge ${badgeClass}">${t.priority}</span></td>
+              <td style="padding: 16px; font-size: 12px; color: #64748b;">${dateStr}</td>
+              <td style="padding: 16px;"><span class="help-badge ${statusBadgeClass}">${t.status}</span></td>
+            </tr>
+          `;
+        });
+        tableBody.innerHTML = html;
+      }
+    } catch (err) {
+      console.error('Error fetching tickets:', err);
+      tableBody.innerHTML = `<tr><td colspan="6" style="padding: 24px; text-align: center; color: #ef4444; font-size: 13px;">Error loading tickets.</td></tr>`;
+    }
+  };
+
+  window.submitTicket = async function() {
+    const subject = document.getElementById('ticket-subject').value.trim();
+    const category = document.getElementById('ticket-category').value;
+    const priority = document.getElementById('ticket-priority').value;
+    const description = document.getElementById('ticket-description').value.trim();
+    const btn = document.getElementById('btn-submit-ticket');
+
+    if (!subject || !description) {
+      showToast('Please fill in all required fields.', true);
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = 'Submitting...';
+
+    try {
+      const res = await fetch('/backend/api/tickets.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject, category, priority, description,
+          reporter_name: 'Admin',
+          email: localStorage.getItem('savedAdminEmail') || 'admin@surakshasetu.in'
+        })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        showToast('Ticket submitted successfully!');
+        document.getElementById('create-ticket-modal-overlay').classList.remove('open');
+        document.getElementById('ticket-subject').value = '';
+        document.getElementById('ticket-description').value = '';
+        fetchTickets();
+      } else {
+        throw new Error(data.error || 'Failed to submit ticket');
+      }
+    } catch (err) {
+      console.error(err);
+      showToast('Error submitting ticket.', true);
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Submit Ticket';
+    }
+  };
+
+  window.viewTicket = function(ticketId) {
+    const modal = document.getElementById('ticketModal');
+    if (modal) {
+        modal.querySelector('.modal-header span:first-child').innerText = ticketId;
+        modal.style.display = 'flex';
+    } else {
+        showToast('View ticket details for ' + ticketId);
+    }
+  };
+
+  // Initial render when script loads
+  document.addEventListener('DOMContentLoaded', () => {
+    renderFAQs(helpFaqsData.filter(faq => faq.tab === 'faq-reporting'));
+    
+    const urlHash = window.location.hash;
+    if (urlHash.includes('help-center') || document.getElementById('admin-view-help-center')?.style.display === 'block') {
+       fetchTickets();
+    }
+  });

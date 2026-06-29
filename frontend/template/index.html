@@ -4711,10 +4711,11 @@
                 <div class="help-hero-band">
                   <div class="help-hero-title">Frequently asked questions</div>
                   <div class="help-hero-sub">Answers to the most common questions about Suraksha Setu.</div>
-                  <div class="help-search-hero">
+                  <div class="help-search-hero" style="position: relative;">
                     <i class="ph-bold ph-magnifying-glass"></i>
-                    <input type="text" placeholder="Search FAQs...">
-                    <button onclick="showToast('Search functionality coming soon!')">Search</button>
+                    <input type="text" id="faq-search-input" placeholder="Search FAQs..." oninput="handleFaqSearch()">
+                    <i id="faq-search-clear" class="ph-bold ph-x" style="display:none; cursor:pointer; color:#94a3b8; font-size:16px; margin-right:8px;" onclick="clearFaqSearch()"></i>
+                    <button onclick="handleFaqSearchSubmit()">Search</button>
                   </div>
                 </div>
                 <div class="help-body-area">
@@ -4726,283 +4727,17 @@
                     <div class="help-tab-btn" onclick="switchHelpSubpage('faq-tech', this)">Technical</div>
                   </div>
 
-                  <div class="help-subpage active" id="faq-reporting">
-                    <div class="help-faq-list">
-                      <!-- 1 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">How do I submit a new environmental issue report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            Click "+ Report Issue" in the top nav. Select the issue category, upload a photo, pin your location on the map, write a brief description, and set the priority level. Submit — your report goes live on the map instantly and notifies the nearest moderator.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- 2 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">Can I report anonymously?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            Anonymous reporting can be enabled or disabled by the platform admin. If enabled, your name won't appear on the public report, but your account is still logged internally for moderation purposes.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- 3 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">How do I track the status of my report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            Go to the Community Feed or your profile and find your submitted report. Status updates (Open → In Progress → Resolved) are shown in real time. You'll also receive email notifications if email alerts are enabled in your settings.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- 4 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">What do the different status labels mean?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            <strong>Open:</strong> Report is submitted but not yet reviewed.<br>
-                            <strong>In Progress:</strong> A team member is actively working on resolving the issue.<br>
-                            <strong>Resolved:</strong> The issue has been fixed and verified.<br>
-                            <strong>Rejected:</strong> The report was deemed invalid or a duplicate.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- 5 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">How can I add more photos to an existing report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            Currently, you cannot edit a report after submission. However, you can leave a comment on your report thread and attach additional context or links there. Our moderators review all comments associated with active reports.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- 6 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">Why was my report rejected?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            Reports are typically rejected if they are duplicates of an existing issue, lack sufficient evidence/clear photos, or fall outside the jurisdiction of Suraksha Setu. You will receive an automated email detailing the specific reason for rejection.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <div id="faq-dynamic-container" class="help-faq-list" style="margin-top: 16px;">
+                    <!-- Dynamically populated FAQs -->
                   </div>
-
-                  <div class="help-subpage" id="faq-admin">
-                    <div class="help-faq-list">
-                      <!-- 7 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">How do I export all reports as CSV or PDF?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            In the Admin Dashboard, click "Export PDF" for the current view, or go to Reports & Exports → select date range and filters → click "Export CSV". Data includes all report fields: ID, category, location, priority, status, and timestamps.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- 8 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">How do I change a report's priority?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            Open the report from the Live Map or Active Issues list, click the priority badge, and select the new level (Low / Medium / High). Moderators can escalate; only Super Admins can downgrade High priority issues.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- 9 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">Can I assign an issue to a specific field officer?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            Yes. In the report detail modal, click the "Assignee" dropdown. You can search by name or role. Assigning an officer triggers an immediate push notification to their device.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- 10 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">How do I approve or reject a pending report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            Under the "Pending Approval" queue, you'll see reports awaiting moderation. Review the image and description, then click the green "Approve" (moves to Live Map) or red "Reject" (removes from public view) button.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                  
+                  <div id="faq-no-results" style="display: none; text-align: center; padding: 40px 20px;">
+                    <div style="width: 48px; height: 48px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                      <i class="ph-duotone ph-magnifying-glass" style="font-size: 24px; color: #94a3b8;"></i>
                     </div>
-                  </div>
-
-                  <div class="help-subpage" id="faq-account">
-                    <div class="help-faq-list">
-                      <!-- 11 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">How do I reset my password?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            Click "Forgot password" on the login page and enter your registered email. You'll receive a password reset link valid for 1 hour. If you don't receive the email within 5 minutes, check your spam folder or contact support.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- 12 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">How do I change my email address?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            Navigate to Settings → Account. Enter your new email address and click "Update". You will be sent an OTP to the new email address to verify ownership before the change takes effect.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- 13 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">Can I have multiple admin roles assigned to my account?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            Roles are strictly hierarchical. An account can only hold one primary role (e.g., Moderator OR Super Admin), but higher roles automatically inherit all permissions of lower roles.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- 14 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">How do I delete my account?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            Go to Settings → Danger Zone. You must type "DELETE" and confirm with your password to permanently delete your account. This action cannot be undone, and your historical reports will be anonymized.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="help-subpage" id="faq-tech">
-                    <div class="help-faq-list">
-                      <!-- 15 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">The live map is not loading — what should I do?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            First, check your internet connection. The live map uses OpenStreetMap/Leaflet which requires an active connection. Try a hard refresh (Ctrl+Shift+R). If the issue persists, clear your browser cache or try a different browser.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- 16 -->
-                      <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                        <div class="help-faq-q"><span class="help-faq-q-text">I am not receiving email notifications.</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
-                        <div class="help-faq-a">
-                          <div class="help-faq-a-inner">
-                            Check your spam or junk folder and whitelist "no-reply@surakshasetu.in". Verify that your notification preferences in Settings → Account are turned ON for "Status Updates". If you still do not receive emails, contact technical support.
-                            <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;" onclick="event.stopPropagation()">
-                              <div style="font-size: 11px; color: #64748b; font-weight: 500;">Was this article helpful?</div>
-                              <div style="display: flex; gap: 8px;">
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👍 Yes</button>
-                                <button onclick="showToast('Feedback submitted. Thank you!')" style="background: none; border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px 10px; font-size: 11px; color: #475569; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">👎 No</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <div style="font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 8px;">No FAQs found</div>
+                    <div style="font-size: 14px; color: #64748b; margin-bottom: 16px;">We couldn't find any articles matching your search.</div>
+                    <button onclick="clearFaqSearch()" style="background: rgba(34, 197, 94, 0.1); border: 1px solid #16a34a; border-radius: 8px; color: #16a34a; font-size: 13px; font-weight: 600; padding: 8px 16px; cursor: pointer;">Clear Search</button>
                   </div>
                 </div>
               </div>
@@ -5163,7 +4898,7 @@
                         <option>Status: In Progress</option>
                         <option>Status: Resolved</option>
                       </select>
-                      <button style="height: 34px; padding: 0 16px; background: #16a34a; border: none; border-radius: 6px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#15803d'" onclick="showToast('Creating new ticket...')"><i class="ph-bold ph-plus" style="margin-right: 6px;"></i>New Ticket</button>
+                      <button style="height: 34px; padding: 0 16px; background: #16a34a; border: none; border-radius: 6px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#15803d'" onclick="document.getElementById('create-ticket-modal-overlay').classList.add('open')"><i class="ph-bold ph-plus" style="margin-right: 6px;"></i>New Ticket</button>
                     </div>
                   </div>
 
@@ -5180,43 +4915,8 @@
                           <th style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">Status</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <!-- Row 1 -->
-                        <tr style="border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'" onclick="document.getElementById('ticketModal').style.display='flex'">
-                          <td style="padding: 16px; font-family: 'Outfit', sans-serif; font-size: 12px; color: #64748b; font-weight: 500;">TKT-0018</td>
-                          <td style="padding: 16px;">
-                            <div style="font-size: 13px; font-weight: 600; color: #1e293b;">Live map not loading on mobile Chrome</div>
-                            <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Last updated 2 hours ago</div>
-                          </td>
-                          <td style="padding: 16px;"><span class="help-badge help-badge-low">Technical</span></td>
-                          <td style="padding: 16px;"><span class="help-badge help-badge-med">Medium</span></td>
-                          <td style="padding: 16px; font-size: 12px; color: #64748b;">Jun 5, 2024</td>
-                          <td style="padding: 16px;"><span class="help-badge help-badge-progress">In progress</span></td>
-                        </tr>
-                        <!-- Row 2 -->
-                        <tr style="border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">
-                          <td style="padding: 16px; font-family: 'Outfit', sans-serif; font-size: 12px; color: #64748b; font-weight: 500;">TKT-0015</td>
-                          <td style="padding: 16px;">
-                            <div style="font-size: 13px; font-weight: 600; color: #1e293b;">Certificate PDF not downloading in Safari</div>
-                            <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Last updated May 29, 2024</div>
-                          </td>
-                          <td style="padding: 16px;"><span class="help-badge help-badge-low">Certificate</span></td>
-                          <td style="padding: 16px;"><span class="help-badge help-badge-high">High</span></td>
-                          <td style="padding: 16px; font-size: 12px; color: #64748b;">May 28, 2024</td>
-                          <td style="padding: 16px;"><span class="help-badge help-badge-open">Open</span></td>
-                        </tr>
-                        <!-- Row 3 -->
-                        <tr style="cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'">
-                          <td style="padding: 16px; font-family: 'Outfit', sans-serif; font-size: 12px; color: #64748b; font-weight: 500;">TKT-0004</td>
-                          <td style="padding: 16px;">
-                            <div style="font-size: 13px; font-weight: 600; color: #1e293b;">How to add a secondary admin?</div>
-                            <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">Last updated Apr 12, 2024</div>
-                          </td>
-                          <td style="padding: 16px;"><span class="help-badge help-badge-low" style="background: rgba(148, 163, 184, 0.1); color: #64748b;">Account</span></td>
-                          <td style="padding: 16px;"><span class="help-badge help-badge-low">Low</span></td>
-                          <td style="padding: 16px; font-size: 12px; color: #64748b;">Apr 10, 2024</td>
-                          <td style="padding: 16px;"><span class="help-badge" style="background: rgba(34, 197, 94, 0.1); color: #16a34a;">Resolved</span></td>
-                        </tr>
+                      <tbody id="ticket-table-body">
+                        <!-- Dynamic tickets will be rendered here -->
                       </tbody>
                     </table>
                   </div>
@@ -5447,17 +5147,20 @@
       });
     });
 
-    function sendHelpChat() {
+    let helpChatHistory = [];
+    
+    async function sendHelpChat() {
       const input = document.getElementById('helpChatInput');
       const messages = document.getElementById('helpChatMessages');
-      if (!input.value.trim()) return;
+      const userText = input.value.trim();
+      if (!userText) return;
 
       const userMsg = document.createElement('div');
       userMsg.className = 'help-msg help-msg-user';
       userMsg.innerHTML = `
         <div class="help-msg-avatar-sm" style="background: #cbd5e1; color: #475569;">You</div>
         <div>
-          <div class="help-msg-bubble">${input.value}</div>
+          <div class="help-msg-bubble">${userText}</div>
           <div class="help-msg-time">Just now</div>
         </div>
       `;
@@ -5465,19 +5168,64 @@
       input.value = '';
       messages.scrollTop = messages.scrollHeight;
 
-      setTimeout(() => {
-        const botMsg = document.createElement('div');
-        botMsg.className = 'help-msg help-msg-bot';
-        botMsg.innerHTML = `
-          <div class="help-msg-avatar-sm" style="background: rgba(34, 197, 94, 0.1); color: #16a34a;">SS</div>
+      helpChatHistory.push({ role: 'user', text: userText });
+
+      const typingIndicatorId = 'typing-' + Date.now();
+      const botTypingMsg = document.createElement('div');
+      botTypingMsg.id = typingIndicatorId;
+      botTypingMsg.className = 'help-msg help-msg-bot';
+      botTypingMsg.innerHTML = `
+        <div class="help-msg-avatar-sm" style="background: rgba(34, 197, 94, 0.1); color: #16a34a;">AI</div>
+        <div>
+          <div class="help-msg-bubble"><i class="ph-duotone ph-dots-three" style="font-size: 16px; display: inline-block; animation: blink 1.4s infinite both;"></i></div>
+        </div>
+      `;
+      messages.appendChild(botTypingMsg);
+      messages.scrollTop = messages.scrollHeight;
+
+      try {
+        const response = await fetch('/backend/api/chat.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: helpChatHistory })
+        });
+        const data = await response.json();
+        
+        document.getElementById(typingIndicatorId).remove();
+
+        if (data.success && data.response) {
+          helpChatHistory.push({ role: 'model', text: data.response });
+          const formattedText = data.response
+              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+              .replace(/\*(.*?)\*/g, '<em>$1</em>')
+              .replace(/\n/g, '<br>');
+
+          const botMsg = document.createElement('div');
+          botMsg.className = 'help-msg help-msg-bot';
+          botMsg.innerHTML = `
+            <div class="help-msg-avatar-sm" style="background: rgba(34, 197, 94, 0.1); color: #16a34a;">AI</div>
+            <div>
+              <div class="help-msg-bubble">${formattedText}</div>
+              <div class="help-msg-time">Just now</div>
+            </div>
+          `;
+          messages.appendChild(botMsg);
+        } else {
+           throw new Error(data.error || 'Failed to get response');
+        }
+      } catch (err) {
+        document.getElementById(typingIndicatorId)?.remove();
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'help-msg help-msg-bot';
+        errorMsg.innerHTML = `
+          <div class="help-msg-avatar-sm" style="background: #fee2e2; color: #ef4444;">!</div>
           <div>
-            <div class="help-msg-bubble">Thanks for your message! An agent will be with you shortly.</div>
-            <div class="help-msg-time">Just now</div>
+            <div class="help-msg-bubble" style="background: #fef2f2; border: 1px solid #fecaca; color: #ef4444;">Sorry, I encountered an error connecting to the AI system. Please try again later.</div>
           </div>
         `;
-        messages.appendChild(botMsg);
-        messages.scrollTop = messages.scrollHeight;
-      }, 1000);
+        messages.appendChild(errorMsg);
+      }
+      messages.scrollTop = messages.scrollHeight;
     }
 
     // Help Center Functions
@@ -5607,6 +5355,50 @@
       <div class="modal-body" id="modal-body"></div>
     </div>
   </div>
+
+  <!-- ── CREATE TICKET MODAL ── -->
+  <div class="modal-overlay" id="create-ticket-modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal" style="max-width: 500px; width: 90%; padding: 24px; background: #fff; border-radius: 12px; display: flex; flex-direction: column;">
+      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="font-size: 18px; font-weight: 800; font-family: 'Outfit', sans-serif;">Submit a Support Ticket</div>
+        <i class="ph-bold ph-x" style="font-size: 20px; color: #64748b; cursor: pointer;" onclick="document.getElementById('create-ticket-modal-overlay').classList.remove('open')"></i>
+      </div>
+      <div class="modal-body" style="display: flex; flex-direction: column; gap: 16px;">
+        <div>
+          <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Subject *</label>
+          <input type="text" id="ticket-subject" placeholder="Briefly describe the issue" style="width: 100%; height: 40px; padding: 0 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
+        </div>
+        <div style="display: flex; gap: 16px;">
+          <div style="flex: 1;">
+            <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Category *</label>
+            <select id="ticket-category" style="width: 100%; height: 40px; padding: 0 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: #fff;">
+              <option value="Technical">Technical Issue</option>
+              <option value="Account">Account Management</option>
+              <option value="Certificate">Certificate Problem</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div style="flex: 1;">
+            <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Priority *</label>
+            <select id="ticket-priority" style="width: 100%; height: 40px; padding: 0 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: #fff;">
+              <option value="Low">Low</option>
+              <option value="Medium" selected>Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Description *</label>
+          <textarea id="ticket-description" rows="5" placeholder="Provide details about the problem, steps to reproduce, etc." style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; resize: vertical;"></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px;">
+          <button onclick="document.getElementById('create-ticket-modal-overlay').classList.remove('open')" style="height: 40px; padding: 0 16px; background: #f1f5f9; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; color: #475569; cursor: pointer;">Cancel</button>
+          <button id="btn-submit-ticket" onclick="submitTicket()" style="height: 40px; padding: 0 20px; background: #16a34a; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; color: #fff; cursor: pointer;">Submit Ticket</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- ── REVIEW SESSIONS MODAL ── -->
   <div class="modal-overlay" id="review-sessions-modal-overlay"
