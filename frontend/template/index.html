@@ -3885,80 +3885,13 @@
               position: relative;
             }
 
-            .help-sidebar {
-              width: 260px;
-              flex-shrink: 0;
-              display: block;
-              background: #f8fafc;
-              border-right: 1px solid #e2e8f0;
-              padding: 18px 0;
-            }
-
-            .help-sb-head {
-              padding: 0 14px 14px;
-              border-bottom: 1px solid #e2e8f0;
-              margin-bottom: 6px;
-            }
-
-            .help-sb-logo {
-              font-family: 'Outfit', sans-serif;
-              font-size: 13px;
-              font-weight: 700;
-              color: #16a34a;
-            }
-
-            .help-sb-sub {
-              font-size: 11px;
-              color: #64748b;
-              margin-top: 1px;
-            }
-
-            .help-nav-group {
-              font-size: 10px;
-              color: #94a3b8;
-              text-transform: uppercase;
-              letter-spacing: 0.7px;
-              padding: 10px 14px 3px;
-            }
-
-            .help-nav-item {
-              display: flex;
-              align-items: center;
-              gap: 9px;
-              padding: 8px 14px;
-              font-size: 12px;
-              color: #64748b;
-              cursor: pointer;
-              transition: all 0.18s;
-              border-left: 2px solid transparent;
-              margin-bottom: 1px;
-            }
-
-            .help-nav-item:hover {
-              color: #16a34a;
-              background: rgba(34, 197, 94, 0.04);
-            }
-
-            .help-nav-item.active {
-              color: #16a34a;
-              background: rgba(34, 197, 94, 0.08);
-              border-left-color: #16a34a;
-            }
-
-            .help-nav-item i {
-              font-size: 14px;
-            }
-
-            .help-nav-sub {
-              padding-left: 28px;
-              font-size: 11px;
-            }
-
             .help-content {
               padding: 0;
               overflow-y: auto;
               display: flex;
               flex-direction: column;
+              flex: 1;
+              width: 100%;
             }
 
             .help-page {
@@ -4597,35 +4530,6 @@
           </style>
 
           <div class="help-layout">
-            <div class="help-sidebar">
-              <div class="help-sb-head">
-                <div class="help-sb-logo"><i class="ph-duotone ph-lifebuoy"
-                    style="font-size: 14px; margin-right: 4px;"></i>Help Center</div>
-                <div class="help-sb-sub">Suraksha Setu Support</div>
-              </div>
-              
-              <div class="help-nav-group">Dashboard</div>
-              <div class="help-nav-item active" id="help-nav-home" onclick="switchHelpPage('home', this)"><i
-                  class="ph-duotone ph-squares-four"></i>Overview</div>
-                  
-              <div class="help-nav-group">Knowledge Base</div>
-              <div class="help-nav-item" id="help-nav-faq" onclick="switchHelpPage('faq', this)"><i
-                  class="ph-duotone ph-question"></i>FAQs</div>
-              <div class="help-nav-item" id="help-nav-guides" onclick="switchHelpPage('guides', this)"><i
-                  class="ph-duotone ph-book-open"></i>Guides & Tutorials</div>
-                  
-              <div class="help-nav-group">Support Hub</div>
-              <div class="help-nav-item" id="help-nav-contact" onclick="switchHelpPage('contact', this)"><i
-                  class="ph-duotone ph-headset"></i>Contact Support</div>
-              <div class="help-nav-item" id="help-nav-tickets" onclick="switchHelpPage('tickets', this)"><i
-                  class="ph-duotone ph-ticket"></i>My Tickets</div>
-                  
-              <div class="help-nav-group">Quick links</div>
-              <div class="help-nav-item help-nav-sub"><i class="ph-duotone ph-arrow-square-out"></i>Report an issue</div>
-              <div class="help-nav-item help-nav-sub"><i class="ph-duotone ph-shield-check"></i>Privacy policy</div>
-              <div class="help-nav-item help-nav-sub"><i class="ph-duotone ph-file-text"></i>Terms of use</div>
-            </div>
-
             <div class="help-content">
               <!-- HOME PAGE -->
               <div class="help-page active" id="help-page-home">
