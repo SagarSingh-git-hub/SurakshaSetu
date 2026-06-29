@@ -3861,13 +3861,15 @@
         <div id="admin-view-help-center" style="display: none;">
           <style>
             .help-layout {
-              display: block;
+              display: flex;
               min-height: 700px;
               position: relative;
             }
 
             .help-sidebar {
-              display: none;
+              width: 260px;
+              flex-shrink: 0;
+              display: block;
               background: #f8fafc;
               border-right: 1px solid #e2e8f0;
               padding: 18px 0;
@@ -4571,7 +4573,7 @@
           </style>
 
           <div class="help-layout">
-            <div class="help-sidebar" style="display: none;">
+            <div class="help-sidebar">
               <div class="help-sb-head">
                 <div class="help-sb-logo"><i class="ph-duotone ph-lifebuoy"
                     style="font-size: 12px; margin-right: 4px;"></i>Help Center</div>
@@ -4604,7 +4606,7 @@
                   <div class="help-search-hero">
                     <i class="ph-bold ph-magnifying-glass"></i>
                     <input type="text" placeholder="Search: how to report an issue, map not loading...">
-                    <button>Search</button>
+                    <button onclick="showToast('Search functionality coming soon!')">Search</button>
                   </div>
                 </div>
                 <div class="help-body-area">
@@ -4744,7 +4746,7 @@
                   <div class="help-search-hero">
                     <i class="ph-bold ph-magnifying-glass"></i>
                     <input type="text" placeholder="Search FAQs...">
-                    <button>Search</button>
+                    <button onclick="showToast('Search functionality coming soon!')">Search</button>
                   </div>
                 </div>
                 <div class="help-body-area">
@@ -5174,37 +5176,7 @@
           // Note: switchAdminView will handle adding 'open' class if needed, but we can ensure it here too if desired.
         }
       });
-    }); function switchHelpPage(pageId, linkElement) {
-      document.querySelectorAll('.help-page').forEach(el => el.classList.remove('active'));
-      document.getElementById('help-page-' + pageId).classList.add('active');
-
-      if (linkElement) {
-        document.querySelectorAll('.help-nav-item').forEach(el => el.classList.remove('active'));
-        linkElement.classList.add('active');
-      }
-    }
-
-    function toggleHelpFaq(item) {
-      item.classList.toggle('open');
-    }
-
-    function switchHelpSubpage(subpageId, btnElement) {
-      document.querySelectorAll('.help-subpage').forEach(el => el.classList.remove('active'));
-      document.getElementById(subpageId).classList.add('active');
-
-      document.querySelectorAll('.help-tab-btn').forEach(el => el.classList.remove('active'));
-      btnElement.classList.add('active');
-
-      // Reset scroll instantly
-      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      setTimeout(() => {
-        document.querySelectorAll('.help-content, .admin-content-wrap, .admin-page, .modal, .help-page, .help-subpage').forEach(el => el.scrollTop = 0);
-        document.documentElement.style.removeProperty('scroll-behavior');
-      }, 50);
-    }
+    });
 
     function sendHelpChat() {
       const input = document.getElementById('helpChatInput');
