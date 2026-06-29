@@ -1608,6 +1608,8 @@ const chartInstances = {};
     if (!wrapper || !scaleContainer) return;
     const container = scaleContainer.parentElement;
 
+    container.style.overflow = 'hidden';
+
     const availableWidth = container.clientWidth - 48;
     const availableHeight = container.clientHeight - 100;
     // Use standard certificate size (A4 Landscape 1123x794)
@@ -1615,7 +1617,7 @@ const chartInstances = {};
     const baseHeight = 794;
     const scaleX = availableWidth / baseWidth;
     const scaleY = availableHeight / baseHeight;
-    const scale = Math.max(0.3, Math.min(scaleX, scaleY, 1));
+    const scale = Math.max(0.1, Math.min(scaleX, scaleY, 1));
 
     wrapper.style.transform = `scale(${scale})`;
     scaleContainer.style.width = `${baseWidth * scale}px`;
@@ -1653,7 +1655,21 @@ const chartInstances = {};
     if (!iframe) return;
     const doc = iframe.contentWindow.document;
     doc.open();
-    doc.write('<html><head><style>body{margin:0;padding:0;box-sizing:border-box;} *{box-sizing:inherit;}</style></head><body>' + content + '</body></html>');
+    
+    const injectStyle = '<style>body{margin:0;padding:0;box-sizing:border-box;overflow:hidden;width:1123px;height:794px;} *{box-sizing:inherit;}</style>';
+    let finalHtml = content;
+    
+    if (finalHtml.includes('<body')) {
+      if (finalHtml.includes('<head>')) {
+        finalHtml = finalHtml.replace('</head>', injectStyle + '</head>');
+      } else {
+        finalHtml = injectStyle + finalHtml;
+      }
+    } else {
+      finalHtml = '<html><head>' + injectStyle + '</head><body>' + finalHtml + '</body></html>';
+    }
+    
+    doc.write(finalHtml);
     doc.close();
   }
 
@@ -1713,9 +1729,33 @@ const chartInstances = {};
       });
       const data = await res.json();
       if (data.success) {
-        showToast('✅ Template Saved!');
+        const tplId = data.id || currentEditingTemplateId;
+        const newTpl = {
+           id: tplId,
+           name: name,
+           award_type: awardType,
+           mode: currentBuilderMode,
+           html_content: htmlContent,
+           css_content: '',
+           is_default: data.is_default || 0,
+           usage_count: data.usage_count || 0
+        };
+
+        if (currentEditingTemplateId) {
+           const idx = allTemplates.findIndex(t => t.id == currentEditingTemplateId);
+           if (idx !== -1) {
+              allTemplates[idx] = { ...allTemplates[idx], ...newTpl };
+           }
+        } else {
+           allTemplates.push(newTpl);
+           allTemplates.sort((a, b) => Number(b.is_default) - Number(a.is_default));
+        }
+
+        const container = document.getElementById('cert-templates-container');
+        if (container) renderTemplatesUI(container, allTemplates);
+
+        showToast('Template saved successfully.');
         closeTemplateBuilder();
-        fetchTemplates(true); // Force refresh
       } else {
         showToast('❌ Failed: ' + data.message);
       }
@@ -1782,7 +1822,7 @@ const chartInstances = {};
       : `${API_URL}/api/certificates/create_template.php`;
 
     try {
-      const res = await fetch(endpoint, {
+      const res = await adminFetch(endpoint, {
         method: 'POST',
         body: formData
       });
@@ -1795,8 +1835,6 @@ const chartInstances = {};
         if (!currentEditingTemplateId && data.id) {
           currentEditingTemplateId = data.id;
         }
-
-        if (typeof fetchTemplates === 'function') fetchTemplates();
       } else {
         if (statusEl) statusEl.innerText = 'Error saving';
       }
@@ -2029,6 +2067,11 @@ const chartInstances = {};
       : "Are you sure you want to permanently delete this certificate template, or have you changed your mind?";
 
     showCustomConfirm("Delete Template?", msg, () => {
+      const btnDelete = document.getElementById('btn-preview-delete');
+      if (btnDelete) {
+         btnDelete.disabled = true;
+         btnDelete.innerHTML = '<i class="ph-duotone ph-spinner animate-spin"></i> Deleting...';
+      }
 
       const formData = new FormData();
       
@@ -2041,16 +2084,25 @@ const chartInstances = {};
         .then(res => res.json())
         .then(data => {
           if (data.success) {
+            allTemplates = allTemplates.filter(t => t.id != id);
+            const container = document.getElementById('cert-templates-container');
+            if (container) renderTemplatesUI(container, allTemplates);
+
             showToast('✅ Certificate Template deleted successfully.');
             document.getElementById('template-preview-overlay').classList.remove('open');
-            if (typeof fetchTemplates === 'function') fetchTemplates();
           } else {
             showToast('❌ Failed: ' + data.message);
           }
         })
         .catch(err => {
           console.error(err);
-          showToast('❌ Error deleting template');
+          showToast('Failed to delete template.');
+        })
+        .finally(() => {
+          if (btnDelete) {
+             btnDelete.disabled = false;
+             btnDelete.innerHTML = '<i class="ph-bold ph-trash"></i> Delete';
+          }
         });
     });
   }
@@ -2515,26 +2567,6 @@ const chartInstances = {};
 
   window.updateAlertStatus = async function(alertId, status) {
     try {
-      // Optimistic UI Update for Dismissed
-      if (status === 'Dismissed') {
-        const idx = alertState.activeAlerts.findIndex(a => String(a.id) === String(alertId));
-        if (idx !== -1) {
-          const alert = alertState.activeAlerts[idx];
-          alertState.activeAlerts.splice(idx, 1);
-          
-          const allIdx = alertState.allAlerts.findIndex(a => String(a.id) === String(alertId));
-          if (allIdx !== -1) alertState.allAlerts[allIdx].status = 'Dismissed';
-          alertState.actionHistory.unshift({
-            title: alert.title,
-            description: alert.description,
-            type: alert.alert_type,
-            status: 'Dismissed',
-            time: Date.now()
-          });
-          renderAlerts(); // re-render instantly without waiting
-        }
-      }
-
       const formData = new FormData();
       formData.append('id', alertId);
       formData.append('status', status);
@@ -2546,15 +2578,31 @@ const chartInstances = {};
       });
       const data = await res.json();
       if (data.success) {
-        showToast(`Alert marked as ${status}`);
-        if (status !== 'Dismissed') fetchAlerts(true);
+        if (status === 'Dismissed') {
+          const allIdx = alertState.allAlerts.findIndex(a => String(a.id) === String(alertId));
+          if (allIdx !== -1) {
+            const alert = alertState.allAlerts[allIdx];
+            alert.status = 'Dismissed';
+            alertState.actionHistory.unshift({
+              title: alert.title,
+              description: 'Status updated to Dismissed',
+              type: alert.alert_type,
+              status: 'Dismissed',
+              time: Date.now()
+            });
+            renderAlerts(); // re-render instantly without waiting for fetch
+          }
+        } else {
+          showToast(`Alert marked as ${status}`);
+          fetchAlerts(true);
+        }
       } else {
-        // Rollback on failure (simplified)
-        showToast(`❌ Failed: ${data.message}`);
-        fetchAlerts(true);
+        showToast(`❌ Failed to dismiss alert. Please try again.`);
+        if (status !== 'Dismissed') fetchAlerts(true);
       }
     } catch (err) {
       console.error("Alert status update failed:", err);
+      showToast(`❌ Failed to dismiss alert. Please try again.`);
     }
   }
 
