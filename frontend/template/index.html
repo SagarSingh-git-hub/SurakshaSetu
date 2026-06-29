@@ -1965,18 +1965,37 @@
             </div>
             </div>
           </div>
+          
+          <!-- Item 7 (Help Center) -->
+          <div class="admin-nav-item">
+            <button class="admin-nav-link" onclick="toggleSubnav(this)">
+              <div class="admin-nav-link-left">
+                <i class="ph-duotone ph-question admin-nav-icon" style="font-size: 20px;"></i>
+                <span class="admin-sidebar-text">Help Center</span>
+              </div>
+              <i class="ph-duotone ph-caret-down admin-nav-arrow" style="font-size: 16px;"></i>
+            </button>
+            <div class="admin-subnav">
+              <div class="admin-subnav-inner">
+                <a href="#" class="admin-subnav-link" onclick="switchAdminView('help-center', this); switchHelpPage('home'); return false;"><i class="ph-duotone ph-layout"></i><span class="admin-subnav-text">Overview</span></a>
+                <a href="#" class="admin-subnav-link" onclick="switchAdminView('help-center', this); switchHelpPage('faq'); return false;"><i class="ph-duotone ph-list-numbers"></i><span class="admin-subnav-text">FAQs</span></a>
+                <a href="#" class="admin-subnav-link" onclick="switchAdminView('help-center', this); switchHelpPage('guides'); return false;"><i class="ph-duotone ph-book-open"></i><span class="admin-subnav-text">Guides & Tutorials</span></a>
+                <a href="#" class="admin-subnav-link" onclick="switchAdminView('help-center', this); switchHelpPage('contact'); return false;"><i class="ph-duotone ph-envelope-simple"></i><span class="admin-subnav-text">Contact Support</span></a>
+                <a href="#" class="admin-subnav-link" onclick="switchAdminView('help-center', this); switchHelpPage('tickets'); return false;"><i class="ph-duotone ph-ticket"></i><span class="admin-subnav-text">My Tickets</span></a>
+                <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin: 12px 12px 4px; letter-spacing: 0.5px;">Quick links</div>
+                <a href="#" class="admin-subnav-link" onclick="showPage('report'); return false;"><i class="ph-duotone ph-warning-circle"></i><span class="admin-subnav-text">Report an issue</span></a>
+                <a href="#" class="admin-subnav-link" onclick="return false;"><i class="ph-duotone ph-shield-check"></i><span class="admin-subnav-text">Privacy policy</span></a>
+                <a href="#" class="admin-subnav-link" onclick="return false;"><i class="ph-duotone ph-file-text"></i><span class="admin-subnav-text">Terms of use</span></a>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="admin-sidebar-footer">
-          <button style="margin-bottom:8px" onclick="switchAdminView('help-center', this); return false;">
-            <i class="ph-duotone ph-question" style="font-size: 20px; color:var(--text3)"></i>
-            <span class="admin-sidebar-text" style="color:var(--text3)">Help Center</span>
-          </button>
           <button onclick="adminLogout()">
             <i class="ph-duotone ph-sign-out" style="font-size: 20px;"></i>
             <span class="admin-sidebar-text">Logout</span>
           </button>
-
         </div>
       </aside>
 
