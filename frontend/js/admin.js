@@ -1656,7 +1656,7 @@ const chartInstances = {};
     const doc = iframe.contentWindow.document;
     doc.open();
     
-    const injectStyle = '<style>body{margin:0;padding:0;box-sizing:border-box;overflow:hidden;width:1123px;height:794px;} *{box-sizing:inherit;}</style>';
+    const injectStyle = '<style>html, body {margin:0 !important;padding:0 !important;box-sizing:border-box !important;overflow:hidden !important;width:1123px !important;height:794px !important;} *{box-sizing:inherit;}</style>';
     let finalHtml = content;
     
     if (finalHtml.includes('<body')) {
@@ -1745,6 +1745,9 @@ const chartInstances = {};
            const idx = allTemplates.findIndex(t => t.id == currentEditingTemplateId);
            if (idx !== -1) {
               allTemplates[idx] = { ...allTemplates[idx], ...newTpl };
+           } else {
+              allTemplates.push(newTpl);
+              allTemplates.sort((a, b) => Number(b.is_default) - Number(a.is_default));
            }
         } else {
            allTemplates.push(newTpl);
@@ -1776,7 +1779,8 @@ const chartInstances = {};
     const name = document.getElementById('builder-tpl-name').value.trim();
     const awardType = document.getElementById('builder-tpl-award').value.trim();
 
-    if (!currentEditingTemplateId && (!name || !awardType)) return; // Only auto-save new templates if basic fields are set
+    // Prevent duplicate templates from autosave by only allowing autosave on existing templates
+    if (!currentEditingTemplateId) return;
 
     const statusEl = document.getElementById('template-save-status');
     if (statusEl) {
