@@ -78,23 +78,116 @@
 <body>
 
   <!-- ── NAV ── -->
+  <style>
+    nav {
+      justify-content: space-between !important;
+      border-bottom: 1px solid #EEF2F7 !important;
+      background: rgba(255, 255, 255, 0.9) !important;
+    }
+    .nav-tabs {
+      position: static !important;
+      transform: none !important;
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+      gap: 24px !important;
+      box-shadow: none !important;
+    }
+    #nav-indicator {
+      display: none !important;
+    }
+    .nav-tab {
+      background: transparent !important;
+      padding: 8px 0 !important;
+      color: #64748b !important;
+      font-weight: 500 !important;
+      font-size: 15px !important;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s !important;
+    }
+    .nav-tab:hover {
+      color: #0f172a !important;
+    }
+    .nav-tab.active {
+      color: #16a34a !important;
+      font-weight: 600 !important;
+    }
+    .nav-search {
+      position: relative;
+    }
+    .nav-search input {
+      background: #F7F9FC;
+      border: 1px solid #EEF2F7;
+      border-radius: 99px;
+      padding: 10px 16px 10px 38px;
+      font-size: 14px;
+      outline: none;
+      width: 240px;
+      transition: all 0.2s;
+      color: #0f172a;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .nav-search input:focus {
+      background: #fff;
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(15,23,42,.05);
+      width: 280px;
+    }
+    .nav-search i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 18px;
+    }
+    .admin-nav-btn {
+      padding: 8px !important;
+      border: 1px solid #EEF2F7 !important;
+      border-radius: 50% !important;
+      background: #F7F9FC !important;
+      width: 40px !important;
+      height: 40px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      margin-left: 8px !important;
+    }
+    .admin-nav-btn i {
+      margin: 0 !important;
+      font-size: 18px !important;
+    }
+    .admin-nav-btn span {
+      display: none !important;
+    }
+  </style>
   <nav>
     <a class="nav-logo" href="#" onclick="showPage('home');return false">
       <img src="L_SurakshaSetu.svg" alt="Suraksha Setu" style="height: 46px; width: auto;">
     </a>
-    <div class="nav-spacer"></div>
-    <div class="nav-tabs" id="nav-tabs">
-      <div class="nav-indicator" id="nav-indicator"></div>
-      <button class="nav-tab active" onclick="showPage('home')"><i
-          class="ph-bold ph-house-line nav-tab-icon"></i><span>Home</span></button>
-      <button class="nav-tab" onclick="showPage('map')"><i class="ph-bold ph-map-trifold nav-tab-icon"></i><span>Live
-          Map</span></button>
-      <button class="nav-tab" onclick="showPage('feed')"><i class="ph-bold ph-rss nav-tab-icon"></i><span>Community
-          Feed</span></button>
-      <button class="nav-tab" onclick="showPage('admin')"><i
-          class="ph-bold ph-shield-checkered nav-tab-icon"></i><span>Admin</span></button>
+    
+    <div style="flex: 1; display: flex; justify-content: center;">
+      <div class="nav-tabs" id="nav-tabs">
+        <div class="nav-indicator" id="nav-indicator"></div>
+        <button class="nav-tab active" onclick="showPage('home')"><i class="ph-bold ph-house-line nav-tab-icon"></i><span>Home</span></button>
+        <button class="nav-tab" onclick="showPage('map')"><i class="ph-bold ph-map-trifold nav-tab-icon"></i><span>Live Map</span></button>
+        <button class="nav-tab" onclick="showPage('feed')"><i class="ph-bold ph-rss nav-tab-icon"></i><span>Community</span></button>
+        <button class="nav-tab" onclick="window.location.hash='admin/help-center'"><i class="ph-bold ph-question nav-tab-icon"></i><span>Help</span></button>
+      </div>
     </div>
-    <button class="btn-report-nav" onclick="showPage('report')">+ Report Issue</button>
+
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <div class="nav-search">
+        <i class="ph-bold ph-magnifying-glass"></i>
+        <input type="text" placeholder="Search reports...">
+      </div>
+      <button class="btn-report-nav" onclick="showPage('report')">+ Report Issue</button>
+      <button class="nav-tab admin-nav-btn" onclick="showPage('admin')" title="Admin Dashboard">
+        <i class="ph-bold ph-shield-checkered nav-tab-icon"></i><span>Admin</span>
+      </button>
+    </div>
   </nav>
 
   <!-- TOAST -->
@@ -3883,6 +3976,7 @@
               display: flex;
               min-height: 700px;
               position: relative;
+              background: #F7F9FC;
             }
 
             .help-content {
@@ -3897,22 +3991,22 @@
             .help-page {
               display: none;
               flex: 1;
-              max-width: 1100px;
+              max-width: 1200px;
               width: 100%;
               margin: 0 auto;
-              padding: 0 0 60px;
+              padding: 0 0 72px;
             }
 
             .help-page.active {
               display: flex;
               flex-direction: column;
-              animation: fadein 0.28s ease;
+              animation: fadein 0.4s ease;
             }
 
             @keyframes fadein {
               from {
                 opacity: 0;
-                transform: translateY(5px);
+                transform: translateY(10px);
               }
 
               to {
@@ -3922,43 +4016,66 @@
             }
 
             .help-hero-band {
-              padding: 40px 32px 32px;
-              background: #fff;
-              border-bottom: 1px solid #e2e8f0;
-              margin-bottom: 24px;
+              padding: 64px 32px 48px;
+              background: transparent;
+              margin-bottom: 40px;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              text-align: center;
+            }
+
+            .help-hero-greeting {
+              font-size: 14px;
+              font-weight: 600;
+              color: #64748b;
+              margin-bottom: 12px;
+              letter-spacing: 0.5px;
             }
 
             .help-hero-title {
               font-family: 'Outfit', sans-serif;
-              font-size: 22px;
+              font-size: 40px;
               font-weight: 800;
-              color: #1e293b;
-              margin-bottom: 6px;
+              color: #0f172a;
+              margin-bottom: 16px;
+              line-height: 1.1;
             }
 
             .help-hero-sub {
-              font-size: 13px;
-              color: #64748b;
-              margin-bottom: 18px;
+              font-size: 18px;
+              color: #475569;
+              margin-bottom: 40px;
+              font-weight: 400;
             }
 
             .help-search-hero {
               display: flex;
               align-items: center;
-              gap: 10px;
-              background: #f8fafc;
-              border: 1px solid #e2e8f0;
-              border-radius: 12px;
-              padding: 11px 16px;
-              max-width: 480px;
+              gap: 12px;
+              background: #fff;
+              border: 1px solid #EEF2F7;
+              border-radius: 16px;
+              padding: 8px 16px 8px 20px;
+              max-width: 640px;
+              width: 100%;
+              height: 60px;
+              box-shadow: 0 8px 30px rgba(15,23,42,.05);
+              transition: all 0.3s ease;
+            }
+
+            .help-search-hero:focus-within {
+              border-color: #cbd5e1;
+              box-shadow: 0 12px 40px rgba(15,23,42,.08);
+              transform: translateY(-2px);
             }
 
             .help-search-hero input {
               background: none;
               border: none;
               outline: none;
-              color: #1e293b;
-              font-size: 14px;
+              color: #0f172a;
+              font-size: 16px;
               font-family: 'DM Sans', sans-serif;
               flex: 1;
             }
@@ -3967,96 +4084,169 @@
               color: #94a3b8;
             }
 
-            .help-search-hero i {
-              font-size: 16px;
-              color: #94a3b8;
+            .help-search-hero i.ph-magnifying-glass {
+              font-size: 24px;
+              color: #64748b;
             }
 
-            .help-search-hero button {
-              background: rgba(34, 197, 94, 0.1);
-              border: 1px solid #16a34a;
-              border-radius: 8px;
-              color: #16a34a;
+            .help-search-shortcut {
+              background: #F7F9FC;
+              border: 1px solid #e2e8f0;
+              color: #64748b;
               font-size: 12px;
-              padding: 6px 14px;
-              cursor: pointer;
-              font-family: 'DM Sans', sans-serif;
-              transition: all 0.2s;
-            }
-
-            .help-search-hero button:hover {
-              background: rgba(34, 197, 94, 0.2);
+              font-weight: 600;
+              padding: 4px 8px;
+              border-radius: 6px;
+              font-family: 'JetBrains Mono', monospace;
             }
 
             .help-body-area {
-              padding: 24px 28px;
+              padding: 0 32px 32px;
               flex: 1;
+            }
+
+            .help-quick-action {
+              flex: 1;
+              background: #fff;
+              border: 1px solid #EEF2F7;
+              border-radius: 18px;
+              padding: 24px;
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
+              cursor: pointer;
+              transition: 300ms ease;
+              box-shadow: 0 4px 20px rgba(15,23,42,.05);
+              text-align: left;
+              position: relative;
+              overflow: hidden;
+            }
+
+            .help-quick-action:hover {
+              transform: translateY(-6px);
+              box-shadow: 0 20px 40px rgba(0,0,0,.08);
+              border-color: #e2e8f0;
+            }
+
+            .help-quick-action .icon-box {
+              width: 48px;
+              height: 48px;
+              border-radius: 14px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 24px;
+              transition: 300ms ease;
+            }
+
+            .help-quick-action:hover .icon-box {
+              background: #ECFDF3 !important;
+              color: #16a34a !important;
+            }
+
+            .help-quick-action-cta {
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              font-size: 14px;
+              font-weight: 600;
+              color: #1e293b;
+              margin-top: auto;
+              transition: 300ms ease;
+            }
+
+            .help-quick-action:hover .help-quick-action-cta i {
+              transform: translateX(4px);
+              color: #16a34a;
             }
 
             .help-cat-grid {
               display: grid;
               grid-template-columns: repeat(3, 1fr);
-              gap: 12px;
-              margin-bottom: 28px;
+              gap: 24px;
+              margin-bottom: 72px;
             }
 
             .help-cat-card {
               background: #fff;
-              border: 1px solid #e2e8f0;
-              border-radius: 14px;
-              padding: 18px 16px;
+              border: 1px solid #EEF2F7;
+              border-radius: 18px;
+              padding: 24px;
               cursor: pointer;
-              transition: all 0.2s;
+              transition: 300ms ease;
               position: relative;
-              overflow: hidden;
+              box-shadow: 0 4px 20px rgba(15,23,42,.05);
+              display: flex;
+              flex-direction: column;
             }
 
             .help-cat-card:hover {
-              border-color: #16a34a;
-              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-              transform: translateY(-2px);
+              border-color: #e2e8f0;
+              box-shadow: 0 20px 40px rgba(0,0,0,.08);
+              transform: translateY(-6px);
             }
 
             .help-cat-icon {
-              width: 38px;
-              height: 38px;
-              border-radius: 10px;
+              width: 48px;
+              height: 48px;
+              border-radius: 14px;
               display: flex;
               align-items: center;
               justify-content: center;
-              font-size: 18px;
-              margin-bottom: 12px;
+              font-size: 24px;
+              margin-bottom: 20px;
+              transition: 300ms ease;
+            }
+
+            .help-cat-card:hover .help-cat-icon {
+              background: #ECFDF3 !important;
+              color: #16a34a !important;
             }
 
             .help-cat-name {
               font-family: 'Outfit', sans-serif;
-              font-size: 13px;
+              font-size: 18px;
               font-weight: 700;
-              color: #1e293b;
-              margin-bottom: 4px;
+              color: #0f172a;
+              margin-bottom: 12px;
             }
 
-            .help-cat-desc {
-              font-size: 11px;
+            .help-cat-links {
+              list-style: none;
+              padding: 0;
+              margin: 0 0 20px 0;
+              flex-grow: 1;
+            }
+
+            .help-cat-links li {
+              font-size: 14px;
               color: #64748b;
-              line-height: 1.5;
               margin-bottom: 8px;
             }
 
             .help-cat-count {
-              font-size: 10px;
-              color: #94a3b8;
+              font-size: 14px;
+              font-weight: 600;
+              color: #1e293b;
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              transition: 300ms ease;
+            }
+
+            .help-cat-card:hover .help-cat-count {
+              color: #16a34a;
             }
 
             .help-section-title {
               font-family: 'Outfit', sans-serif;
-              font-size: 14px;
-              font-weight: 700;
-              color: #16a34a;
-              margin-bottom: 14px;
+              font-size: 28px;
+              font-weight: 800;
+              color: #0f172a;
+              margin-bottom: 32px;
               display: flex;
               align-items: center;
-              gap: 8px;
+              gap: 12px;
             }
 
             .help-faq-list {
@@ -4065,41 +4255,46 @@
 
             .help-faq-item {
               background: #fff;
-              border: 1px solid #e2e8f0;
-              border-radius: 11px;
-              margin-bottom: 8px;
+              border: 1px solid #EEF2F7;
+              border-radius: 16px;
+              margin-bottom: 12px;
               overflow: hidden;
               cursor: pointer;
-              transition: border-color 0.18s;
+              transition: all 300ms ease;
+              box-shadow: 0 4px 20px rgba(15,23,42,.05);
             }
 
             .help-faq-item:hover {
-              border-color: #16a34a;
+              background: #f8fafc;
+              border-color: #e2e8f0;
+              transform: translateY(-2px);
+              box-shadow: 0 8px 30px rgba(15,23,42,.06);
             }
 
             .help-faq-item.open {
-              border-color: #16a34a;
+              border-color: #cbd5e1;
+              background: #fff;
             }
 
             .help-faq-q {
               display: flex;
               align-items: center;
               justify-content: space-between;
-              padding: 13px 16px;
-              gap: 12px;
+              padding: 20px 24px;
+              gap: 16px;
             }
 
             .help-faq-q-text {
-              font-size: 13px;
-              font-weight: 500;
+              font-size: 15px;
+              font-weight: 600;
               color: #1e293b;
               flex: 1;
             }
 
             .help-faq-icon {
-              font-size: 15px;
+              font-size: 18px;
               color: #94a3b8;
-              transition: transform 0.22s;
+              transition: transform 0.3s ease;
               flex-shrink: 0;
             }
 
@@ -4111,25 +4306,108 @@
             .help-faq-a {
               max-height: 0;
               overflow: hidden;
-              transition: max-height 0.3s ease;
+              transition: max-height 0.4s ease;
             }
 
             .help-faq-item.open .help-faq-a {
-              max-height: 200px;
+              max-height: 300px;
             }
 
             .help-faq-a-inner {
-              padding: 0 16px 14px;
-              font-size: 12px;
+              padding: 0 24px 20px;
+              font-size: 14px;
               color: #475569;
               line-height: 1.7;
-              border-top: 1px solid #f1f5f9;
+            }
+
+            .help-recent-card {
+              background: #fff;
+              border: 1px solid #EEF2F7;
+              border-radius: 18px;
+              padding: 24px;
+              box-shadow: 0 4px 20px rgba(15,23,42,.05);
+            }
+
+            .help-recent-item {
+              padding-bottom: 16px;
+              margin-bottom: 16px;
+              border-bottom: 1px solid #f1f5f9;
+              cursor: pointer;
+              display: block;
+              text-decoration: none;
+              transition: 300ms ease;
+            }
+
+            .help-recent-item:last-child {
+              padding-bottom: 0;
+              margin-bottom: 0;
+              border-bottom: none;
+            }
+
+            .help-recent-item:hover {
+              transform: translateX(4px);
+            }
+
+            .help-recent-item:hover .ru-title {
+              color: #16a34a;
+            }
+
+            .help-bottom-cta {
+              background: #fff;
+              border: 1px solid #EEF2F7;
+              border-radius: 24px;
+              padding: 48px 32px;
+              text-align: center;
+              box-shadow: 0 8px 30px rgba(15,23,42,.05);
+              margin-top: 72px;
+            }
+
+            .docs-sidebar {
+              width: 270px;
+              border-right: 1px solid #EEF2F7;
+              padding: 32px 24px;
+              background: #F7F9FC;
+              overflow-y: auto;
+            }
+
+            .docs-nav-link {
+              padding: 10px 14px;
+              font-size: 14px;
+              color: #475569;
+              cursor: pointer;
+              margin-bottom: 6px;
+              border-radius: 12px;
+              transition: 0.2s ease;
+              position: relative;
+            }
+
+            .docs-nav-link:hover {
+              color: #1e293b;
+              background: #f1f5f9;
+            }
+
+            .docs-nav-link.active {
+              color: #16a34a;
+              background: #ECFDF3;
+              font-weight: 600;
+            }
+
+            .docs-nav-link.active::before {
+              content: '';
+              position: absolute;
+              left: 0;
+              top: 50%;
+              transform: translateY(-50%);
+              width: 3px;
+              height: 18px;
+              background: #16a34a;
+              border-radius: 0 4px 4px 0;
             }
 
             .help-guide-grid {
               display: grid;
               grid-template-columns: 1fr 1fr;
-              gap: 10px;
+              gap: 16px;
               margin-bottom: 28px;
             }
 
@@ -4534,174 +4812,189 @@
               <!-- HOME PAGE -->
               <div class="help-page active" id="help-page-home">
                 <div class="help-hero-band">
-                  <div class="help-hero-title">How can we help you?</div>
-                  <div class="help-hero-sub">Search our knowledge base, guides, FAQs and support resources.</div>
+                  <div class="help-hero-greeting">👋 Hello Admin</div>
+                  <div class="help-hero-title">How can we help today?</div>
+                  <div class="help-hero-sub">Search anything to find answers fast.</div>
                   
-                  <div style="position: relative; max-width: 600px; width: 100%; margin-top: 24px;">
-                    <div class="help-search-hero" style="max-width: 100%;">
-                      <i class="ph-bold ph-magnifying-glass" style="font-size: 18px;"></i>
-                      <input type="text" id="helpGlobalSearch" placeholder="Search anything: 'Report Issue', 'Certificate'..." style="font-size: 15px; padding: 4px 0;" onkeyup="performHelpSearch(this.value)">
-                      <button onclick="performHelpSearch(document.getElementById('helpGlobalSearch').value)">Search</button>
+                  <div style="position: relative; max-width: 640px; width: 100%;">
+                    <div class="help-search-hero">
+                      <i class="ph-bold ph-magnifying-glass"></i>
+                      <input type="text" id="helpGlobalSearch" placeholder="Search anything: 'Report Issue', 'Certificate'..." onkeyup="performHelpSearch(this.value)">
+                      <div class="help-search-shortcut">⌘ K</div>
                     </div>
                     <!-- Search Results Dropdown -->
-                    <div id="helpSearchResults" style="display: none; position: absolute; top: 110%; left: 0; right: 0; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 100; max-height: 400px; overflow-y: auto;">
+                    <div id="helpSearchResults" style="display: none; position: absolute; top: 110%; left: 0; right: 0; background: #fff; border: 1px solid #EEF2F7; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); z-index: 100; max-height: 400px; overflow-y: auto;">
                     </div>
                   </div>
                 </div>
                 
-                <div class="help-body-area" style="padding-top: 0;">
+                <div class="help-body-area">
                   
                   <!-- QUICK ACTIONS -->
-                  <div style="display: flex; gap: 16px; margin-top: -24px; position: relative; z-index: 10; margin-bottom: 36px;">
-                    <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.02);" onclick="switchHelpPage('contact', document.getElementById('help-nav-contact'))" onmouseover="this.style.borderColor='#16a34a';this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='none';">
-                      <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(34, 197, 94, 0.1); color: #16a34a; display: flex; align-items: center; justify-content: center; font-size: 22px;"><i class="ph-duotone ph-chat-circle-text"></i></div>
-                      <div><div style="font-size: 15px; font-weight: 700; color: #1e293b;">Contact Support</div><div style="font-size: 12px; color: #64748b; margin-top: 2px;">Get help instantly</div></div>
+                  <div style="display: flex; gap: 24px; margin-top: -80px; position: relative; z-index: 10; margin-bottom: 72px;">
+                    <div class="help-quick-action" onclick="switchHelpPage('contact', document.getElementById('help-nav-contact'))">
+                      <div class="icon-box" style="background: rgba(34, 197, 94, 0.1); color: #16a34a;"><i class="ph-duotone ph-chat-circle-text"></i></div>
+                      <div>
+                        <div style="font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Contact Support</div>
+                        <div style="font-size: 14px; color: #64748b; line-height: 1.5;">Chat with our support team instantly.</div>
+                      </div>
+                      <div class="help-quick-action-cta">Open <i class="ph-bold ph-arrow-right"></i></div>
                     </div>
-                    <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.02);" onclick="switchHelpPage('tickets', document.getElementById('help-nav-tickets'))" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='none';">
-                      <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 22px;"><i class="ph-duotone ph-ticket"></i></div>
-                      <div><div style="font-size: 15px; font-weight: 700; color: #1e293b;">Track Ticket</div><div style="font-size: 12px; color: #64748b; margin-top: 2px;">Check issue status</div></div>
+                    
+                    <div class="help-quick-action" onclick="switchHelpPage('tickets', document.getElementById('help-nav-tickets'))">
+                      <div class="icon-box" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;"><i class="ph-duotone ph-ticket"></i></div>
+                      <div>
+                        <div style="font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">Track Ticket</div>
+                        <div style="font-size: 14px; color: #64748b; line-height: 1.5;">Check status of your reported issues.</div>
+                      </div>
+                      <div class="help-quick-action-cta">Open <i class="ph-bold ph-arrow-right"></i></div>
                     </div>
-                    <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.02);" onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))" onmouseover="this.style.borderColor='#f59e0b';this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='none';">
-                      <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(245, 158, 11, 0.1); color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 22px;"><i class="ph-duotone ph-book-open"></i></div>
-                      <div><div style="font-size: 15px; font-weight: 700; color: #1e293b;">User Guides</div><div style="font-size: 12px; color: #64748b; margin-top: 2px;">Detailed manuals</div></div>
+                    
+                    <div class="help-quick-action" onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))">
+                      <div class="icon-box" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;"><i class="ph-duotone ph-book-open"></i></div>
+                      <div>
+                        <div style="font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">User Guides</div>
+                        <div style="font-size: 14px; color: #64748b; line-height: 1.5;">Detailed manuals and platform guides.</div>
+                      </div>
+                      <div class="help-quick-action-cta">Open <i class="ph-bold ph-arrow-right"></i></div>
                     </div>
                   </div>
-                  <div class="help-section-title"><i class="ph-duotone ph-squares-four"
-                      style="font-size: 14px;"></i>Browse by category</div>
+                  <div class="help-section-title">Browse by category</div>
                   <div class="help-cat-grid">
                     <div class="help-cat-card" onclick="switchHelpPage('faq', document.getElementById('help-nav-faq'))">
-                      <div class="help-cat-icon" style="background: rgba(34, 197, 94, 0.1);"><i
-                          class="ph-duotone ph-map-pin" style="color: #16a34a; font-size: 18px;"></i></div>
+                      <div class="help-cat-icon" style="background: rgba(34, 197, 94, 0.1); color: #16a34a;"><i class="ph-duotone ph-map-pin"></i></div>
                       <div class="help-cat-name">Reporting issues</div>
-                      <div class="help-cat-desc">How to submit, track, and update environmental reports on the
-                        platform.
-                      </div>
-                      <div class="help-cat-count">12 articles</div>
+                      <ul class="help-cat-links">
+                        <li>Submit reports</li>
+                        <li>Track reports</li>
+                        <li>Analytics</li>
+                      </ul>
+                      <div class="help-cat-count">12 Articles <i class="ph-bold ph-arrow-right" style="margin-left: 2px;"></i></div>
                     </div>
+                    
                     <div class="help-cat-card" onclick="switchHelpPage('faq', document.getElementById('help-nav-faq'))">
-                      <div class="help-cat-icon" style="background: rgba(96, 165, 250, 0.1);"><i
-                          class="ph-duotone ph-layout-dashboard" style="color: #3b82f6; font-size: 18px;"></i></div>
+                      <div class="help-cat-icon" style="background: rgba(96, 165, 250, 0.1); color: #3b82f6;"><i class="ph-duotone ph-layout-dashboard"></i></div>
                       <div class="help-cat-name">Admin dashboard</div>
-                      <div class="help-cat-desc">Navigating the admin panel, managing reports, analytics and exports.
-                      </div>
-                      <div class="help-cat-count">9 articles</div>
+                      <ul class="help-cat-links">
+                        <li>Navigating panel</li>
+                        <li>Managing reports</li>
+                        <li>Data exports</li>
+                      </ul>
+                      <div class="help-cat-count">9 Articles <i class="ph-bold ph-arrow-right" style="margin-left: 2px;"></i></div>
                     </div>
+                    
                     <div class="help-cat-card" onclick="switchHelpPage('faq', document.getElementById('help-nav-faq'))">
-                      <div class="help-cat-icon" style="background: rgba(167, 139, 250, 0.1);"><i
-                          class="ph-duotone ph-users" style="color: #8b5cf6; font-size: 18px;"></i></div>
+                      <div class="help-cat-icon" style="background: rgba(167, 139, 250, 0.1); color: #8b5cf6;"><i class="ph-duotone ph-users"></i></div>
                       <div class="help-cat-name">Team & accounts</div>
-                      <div class="help-cat-desc">User roles, inviting members, permissions, and profile management.
-                      </div>
-                      <div class="help-cat-count">7 articles</div>
+                      <ul class="help-cat-links">
+                        <li>User roles</li>
+                        <li>Inviting members</li>
+                        <li>Permissions</li>
+                      </ul>
+                      <div class="help-cat-count">7 Articles <i class="ph-bold ph-arrow-right" style="margin-left: 2px;"></i></div>
                     </div>
-                    <div class="help-cat-card"
-                      onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))">
-                      <div class="help-cat-icon" style="background: rgba(251, 191, 36, 0.1);"><i
-                          class="ph-duotone ph-medal" style="color: #f59e0b; font-size: 18px;"></i></div>
+                    
+                    <div class="help-cat-card" onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))">
+                      <div class="help-cat-icon" style="background: rgba(251, 191, 36, 0.1); color: #f59e0b;"><i class="ph-duotone ph-medal"></i></div>
                       <div class="help-cat-name">Certificates</div>
-                      <div class="help-cat-desc">Issuing, downloading, and verifying community achievement
-                        certificates.
-                      </div>
-                      <div class="help-cat-count">5 articles</div>
+                      <ul class="help-cat-links">
+                        <li>Issuing certificates</li>
+                        <li>Downloading PDF</li>
+                        <li>Verifying QR code</li>
+                      </ul>
+                      <div class="help-cat-count">5 Articles <i class="ph-bold ph-arrow-right" style="margin-left: 2px;"></i></div>
                     </div>
-                    <div class="help-cat-card"
-                      onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))">
-                      <div class="help-cat-icon" style="background: rgba(251, 146, 60, 0.1);"><i
-                          class="ph-duotone ph-map-trifold" style="color: #f97316; font-size: 18px;"></i></div>
+                    
+                    <div class="help-cat-card" onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))">
+                      <div class="help-cat-icon" style="background: rgba(251, 146, 60, 0.1); color: #f97316;"><i class="ph-duotone ph-map-trifold"></i></div>
                       <div class="help-cat-name">Live map & zones</div>
-                      <div class="help-cat-desc">Understanding issue markers, filters, zone clustering, and map
-                        settings.</div>
-                      <div class="help-cat-count">6 articles</div>
+                      <ul class="help-cat-links">
+                        <li>Issue markers</li>
+                        <li>Zone clustering</li>
+                        <li>Map settings</li>
+                      </ul>
+                      <div class="help-cat-count">6 Articles <i class="ph-bold ph-arrow-right" style="margin-left: 2px;"></i></div>
                     </div>
-                    <div class="help-cat-card"
-                      onclick="switchHelpPage('contact', document.getElementById('help-nav-contact'))">
-                      <div class="help-cat-icon" style="background: rgba(248, 113, 113, 0.1);"><i
-                          class="ph-duotone ph-wrench" style="color: #ef4444; font-size: 18px;"></i></div>
+                    
+                    <div class="help-cat-card" onclick="switchHelpPage('contact', document.getElementById('help-nav-contact'))">
+                      <div class="help-cat-icon" style="background: rgba(248, 113, 113, 0.1); color: #ef4444;"><i class="ph-duotone ph-wrench"></i></div>
                       <div class="help-cat-name">Troubleshooting</div>
-                      <div class="help-cat-desc">Login issues, map not loading, notifications not working, and more.
-                      </div>
-                      <div class="help-cat-count">8 articles</div>
+                      <ul class="help-cat-links">
+                        <li>Login issues</li>
+                        <li>Map not loading</li>
+                        <li>Notifications</li>
+                      </ul>
+                      <div class="help-cat-count">8 Articles <i class="ph-bold ph-arrow-right" style="margin-left: 2px;"></i></div>
                     </div>
                   </div>
 
-                  <div style="display: flex; gap: 24px;">
+                  <div style="display: flex; gap: 32px;">
                     <div style="flex: 2;">
-                      <div class="help-section-title"><i class="ph-duotone ph-flame"
-                          style="font-size: 14px; color: #f97316;"></i>Popular Articles</div>
+                      <div class="help-section-title">Popular Articles</div>
                       <div class="help-faq-list">
                         <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                          <div class="help-faq-q"><span class="help-faq-q-text">How do I submit a new environmental issue
-                              report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                          <div class="help-faq-q"><span class="help-faq-q-text">How do I submit a new environmental issue report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
                           <div class="help-faq-a">
-                            <div class="help-faq-a-inner">Click the green "+ Report Issue" button in the top navigation
-                              bar. Fill in the category (Garbage, Plastic, Water, etc.), add a photo or description, pin the
-                              location on the map, and set the priority.</div>
+                            <div class="help-faq-a-inner">Click the green "+ Report Issue" button in the top navigation bar. Fill in the category (Garbage, Plastic, Water, etc.), add a photo or description, pin the location on the map, and set the priority.</div>
                           </div>
                         </div>
                         <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                          <div class="help-faq-q"><span class="help-faq-q-text">Why is my report showing "In Progress" but
-                              no update from the team?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                          <div class="help-faq-q"><span class="help-faq-q-text">Why is my report showing "In Progress" but no update from the team?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
                           <div class="help-faq-a">
-                            <div class="help-faq-a-inner">In Progress means a moderator or field officer has picked up the
-                              issue for review. Resolution timelines depend on priority. You can track status in real time from your report detail page.</div>
+                            <div class="help-faq-a-inner">In Progress means a moderator or field officer has picked up the issue for review. Resolution timelines depend on priority. You can track status in real time from your report detail page.</div>
                           </div>
                         </div>
                         <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                          <div class="help-faq-q"><span class="help-faq-q-text">How do I access the Admin
-                              Dashboard?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                          <div class="help-faq-q"><span class="help-faq-q-text">How do I access the Admin Dashboard?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
                           <div class="help-faq-a">
-                            <div class="help-faq-a-inner">The Admin Dashboard is accessible only to Super Admins and
-                              Moderators. Click the "Admin" button in the top navigation.</div>
+                            <div class="help-faq-a-inner">The Admin Dashboard is accessible only to Super Admins and Moderators. Click the "Admin" button in the top navigation.</div>
                           </div>
                         </div>
                         <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                          <div class="help-faq-q"><span class="help-faq-q-text">How do I download or share a community
-                              certificate?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
+                          <div class="help-faq-q"><span class="help-faq-q-text">How do I download or share a community certificate?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
                           <div class="help-faq-a">
-                            <div class="help-faq-a-inner">Go to Certificate → View Certificates, find your certificate by
-                              name or ID, and click the download icon to save as PDF. Each certificate includes a QR code
-                              for instant verification.</div>
+                            <div class="help-faq-a-inner">Go to Certificate → View Certificates, find your certificate by name or ID, and click the download icon to save as PDF. Each certificate includes a QR code for instant verification.</div>
                           </div>
                         </div>
                       </div>
                     </div>
                     
                     <div style="flex: 1;">
-                      <div class="help-section-title"><i class="ph-duotone ph-clock-counter-clockwise"
-                          style="font-size: 14px; color: #8b5cf6;"></i>Recently Updated</div>
-                      <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
-                        <div style="margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid #f1f5f9; cursor: pointer;" onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))" onmouseover="this.querySelector('.ru-title').style.color='#16a34a'" onmouseout="this.querySelector('.ru-title').style.color='#1e293b'">
-                          <div class="ru-title" style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 4px; transition: 0.2s;">New Certificate Templates</div>
-                          <div style="font-size: 11px; color: #64748b;">Added 2 days ago in Guides</div>
-                        </div>
-                        <div style="margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid #f1f5f9; cursor: pointer;" onclick="switchHelpPage('faq', document.getElementById('help-nav-faq'))" onmouseover="this.querySelector('.ru-title').style.color='#16a34a'" onmouseout="this.querySelector('.ru-title').style.color='#1e293b'">
-                          <div class="ru-title" style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 4px; transition: 0.2s;">Live Map Filtering Fix</div>
-                          <div style="font-size: 11px; color: #64748b;">Updated 4 days ago in FAQs</div>
-                        </div>
-                        <div style="cursor: pointer;" onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))" onmouseover="this.querySelector('.ru-title').style.color='#16a34a'" onmouseout="this.querySelector('.ru-title').style.color='#1e293b'">
-                          <div class="ru-title" style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 4px; transition: 0.2s;">Managing Role Permissions</div>
-                          <div style="font-size: 11px; color: #64748b;">Updated last week in Admin</div>
-                        </div>
+                      <div class="help-section-title">Recently Updated</div>
+                      <div class="help-recent-card">
+                        <a class="help-recent-item" onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))">
+                          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <span style="font-size: 10px; font-weight: 700; color: #16a34a; background: #ECFDF3; padding: 2px 6px; border-radius: 4px;">NEW</span>
+                            <div class="ru-title" style="font-size: 14px; font-weight: 600; color: #0f172a; transition: 0.2s;">Certificate Guide</div>
+                          </div>
+                          <div style="font-size: 13px; color: #64748b; margin-bottom: 8px;">Updated 2 days ago</div>
+                          <div style="font-size: 13px; font-weight: 600; color: #16a34a;">Read <i class="ph-bold ph-arrow-right"></i></div>
+                        </a>
+                        <a class="help-recent-item" onclick="switchHelpPage('faq', document.getElementById('help-nav-faq'))">
+                          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <div class="ru-title" style="font-size: 14px; font-weight: 600; color: #0f172a; transition: 0.2s;">Live Map Filtering Fix</div>
+                          </div>
+                          <div style="font-size: 13px; color: #64748b; margin-bottom: 8px;">Updated 4 days ago</div>
+                          <div style="font-size: 13px; font-weight: 600; color: #16a34a;">Read <i class="ph-bold ph-arrow-right"></i></div>
+                        </a>
+                        <a class="help-recent-item" onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))">
+                          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <div class="ru-title" style="font-size: 14px; font-weight: 600; color: #0f172a; transition: 0.2s;">Managing Role Permissions</div>
+                          </div>
+                          <div style="font-size: 13px; color: #64748b; margin-bottom: 8px;">Updated last week</div>
+                          <div style="font-size: 13px; font-weight: 600; color: #16a34a;">Read <i class="ph-bold ph-arrow-right"></i></div>
+                        </a>
                       </div>
                     </div>
                   </div>
 
-                  <div
-                    style="background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 16px;">
-                    <div
-                      style="width: 44px; height: 44px; border-radius: 12px; background: rgba(34, 197, 94, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                      <i class="ph-duotone ph-headset" style="font-size: 22px; color: #16a34a;"></i>
+                  <div class="help-bottom-cta">
+                    <div style="font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 12px;">Still need help?</div>
+                    <div style="font-size: 16px; color: #475569; margin-bottom: 32px;">Talk with our support team. We're here to help.</div>
+                    <div style="display: flex; gap: 16px; justify-content: center;">
+                      <button onclick="switchHelpPage('contact', document.getElementById('help-nav-contact'))" style="background: #16a34a; border: none; border-radius: 12px; color: #fff; font-size: 15px; font-weight: 600; padding: 12px 24px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s;" onmouseover="this.style.background='#15803d'"><i class="ph-bold ph-chat-circle-text"></i> Live Chat</button>
+                      <a href="mailto:support@surakshasetu.in" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; color: #1e293b; font-size: 15px; font-weight: 600; padding: 12px 24px; cursor: pointer; display: flex; align-items: center; gap: 8px; text-decoration: none; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'"><i class="ph-bold ph-envelope"></i> Email</a>
                     </div>
-                    <div style="flex: 1;">
-                      <div
-                        style="font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 2px;">
-                        Still need help?</div>
-                      <div style="font-size: 12px; color: #64748b;">Our support team is available Mon–Sat, 9 AM – 6 PM
-                        IST. Average response time: under 2 hours.</div>
-                    </div>
-                    <button onclick="switchHelpPage('contact', document.getElementById('help-nav-contact'))"
-                      style="background: rgba(34, 197, 94, 0.1); border: 1px solid #16a34a; border-radius: 9px; color: #16a34a; font-size: 12px; font-weight: 500; padding: 9px 16px; cursor: pointer; white-space: nowrap; font-family: 'DM Sans', sans-serif;">Contact
-                      us</button>
                   </div>
                 </div>
               </div>
@@ -4751,20 +5044,20 @@
                 
                 <div style="display: flex; flex: 1; min-height: 600px;">
                   <!-- Docs Sidebar -->
-                  <div style="width: 240px; border-right: 1px solid #e2e8f0; padding: 24px 16px; background: #f8fafc; overflow-y: auto;">
-                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">Getting Started</div>
-                    <div style="padding: 8px 12px; font-size: 13px; font-weight: 600; color: #16a34a; background: rgba(34, 197, 94, 0.1); border-radius: 6px; cursor: pointer; margin-bottom: 4px;">Platform Overview</div>
-                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 16px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Create Account</div>
+                  <div class="docs-sidebar">
+                    <div style="font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">Getting Started</div>
+                    <div class="docs-nav-link active">Platform Overview</div>
+                    <div class="docs-nav-link">Create Account</div>
                     
-                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">Reporting</div>
-                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Submit a Report</div>
-                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Issue Workflow</div>
-                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 16px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Live Map Filters</div>
+                    <div style="font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-top: 24px; margin-bottom: 12px; letter-spacing: 0.5px;">Reporting</div>
+                    <div class="docs-nav-link">Submit a Report</div>
+                    <div class="docs-nav-link">Issue Workflow</div>
+                    <div class="docs-nav-link">Live Map Filters</div>
                     
-                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">Admin Tasks</div>
-                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Manage Users</div>
-                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Certificates</div>
-                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Notifications</div>
+                    <div style="font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-top: 24px; margin-bottom: 12px; letter-spacing: 0.5px;">Admin Tasks</div>
+                    <div class="docs-nav-link">Manage Users</div>
+                    <div class="docs-nav-link">Certificates</div>
+                    <div class="docs-nav-link">Notifications</div>
                   </div>
                   
                   <!-- Docs Content -->
