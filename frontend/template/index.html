@@ -2791,6 +2791,27 @@
             .leaflet-custom-tooltip::before {
               display: none !important;
             }
+
+            @media (max-width: 768px) {
+              .m-layout {
+                display: flex;
+                flex-direction: column;
+                min-height: auto;
+              }
+              .m-map-panel {
+                width: 100%;
+                height: 360px;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+              }
+              #live-leaflet-map {
+                min-height: 360px !important;
+                height: 360px !important;
+              }
+              .m-right {
+                width: 100%;
+              }
+            }
           </style>
 
           <div class="m-filter-bar"
