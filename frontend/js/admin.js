@@ -2581,7 +2581,7 @@ const chartInstances = {};
 
     return `
     <div style="background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px; font-size:12px; box-shadow:var(--shadow-sm);">
-      <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+      <div class="history-card-header" style="margin-bottom:6px;">
         <span style="font-weight:800; color:${typeBadgeCol}; text-transform:uppercase; font-size:10px;">${log.type}</span>
         <span style="color:${statusColor}; font-weight:700; text-transform:uppercase; font-size:10px;">● ${escapeHTML(log.status)}</span>
       </div>

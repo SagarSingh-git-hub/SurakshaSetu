@@ -3107,11 +3107,11 @@
             <!-- Active Alerts Panel -->
             <div>
               <div
-                style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:0.5px;">
+                style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:16px;display:flex;align-items:flex-start;gap:8px;text-transform:uppercase;letter-spacing:0.5px;">
                 <div
-                  style="width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 6px rgba(239, 68, 68, 0.6);animation:pulse 2s infinite;">
+                  style="width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 6px rgba(239, 68, 68, 0.6);animation:pulse 2s infinite;flex-shrink:0;margin-top:5px;">
                 </div>
-                Active Alerts Requiring Action (<span id="active-alerts-count">0</span>)
+                <span>Active Alerts Requiring Action (<span id="active-alerts-count">0</span>)</span>
               </div>
               <div id="active-alerts-container" style="display:flex;flex-direction:column;gap:16px;">
                 <!-- Active Alerts dynamically populated here -->

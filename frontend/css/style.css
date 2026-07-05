@@ -1358,6 +1358,11 @@ body:has(#page-map.active) {
     flex-shrink: 0 !important;
     z-index: 10 !important;
   }
+  .history-card-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 2px !important;
+  }
   .admin-sidebar.open-mobile {
     transform: translateX(0) !important;
   }
@@ -2417,4 +2422,9 @@ body:has(#page-map.active) {
 
 #admin-live-activity-feed::-webkit-scrollbar-thumb:hover {
   background-color: #16a34a;
+}
+
+.history-card-header {
+  display: flex;
+  justify-content: space-between;
 }
