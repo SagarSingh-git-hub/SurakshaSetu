@@ -1335,7 +1335,9 @@ body:has(#page-map.active) {
   .admin-sidebar {
     position: fixed !important;
     top: 60px !important;
-    bottom: 0 !important;
+    height: calc(100dvh - 60px) !important;
+    display: flex !important;
+    flex-direction: column !important;
     left: 0 !important;
     width: 280px !important;
     background: #fff !important;
@@ -1343,6 +1345,18 @@ body:has(#page-map.active) {
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
     z-index: 9998 !important;
     box-shadow: 4px 0 20px rgba(0,0,0,0.12) !important;
+  }
+  .admin-sidebar-nav {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    min-height: 0 !important;
+  }
+  .admin-sidebar-footer {
+    position: sticky !important;
+    bottom: 0 !important;
+    background: #fff !important;
+    flex-shrink: 0 !important;
+    z-index: 10 !important;
   }
   .admin-sidebar.open-mobile {
     transform: translateX(0) !important;
