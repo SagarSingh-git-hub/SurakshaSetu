@@ -1827,6 +1827,8 @@
       <button class="sidebar-mobile-toggle" onclick="toggleMobileSidebar()" title="Toggle Sidebar">
         <i class="ph-bold ph-list"></i>
       </button>
+      <!-- SIDEBAR BACKDROP -->
+      <div class="admin-sidebar-backdrop" id="admin-sidebar-backdrop" onclick="toggleMobileSidebar()"></div>
       <!-- SIDEBAR -->
       <aside class="admin-sidebar" id="admin-sidebar">
         <!-- Edge Collapse Toggle -->
@@ -1834,8 +1836,8 @@
           <i class="ph-bold ph-caret-left" id="sidebar-toggle-icon"></i>
         </button>
 
-        <div class="admin-sidebar-search">
-          <div class="admin-sidebar-search-box" onclick="expandSidebarIfCollapsed()">
+        <div class="admin-sidebar-search" style="display:flex; align-items:center;">
+          <div class="admin-sidebar-search-box" onclick="expandSidebarIfCollapsed()" style="flex:1;">
             <i class="ph-duotone ph-magnifying-glass" style="font-size: 16px; color:var(--text3)"></i>
             <input type="text" id="admin-module-search" placeholder="Search modules..."
               oninput="filterAdminModules(this.value)">
@@ -1843,6 +1845,9 @@
               style="display:none; background:none; border:none; color:var(--text3); cursor:pointer; font-size:16px; padding:0;"><i
                 class="ph-bold ph-x"></i></button>
           </div>
+          <button class="mobile-sidebar-close" onclick="toggleMobileSidebar()">
+            <i class="ph-bold ph-x"></i>
+          </button>
         </div>
 
         <div class="admin-sidebar-nav">
@@ -5137,7 +5142,9 @@
 
     function toggleMobileSidebar() {
       const sidebar = document.getElementById('admin-sidebar');
+      const backdrop = document.getElementById('admin-sidebar-backdrop');
       if (sidebar) sidebar.classList.toggle('open-mobile');
+      if (backdrop) backdrop.classList.toggle('show');
     }
 
     function expandSidebarIfCollapsed() {
