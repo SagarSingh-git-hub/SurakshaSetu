@@ -1836,8 +1836,8 @@
           <i class="ph-bold ph-caret-left" id="sidebar-toggle-icon"></i>
         </button>
 
-        <div class="admin-sidebar-search" style="display:flex; align-items:center;">
-          <div class="admin-sidebar-search-box" onclick="expandSidebarIfCollapsed()" style="flex:1;">
+        <div class="admin-sidebar-search">
+          <div class="admin-sidebar-search-box" onclick="expandSidebarIfCollapsed()">
             <i class="ph-duotone ph-magnifying-glass" style="font-size: 16px; color:var(--text3)"></i>
             <input type="text" id="admin-module-search" placeholder="Search modules..."
               oninput="filterAdminModules(this.value)">
@@ -1845,9 +1845,6 @@
               style="display:none; background:none; border:none; color:var(--text3); cursor:pointer; font-size:16px; padding:0;"><i
                 class="ph-bold ph-x"></i></button>
           </div>
-          <button class="mobile-sidebar-close" onclick="toggleMobileSidebar()">
-            <i class="ph-bold ph-x"></i>
-          </button>
         </div>
 
         <div class="admin-sidebar-nav">

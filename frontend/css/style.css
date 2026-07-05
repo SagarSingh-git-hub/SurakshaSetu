@@ -1347,11 +1347,8 @@ body:has(#page-map.active) {
   .admin-sidebar.open-mobile {
     transform: translateX(0) !important;
   }
-  .admin-nav-arrow {
+  .sidebar-edge-toggle {
     display: none !important;
-  }
-  .mobile-sidebar-close {
-    display: flex !important;
   }
   .admin-sidebar-backdrop.show {
     display: block !important;
@@ -1571,22 +1568,6 @@ body:has(#page-map.active) {
 }
 
 /* Mobile Sidebar specific elements */
-.mobile-sidebar-close {
-  display: none;
-  width: 32px;
-  height: 32px;
-  background: #f1f5f9;
-  border-radius: 50%;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  color: var(--text2);
-  cursor: pointer;
-  margin-left: 12px;
-}
-.mobile-sidebar-close:hover {
-  background: #e2e8f0;
-}
 .admin-sidebar-backdrop {
   display: none;
   position: fixed;
