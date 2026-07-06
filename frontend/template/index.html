@@ -6386,6 +6386,24 @@
     });
   </script>
 
+  <!-- Plant Back to Top Button -->
+  <button id="plant-back-to-top" class="plant-btt" title="Back to top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    <i class="ph-bold ph-arrow-up"></i>
+  </button>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const bttBtn = document.getElementById('plant-back-to-top');
+      if (bttBtn) {
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 300) {
+            bttBtn.classList.add('show');
+          } else {
+            bttBtn.classList.remove('show');
+          }
+        });
+      }
+    });
+  </script>
 </body>
 
 </html>

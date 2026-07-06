@@ -2428,3 +2428,48 @@ body:has(#page-map.active) {
   display: flex;
   justify-content: space-between;
 }
+
+/* Plant Back to Top Button */
+.plant-btt {
+  position: fixed;
+  bottom: -80px;
+  right: 24px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #4ade80, #16a34a);
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 50% 50% 0 50%;
+  box-shadow: 0 4px 15px rgba(22, 163, 74, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  z-index: 9999;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: rotate(45deg);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.plant-btt i {
+  transform: rotate(-45deg);
+  transition: transform 0.3s;
+}
+
+.plant-btt:hover {
+  background: linear-gradient(135deg, #22c55e, #15803d);
+  box-shadow: 0 6px 20px rgba(22, 163, 74, 0.6);
+  transform: rotate(45deg) scale(1.1);
+}
+
+.plant-btt:hover i {
+  transform: rotate(-45deg) translateY(-3px);
+}
+
+.plant-btt.show {
+  bottom: 24px;
+  opacity: 1;
+  visibility: visible;
+}
