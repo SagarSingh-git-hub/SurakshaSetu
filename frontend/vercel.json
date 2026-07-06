@@ -5,6 +5,7 @@
     { "source": "/js/(.*)", "destination": "/js/$1" },
     { "source": "/L_SurakshaSetu.svg", "destination": "/template/L_SurakshaSetu.svg" },
     { "source": "/model.svg", "destination": "/template/model.svg" },
+    { "source": "/BackToTop.svg", "destination": "/template/BackToTop.svg" },
     { "source": "/organisation.html", "destination": "/template/organisation.html" },
     { "source": "/organisation", "destination": "/template/organisation.html" },
     { "source": "/Video/(.*)", "destination": "/Video/$1" },
