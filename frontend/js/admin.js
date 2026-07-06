@@ -3504,8 +3504,13 @@ const chartInstances = {};
           <td style="padding: 16px; font-size: 12px; color: #64748b;">${dateStr}</td>
           <td style="padding: 16px;"><span class="help-badge ${statusBadgeClass}">${t.status}</span></td>
           <td style="padding: 16px; text-align: center;">
-            <div style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; background: #fff; border: 1px solid #e2e8f0; color: #64748b; transition: 0.2s;" onmouseover="this.style.borderColor='#cbd5e1'; this.style.color='#1e293b'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#64748b'; this.style.boxShadow='none';" title="View Details" onclick="event.stopPropagation(); viewTicket('${t.ticket_id}')">
-              <i class="ph-bold ph-eye"></i>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <div style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; background: #fff; border: 1px solid #e2e8f0; color: #64748b; transition: 0.2s;" onmouseover="this.style.borderColor='#cbd5e1'; this.style.color='#1e293b'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#64748b'; this.style.boxShadow='none';" title="View Details" onclick="event.stopPropagation(); viewTicket('${t.ticket_id}')">
+                <i class="ph-bold ph-eye"></i>
+              </div>
+              <div style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; background: #fff; border: 1px solid #e2e8f0; color: #ef4444; transition: 0.2s;" onmouseover="this.style.borderColor='#fca5a5'; this.style.background='#fef2f2'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.background='#fff'; this.style.boxShadow='none';" title="Delete Ticket" onclick="event.stopPropagation(); deleteTicket('${t.ticket_id}')">
+                <i class="ph-bold ph-trash"></i>
+              </div>
             </div>
           </td>
         </tr>
@@ -3600,6 +3605,36 @@ const chartInstances = {};
     } else {
         showToast('View ticket details for ' + ticketId);
     }
+  };
+
+  window.deleteTicket = async function(ticketId) {
+    if (!confirm('Are you sure you want to delete ticket ' + ticketId + '?')) return;
+    
+    // Optimistic UI update
+    const previousData = [...window.ticketsData];
+    window.ticketsData = window.ticketsData.filter(t => t.ticket_id !== ticketId);
+    renderTickets();
+    showToast('Ticket deleted successfully');
+
+    // Fire and forget backend call
+    fetch(`${API_URL}/api/tickets.php?id=${encodeURIComponent(ticketId)}`, {
+      method: 'DELETE'
+    }).then(res => res.json()).then(data => {
+      if (!data.success) {
+        // If delete fails, rollback
+        window.ticketsData = previousData;
+        renderTickets();
+        showToast('Failed to delete ticket', true);
+      }
+    }).catch(e => {
+      console.error('Error deleting ticket:', e);
+      // Only rollback on error if not a demo ticket
+      if (!ticketId.includes('#SS-100')) {
+          window.ticketsData = previousData;
+          renderTickets();
+          showToast('Failed to delete ticket', true);
+      }
+    });
   };
 
   // Initial render when script loads
