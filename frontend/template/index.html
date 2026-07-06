@@ -5159,26 +5159,13 @@
                         onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#94a3b8'"></i>
                     </div>
                     <div style="display: flex; gap: 12px;">
-                      <div id="custom-status-dropdown" style="position: relative; z-index: 50;">
-                        <div id="custom-status-btn" style="height: 34px; padding: 0 12px 0 16px; border: 1.5px solid #22c55e; border-radius: 20px; font-size: 13px; font-weight: 600; color: #15803d; background: #fff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; width: 140px; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);" onclick="toggleCustomDropdown(event)">
-                          <span id="custom-status-label">Status: All</span>
-                          <i id="custom-status-icon" class="ph-bold ph-caret-up" style="font-size: 14px; color: #16a34a; transition: transform 0.2s; transform: rotate(180deg);"></i>
-                        </div>
-                        <div id="custom-status-menu" style="position: absolute; top: calc(100% + 4px); left: 0; width: 100%; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; margin: 0; padding: 4px 0; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: none; flex-direction: column; overflow: hidden;">
-                          <div class="custom-status-item active" style="padding: 10px 16px; font-size: 13px; font-weight: 500; cursor: pointer; background: #f0fdf4; color: #16a34a; transition: 0.1s;" onclick="selectCustomStatus('All', 'Status: All', this)">Status: All</div>
-                          <div class="custom-status-item" style="padding: 10px 16px; font-size: 13px; font-weight: 500; cursor: pointer; background: #fff; color: #475569; transition: 0.1s;" onclick="selectCustomStatus('Open', 'Status: Open', this)" onmouseover="if(!this.classList.contains('active')){this.style.background='#f8fafc'}" onmouseout="if(!this.classList.contains('active')){this.style.background='#fff'}">Status: Open</div>
-                          <div class="custom-status-item" style="padding: 10px 16px; font-size: 13px; font-weight: 500; cursor: pointer; background: #fff; color: #475569; transition: 0.1s;" onclick="selectCustomStatus('Reported', 'Status: Reported', this)" onmouseover="if(!this.classList.contains('active')){this.style.background='#f8fafc'}" onmouseout="if(!this.classList.contains('active')){this.style.background='#fff'}">Status: Reported</div>
-                          <div class="custom-status-item" style="padding: 10px 16px; font-size: 13px; font-weight: 500; cursor: pointer; background: #fff; color: #475569; transition: 0.1s;" onclick="selectCustomStatus('In Progress', 'Status: In Progress', this)" onmouseover="if(!this.classList.contains('active')){this.style.background='#f8fafc'}" onmouseout="if(!this.classList.contains('active')){this.style.background='#fff'}">Status: In Progress</div>
-                          <div class="custom-status-item" style="padding: 10px 16px; font-size: 13px; font-weight: 500; cursor: pointer; background: #fff; color: #475569; transition: 0.1s;" onclick="selectCustomStatus('Resolved', 'Status: Resolved', this)" onmouseover="if(!this.classList.contains('active')){this.style.background='#f8fafc'}" onmouseout="if(!this.classList.contains('active')){this.style.background='#fff'}">Status: Resolved</div>
-                        </div>
-                        <select id="ticket-status-filter" style="display: none;">
-                          <option value="All">Status: All</option>
-                          <option value="Open">Status: Open</option>
-                          <option value="Reported">Status: Reported</option>
-                          <option value="In Progress">Status: In Progress</option>
-                          <option value="Resolved">Status: Resolved</option>
-                        </select>
-                      </div>
+                      <select id="ticket-status-filter" class="filter-select">
+                        <option value="All">Status: All</option>
+                        <option value="Open">Status: Open</option>
+                        <option value="Reported">Status: Reported</option>
+                        <option value="In Progress">Status: In Progress</option>
+                        <option value="Resolved">Status: Resolved</option>
+                      </select>
                       <button
                         style="height: 34px; padding: 0 16px; background: #16a34a; border: none; border-radius: 6px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;"
                         onmouseover="this.style.background='#15803d'"

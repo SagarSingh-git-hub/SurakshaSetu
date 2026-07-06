@@ -3649,90 +3649,34 @@ const chartInstances = {};
   };
 
   window.deleteTicket = async function(ticketId) {
-    showConfirmModal(
-      'Delete Ticket?',
-      `Are you sure you want to permanently delete ticket ${ticketId}? This action cannot be undone.`,
-      'Yes, Delete',
-      'Cancel',
-      () => {
-        // Optimistic UI update
-        const previousData = [...window.ticketsData];
-        window.ticketsData = window.ticketsData.filter(t => t.ticket_id !== ticketId);
+    if (!confirm('Are you sure you want to delete ticket ' + ticketId + '?')) return;
+    
+    // Optimistic UI update
+    const previousData = [...window.ticketsData];
+    window.ticketsData = window.ticketsData.filter(t => t.ticket_id !== ticketId);
+    renderTickets();
+    showToast('Ticket deleted successfully');
+
+    // Fire and forget backend call
+    fetch(`${API_URL}/api/tickets.php?id=${encodeURIComponent(ticketId)}`, {
+      method: 'DELETE'
+    }).then(res => res.json()).then(data => {
+      if (!data.success) {
+        // If delete fails, rollback
+        window.ticketsData = previousData;
         renderTickets();
-        showToast('Ticket deleted successfully');
-
-        // Fire and forget backend call
-        fetch(`${API_URL}/api/tickets.php?id=${encodeURIComponent(ticketId)}`, {
-          method: 'DELETE'
-        }).then(res => res.json()).then(data => {
-          if (!data.success) {
-            // If delete fails, rollback
-            window.ticketsData = previousData;
-            renderTickets();
-            showToast('Failed to delete ticket', true);
-          }
-        }).catch(e => {
-          console.error('Error deleting ticket:', e);
-          // Only rollback on error if not a demo ticket
-          if (!ticketId.includes('#SS-100')) {
-              window.ticketsData = previousData;
-              renderTickets();
-              showToast('Failed to delete ticket', true);
-          }
-        });
+        showToast('Failed to delete ticket', true);
       }
-    );
-  };
-
-  window.toggleCustomDropdown = function(e) {
-    if(e) e.stopPropagation();
-    const menu = document.getElementById('custom-status-menu');
-    const icon = document.getElementById('custom-status-icon');
-    if (menu.style.display === 'flex') {
-      menu.style.display = 'none';
-      icon.style.transform = 'rotate(180deg)';
-    } else {
-      menu.style.display = 'flex';
-      icon.style.transform = 'rotate(0deg)';
-    }
-  };
-
-  window.selectCustomStatus = function(val, text, el) {
-    // Update label
-    document.getElementById('custom-status-label').innerText = text;
-    // Update active class
-    const items = document.querySelectorAll('#custom-status-menu .custom-status-item');
-    items.forEach(i => {
-      i.classList.remove('active');
-      i.style.background = '#fff';
-      i.style.color = '#0d9488';
+    }).catch(e => {
+      console.error('Error deleting ticket:', e);
+      // Only rollback on error if not a demo ticket
+      if (!ticketId.includes('#SS-100')) {
+          window.ticketsData = previousData;
+          renderTickets();
+          showToast('Failed to delete ticket', true);
+      }
     });
-    el.classList.add('active');
-    el.style.background = '#1d4ed8';
-    el.style.color = '#fff';
-    
-    // Close menu
-    window.toggleCustomDropdown();
-    
-    // Update native hidden select and trigger change
-    const select = document.getElementById('ticket-status-filter');
-    if (select) {
-      select.value = val;
-      select.dispatchEvent(new Event('change', { bubbles: true }));
-    }
   };
-
-  document.addEventListener('click', function(e) {
-    const dropdown = document.getElementById('custom-status-dropdown');
-    if (dropdown && !dropdown.contains(e.target)) {
-      const menu = document.getElementById('custom-status-menu');
-      const icon = document.getElementById('custom-status-icon');
-      if (menu && menu.style.display === 'flex') {
-        menu.style.display = 'none';
-        icon.style.transform = 'rotate(180deg)';
-      }
-    }
-  });
 
   // Initial render when script loads
   document.addEventListener('DOMContentLoaded', () => {
