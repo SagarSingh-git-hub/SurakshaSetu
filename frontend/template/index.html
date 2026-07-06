@@ -4369,8 +4369,13 @@
               border-radius: 10px;
               padding: 14px;
               margin-bottom: 12px;
-              height: 280px;
+              height: 360px;
               overflow-y: auto;
+              -ms-overflow-style: none;
+              scrollbar-width: none;
+            }
+            .help-chat-messages::-webkit-scrollbar {
+              display: none;
             }
 
             .help-msg {
