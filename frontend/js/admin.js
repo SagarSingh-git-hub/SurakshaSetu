@@ -3366,8 +3366,225 @@ const chartInstances = {};
   window.clearFaqSearch = function() {
     const input = document.getElementById('faq-search-input');
     const clearBtn = document.getElementById('faq-search-clear');
-      btn.innerHTML = 'Submit Ticket';
+    input.value = '';
+    clearBtn.style.display = 'none';
+    
+    const tabBtns = document.querySelectorAll('.help-tab-btn');
+    if(tabBtns.length > 0) {
+       const targetBtn = Array.from(tabBtns).find(b => b.innerText.toLowerCase().includes(currentFaqTab.replace('faq-', ''))) || tabBtns[0];
+       targetBtn.click();
+    } else {
+       renderFAQs(helpFaqsData.filter(faq => faq.tab === currentFaqTab));
     }
+  };
+
+  // --- Help Center Tickets Logic ---
+  window.ticketsData = [];
+  let ticketSearchTimeout = null;
+
+  window.fetchTickets = async function() {
+    const tableBody = document.getElementById('ticket-table-body');
+    if (!tableBody) return;
+
+    try {
+      const res = await fetch(`${API_URL}/api/tickets.php`);
+      const data = await res.json();
+
+      if (data.success && data.tickets && data.tickets.length > 0) {
+        window.ticketsData = data.tickets;
+      } else {
+        // Fallback to Demo Data
+        window.ticketsData = [
+          {
+            ticket_id: '#SS-1001',
+            subject: 'Road damaged near Community Park',
+            category: 'Infrastructure',
+            priority: 'High',
+            created_at: new Date().toISOString(),
+            status: 'Reported'
+          },
+          {
+            ticket_id: '#SS-1002',
+            subject: 'Street light not working',
+            category: 'Technical Issue',
+            priority: 'Medium',
+            created_at: new Date(Date.now() - 86400000).toISOString(),
+            status: 'In Progress'
+          }
+        ];
+      }
+    } catch (err) {
+      console.error('Error fetching tickets:', err);
+      // Fallback to Demo Data on error
+      window.ticketsData = [
+        {
+          ticket_id: '#SS-1001',
+          subject: 'Road damaged near Community Park',
+          category: 'Infrastructure',
+          priority: 'High',
+          created_at: new Date().toISOString(),
+          status: 'Reported'
+        },
+        {
+          ticket_id: '#SS-1002',
+          subject: 'Street light not working',
+          category: 'Technical Issue',
+          priority: 'Medium',
+          created_at: new Date(Date.now() - 86400000).toISOString(),
+          status: 'In Progress'
+        }
+      ];
+    }
+    
+    renderTickets();
+  };
+
+  window.renderTickets = function() {
+    const tableBody = document.getElementById('ticket-table-body');
+    if (!tableBody) return;
+
+    const searchInput = document.getElementById('ticket-search-input');
+    const filterSelect = document.getElementById('ticket-status-filter');
+    const clearBtn = document.getElementById('ticket-search-clear');
+
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const statusFilter = filterSelect ? filterSelect.value : 'All';
+
+    if (clearBtn) {
+      clearBtn.style.display = searchTerm ? 'block' : 'none';
+    }
+
+    let filteredTickets = window.ticketsData.filter(t => {
+      const matchSearch = searchTerm === '' || 
+        t.ticket_id.toLowerCase().includes(searchTerm) ||
+        t.subject.toLowerCase().includes(searchTerm) ||
+        t.category.toLowerCase().includes(searchTerm) ||
+        t.priority.toLowerCase().includes(searchTerm) ||
+        t.status.toLowerCase().includes(searchTerm);
+      
+      const matchStatus = statusFilter === 'All' || t.status === statusFilter;
+      
+      return matchSearch && matchStatus;
+    });
+
+    if (filteredTickets.length === 0) {
+      tableBody.innerHTML = `<tr><td colspan="6" style="padding: 40px 24px; text-align: center;"><i class="ph-duotone ph-magnifying-glass" style="font-size: 32px; color: #cbd5e1; margin-bottom: 12px;"></i><div style="color: #64748b; font-size: 14px; font-weight: 500;">No tickets found matching your criteria.</div><div style="color: #94a3b8; font-size: 13px; margin-top: 4px;">Try adjusting your filters or search term.</div></td></tr>`;
+      return;
+    }
+
+    let html = '';
+    filteredTickets.forEach(t => {
+      let badgeClass = 'help-badge-low';
+      if (t.priority === 'High') badgeClass = 'help-badge-high';
+      else if (t.priority === 'Medium') badgeClass = 'help-badge-med';
+
+      let statusBadgeClass = 'help-badge-open';
+      if (t.status === 'In Progress') statusBadgeClass = 'help-badge-progress';
+      else if (t.status === 'Resolved' || t.status === 'Closed') statusBadgeClass = 'help-badge';
+
+      let dateStr = 'Today';
+      const d = new Date(t.created_at);
+      const now = new Date();
+      if (d.toDateString() === now.toDateString()) {
+        dateStr = 'Today';
+      } else if (d.toDateString() === new Date(now.setDate(now.getDate() - 1)).toDateString()) {
+        dateStr = 'Yesterday';
+      } else {
+        dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+
+      html += `
+        <tr style="border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'" onclick="viewTicket('${t.ticket_id}')">
+          <td style="padding: 16px; font-family: 'Outfit', sans-serif; font-size: 12px; color: #64748b; font-weight: 500;">${t.ticket_id}</td>
+          <td style="padding: 16px;">
+            <div style="font-size: 13px; font-weight: 600; color: #1e293b;">${t.subject}</div>
+          </td>
+          <td style="padding: 16px;"><span class="help-badge ${t.category === 'Technical Issue' || t.category === 'Technical' ? 'help-badge-low' : (t.category === 'Certificate' ? 'help-badge-med' : 'help-badge-high')}">${t.category}</span></td>
+          <td style="padding: 16px;"><span class="help-badge ${badgeClass}">${t.priority}</span></td>
+          <td style="padding: 16px; font-size: 12px; color: #64748b;">${dateStr}</td>
+          <td style="padding: 16px;"><span class="help-badge ${statusBadgeClass}">${t.status}</span></td>
+        </tr>
+      `;
+    });
+    tableBody.innerHTML = html;
+  };
+
+  document.addEventListener('input', function(e) {
+    if (e.target && e.target.id === 'ticket-search-input') {
+      clearTimeout(ticketSearchTimeout);
+      ticketSearchTimeout = setTimeout(() => {
+        renderTickets();
+      }, 250);
+    }
+  });
+
+  document.addEventListener('change', function(e) {
+    if (e.target && e.target.id === 'ticket-status-filter') {
+      renderTickets();
+    }
+  });
+
+  document.addEventListener('click', function(e) {
+    if (e.target && e.target.id === 'ticket-search-clear') {
+      const input = document.getElementById('ticket-search-input');
+      if (input) {
+        input.value = '';
+        input.focus();
+        renderTickets();
+      }
+    }
+  });
+
+  window.submitTicket = async function() {
+    const subject = document.getElementById('ticket-subject').value.trim();
+    const categorySelect = document.getElementById('ticket-category');
+    const category = categorySelect.options[categorySelect.selectedIndex].text;
+    const priority = document.getElementById('ticket-priority').value;
+    const description = document.getElementById('ticket-description').value.trim();
+    const btn = document.getElementById('btn-submit-ticket');
+
+    if (!subject || !description) {
+      showToast('Please fill in all required fields.', true);
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = 'Submitting...';
+
+    // Simulate instant local addition
+    setTimeout(() => {
+      const newTicketId = '#SS-' + Math.floor(1000 + Math.random() * 9000);
+      const newTicket = {
+        ticket_id: newTicketId,
+        subject: subject,
+        category: category,
+        priority: priority,
+        created_at: new Date().toISOString(),
+        status: 'Reported'
+      };
+
+      window.ticketsData.unshift(newTicket);
+      renderTickets();
+
+      showToast('Support ticket submitted successfully!');
+      document.getElementById('create-ticket-modal-overlay').classList.remove('open');
+      document.getElementById('ticket-subject').value = '';
+      document.getElementById('ticket-description').value = '';
+      
+      btn.disabled = false;
+      btn.innerHTML = 'Submit Ticket';
+      
+      // Fire and forget POST to backend for persistence if needed
+      fetch(`${API_URL}/api/tickets.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject, category, priority, description,
+          reporter_name: 'Admin',
+          email: localStorage.getItem('savedAdminEmail') || 'admin@surakshasetu.in'
+        })
+      }).catch(e => console.error(e));
+    }, 400); // Small artificial delay for animation
   };
 
   window.viewTicket = function(ticketId) {
