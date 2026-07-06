@@ -3493,9 +3493,17 @@ const chartInstances = {};
         dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       }
 
+      let displayId = String(t.ticket_id);
+      if (!displayId.startsWith('#SS-')) {
+        const num = parseInt(displayId, 10);
+        if (!isNaN(num)) {
+          displayId = '#SS-' + String(num).padStart(4, '0');
+        }
+      }
+
       html += `
         <tr style="border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='none'" onclick="viewTicket('${t.ticket_id}')">
-          <td style="padding: 16px; font-family: 'Outfit', sans-serif; font-size: 12px; color: #64748b; font-weight: 500;">${t.ticket_id}</td>
+          <td style="padding: 16px; font-family: 'Outfit', sans-serif; font-size: 12px; color: #64748b; font-weight: 500;">${displayId}</td>
           <td style="padding: 16px;">
             <div style="font-size: 13px; font-weight: 600; color: #1e293b;">${t.subject}</div>
           </td>
@@ -3600,7 +3608,40 @@ const chartInstances = {};
   window.viewTicket = function(ticketId) {
     const modal = document.getElementById('ticketModal');
     if (modal) {
-        modal.querySelector('.modal-header span:first-child').innerText = ticketId;
+        const t = window.ticketsData.find(t => String(t.ticket_id) === String(ticketId));
+        if (t) {
+            let displayId = String(t.ticket_id);
+            if (!displayId.startsWith('#SS-')) {
+              const num = parseInt(displayId, 10);
+              if (!isNaN(num)) displayId = '#SS-' + String(num).padStart(4, '0');
+            }
+            
+            const idSpan = document.getElementById('ticket-modal-id-span');
+            if (idSpan) idSpan.innerText = displayId;
+            
+            const subj = document.getElementById('ticket-modal-subject');
+            if (subj) subj.innerText = t.subject;
+            
+            const statusSpan = document.getElementById('ticket-modal-status');
+            if (statusSpan) {
+              statusSpan.innerText = t.status;
+              statusSpan.className = 'help-badge';
+              if (t.status === 'In Progress') statusSpan.classList.add('help-badge-progress');
+              else if (t.status === 'Reported' || t.status === 'Open') statusSpan.classList.add('help-badge-open');
+            }
+            
+            const prioSpan = document.getElementById('ticket-modal-priority');
+            if (prioSpan) {
+              prioSpan.innerText = t.priority + ' Priority';
+              prioSpan.className = 'help-badge';
+              if (t.priority === 'High') prioSpan.classList.add('help-badge-high');
+              else if (t.priority === 'Medium') prioSpan.classList.add('help-badge-med');
+              else prioSpan.classList.add('help-badge-low');
+            }
+            
+            const desc = document.getElementById('ticket-modal-desc');
+            if (desc) desc.innerText = t.description || 'No description provided.';
+        }
         modal.style.display = 'flex';
     } else {
         showToast('View ticket details for ' + ticketId);

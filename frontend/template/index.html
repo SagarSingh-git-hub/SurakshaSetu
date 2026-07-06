@@ -5164,12 +5164,12 @@
                           <span id="custom-status-label">Status: All</span>
                           <i id="custom-status-icon" class="ph-bold ph-caret-up" style="font-size: 14px; color: #16a34a; transition: transform 0.2s; transform: rotate(180deg);"></i>
                         </div>
-                        <div id="custom-status-menu" style="position: absolute; top: calc(100% + 4px); left: 0; width: 100%; background: #fff; border: 1px solid #1e293b; margin: 0; padding: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; flex-direction: column;">
-                          <div class="custom-status-item active" style="padding: 10px 12px; font-size: 13px; font-weight: 500; cursor: pointer; background: #1d4ed8; color: #fff; transition: 0.1s;" onclick="selectCustomStatus('All', 'Status: All', this)">Status: All</div>
-                          <div class="custom-status-item" style="padding: 10px 12px; font-size: 13px; font-weight: 500; cursor: pointer; background: #fff; color: #0d9488; transition: 0.1s;" onclick="selectCustomStatus('Open', 'Status: Open', this)" onmouseover="if(!this.classList.contains('active')){this.style.background='#f0fdf4'}" onmouseout="if(!this.classList.contains('active')){this.style.background='#fff'}">Status: Open</div>
-                          <div class="custom-status-item" style="padding: 10px 12px; font-size: 13px; font-weight: 500; cursor: pointer; background: #fff; color: #0d9488; transition: 0.1s;" onclick="selectCustomStatus('Reported', 'Status: Reported', this)" onmouseover="if(!this.classList.contains('active')){this.style.background='#f0fdf4'}" onmouseout="if(!this.classList.contains('active')){this.style.background='#fff'}">Status: Reported</div>
-                          <div class="custom-status-item" style="padding: 10px 12px; font-size: 13px; font-weight: 500; cursor: pointer; background: #fff; color: #0d9488; transition: 0.1s;" onclick="selectCustomStatus('In Progress', 'Status: In Progress', this)" onmouseover="if(!this.classList.contains('active')){this.style.background='#f0fdf4'}" onmouseout="if(!this.classList.contains('active')){this.style.background='#fff'}">Status: In Progress</div>
-                          <div class="custom-status-item" style="padding: 10px 12px; font-size: 13px; font-weight: 500; cursor: pointer; background: #fff; color: #0d9488; transition: 0.1s;" onclick="selectCustomStatus('Resolved', 'Status: Resolved', this)" onmouseover="if(!this.classList.contains('active')){this.style.background='#f0fdf4'}" onmouseout="if(!this.classList.contains('active')){this.style.background='#fff'}">Status: Resolved</div>
+                        <div id="custom-status-menu" style="position: absolute; top: calc(100% + 4px); left: 0; width: 100%; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; margin: 0; padding: 4px 0; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: none; flex-direction: column; overflow: hidden;">
+                          <div class="custom-status-item active" style="padding: 10px 16px; font-size: 13px; font-weight: 500; cursor: pointer; background: #f0fdf4; color: #16a34a; transition: 0.1s;" onclick="selectCustomStatus('All', 'Status: All', this)">Status: All</div>
+                          <div class="custom-status-item" style="padding: 10px 16px; font-size: 13px; font-weight: 500; cursor: pointer; background: #fff; color: #475569; transition: 0.1s;" onclick="selectCustomStatus('Open', 'Status: Open', this)" onmouseover="if(!this.classList.contains('active')){this.style.background='#f8fafc'}" onmouseout="if(!this.classList.contains('active')){this.style.background='#fff'}">Status: Open</div>
+                          <div class="custom-status-item" style="padding: 10px 16px; font-size: 13px; font-weight: 500; cursor: pointer; background: #fff; color: #475569; transition: 0.1s;" onclick="selectCustomStatus('Reported', 'Status: Reported', this)" onmouseover="if(!this.classList.contains('active')){this.style.background='#f8fafc'}" onmouseout="if(!this.classList.contains('active')){this.style.background='#fff'}">Status: Reported</div>
+                          <div class="custom-status-item" style="padding: 10px 16px; font-size: 13px; font-weight: 500; cursor: pointer; background: #fff; color: #475569; transition: 0.1s;" onclick="selectCustomStatus('In Progress', 'Status: In Progress', this)" onmouseover="if(!this.classList.contains('active')){this.style.background='#f8fafc'}" onmouseout="if(!this.classList.contains('active')){this.style.background='#fff'}">Status: In Progress</div>
+                          <div class="custom-status-item" style="padding: 10px 16px; font-size: 13px; font-weight: 500; cursor: pointer; background: #fff; color: #475569; transition: 0.1s;" onclick="selectCustomStatus('Resolved', 'Status: Resolved', this)" onmouseover="if(!this.classList.contains('active')){this.style.background='#f8fafc'}" onmouseout="if(!this.classList.contains('active')){this.style.background='#fff'}">Status: Resolved</div>
                         </div>
                         <select id="ticket-status-filter" style="display: none;">
                           <option value="All">Status: All</option>
@@ -5233,12 +5233,12 @@
                     style="padding: 24px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; background: #f8fafc;">
                     <div>
                       <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                        <span
+                        <span id="ticket-modal-id-span"
                           style="font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase;">TKT-0018</span>
-                        <span class="help-badge help-badge-progress">In progress</span>
-                        <span class="help-badge help-badge-med">Medium Priority</span>
+                        <span id="ticket-modal-status" class="help-badge help-badge-progress">In progress</span>
+                        <span id="ticket-modal-priority" class="help-badge help-badge-med">Medium Priority</span>
                       </div>
-                      <div style="font-size: 18px; font-weight: 700; color: #0f172a;">Live map not loading on mobile
+                      <div id="ticket-modal-subject" style="font-size: 18px; font-weight: 700; color: #0f172a;">Live map not loading on mobile
                         Chrome</div>
                     </div>
                     <i class="ph-bold ph-x" style="font-size: 20px; color: #64748b; cursor: pointer;"
@@ -5256,7 +5256,7 @@
                           <div style="font-size: 13px; font-weight: 700; color: #1e293b;">You</div>
                           <div style="font-size: 11px; color: #94a3b8;">Jun 5, 2024 at 10:23 AM</div>
                         </div>
-                        <div style="font-size: 13px; color: #475569; line-height: 1.6;">
+                        <div id="ticket-modal-desc" style="font-size: 13px; color: #475569; line-height: 1.6;">
                           Hi team,<br><br>
                           I'm trying to view the live map on my Android phone using Google Chrome, but the map tiles
                           aren't loading. It just shows a grey grid. It works perfectly on my desktop.<br><br>
