@@ -3503,6 +3503,11 @@ const chartInstances = {};
           <td style="padding: 16px;"><span class="help-badge ${badgeClass}">${t.priority}</span></td>
           <td style="padding: 16px; font-size: 12px; color: #64748b;">${dateStr}</td>
           <td style="padding: 16px;"><span class="help-badge ${statusBadgeClass}">${t.status}</span></td>
+          <td style="padding: 16px; text-align: center;">
+            <div style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; background: #fff; border: 1px solid #e2e8f0; color: #64748b; transition: 0.2s;" onmouseover="this.style.borderColor='#cbd5e1'; this.style.color='#1e293b'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)';" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#64748b'; this.style.boxShadow='none';" title="View Details" onclick="event.stopPropagation(); viewTicket('${t.ticket_id}')">
+              <i class="ph-bold ph-eye"></i>
+            </div>
+          </td>
         </tr>
       `;
     });
