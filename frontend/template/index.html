@@ -1661,7 +1661,7 @@
           align-items: center;
           gap: 12px;
         }
-        
+
         /* --- Admin Login Background Fallback --- */
         #page-admin.active {
           background: linear-gradient(to bottom right, #F4F8F4, #EDF5EF);
@@ -1675,6 +1675,7 @@
         }
 
         @media (max-width: 1023px) {
+
           html:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])),
           body:has(#page-admin.active #admin-login-wrap:not([style*="display: none"])) {
             height: auto;
@@ -1859,16 +1860,16 @@
             </button>
             <div class="admin-subnav">
               <div class="admin-subnav-inner">
-              <a href="#" class="admin-subnav-link" title="Overview"
-                onclick="switchAdminView('overview', this); return false;"><i class="ph-duotone ph-layout"></i><span
-                  class="admin-subnav-text">Overview</span></a>
-              <a href="#" class="admin-subnav-link" title="Statistics"
-                onclick="switchAdminView('statistics', this); return false;"><i
-                  class="ph-duotone ph-chart-bar"></i><span class="admin-subnav-text">Statistics</span></a>
-              <a href="#" class="admin-subnav-link" title="Analytics"
-                onclick="switchAdminView('analytics', this); return false;"><i
-                  class="ph-duotone ph-chart-line-up"></i><span class="admin-subnav-text">Analytics</span></a>
-            </div>
+                <a href="#" class="admin-subnav-link" title="Overview"
+                  onclick="switchAdminView('overview', this); return false;"><i class="ph-duotone ph-layout"></i><span
+                    class="admin-subnav-text">Overview</span></a>
+                <a href="#" class="admin-subnav-link" title="Statistics"
+                  onclick="switchAdminView('statistics', this); return false;"><i
+                    class="ph-duotone ph-chart-bar"></i><span class="admin-subnav-text">Statistics</span></a>
+                <a href="#" class="admin-subnav-link" title="Analytics"
+                  onclick="switchAdminView('analytics', this); return false;"><i
+                    class="ph-duotone ph-chart-line-up"></i><span class="admin-subnav-text">Analytics</span></a>
+              </div>
             </div>
           </div>
           <!-- Item 2 -->
@@ -1900,18 +1901,18 @@
             </button>
             <div class="admin-subnav">
               <div class="admin-subnav-inner">
-              <a href="#" class="admin-subnav-link" title="Active Users"><i class="ph-duotone ph-user-circle"></i><span
-                  class="admin-subnav-text">Active Users</span></a>
-              <a href="#" class="admin-subnav-link" title="Comments Management"><i
-                  class="ph-duotone ph-chat-circle-dots"></i><span class="admin-subnav-text">Comments
-                  Management</span></a>
-              <a href="#" class="admin-subnav-link" title="Community Feed"><i class="ph-duotone ph-rss"></i><span
-                  class="admin-subnav-text">Community Feed</span></a>
-              <a href="#" class="admin-subnav-link" title="User Posts"><i class="ph-duotone ph-article"></i><span
-                  class="admin-subnav-text">User Posts</span></a>
-              <a href="#" class="admin-subnav-link" title="Volunteers"><i class="ph-duotone ph-users-three"></i><span
-                  class="admin-subnav-text">Volunteers</span></a>
-            </div>
+                <a href="#" class="admin-subnav-link" title="Active Users"><i
+                    class="ph-duotone ph-user-circle"></i><span class="admin-subnav-text">Active Users</span></a>
+                <a href="#" class="admin-subnav-link" title="Comments Management"><i
+                    class="ph-duotone ph-chat-circle-dots"></i><span class="admin-subnav-text">Comments
+                    Management</span></a>
+                <a href="#" class="admin-subnav-link" title="Community Feed"><i class="ph-duotone ph-rss"></i><span
+                    class="admin-subnav-text">Community Feed</span></a>
+                <a href="#" class="admin-subnav-link" title="User Posts"><i class="ph-duotone ph-article"></i><span
+                    class="admin-subnav-text">User Posts</span></a>
+                <a href="#" class="admin-subnav-link" title="Volunteers"><i class="ph-duotone ph-users-three"></i><span
+                    class="admin-subnav-text">Volunteers</span></a>
+              </div>
             </div>
           </div>
           <!-- Item 5 -->
@@ -1925,17 +1926,17 @@
             </button>
             <div class="admin-subnav">
               <div class="admin-subnav-inner">
-              <a href="#" class="admin-subnav-link" title="Issue Certificates"
-                onclick="switchAdminView('cert-issue', this); return false;"><i
-                  class="ph-duotone ph-file-plus"></i><span class="admin-subnav-text">Issue Certificates</span></a>
-              <a href="#" class="admin-subnav-link" title="View Certificates"
-                onclick="switchAdminView('cert-view', this); return false;"><i class="ph-duotone ph-files"></i><span
-                  class="admin-subnav-text">View Certificates</span></a>
-              <a href="#" class="admin-subnav-link" title="Certificate Templates"
-                onclick="switchAdminView('cert-templates', this); return false;"><i
-                  class="ph-duotone ph-paint-brush"></i><span class="admin-subnav-text">Certificate
-                  Templates</span></a>
-            </div>
+                <a href="#" class="admin-subnav-link" title="Issue Certificates"
+                  onclick="switchAdminView('cert-issue', this); return false;"><i
+                    class="ph-duotone ph-file-plus"></i><span class="admin-subnav-text">Issue Certificates</span></a>
+                <a href="#" class="admin-subnav-link" title="View Certificates"
+                  onclick="switchAdminView('cert-view', this); return false;"><i class="ph-duotone ph-files"></i><span
+                    class="admin-subnav-text">View Certificates</span></a>
+                <a href="#" class="admin-subnav-link" title="Certificate Templates"
+                  onclick="switchAdminView('cert-templates', this); return false;"><i
+                    class="ph-duotone ph-paint-brush"></i><span class="admin-subnav-text">Certificate
+                    Templates</span></a>
+              </div>
             </div>
           </div>
           <!-- Item 6 -->
@@ -1958,16 +1959,16 @@
             </button>
             <div class="admin-subnav">
               <div class="admin-subnav-inner">
-              <a href="#" class="admin-subnav-link" title="General"
-                onclick="switchAdminView('settings-general', this); return false;"><i
-                  class="ph-duotone ph-sliders-horizontal"></i><span class="admin-subnav-text">General</span></a>
-              <a href="#" class="admin-subnav-link" title="Security"
-                onclick="switchAdminView('settings-security', this); return false;"><i
-                  class="ph-duotone ph-shield-check"></i><span class="admin-subnav-text">Security</span></a>
-            </div>
+                <a href="#" class="admin-subnav-link" title="General"
+                  onclick="switchAdminView('settings-general', this); return false;"><i
+                    class="ph-duotone ph-sliders-horizontal"></i><span class="admin-subnav-text">General</span></a>
+                <a href="#" class="admin-subnav-link" title="Security"
+                  onclick="switchAdminView('settings-security', this); return false;"><i
+                    class="ph-duotone ph-shield-check"></i><span class="admin-subnav-text">Security</span></a>
+              </div>
             </div>
           </div>
-          
+
           <!-- Item 7 (Help Center) -->
           <div class="admin-nav-item">
             <button class="admin-nav-link" onclick="toggleSubnav(this)">
@@ -1979,15 +1980,30 @@
             </button>
             <div class="admin-subnav">
               <div class="admin-subnav-inner">
-                <a href="#" class="admin-subnav-link" onclick="switchAdminView('help-center', this); switchHelpPage('home'); return false;"><i class="ph-duotone ph-layout"></i><span class="admin-subnav-text">Overview</span></a>
-                <a href="#" class="admin-subnav-link" onclick="switchAdminView('help-center', this); switchHelpPage('faq'); return false;"><i class="ph-duotone ph-list-numbers"></i><span class="admin-subnav-text">FAQs</span></a>
-                <a href="#" class="admin-subnav-link" onclick="switchAdminView('help-center', this); switchHelpPage('guides'); return false;"><i class="ph-duotone ph-book-open"></i><span class="admin-subnav-text">Guides & Tutorials</span></a>
-                <a href="#" class="admin-subnav-link" onclick="switchAdminView('help-center', this); switchHelpPage('contact'); return false;"><i class="ph-duotone ph-envelope-simple"></i><span class="admin-subnav-text">Contact Support</span></a>
-                <a href="#" class="admin-subnav-link" onclick="switchAdminView('help-center', this); switchHelpPage('tickets'); return false;"><i class="ph-duotone ph-ticket"></i><span class="admin-subnav-text">My Tickets</span></a>
-                <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin: 12px 12px 4px; letter-spacing: 0.5px;">Quick links</div>
-                <a href="#" class="admin-subnav-link" onclick="showPage('report'); return false;"><i class="ph-duotone ph-warning-circle"></i><span class="admin-subnav-text">Report an issue</span></a>
-                <a href="#" class="admin-subnav-link" onclick="return false;"><i class="ph-duotone ph-shield-check"></i><span class="admin-subnav-text">Privacy policy</span></a>
-                <a href="#" class="admin-subnav-link" onclick="return false;"><i class="ph-duotone ph-file-text"></i><span class="admin-subnav-text">Terms of use</span></a>
+                <a href="#" class="admin-subnav-link"
+                  onclick="switchAdminView('help-center', this); switchHelpPage('home'); return false;"><i
+                    class="ph-duotone ph-layout"></i><span class="admin-subnav-text">Overview</span></a>
+                <a href="#" class="admin-subnav-link"
+                  onclick="switchAdminView('help-center', this); switchHelpPage('faq'); return false;"><i
+                    class="ph-duotone ph-list-numbers"></i><span class="admin-subnav-text">FAQs</span></a>
+                <a href="#" class="admin-subnav-link"
+                  onclick="switchAdminView('help-center', this); switchHelpPage('guides'); return false;"><i
+                    class="ph-duotone ph-book-open"></i><span class="admin-subnav-text">Guides & Tutorials</span></a>
+                <a href="#" class="admin-subnav-link"
+                  onclick="switchAdminView('help-center', this); switchHelpPage('contact'); return false;"><i
+                    class="ph-duotone ph-envelope-simple"></i><span class="admin-subnav-text">Contact Support</span></a>
+                <a href="#" class="admin-subnav-link"
+                  onclick="switchAdminView('help-center', this); switchHelpPage('tickets'); return false;"><i
+                    class="ph-duotone ph-ticket"></i><span class="admin-subnav-text">My Tickets</span></a>
+                <div
+                  style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin: 12px 12px 4px; letter-spacing: 0.5px;">
+                  Quick links</div>
+                <a href="#" class="admin-subnav-link" onclick="showPage('report'); return false;"><i
+                    class="ph-duotone ph-warning-circle"></i><span class="admin-subnav-text">Report an issue</span></a>
+                <a href="#" class="admin-subnav-link" onclick="return false;"><i
+                    class="ph-duotone ph-shield-check"></i><span class="admin-subnav-text">Privacy policy</span></a>
+                <a href="#" class="admin-subnav-link" onclick="return false;"><i
+                    class="ph-duotone ph-file-text"></i><span class="admin-subnav-text">Terms of use</span></a>
               </div>
             </div>
           </div>
@@ -2800,16 +2816,19 @@
                 flex-direction: column;
                 min-height: auto;
               }
+
               .m-map-panel {
                 width: 100%;
                 height: 360px;
                 border-right: none;
                 border-bottom: 1px solid var(--border);
               }
+
               #live-leaflet-map {
                 min-height: 360px !important;
                 height: 360px !important;
               }
+
               .m-right {
                 width: 100%;
               }
@@ -3950,8 +3969,9 @@
               border-radius: 22px;
               margin-bottom: 16px;
               position: relative;
-              box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             }
+
             .help-hero-band::before {
               content: '';
               position: absolute;
@@ -3967,6 +3987,7 @@
               pointer-events: none;
               z-index: 0;
             }
+
             .help-hero-band::after {
               content: '';
               position: absolute;
@@ -4009,7 +4030,7 @@
               border-radius: 12px;
               padding: 8px 8px 8px 16px;
               max-width: 520px;
-              box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+              box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
               position: relative;
               z-index: 2;
             }
@@ -4044,13 +4065,13 @@
               cursor: pointer;
               font-family: 'Outfit', sans-serif;
               transition: all 0.2s ease;
-              box-shadow: 6px 6px 14px rgba(0,0,0,0.12), -6px -6px 14px rgba(255,255,255,0.7), inset 0px 2px 4px rgba(255,255,255,0.3);
+              box-shadow: 6px 6px 14px rgba(0, 0, 0, 0.12), -6px -6px 14px rgba(255, 255, 255, 0.7), inset 0px 2px 4px rgba(255, 255, 255, 0.3);
             }
 
             .help-search-hero button:hover {
               background: #0c8a40;
               transform: translateY(-1px);
-              box-shadow: 4px 4px 10px rgba(0,0,0,0.15), -4px -4px 10px rgba(255,255,255,0.8), inset 0px 2px 4px rgba(255,255,255,0.3);
+              box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15), -4px -4px 10px rgba(255, 255, 255, 0.8), inset 0px 2px 4px rgba(255, 255, 255, 0.3);
             }
 
             .help-body-area {
@@ -4369,11 +4390,12 @@
               border-radius: 10px;
               padding: 14px;
               margin-bottom: 12px;
-              height: 540px;
+              height: 500px;
               overflow-y: auto;
               -ms-overflow-style: none;
               scrollbar-width: none;
             }
+
             .help-chat-messages::-webkit-scrollbar {
               display: none;
             }
@@ -4607,34 +4629,66 @@
                 <div class="help-hero-band">
                   <div class="help-hero-title">How can we help you?</div>
                   <div class="help-hero-sub">Search our knowledge base, guides, FAQs and support resources.</div>
-                  
+
                   <div style="position: relative; max-width: 600px; width: 100%; margin-top: 24px;">
                     <div class="help-search-hero" style="max-width: 100%;">
                       <i class="ph-bold ph-magnifying-glass"></i>
-                      <input type="text" id="helpGlobalSearch" placeholder="Search anything: 'Report Issue', 'Certificate'..." onkeyup="performHelpSearch(this.value)">
-                      <button onclick="performHelpSearch(document.getElementById('helpGlobalSearch').value)">Search</button>
+                      <input type="text" id="helpGlobalSearch"
+                        placeholder="Search anything: 'Report Issue', 'Certificate'..."
+                        onkeyup="performHelpSearch(this.value)">
+                      <button
+                        onclick="performHelpSearch(document.getElementById('helpGlobalSearch').value)">Search</button>
                     </div>
                     <!-- Search Results Dropdown -->
-                    <div id="helpSearchResults" style="display: none; position: absolute; top: 110%; left: 0; right: 0; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 100; max-height: 400px; overflow-y: auto;">
+                    <div id="helpSearchResults"
+                      style="display: none; position: absolute; top: 110%; left: 0; right: 0; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 100; max-height: 400px; overflow-y: auto;">
                     </div>
                   </div>
                 </div>
-                
+
                 <div class="help-body-area" style="padding-top: 0;">
-                  
+
                   <!-- QUICK ACTIONS -->
-                  <div style="display: flex; gap: 24px; margin-top: 16px; position: relative; z-index: 10; margin-bottom: 36px;">
-                    <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.02);" onclick="switchHelpPage('contact', document.getElementById('help-nav-contact'))" onmouseover="this.style.borderColor='#16a34a';this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='none';">
-                      <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(34, 197, 94, 0.1); color: #16a34a; display: flex; align-items: center; justify-content: center; font-size: 20px;"><i class="ph-duotone ph-chat-circle-text"></i></div>
-                      <div><div style="font-size: 14px; font-weight: 700; color: #1e293b;">Contact Support</div><div style="font-size: 11px; color: #64748b; margin-top: 2px;">Get help instantly</div></div>
+                  <div
+                    style="display: flex; gap: 24px; margin-top: 16px; position: relative; z-index: 10; margin-bottom: 36px;">
+                    <div
+                      style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.02);"
+                      onclick="switchHelpPage('contact', document.getElementById('help-nav-contact'))"
+                      onmouseover="this.style.borderColor='#16a34a';this.style.transform='translateY(-2px)';"
+                      onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='none';">
+                      <div
+                        style="width: 40px; height: 40px; border-radius: 10px; background: rgba(34, 197, 94, 0.1); color: #16a34a; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                        <i class="ph-duotone ph-chat-circle-text"></i></div>
+                      <div>
+                        <div style="font-size: 14px; font-weight: 700; color: #1e293b;">Contact Support</div>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 2px;">Get help instantly</div>
+                      </div>
                     </div>
-                    <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.02);" onclick="switchHelpPage('tickets', document.getElementById('help-nav-tickets'))" onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='none';">
-                      <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 20px;"><i class="ph-duotone ph-ticket"></i></div>
-                      <div><div style="font-size: 14px; font-weight: 700; color: #1e293b;">Track Ticket</div><div style="font-size: 11px; color: #64748b; margin-top: 2px;">Check issue status</div></div>
+                    <div
+                      style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.02);"
+                      onclick="switchHelpPage('tickets', document.getElementById('help-nav-tickets'))"
+                      onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)';"
+                      onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='none';">
+                      <div
+                        style="width: 40px; height: 40px; border-radius: 10px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                        <i class="ph-duotone ph-ticket"></i></div>
+                      <div>
+                        <div style="font-size: 14px; font-weight: 700; color: #1e293b;">Track Ticket</div>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 2px;">Check issue status</div>
+                      </div>
                     </div>
-                    <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.02);" onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))" onmouseover="this.style.borderColor='#f59e0b';this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='none';">
-                      <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(245, 158, 11, 0.1); color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 20px;"><i class="ph-duotone ph-book-open"></i></div>
-                      <div><div style="font-size: 14px; font-weight: 700; color: #1e293b;">User Guides</div><div style="font-size: 11px; color: #64748b; margin-top: 2px;">Detailed manuals</div></div>
+                    <div
+                      style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.02);"
+                      onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))"
+                      onmouseover="this.style.borderColor='#f59e0b';this.style.transform='translateY(-2px)';"
+                      onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='none';">
+                      <div
+                        style="width: 40px; height: 40px; border-radius: 10px; background: rgba(245, 158, 11, 0.1); color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                        <i class="ph-duotone ph-book-open"></i></div>
+                      <div>
+                        <div style="font-size: 14px; font-weight: 700; color: #1e293b;">User Guides</div>
+                        <div style="font-size: 11px; color: #64748b; margin-top: 2px;">Detailed manuals</div>
+                      </div>
                     </div>
                   </div>
                   <div class="help-section-title"><i class="ph-duotone ph-squares-four"
@@ -4701,20 +4755,25 @@
                           style="font-size: 14px; color: #f97316;"></i>Popular Articles</div>
                       <div class="help-faq-list">
                         <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                          <div class="help-faq-q"><span class="help-faq-q-text">How do I submit a new environmental issue
+                          <div class="help-faq-q"><span class="help-faq-q-text">How do I submit a new environmental
+                              issue
                               report?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
                           <div class="help-faq-a">
                             <div class="help-faq-a-inner">Click the green "+ Report Issue" button in the top navigation
-                              bar. Fill in the category (Garbage, Plastic, Water, etc.), add a photo or description, pin the
+                              bar. Fill in the category (Garbage, Plastic, Water, etc.), add a photo or description, pin
+                              the
                               location on the map, and set the priority.</div>
                           </div>
                         </div>
                         <div class="help-faq-item" onclick="toggleHelpFaq(this)">
-                          <div class="help-faq-q"><span class="help-faq-q-text">Why is my report showing "In Progress" but
+                          <div class="help-faq-q"><span class="help-faq-q-text">Why is my report showing "In Progress"
+                              but
                               no update from the team?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
                           <div class="help-faq-a">
-                            <div class="help-faq-a-inner">In Progress means a moderator or field officer has picked up the
-                              issue for review. Resolution timelines depend on priority. You can track status in real time from your report detail page.</div>
+                            <div class="help-faq-a-inner">In Progress means a moderator or field officer has picked up
+                              the
+                              issue for review. Resolution timelines depend on priority. You can track status in real
+                              time from your report detail page.</div>
                           </div>
                         </div>
                         <div class="help-faq-item" onclick="toggleHelpFaq(this)">
@@ -4729,28 +4788,47 @@
                           <div class="help-faq-q"><span class="help-faq-q-text">How do I download or share a community
                               certificate?</span><i class="ph-bold ph-plus help-faq-icon"></i></div>
                           <div class="help-faq-a">
-                            <div class="help-faq-a-inner">Go to Certificate → View Certificates, find your certificate by
-                              name or ID, and click the download icon to save as PDF. Each certificate includes a QR code
+                            <div class="help-faq-a-inner">Go to Certificate → View Certificates, find your certificate
+                              by
+                              name or ID, and click the download icon to save as PDF. Each certificate includes a QR
+                              code
                               for instant verification.</div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    
+
                     <div style="flex: 1;">
                       <div class="help-section-title"><i class="ph-duotone ph-clock-counter-clockwise"
                           style="font-size: 14px; color: #8b5cf6;"></i>Recently Updated</div>
                       <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
-                        <div style="margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid #f1f5f9; cursor: pointer;" onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))" onmouseover="this.querySelector('.ru-title').style.color='#16a34a'" onmouseout="this.querySelector('.ru-title').style.color='#1e293b'">
-                          <div class="ru-title" style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 4px; transition: 0.2s;">New Certificate Templates</div>
+                        <div
+                          style="margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid #f1f5f9; cursor: pointer;"
+                          onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))"
+                          onmouseover="this.querySelector('.ru-title').style.color='#16a34a'"
+                          onmouseout="this.querySelector('.ru-title').style.color='#1e293b'">
+                          <div class="ru-title"
+                            style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 4px; transition: 0.2s;">
+                            New Certificate Templates</div>
                           <div style="font-size: 11px; color: #64748b;">Added 2 days ago in Guides</div>
                         </div>
-                        <div style="margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid #f1f5f9; cursor: pointer;" onclick="switchHelpPage('faq', document.getElementById('help-nav-faq'))" onmouseover="this.querySelector('.ru-title').style.color='#16a34a'" onmouseout="this.querySelector('.ru-title').style.color='#1e293b'">
-                          <div class="ru-title" style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 4px; transition: 0.2s;">Live Map Filtering Fix</div>
+                        <div
+                          style="margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid #f1f5f9; cursor: pointer;"
+                          onclick="switchHelpPage('faq', document.getElementById('help-nav-faq'))"
+                          onmouseover="this.querySelector('.ru-title').style.color='#16a34a'"
+                          onmouseout="this.querySelector('.ru-title').style.color='#1e293b'">
+                          <div class="ru-title"
+                            style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 4px; transition: 0.2s;">
+                            Live Map Filtering Fix</div>
                           <div style="font-size: 11px; color: #64748b;">Updated 4 days ago in FAQs</div>
                         </div>
-                        <div style="cursor: pointer;" onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))" onmouseover="this.querySelector('.ru-title').style.color='#16a34a'" onmouseout="this.querySelector('.ru-title').style.color='#1e293b'">
-                          <div class="ru-title" style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 4px; transition: 0.2s;">Managing Role Permissions</div>
+                        <div style="cursor: pointer;"
+                          onclick="switchHelpPage('guides', document.getElementById('help-nav-guides'))"
+                          onmouseover="this.querySelector('.ru-title').style.color='#16a34a'"
+                          onmouseout="this.querySelector('.ru-title').style.color='#1e293b'">
+                          <div class="ru-title"
+                            style="font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 4px; transition: 0.2s;">
+                            Managing Role Permissions</div>
                           <div style="font-size: 11px; color: #64748b;">Updated last week in Admin</div>
                         </div>
                       </div>
@@ -4785,7 +4863,9 @@
                   <div class="help-search-hero" style="position: relative;">
                     <i class="ph-bold ph-magnifying-glass"></i>
                     <input type="text" id="faq-search-input" placeholder="Search FAQs..." oninput="handleFaqSearch()">
-                    <i id="faq-search-clear" class="ph-bold ph-x" style="display:none; cursor:pointer; color:#94a3b8; font-size:16px; margin-right:8px;" onclick="clearFaqSearch()"></i>
+                    <i id="faq-search-clear" class="ph-bold ph-x"
+                      style="display:none; cursor:pointer; color:#94a3b8; font-size:16px; margin-right:8px;"
+                      onclick="clearFaqSearch()"></i>
                     <button onclick="handleFaqSearchSubmit()">Search</button>
                   </div>
                 </div>
@@ -4802,46 +4882,84 @@
                   <div id="faq-dynamic-container" class="help-faq-list" style="margin-top: 16px;">
                     <!-- Dynamically populated FAQs -->
                   </div>
-                  
+
                   <div id="faq-no-results" style="display: none; text-align: center; padding: 40px 20px;">
-                    <div style="width: 48px; height: 48px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                    <div
+                      style="width: 48px; height: 48px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
                       <i class="ph-duotone ph-magnifying-glass" style="font-size: 24px; color: #94a3b8;"></i>
                     </div>
-                    <div style="font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 8px;">No FAQs found</div>
-                    <div style="font-size: 14px; color: #64748b; margin-bottom: 16px;">We couldn't find any articles matching your search.</div>
-                    <button onclick="clearFaqSearch()" style="background: rgba(34, 197, 94, 0.1); border: 1px solid #16a34a; border-radius: 8px; color: #16a34a; font-size: 13px; font-weight: 600; padding: 8px 16px; cursor: pointer;">Clear Search</button>
+                    <div style="font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 8px;">No FAQs found
+                    </div>
+                    <div style="font-size: 14px; color: #64748b; margin-bottom: 16px;">We couldn't find any articles
+                      matching your search.</div>
+                    <button onclick="clearFaqSearch()"
+                      style="background: rgba(34, 197, 94, 0.1); border: 1px solid #16a34a; border-radius: 8px; color: #16a34a; font-size: 13px; font-weight: 600; padding: 8px 16px; cursor: pointer;">Clear
+                      Search</button>
                   </div>
                 </div>
               </div>
 
               <!-- GUIDES PAGE -->
               <div class="help-page" id="help-page-guides" style="padding-bottom: 0;">
-                <div class="help-hero-band" style="margin-bottom: 0; border-bottom: 1px solid #e2e8f0; padding: 32px 32px 24px;">
+                <div class="help-hero-band"
+                  style="margin-bottom: 0; border-bottom: 1px solid #e2e8f0; padding: 32px 32px 24px;">
                   <div class="help-hero-title">Guides & Tutorials</div>
-                  <div class="help-hero-sub" style="margin-bottom: 0;">Step-by-step walkthroughs to master the platform.</div>
+                  <div class="help-hero-sub" style="margin-bottom: 0;">Step-by-step walkthroughs to master the platform.
+                  </div>
                 </div>
-                
+
                 <div style="display: flex; flex: 1; min-height: 600px;">
                   <!-- Docs Sidebar -->
-                  <div style="width: 240px; border-right: 1px solid #e2e8f0; padding: 24px 16px; background: #f8fafc; overflow-y: auto;">
-                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">Getting Started</div>
-                    <div style="padding: 8px 12px; font-size: 13px; font-weight: 600; color: #16a34a; background: rgba(34, 197, 94, 0.1); border-radius: 6px; cursor: pointer; margin-bottom: 4px;">Platform Overview</div>
-                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 16px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Create Account</div>
-                    
-                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">Reporting</div>
-                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Submit a Report</div>
-                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Issue Workflow</div>
-                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 16px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Live Map Filters</div>
-                    
-                    <div style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">Admin Tasks</div>
-                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Manage Users</div>
-                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Certificates</div>
-                    <div style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;" onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Notifications</div>
+                  <div
+                    style="width: 240px; border-right: 1px solid #e2e8f0; padding: 24px 16px; background: #f8fafc; overflow-y: auto;">
+                    <div
+                      style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">
+                      Getting Started</div>
+                    <div
+                      style="padding: 8px 12px; font-size: 13px; font-weight: 600; color: #16a34a; background: rgba(34, 197, 94, 0.1); border-radius: 6px; cursor: pointer; margin-bottom: 4px;">
+                      Platform Overview</div>
+                    <div
+                      style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 16px; transition: 0.2s;"
+                      onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Create Account
+                    </div>
+
+                    <div
+                      style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">
+                      Reporting</div>
+                    <div
+                      style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;"
+                      onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Submit a Report
+                    </div>
+                    <div
+                      style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;"
+                      onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Issue Workflow
+                    </div>
+                    <div
+                      style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 16px; transition: 0.2s;"
+                      onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Live Map Filters
+                    </div>
+
+                    <div
+                      style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">
+                      Admin Tasks</div>
+                    <div
+                      style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;"
+                      onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Manage Users
+                    </div>
+                    <div
+                      style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;"
+                      onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Certificates
+                    </div>
+                    <div
+                      style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;"
+                      onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Notifications
+                    </div>
                   </div>
-                  
+
                   <!-- Docs Content -->
                   <div style="flex: 1; padding: 32px 48px; background: #fff; max-width: 800px;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                    <div
+                      style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
                       <div style="display: flex; gap: 8px; font-size: 12px; color: #64748b; font-weight: 500;">
                         <span>Help Center</span>
                         <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i>
@@ -4849,33 +4967,66 @@
                         <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i>
                         <span style="color: #16a34a;">Getting Started</span>
                       </div>
-                      <div style="font-size: 12px; color: #64748b;"><i class="ph-duotone ph-clock" style="margin-right: 4px;"></i>5 min read</div>
+                      <div style="font-size: 12px; color: #64748b;"><i class="ph-duotone ph-clock"
+                          style="margin-right: 4px;"></i>5 min read</div>
                     </div>
-                    
-                    <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">Platform Overview</h1>
-                    <div style="font-size: 15px; color: #475569; margin-bottom: 32px; line-height: 1.6;">Welcome to Suraksha Setu! This guide will give you a quick 5-minute tour of the main features so you can start contributing to your community immediately.</div>
-                    
-                    <div style="width: 100%; height: 360px; background: #0f172a; border-radius: 12px; margin-bottom: 32px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                      <i class="ph-fill ph-play-circle" style="font-size: 64px; color: #fff; cursor: pointer; opacity: 0.9; transition: 0.2s;" onmouseover="this.style.opacity='1';this.style.transform='scale(1.05)'" onmouseout="this.style.opacity='0.9';this.style.transform='scale(1)'" onclick="showToast('Video playback initializing...')"></i>
-                      <div style="position: absolute; bottom: 16px; left: 16px; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 500;">▶ Suraksha Setu Masterclass (5:20)</div>
+
+                    <h1
+                      style="font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">
+                      Platform Overview</h1>
+                    <div style="font-size: 15px; color: #475569; margin-bottom: 32px; line-height: 1.6;">Welcome to
+                      Suraksha Setu! This guide will give you a quick 5-minute tour of the main features so you can
+                      start contributing to your community immediately.</div>
+
+                    <div
+                      style="width: 100%; height: 360px; background: #0f172a; border-radius: 12px; margin-bottom: 32px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                      <i class="ph-fill ph-play-circle"
+                        style="font-size: 64px; color: #fff; cursor: pointer; opacity: 0.9; transition: 0.2s;"
+                        onmouseover="this.style.opacity='1';this.style.transform='scale(1.05)'"
+                        onmouseout="this.style.opacity='0.9';this.style.transform='scale(1)'"
+                        onclick="showToast('Video playback initializing...')"></i>
+                      <div
+                        style="position: absolute; bottom: 16px; left: 16px; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 500;">
+                        ▶ Suraksha Setu Masterclass (5:20)</div>
                     </div>
-                    
-                    <h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">1. The Live Map</h2>
-                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">The Live Map is the core of our platform. It clusters environmental issues submitted by users into interactive zones. You can filter the map by category (e.g., Plastic Waste, Water Leak) or by status (Open, In Progress, Resolved).</p>
-                    
-                    <div style="padding: 16px; border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.05); border-radius: 0 8px 8px 0; margin-bottom: 32px;">
-                      <div style="font-weight: 600; color: #1e293b; font-size: 14px; margin-bottom: 4px;">Pro Tip: Heatmaps</div>
-                      <div style="font-size: 13px; color: #475569; line-height: 1.5;">Zoom out on the Live Map to automatically trigger the Heatmap view. This is incredibly useful for admins trying to identify high-density problem areas in the city.</div>
+
+                    <h2
+                      style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      1. The Live Map</h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">The Live Map is
+                      the core of our platform. It clusters environmental issues submitted by users into interactive
+                      zones. You can filter the map by category (e.g., Plastic Waste, Water Leak) or by status (Open, In
+                      Progress, Resolved).</p>
+
+                    <div
+                      style="padding: 16px; border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.05); border-radius: 0 8px 8px 0; margin-bottom: 32px;">
+                      <div style="font-weight: 600; color: #1e293b; font-size: 14px; margin-bottom: 4px;">Pro Tip:
+                        Heatmaps</div>
+                      <div style="font-size: 13px; color: #475569; line-height: 1.5;">Zoom out on the Live Map to
+                        automatically trigger the Heatmap view. This is incredibly useful for admins trying to identify
+                        high-density problem areas in the city.</div>
                     </div>
-                    
-                    <h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">2. Community Feed</h2>
-                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Switch to the Community Feed if you prefer a social media style timeline. You can upvote (Support) issues reported by others. Issues with high upvotes are automatically escalated in priority for the admin team.</p>
-                    
-                    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+
+                    <h2
+                      style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      2. Community Feed</h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Switch to the
+                      Community Feed if you prefer a social media style timeline. You can upvote (Support) issues
+                      reported by others. Issues with high upvotes are automatically escalated in priority for the admin
+                      team.</p>
+
+                    <div
+                      style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
                       <div style="font-size: 13px; color: #64748b; font-weight: 500;">Was this guide helpful?</div>
                       <div style="display: flex; gap: 8px;">
-                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👍 Yes, thanks</button>
-                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👎 No, needs work</button>
+                        <button onclick="showToast('Feedback submitted. Thank you!')"
+                          style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);"
+                          onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👍
+                          Yes, thanks</button>
+                        <button onclick="showToast('Feedback submitted. Thank you!')"
+                          style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);"
+                          onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👎 No,
+                          needs work</button>
                       </div>
                     </div>
                   </div>
@@ -4888,44 +5039,75 @@
                   <div class="help-hero-title">Contact Support</div>
                   <div class="help-hero-sub">Our team is available to assist you across multiple channels.</div>
                 </div>
-                
+
                 <div class="help-body-area">
                   <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 32px;">
                     <!-- Email -->
-                    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.3s;" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='#3b82f6'" onmouseout="this.style.transform='translateY(0)';this.style.borderColor='#e2e8f0'">
-                      <div style="width: 44px; height: 44px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 12px;">
+                    <div
+                      style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.3s;"
+                      onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='#3b82f6'"
+                      onmouseout="this.style.transform='translateY(0)';this.style.borderColor='#e2e8f0'">
+                      <div
+                        style="width: 44px; height: 44px; background: rgba(59, 130, 246, 0.1); color: #3b82f6; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 12px;">
                         <i class="ph-duotone ph-envelope"></i>
                       </div>
-                      <div style="font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 6px;">Email Support</div>
-                      <div style="font-size: 12px; color: #64748b; line-height: 1.5; margin-bottom: 12px; height: 40px;">Best for detailed queries and technical assistance. Response in ~2 hours.</div>
-                      <a href="mailto:support@surakshasetu.in" style="display: block; width: 100%; padding: 8px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; color: #3b82f6; font-size: 13px; font-weight: 600; text-decoration: none; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">Write to Us</a>
+                      <div style="font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 6px;">Email Support
+                      </div>
+                      <div
+                        style="font-size: 12px; color: #64748b; line-height: 1.5; margin-bottom: 12px; height: 40px;">
+                        Best for detailed queries and technical assistance. Response in ~2 hours.</div>
+                      <a href="mailto:support@surakshasetu.in"
+                        style="display: block; width: 100%; padding: 8px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; color: #3b82f6; font-size: 13px; font-weight: 600; text-decoration: none; transition: 0.2s;"
+                        onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">Write to
+                        Us</a>
                     </div>
-                    
+
                     <!-- WhatsApp -->
-                    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.3s;" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='#22c55e'" onmouseout="this.style.transform='translateY(0)';this.style.borderColor='#e2e8f0'">
-                      <div style="width: 44px; height: 44px; background: rgba(34, 197, 94, 0.1); color: #22c55e; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 12px;">
+                    <div
+                      style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.3s;"
+                      onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='#22c55e'"
+                      onmouseout="this.style.transform='translateY(0)';this.style.borderColor='#e2e8f0'">
+                      <div
+                        style="width: 44px; height: 44px; background: rgba(34, 197, 94, 0.1); color: #22c55e; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 12px;">
                         <i class="ph-duotone ph-whatsapp-logo"></i>
                       </div>
                       <div style="font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 6px;">WhatsApp</div>
-                      <div style="font-size: 12px; color: #64748b; line-height: 1.5; margin-bottom: 12px; height: 40px;">Quick responses for urgent environmental issues. Available 24/7.</div>
-                      <a href="https://wa.me/911234567890" target="_blank" style="display: block; width: 100%; padding: 8px; background: #22c55e; border: 1px solid #22c55e; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 600; text-decoration: none; transition: 0.2s;" onmouseover="this.style.background='#16a34a'" onmouseout="this.style.background='#22c55e'">Message on WhatsApp</a>
+                      <div
+                        style="font-size: 12px; color: #64748b; line-height: 1.5; margin-bottom: 12px; height: 40px;">
+                        Quick responses for urgent environmental issues. Available 24/7.</div>
+                      <a href="https://wa.me/911234567890" target="_blank"
+                        style="display: block; width: 100%; padding: 8px; background: #22c55e; border: 1px solid #22c55e; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 600; text-decoration: none; transition: 0.2s;"
+                        onmouseover="this.style.background='#16a34a'"
+                        onmouseout="this.style.background='#22c55e'">Message on WhatsApp</a>
                     </div>
-                    
+
                     <!-- Ticket -->
-                    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.3s;" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='#f59e0b'" onmouseout="this.style.transform='translateY(0)';this.style.borderColor='#e2e8f0'">
-                      <div style="width: 44px; height: 44px; background: rgba(245, 158, 11, 0.1); color: #f59e0b; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 12px;">
+                    <div
+                      style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.3s;"
+                      onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='#f59e0b'"
+                      onmouseout="this.style.transform='translateY(0)';this.style.borderColor='#e2e8f0'">
+                      <div
+                        style="width: 44px; height: 44px; background: rgba(245, 158, 11, 0.1); color: #f59e0b; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin: 0 auto 12px;">
                         <i class="ph-duotone ph-ticket"></i>
                       </div>
-                      <div style="font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 6px;">Support Ticket</div>
-                      <div style="font-size: 12px; color: #64748b; line-height: 1.5; margin-bottom: 12px; height: 40px;">Submit a formal ticket to track the progress of complex issues.</div>
-                      <button onclick="switchHelpPage('tickets', document.getElementById('help-nav-tickets'))" style="display: block; width: 100%; padding: 8px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; color: #f59e0b; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">Open a Ticket</button>
+                      <div style="font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 6px;">Support Ticket
+                      </div>
+                      <div
+                        style="font-size: 12px; color: #64748b; line-height: 1.5; margin-bottom: 12px; height: 40px;">
+                        Submit a formal ticket to track the progress of complex issues.</div>
+                      <button onclick="switchHelpPage('tickets', document.getElementById('help-nav-tickets'))"
+                        style="display: block; width: 100%; padding: 8px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; color: #f59e0b; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;"
+                        onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">Open a
+                        Ticket</button>
                     </div>
                   </div>
 
-                  <div class="help-section-title"><i class="ph-duotone ph-chat-circle-text" style="font-size: 14px;"></i>Live Chat Support</div>
+                  <div class="help-section-title"><i class="ph-duotone ph-chat-circle-text"
+                      style="font-size: 14px;"></i>Live Chat Support</div>
                   <div class="help-chat-widget" style="margin-top: 16px;">
                     <div class="help-chat-header">
-                      <div class="help-chat-avatar"><i class="ph-duotone ph-robot" style="color: #16a34a; font-size: 18px;"></i></div>
+                      <div class="help-chat-avatar"><i class="ph-duotone ph-robot"
+                          style="color: #16a34a; font-size: 18px;"></i></div>
                       <div>
                         <div style="font-size: 13px; font-weight: 500; color: #1e293b;">Suraksha Setu Bot</div>
                         <div class="help-chat-status">
@@ -4935,16 +5117,21 @@
                     </div>
                     <div class="help-chat-messages" id="helpChatMessages">
                       <div class="help-msg help-msg-bot">
-                        <div class="help-msg-avatar-sm" style="background: rgba(34, 197, 94, 0.1); color: #16a34a;">SS</div>
+                        <div class="help-msg-avatar-sm" style="background: rgba(34, 197, 94, 0.1); color: #16a34a;">SS
+                        </div>
                         <div>
-                          <div class="help-msg-bubble">Namaste! I'm the Suraksha Setu support bot. How can I help you today? You can ask about reporting issues, admin features, certificates, or anything else.</div>
+                          <div class="help-msg-bubble">Namaste! I'm the Suraksha Setu support bot. How can I help you
+                            today? You can ask about reporting issues, admin features, certificates, or anything else.
+                          </div>
                           <div class="help-msg-time">Just now</div>
                         </div>
                       </div>
                     </div>
                     <div class="help-chat-input-row">
-                      <input class="help-chat-input" id="helpChatInput" type="text" placeholder="Type your question..." onkeydown="if(event.key==='Enter')sendHelpChat()">
-                      <button class="help-chat-send" onclick="sendHelpChat()"><i class="ph-bold ph-paper-plane-right" style="font-size: 15px;"></i></button>
+                      <input class="help-chat-input" id="helpChatInput" type="text" placeholder="Type your question..."
+                        onkeydown="if(event.key==='Enter')sendHelpChat()">
+                      <button class="help-chat-send" onclick="sendHelpChat()"><i class="ph-bold ph-paper-plane-right"
+                          style="font-size: 15px;"></i></button>
                     </div>
                   </div>
                 </div>
@@ -4958,19 +5145,28 @@
                 </div>
                 <div class="help-body-area">
                   <!-- Ticket Filters -->
-                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 16px;">
+                  <div
+                    style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 16px;">
                     <div style="position: relative; width: 300px;">
-                      <i class="ph-bold ph-magnifying-glass" style="position: absolute; left: 12px; top: 10px; color: #94a3b8; font-size: 14px;"></i>
-                      <input type="text" placeholder="Search tickets..." style="width: 100%; height: 34px; padding-left: 36px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; color: #1e293b; background: #fff;">
+                      <i class="ph-bold ph-magnifying-glass"
+                        style="position: absolute; left: 12px; top: 10px; color: #94a3b8; font-size: 14px;"></i>
+                      <input type="text" id="ticket-search-input" oninput="renderTickets()" placeholder="Search tickets..."
+                        style="width: 100%; height: 34px; padding-left: 36px; padding-right: 30px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; color: #1e293b; background: #fff;">
+                      <i id="ticket-search-clear" class="ph-bold ph-x" style="display:none; cursor:pointer; position:absolute; right:12px; top:10px; color:#94a3b8; font-size:14px;" onclick="document.getElementById('ticket-search-input').value=''; renderTickets();"></i>
                     </div>
                     <div style="display: flex; gap: 12px;">
-                      <select style="height: 34px; padding: 0 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; color: #475569; background: #fff; cursor: pointer;">
-                        <option>Status: All</option>
-                        <option>Status: Open</option>
-                        <option>Status: In Progress</option>
-                        <option>Status: Resolved</option>
+                      <select id="ticket-status-filter" onchange="renderTickets()"
+                        style="height: 34px; padding: 0 32px 0 12px; border: 1px solid #22c55e; border-radius: 8px; font-size: 13px; font-weight: 600; color: #16a34a; background: #f0fdf4 url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2316a34a%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E') no-repeat right 10px center; background-size: 10px; -webkit-appearance: none; cursor: pointer; outline: none; transition: 0.2s;" onmouseover="this.style.boxShadow='0 2px 8px rgba(34,197,94,0.15)'" onmouseout="this.style.boxShadow='none'">
+                        <option style="color:#1e293b; background:#fff;">Status: All</option>
+                        <option style="color:#1e293b; background:#fff;">Status: Open</option>
+                        <option style="color:#1e293b; background:#fff;">Status: In Progress</option>
+                        <option style="color:#1e293b; background:#fff;">Status: Resolved</option>
                       </select>
-                      <button style="height: 34px; padding: 0 16px; background: #16a34a; border: none; border-radius: 6px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#15803d'" onclick="document.getElementById('create-ticket-modal-overlay').classList.add('open')"><i class="ph-bold ph-plus" style="margin-right: 6px;"></i>New Ticket</button>
+                      <button
+                        style="height: 34px; padding: 0 16px; background: #16a34a; border: none; border-radius: 6px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;"
+                        onmouseover="this.style.background='#15803d'"
+                        onclick="document.getElementById('create-ticket-modal-overlay').classList.add('open')"><i
+                          class="ph-bold ph-plus" style="margin-right: 6px;"></i>New Ticket</button>
                     </div>
                   </div>
 
@@ -4979,12 +5175,24 @@
                     <table class="help-ticket-table" style="width: 100%; border-collapse: collapse;">
                       <thead>
                         <tr style="background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
-                          <th style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">Ticket ID</th>
-                          <th style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">Subject</th>
-                          <th style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">Category</th>
-                          <th style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">Priority</th>
-                          <th style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">Created</th>
-                          <th style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">Status</th>
+                          <th
+                            style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">
+                            Ticket ID</th>
+                          <th
+                            style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">
+                            Subject</th>
+                          <th
+                            style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">
+                            Category</th>
+                          <th
+                            style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">
+                            Priority</th>
+                          <th
+                            style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">
+                            Created</th>
+                          <th
+                            style="padding: 12px 16px; font-size: 12px; font-weight: 600; color: #64748b; text-align: left;">
+                            Status</th>
                         </tr>
                       </thead>
                       <tbody id="ticket-table-body">
@@ -4996,25 +5204,33 @@
               </div>
 
               <!-- TICKET MODAL (Static) -->
-              <div id="ticketModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-                <div style="background: #fff; width: 600px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column;">
+              <div id="ticketModal"
+                style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+                <div
+                  style="background: #fff; width: 600px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); overflow: hidden; display: flex; flex-direction: column;">
                   <!-- Header -->
-                  <div style="padding: 24px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; background: #f8fafc;">
+                  <div
+                    style="padding: 24px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; background: #f8fafc;">
                     <div>
                       <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                        <span style="font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase;">TKT-0018</span>
+                        <span
+                          style="font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase;">TKT-0018</span>
                         <span class="help-badge help-badge-progress">In progress</span>
                         <span class="help-badge help-badge-med">Medium Priority</span>
                       </div>
-                      <div style="font-size: 18px; font-weight: 700; color: #0f172a;">Live map not loading on mobile Chrome</div>
+                      <div style="font-size: 18px; font-weight: 700; color: #0f172a;">Live map not loading on mobile
+                        Chrome</div>
                     </div>
-                    <i class="ph-bold ph-x" style="font-size: 20px; color: #64748b; cursor: pointer;" onclick="document.getElementById('ticketModal').style.display='none'"></i>
+                    <i class="ph-bold ph-x" style="font-size: 20px; color: #64748b; cursor: pointer;"
+                      onclick="document.getElementById('ticketModal').style.display='none'"></i>
                   </div>
                   <!-- Body -->
                   <div style="padding: 24px; max-height: 400px; overflow-y: auto; background: #fff;">
                     <!-- Original Request -->
                     <div style="display: flex; gap: 16px; margin-bottom: 24px;">
-                      <div style="width: 32px; height: 32px; background: #3b82f6; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; flex-shrink: 0;">You</div>
+                      <div
+                        style="width: 32px; height: 32px; background: #3b82f6; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; flex-shrink: 0;">
+                        You</div>
                       <div>
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
                           <div style="font-size: 13px; font-weight: 700; color: #1e293b;">You</div>
@@ -5022,7 +5238,8 @@
                         </div>
                         <div style="font-size: 13px; color: #475569; line-height: 1.6;">
                           Hi team,<br><br>
-                          I'm trying to view the live map on my Android phone using Google Chrome, but the map tiles aren't loading. It just shows a grey grid. It works perfectly on my desktop.<br><br>
+                          I'm trying to view the live map on my Android phone using Google Chrome, but the map tiles
+                          aren't loading. It just shows a grey grid. It works perfectly on my desktop.<br><br>
                           Browser: Chrome 114.0.0.0<br>
                           OS: Android 13<br><br>
                           Thanks!
@@ -5031,7 +5248,9 @@
                     </div>
                     <!-- Support Reply -->
                     <div style="display: flex; gap: 16px;">
-                      <div style="width: 32px; height: 32px; background: #16a34a; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;"><i class="ph-duotone ph-robot"></i></div>
+                      <div
+                        style="width: 32px; height: 32px; background: #16a34a; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+                        <i class="ph-duotone ph-robot"></i></div>
                       <div>
                         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
                           <div style="font-size: 13px; font-weight: 700; color: #1e293b;">Support Team</div>
@@ -5039,7 +5258,9 @@
                         </div>
                         <div style="font-size: 13px; color: #475569; line-height: 1.6;">
                           Hello,<br><br>
-                          Thank you for reporting this issue. We are currently investigating a potential CORS issue with our map tile provider specifically affecting mobile browsers. Our engineering team is looking into it.<br><br>
+                          Thank you for reporting this issue. We are currently investigating a potential CORS issue with
+                          our map tile provider specifically affecting mobile browsers. Our engineering team is looking
+                          into it.<br><br>
                           We will update this ticket as soon as we have a fix deployed.<br><br>
                           Regards,<br>Suraksha Setu Support
                         </div>
@@ -5047,9 +5268,14 @@
                     </div>
                   </div>
                   <!-- Reply Footer -->
-                  <div style="padding: 16px 24px; border-top: 1px solid #e2e8f0; background: #f8fafc; display: flex; gap: 12px;">
-                    <input type="text" placeholder="Type a reply..." style="flex: 1; height: 38px; padding-left: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
-                    <button style="height: 38px; padding: 0 16px; background: #3b82f6; color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#2563eb'" onclick="showToast('Reply submitted.')">Reply</button>
+                  <div
+                    style="padding: 16px 24px; border-top: 1px solid #e2e8f0; background: #f8fafc; display: flex; gap: 12px;">
+                    <input type="text" placeholder="Type a reply..."
+                      style="flex: 1; height: 38px; padding-left: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px;">
+                    <button
+                      style="height: 38px; padding: 0 16px; background: #3b82f6; color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s;"
+                      onmouseover="this.style.background='#2563eb'"
+                      onclick="showToast('Reply submitted.')">Reply</button>
                   </div>
                 </div>
               </div>
@@ -5065,7 +5291,7 @@
     // Sidebar View Routing
     function switchAdminView(viewName, linkElement) {
       sessionStorage.setItem('lastAdminPage', viewName);
-      
+
       // Update hash silently in the URL to preserve route on refresh
       const queryParams = window.location.search;
       const targetHash = '#admin/' + viewName;
@@ -5222,7 +5448,7 @@
     });
 
     let helpChatHistory = [];
-    
+
     async function sendHelpChat() {
       const input = document.getElementById('helpChatInput');
       const messages = document.getElementById('helpChatMessages');
@@ -5264,15 +5490,15 @@
           body: JSON.stringify({ messages: helpChatHistory })
         });
         const data = await response.json();
-        
+
         document.getElementById(typingIndicatorId).remove();
 
         if (data.success && data.response) {
           helpChatHistory.push({ role: 'model', text: data.response });
           const formattedText = data.response
-              .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-              .replace(/\*(.*?)\*/g, '<em>$1</em>')
-              .replace(/\n/g, '<br>');
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/\n/g, '<br>');
 
           const botMsg = document.createElement('div');
           botMsg.className = 'help-msg help-msg-bot';
@@ -5285,7 +5511,7 @@
           `;
           messages.appendChild(botMsg);
         } else {
-           throw new Error(data.error || 'Failed to get response');
+          throw new Error(data.error || 'Failed to get response');
         }
       } catch (err) {
         document.getElementById(typingIndicatorId)?.remove();
@@ -5324,10 +5550,10 @@
         resultsDiv.style.display = 'none';
         return;
       }
-      
+
       const lowerQ = query.toLowerCase();
-      const matches = helpSearchData.filter(item => 
-        item.title.toLowerCase().includes(lowerQ) || 
+      const matches = helpSearchData.filter(item =>
+        item.title.toLowerCase().includes(lowerQ) ||
         item.desc.toLowerCase().includes(lowerQ)
       );
 
@@ -5339,11 +5565,11 @@
           let icon = 'ph-file-text';
           let color = '#64748b';
           let action = '';
-          
+
           if (m.type === 'faq') { icon = 'ph-question'; color = '#3b82f6'; action = "switchHelpPage('faq', document.getElementById('help-nav-faq'))"; }
           if (m.type === 'guide') { icon = 'ph-book-open'; color = '#f59e0b'; action = "switchHelpPage('guides', document.getElementById('help-nav-guides'))"; }
           if (m.type === 'category') { icon = 'ph-squares-four'; color = '#16a34a'; action = "switchHelpPage('home', document.getElementById('help-nav-home'))"; }
-          
+
           html += `
             <div style="padding: 12px 16px; border-bottom: 1px solid #f1f5f9; cursor: pointer; display: flex; gap: 12px; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'" onclick="${action}; document.getElementById('helpSearchResults').style.display='none';">
               <div style="font-size: 18px; color: ${color}; margin-top: 2px;"><i class="ph-duotone ${icon}"></i></div>
@@ -5358,7 +5584,7 @@
       }
       resultsDiv.style.display = 'block';
     }
-    
+
     document.addEventListener('click', (e) => {
       const searchHero = document.querySelector('.help-search-hero');
       const resultsDiv = document.getElementById('helpSearchResults');
@@ -5431,21 +5657,41 @@
   </div>
 
   <!-- ── CREATE TICKET MODAL ── -->
-  <div class="modal-overlay" id="create-ticket-modal-overlay" onclick="if(event.target===this) this.classList.remove('open')">
-    <div class="modal" style="max-width: 500px; width: 90%; padding: 24px; background: #fff; border-radius: 12px; display: flex; flex-direction: column;">
-      <div class="modal-header" style="border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+  <div class="modal-overlay" id="create-ticket-modal-overlay"
+    onclick="if(event.target===this) this.classList.remove('open')">
+    <div class="modal"
+      style="max-width: 500px; width: 90%; padding: 32px; background: #e0e5ec; border-radius: 20px; display: flex; flex-direction: column; box-shadow: 12px 12px 24px rgba(163,177,198,0.6), -12px -12px 24px rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.4); animation: floatModal 3s ease-in-out infinite;">
+      <style>
+        @keyframes floatModal {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
+          100% { transform: translateY(0px); }
+        }
+        .neu-input {
+          width: 100%; height: 44px; padding: 0 16px; border: none; border-radius: 10px; font-size: 14px; background: #e0e5ec; box-shadow: inset 4px 4px 8px rgba(163,177,198,0.5), inset -4px -4px 8px rgba(255,255,255,0.9); outline: none; color: #1e293b; transition: all 0.2s;
+        }
+        .neu-input:focus {
+          box-shadow: inset 6px 6px 12px rgba(163,177,198,0.6), inset -6px -6px 12px rgba(255,255,255,1);
+        }
+      </style>
+      <div class="modal-header"
+        style="border-bottom: none; padding-bottom: 0; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
         <div style="font-size: 18px; font-weight: 800; font-family: 'Outfit', sans-serif;">Submit a Support Ticket</div>
-        <i class="ph-bold ph-x" style="font-size: 20px; color: #64748b; cursor: pointer;" onclick="document.getElementById('create-ticket-modal-overlay').classList.remove('open')"></i>
+        <i class="ph-bold ph-x" style="font-size: 20px; color: #64748b; cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#64748b'"
+          onclick="document.getElementById('create-ticket-modal-overlay').classList.remove('open')"></i>
       </div>
       <div class="modal-body" style="display: flex; flex-direction: column; gap: 16px;">
         <div>
-          <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Subject *</label>
-          <input type="text" id="ticket-subject" placeholder="Briefly describe the issue" style="width: 100%; height: 40px; padding: 0 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px;">
+          <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Subject
+            *</label>
+          <input type="text" id="ticket-subject" class="neu-input" placeholder="Briefly describe the issue">
         </div>
         <div style="display: flex; gap: 16px;">
           <div style="flex: 1;">
-            <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Category *</label>
-            <select id="ticket-category" style="width: 100%; height: 40px; padding: 0 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: #fff;">
+            <label
+              style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Category
+              *</label>
+            <select id="ticket-category" class="neu-input" style="padding-right: 32px;">
               <option value="Technical">Technical Issue</option>
               <option value="Account">Account Management</option>
               <option value="Certificate">Certificate Problem</option>
@@ -5453,8 +5699,10 @@
             </select>
           </div>
           <div style="flex: 1;">
-            <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Priority *</label>
-            <select id="ticket-priority" style="width: 100%; height: 40px; padding: 0 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; background: #fff;">
+            <label
+              style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Priority
+              *</label>
+            <select id="ticket-priority" class="neu-input" style="padding-right: 32px;">
               <option value="Low">Low</option>
               <option value="Medium" selected>Medium</option>
               <option value="High">High</option>
@@ -5462,12 +5710,19 @@
           </div>
         </div>
         <div>
-          <label style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Description *</label>
-          <textarea id="ticket-description" rows="5" placeholder="Provide details about the problem, steps to reproduce, etc." style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; resize: vertical;"></textarea>
+          <label
+            style="display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 6px;">Description
+            *</label>
+          <textarea id="ticket-description" rows="5" class="neu-input"
+            placeholder="Provide details about the problem, steps to reproduce, etc."
+            style="height: auto; padding: 12px 16px; resize: vertical;"></textarea>
         </div>
-        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px;">
-          <button onclick="document.getElementById('create-ticket-modal-overlay').classList.remove('open')" style="height: 40px; padding: 0 16px; background: #f1f5f9; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; color: #475569; cursor: pointer;">Cancel</button>
-          <button id="btn-submit-ticket" onclick="submitTicket()" style="height: 40px; padding: 0 20px; background: #16a34a; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; color: #fff; cursor: pointer;">Submit Ticket</button>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 12px;">
+          <button onclick="document.getElementById('create-ticket-modal-overlay').classList.remove('open')"
+            style="height: 44px; padding: 0 20px; background: #e0e5ec; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; color: #475569; cursor: pointer; box-shadow: 4px 4px 10px rgba(163,177,198,0.5), -4px -4px 10px rgba(255,255,255,0.9); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='6px 6px 12px rgba(163,177,198,0.6), -6px -6px 12px rgba(255,255,255,1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='4px 4px 10px rgba(163,177,198,0.5), -4px -4px 10px rgba(255,255,255,0.9)';">Cancel</button>
+          <button id="btn-submit-ticket" onclick="submitTicket()"
+            style="height: 44px; padding: 0 24px; background: #16a34a; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; color: #fff; cursor: pointer; box-shadow: 4px 4px 10px rgba(22,163,74,0.3), -4px -4px 10px rgba(255,255,255,0.5); transition: all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='6px 6px 14px rgba(22,163,74,0.4), -6px -6px 14px rgba(255,255,255,0.6)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='4px 4px 10px rgba(22,163,74,0.3), -4px -4px 10px rgba(255,255,255,0.5)';">Submit
+            Ticket</button>
         </div>
       </div>
     </div>
@@ -5574,7 +5829,8 @@
   <!-- ── SYNC PROGRESS MODAL ── -->
   <div class="modal-overlay" id="sync-progress-modal-overlay">
     <div class="modal" style="max-width:420px; width:90%; padding:24px; text-align:center; position:relative;">
-      <button class="modal-close" onclick="document.getElementById('sync-progress-modal-overlay').classList.remove('open')">✕</button>
+      <button class="modal-close"
+        onclick="document.getElementById('sync-progress-modal-overlay').classList.remove('open')">✕</button>
       <div style="font-size:36px; margin-bottom:12px;">🔄</div>
       <h3
         style="font-size:18px; font-weight:800; font-family:'Outfit',sans-serif; color:var(--text); margin-bottom:8px;">
@@ -5609,7 +5865,8 @@
   <!-- ── SYSTEM LOGS MODAL ── -->
   <div class="modal-overlay" id="log-viewer-modal-overlay"
     onclick="if(event.target===this) this.classList.remove('open')">
-    <div class="modal" style="max-width:900px; width:95%; padding:24px; overflow:visible; max-height:none; margin: 40px auto;">
+    <div class="modal"
+      style="max-width:900px; width:95%; padding:24px; overflow:visible; max-height:none; margin: 40px auto;">
       <div class="modal-header">
         <div>
           <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif">System Log Viewer</div>
@@ -5619,7 +5876,8 @@
         <button class="modal-close"
           onclick="document.getElementById('log-viewer-modal-overlay').classList.remove('open')">✕</button>
       </div>
-      <div class="modal-body" style="padding:16px 0 0 0; display:flex; flex-direction:column; gap:16px; overflow:visible;">
+      <div class="modal-body"
+        style="padding:16px 0 0 0; display:flex; flex-direction:column; gap:16px; overflow:visible;">
         <!-- Filter and Search Row -->
         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
           <select id="log-filter-time" onchange="fetchSystemLogs()" class="filter-select"
@@ -5635,7 +5893,10 @@
             <input type="text" id="log-search-input" oninput="renderSystemLogs()"
               placeholder="Search logs by message, service..."
               style="border:none; background:transparent; outline:none; font-size:13px; width:100%;">
-            <i id="log-search-clear" class="ph-bold ph-x" style="color:var(--text3); font-size:14px; cursor:pointer; display:none;" onclick="document.getElementById('log-search-input').value=''; renderSystemLogs();" title="Clear Search"></i>
+            <i id="log-search-clear" class="ph-bold ph-x"
+              style="color:var(--text3); font-size:14px; cursor:pointer; display:none;"
+              onclick="document.getElementById('log-search-input').value=''; renderSystemLogs();"
+              title="Clear Search"></i>
           </div>
           <button class="btn-primary"
             style="padding:8px 16px; border-radius:8px; font-size:13px; display:flex; align-items:center; gap:6px;"
@@ -5862,7 +6123,9 @@
         <!-- Preview Controls removed -->
 
         <!-- Preview Canvas -->
-        <div style="flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 24px;" id="preview-outer-container">
+        <div
+          style="flex: 1; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 24px;"
+          id="preview-outer-container">
           <div id="preview-scale-container" style="margin: 0 auto; transition: all 0.3s ease;">
             <div id="preview-wrapper"
               style="transition: all 0.3s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.1); background: #fff; transform-origin: top left;">
@@ -6061,22 +6324,22 @@
     });
   </script>
 
-    <!-- Sidebar Interactions -->
-    <script>
+  <!-- Sidebar Interactions -->
+  <script>
     document.addEventListener('DOMContentLoaded', () => {
       const sidebar = document.getElementById('admin-sidebar');
       const sidebarNav = document.querySelector('.admin-sidebar-nav');
-      
+
       if (sidebar && sidebarNav) {
         // Top and Bottom Fade Masks
         const topFade = document.createElement('div');
         topFade.className = 'sidebar-scroll-fade top';
         const bottomFade = document.createElement('div');
         bottomFade.className = 'sidebar-scroll-fade bottom';
-        
+
         sidebar.insertBefore(topFade, sidebarNav);
         sidebar.insertBefore(bottomFade, sidebarNav.nextSibling);
-        
+
         const updateScrollFades = () => {
           if (sidebarNav.scrollTop > 0) {
             topFade.style.opacity = '1';
@@ -6089,18 +6352,18 @@
             bottomFade.style.opacity = '0';
           }
         };
-        
+
         sidebarNav.addEventListener('scroll', updateScrollFades);
         window.addEventListener('resize', updateScrollFades);
-        
+
         const observer = new ResizeObserver(() => updateScrollFades());
         observer.observe(sidebarNav);
         setTimeout(updateScrollFades, 100);
-        
+
         // Smart Auto-Expand on Hover (Collapsed Mode Only)
         let hoverTimer;
         let leaveTimer;
-        
+
         sidebar.addEventListener('mouseenter', () => {
           if (sidebar.classList.contains('collapsed')) {
             clearTimeout(leaveTimer);
@@ -6110,7 +6373,7 @@
             }, 50);
           }
         });
-        
+
         sidebar.addEventListener('mouseleave', () => {
           if (sidebar.classList.contains('collapsed')) {
             clearTimeout(hoverTimer);
@@ -6121,7 +6384,7 @@
         });
       }
     });
-    </script>
+  </script>
 
 </body>
 
