@@ -1148,7 +1148,7 @@
                     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6), -2px -2px 6px rgba(255, 255, 255, 0.03), inset 3px 3px 6px rgba(0, 0, 0, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.1);
                   }
                 </style>
-                <form id="newsletter-form-reveal" class="relative w-full sm:w-[400px]"
+                <form id="newsletter-form-reveal" class="relative w-full sm:w-full max-w-[400px]"
                   onsubmit="handleNewsletterSubmit(event)">
                   <div class="relative w-full group">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
@@ -1223,12 +1223,12 @@
                     </button>
                   </div>
                 </form>
-                <div class="flex justify-center mt-3 w-full sm:w-[400px]">
+                <div class="flex justify-center mt-3 w-full sm:w-full max-w-[400px]">
                   <p class="text-xs text-white text-center"><i class="ph-bold ph-shield-check text-green-500 mr-1"></i>
                     No
                     spam. Unsubscribe anytime.</p>
                 </div>
-                <div class="flex justify-center w-full sm:w-[400px]">
+                <div class="flex justify-center w-full sm:w-full max-w-[400px]">
                   <p id="newsletter-success-reveal" class="hidden text-sm text-green-400 mt-2 text-center font-medium">✓
                     Thanks for subscribing
                     to SurakshaSetu updates.</p>
@@ -1347,7 +1347,7 @@
   <div class="page" id="page-admin">
     <!-- Login -->
     <div id="admin-login-wrap"
-      class="relative min-h-[calc(100dvh-64px)] lg:h-[calc(100vh-64px)] flex flex-col lg:flex-row items-center justify-start lg:justify-center pt-8 pb-[max(32px,env(safe-area-inset-bottom))] lg:py-0 overflow-x-hidden overflow-y-auto lg:overflow-hidden font-['Poppins',sans-serif] bg-gradient-to-br from-[#F4F8F4] to-[#EDF5EF]">
+      class="relative min-h-[calc(100dvh-64px)] lg:h-[calc(100vh-64px)] flex flex-col lg:flex-row items-center justify-start lg:justify-center pt-8 pb-[max(32px,env(safe-area-inset-bottom))] lg:py-0  overflow-y-auto lg:overflow-hidden font-['Poppins',sans-serif] bg-gradient-to-br from-[#F4F8F4] to-[#EDF5EF]">
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
@@ -1696,7 +1696,7 @@
 
         <!-- Illustration Container -->
         <div
-          class="relative w-[80vw] max-w-[300px] md:max-w-[450px] lg:max-w-[700px] h-auto flex items-center justify-center anim-float-ill mx-auto">
+          class="relative w-[80vw] max-w-full max-w-[300px] md:max-w-full max-w-[450px] lg:max-w-full max-w-[700px] h-auto flex items-center justify-center anim-float-ill mx-auto">
           <img src="model.svg" alt="SurakshaSetu 3D Admin Model"
             class="w-full h-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.1)]">
         </div>
