@@ -3387,7 +3387,10 @@ const chartInstances = {};
     if (!tableBody) return;
 
     try {
-      const res = await fetch(`${API_URL}/api/tickets.php`);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2000);
+      const res = await fetch(`${API_URL}/api/tickets.php`, { signal: controller.signal });
+      clearTimeout(timeoutId);
       const data = await res.json();
 
       if (data.success && data.tickets && data.tickets.length > 0) {
@@ -3649,13 +3652,28 @@ const chartInstances = {};
   };
 
   window.deleteTicket = async function(ticketId) {
-    if (!confirm('Are you sure you want to delete ticket ' + ticketId + '?')) return;
-    
+    if (typeof showConfirmModal === 'function') {
+      showConfirmModal(
+        'Delete Ticket?',
+        `Are you sure you want to permanently delete ticket ${ticketId}? This action cannot be undone.`,
+        'Yes, Delete',
+        'Cancel',
+        async () => {
+          executeTicketDeletion(ticketId);
+        }
+      );
+    } else {
+      if (!confirm('Are you sure you want to delete ticket ' + ticketId + '?')) return;
+      executeTicketDeletion(ticketId);
+    }
+  };
+
+  function executeTicketDeletion(ticketId) {
     // Optimistic UI update
     const previousData = [...window.ticketsData];
     window.ticketsData = window.ticketsData.filter(t => t.ticket_id !== ticketId);
     renderTickets();
-    showToast('Ticket deleted successfully');
+    if(typeof showToast === 'function') showToast('Ticket deleted successfully');
 
     // Fire and forget backend call
     fetch(`${API_URL}/api/tickets.php?id=${encodeURIComponent(ticketId)}`, {
@@ -3665,7 +3683,7 @@ const chartInstances = {};
         // If delete fails, rollback
         window.ticketsData = previousData;
         renderTickets();
-        showToast('Failed to delete ticket', true);
+        if(typeof showToast === 'function') showToast('Failed to delete ticket', true);
       }
     }).catch(e => {
       console.error('Error deleting ticket:', e);
@@ -3673,10 +3691,10 @@ const chartInstances = {};
       if (!ticketId.includes('#SS-100')) {
           window.ticketsData = previousData;
           renderTickets();
-          showToast('Failed to delete ticket', true);
+          if(typeof showToast === 'function') showToast('Failed to delete ticket', true);
       }
     });
-  };
+  }
 
   // Initial render when script loads
   document.addEventListener('DOMContentLoaded', () => {
