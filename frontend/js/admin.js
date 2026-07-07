@@ -222,7 +222,7 @@ function adminLogout() {
   );
 }
 
-async function renderAdminDashboard(initialView = 'overview', subSubView = '') {
+async function renderAdminDashboard(initialView = 'overview', subSubView = '', subSubSubView = '') {
       const adminToken = sessionStorage.getItem('adminToken');
       if (!adminToken) {
         console.error('Security Check Failed: Unauthorized access to Admin Dashboard rendering.');
@@ -244,7 +244,7 @@ async function renderAdminDashboard(initialView = 'overview', subSubView = '') {
 
       // Switch view instantly before data processing
       if (typeof switchAdminView === 'function') {
-        switchAdminView(activeSubView, linkElement, subSubView);
+        switchAdminView(activeSubView, linkElement, subSubView, subSubSubView);
       }
 
       // If reports are already loaded (or we render with 0 initially to show skeleton), update DOM

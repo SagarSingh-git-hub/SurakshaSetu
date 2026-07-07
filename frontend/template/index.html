@@ -4910,121 +4910,544 @@
                     <div
                       style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">
                       Getting Started</div>
-                    <div
-                      style="padding: 8px 12px; font-size: 13px; font-weight: 600; color: #16a34a; background: rgba(34, 197, 94, 0.1); border-radius: 6px; cursor: pointer; margin-bottom: 4px;">
+                    <div id="guide-nav-platform-overview" class="guide-nav-item active"
+                      style="padding: 8px 12px; font-size: 13px; font-weight: 600; color: #16a34a; background: rgba(34, 197, 94, 0.1); border-radius: 6px; cursor: pointer; margin-bottom: 4px;" onclick="switchGuide('platform-overview')">
                       Platform Overview</div>
-                    <div
+                    <div id="guide-nav-create-account" class="guide-nav-item"
                       style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 16px; transition: 0.2s;"
-                      onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Create Account
+                      onmouseover="this.style.color='#16a34a'" onmouseout="if(!this.classList.contains('active'))this.style.color='#475569'" onclick="switchGuide('create-account')">Create Account
                     </div>
 
                     <div
                       style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">
                       Reporting</div>
-                    <div
+                    <div id="guide-nav-submit-report" class="guide-nav-item"
                       style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;"
-                      onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Submit a Report
+                      onmouseover="this.style.color='#16a34a'" onmouseout="if(!this.classList.contains('active'))this.style.color='#475569'" onclick="switchGuide('submit-report')">Submit a Report
                     </div>
-                    <div
+                    <div id="guide-nav-issue-workflow" class="guide-nav-item"
                       style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;"
-                      onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Issue Workflow
+                      onmouseover="this.style.color='#16a34a'" onmouseout="if(!this.classList.contains('active'))this.style.color='#475569'" onclick="switchGuide('issue-workflow')">Issue Workflow
                     </div>
-                    <div
+                    <div id="guide-nav-live-map-filters" class="guide-nav-item"
                       style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 16px; transition: 0.2s;"
-                      onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Live Map Filters
+                      onmouseover="this.style.color='#16a34a'" onmouseout="if(!this.classList.contains('active'))this.style.color='#475569'" onclick="switchGuide('live-map-filters')">Live Map Filters
                     </div>
 
                     <div
                       style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;">
                       Admin Tasks</div>
-                    <div
+                    <div id="guide-nav-manage-users" class="guide-nav-item"
                       style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;"
-                      onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Manage Users
+                      onmouseover="this.style.color='#16a34a'" onmouseout="if(!this.classList.contains('active'))this.style.color='#475569'" onclick="switchGuide('manage-users')">Manage Users
                     </div>
-                    <div
+                    <div id="guide-nav-certificates" class="guide-nav-item"
                       style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;"
-                      onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Certificates
+                      onmouseover="this.style.color='#16a34a'" onmouseout="if(!this.classList.contains('active'))this.style.color='#475569'" onclick="switchGuide('certificates')">Certificates
                     </div>
-                    <div
+                    <div id="guide-nav-notifications" class="guide-nav-item"
                       style="padding: 8px 12px; font-size: 13px; color: #475569; cursor: pointer; margin-bottom: 4px; transition: 0.2s;"
-                      onmouseover="this.style.color='#16a34a'" onmouseout="this.style.color='#475569'">Notifications
+                      onmouseover="this.style.color='#16a34a'" onmouseout="if(!this.classList.contains('active'))this.style.color='#475569'" onclick="switchGuide('notifications')">Notifications
                     </div>
                   </div>
 
                   <!-- Docs Content -->
-                  <div style="flex: 1; padding: 32px 48px; background: #fff; max-width: 800px;">
-                    <div
-                      style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+<div style="flex: 1; padding: 32px 48px; background: #fff; max-width: 800px; position: relative;">
+<div id="guide-platform-overview" class="guide-content-panel" style="display: block; width: 100%;">
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
                       <div style="display: flex; gap: 8px; font-size: 12px; color: #64748b; font-weight: 500;">
-                        <span>Help Center</span>
-                        <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i>
-                        <span>Guides</span>
-                        <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i>
-                        <span style="color: #16a34a;">Getting Started</span>
+                        <span>Help Center</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span>Guides</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span style='color: #16a34a;'>Platform Overview</span>
                       </div>
-                      <div style="font-size: 12px; color: #64748b;"><i class="ph-duotone ph-clock"
-                          style="margin-right: 4px;"></i>5 min read</div>
+                      <div style="font-size: 12px; color: #64748b;"><i class="ph-duotone ph-clock" style="margin-right: 4px;"></i>5 min read</div>
+                    </div>
+                    <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">Platform Overview</h1>
+                    <div style="font-size: 15px; color: #475569; margin-bottom: 32px; line-height: 1.6;">Welcome to SurakshaSetu! This guide gives you a quick 5-minute tour of the main features so you can start contributing to your community immediately.</div>
+                    <div style="width: 100%; height: 360px; background: #0f172a; border-radius: 12px; margin-bottom: 32px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                      <i class="ph-fill ph-play-circle" style="font-size: 64px; color: #fff; cursor: pointer; opacity: 0.9; transition: 0.2s;" onmouseover="this.style.opacity='1';this.style.transform='scale(1.05)'" onmouseout="this.style.opacity='0.9';this.style.transform='scale(1)'" onclick="showToast('Video playback initializing...')"></i>
+                      <div style="position: absolute; bottom: 16px; left: 16px; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 500;">▶ Suraksha Setu Masterclass (5:20)</div>
+                    </div>
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">1</div>
+                      The Live Map
+                    </h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">The <a href='#'>Live Map</a> is the core of the platform. It clusters <a href='#'>environmental issues</a> submitted by users into interactive zones. Filter by category or by status: <strong style="font-weight: 600; color: #0f172a;">Open</strong>, <strong style="font-weight: 600; color: #0f172a;">In Progress</strong>, <strong style="font-weight: 600; color: #0f172a;">Resolved</strong>.</p>
+                    <div style="padding: 16px; border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.05); border-radius: 0 8px 8px 0; margin: 16px 0 32px;">
+                      <div style="font-weight: 600; color: #1e293b; font-size: 14px; margin-bottom: 4px;">💡 Pro Tip: Heatmaps</div>
+                      <div style="font-size: 13px; color: #475569; line-height: 1.5;">Zoom out on the Live Map to automatically trigger the Heatmap view. Incredibly useful for admins trying to identify <strong style="font-weight: 600; color: #0f172a;">high-density problem areas</strong> across the city.</div>
                     </div>
 
-                    <h1
-                      style="font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">
-                      Platform Overview</h1>
-                    <div style="font-size: 15px; color: #475569; margin-bottom: 32px; line-height: 1.6;">Welcome to
-                      Suraksha Setu! This guide will give you a quick 5-minute tour of the main features so you can
-                      start contributing to your community immediately.</div>
-
-                    <div
-                      style="width: 100%; height: 360px; background: #0f172a; border-radius: 12px; margin-bottom: 32px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                      <i class="ph-fill ph-play-circle"
-                        style="font-size: 64px; color: #fff; cursor: pointer; opacity: 0.9; transition: 0.2s;"
-                        onmouseover="this.style.opacity='1';this.style.transform='scale(1.05)'"
-                        onmouseout="this.style.opacity='0.9';this.style.transform='scale(1)'"
-                        onclick="showToast('Video playback initializing...')"></i>
-                      <div
-                        style="position: absolute; bottom: 16px; left: 16px; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 500;">
-                        ▶ Suraksha Setu Masterclass (5:20)</div>
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">2</div>
+                      Community Feed
+                    </h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Switch to the Community Feed for a social-style timeline. Upvote issues reported by others. Issues with high upvotes are automatically escalated in priority for the admin team.</p>
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">3</div>
+                      Quick Stats
+                    </h2>
+                    <div style="display: flex; gap: 12px; margin: 16px 0 24px;">
+                      <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                        <div style="font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 2px;">2.4k <span style="font-size: 13px; color: #16a34a; font-weight: 600;">↑ 12%</span></div>
+                        <div style="font-size: 11.5px; color: #64748b;">Issues resolved this month</div>
+                      </div>
+                      <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                        <div style="font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 2px;">18k</div>
+                        <div style="font-size: 11.5px; color: #64748b;">Registered citizens</div>
+                      </div>
+                      <div style="flex: 1; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                        <div style="font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 2px;">94<span style="font-size: 14px; color: #64748b;">%</span></div>
+                        <div style="font-size: 11.5px; color: #64748b;">Resolution satisfaction</div>
+                      </div>
                     </div>
-
-                    <h2
-                      style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
-                      1. The Live Map</h2>
-                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">The Live Map is
-                      the core of our platform. It clusters environmental issues submitted by users into interactive
-                      zones. You can filter the map by category (e.g., Plastic Waste, Water Leak) or by status (Open, In
-                      Progress, Resolved).</p>
-
-                    <div
-                      style="padding: 16px; border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.05); border-radius: 0 8px 8px 0; margin-bottom: 32px;">
-                      <div style="font-weight: 600; color: #1e293b; font-size: 14px; margin-bottom: 4px;">Pro Tip:
-                        Heatmaps</div>
-                      <div style="font-size: 13px; color: #475569; line-height: 1.5;">Zoom out on the Live Map to
-                        automatically trigger the Heatmap view. This is incredibly useful for admins trying to identify
-                        high-density problem areas in the city.</div>
-                    </div>
-
-                    <h2
-                      style="font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
-                      2. Community Feed</h2>
-                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Switch to the
-                      Community Feed if you prefer a social media style timeline. You can upvote (Support) issues
-                      reported by others. Issues with high upvotes are automatically escalated in priority for the admin
-                      team.</p>
-
-                    <div
-                      style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
                       <div style="font-size: 13px; color: #64748b; font-weight: 500;">Was this guide helpful?</div>
                       <div style="display: flex; gap: 8px;">
-                        <button onclick="showToast('Feedback submitted. Thank you!')"
-                          style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);"
-                          onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👍
-                          Yes, thanks</button>
-                        <button onclick="showToast('Feedback submitted. Thank you!')"
-                          style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);"
-                          onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👎 No,
-                          needs work</button>
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👍 Yes, thanks</button>
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👎 No, needs work</button>
                       </div>
                     </div>
-                  </div>
+
+</div>
+<div id="guide-create-account" class="guide-content-panel" style="display: none; width: 100%;">
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                      <div style="display: flex; gap: 8px; font-size: 12px; color: #64748b; font-weight: 500;">
+                        <span>Help Center</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span>Getting Started</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span style='color: #16a34a;'>Create Account</span>
+                      </div>
+                      <div style="font-size: 12px; color: #64748b;"><i class="ph-duotone ph-clock" style="margin-right: 4px;"></i>2 min read</div>
+                    </div>
+                    <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">Create Your Account</h1>
+                    <div style="font-size: 15px; color: #475569; margin-bottom: 32px; line-height: 1.6;">Get started with SurakshaSetu in under two minutes. All you need is a phone number or Google account.</div>
+<div style="margin: 4px 0 24px;">
+                      <div style="display: flex; gap: 14px; margin-bottom: 20px; position: relative;">
+                        <div style="position: absolute; left: 11px; top: 28px; bottom: -12px; width: 1px; background: #e2e8f0; z-index: 0;"></div>
+                        <div style="width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; background: #16a34a; color: #fff; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; position: relative; z-index: 1;">1</div>
+                        <div style="flex: 1;">
+                          <div style="font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 3px;">Go to the sign-up page</div>
+                          <div style="font-size: 13.5px; color: #475569; line-height: 1.65;">Tap <strong>+ Report Issue</strong> or open the app. Select "Create a free account." Sign up with your mobile number or Google account.</div>
+                        </div>
+                      </div>
+
+                      <div style="display: flex; gap: 14px; margin-bottom: 20px; position: relative;">
+                        <div style="position: absolute; left: 11px; top: 28px; bottom: -12px; width: 1px; background: #e2e8f0; z-index: 0;"></div>
+                        <div style="width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; background: #16a34a; color: #fff; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; position: relative; z-index: 1;">2</div>
+                        <div style="flex: 1;">
+                          <div style="font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 3px;">Verify your identity</div>
+                          <div style="font-size: 13.5px; color: #475569; line-height: 1.65;">Enter the 6-digit OTP sent to your phone. OTPs expire in 10 minutes. Google sign-in skips this step automatically.</div>
+                        </div>
+                      </div>
+
+                      <div style="display: flex; gap: 14px; margin-bottom: 20px; position: relative;">
+                        <div style="position: absolute; left: 11px; top: 28px; bottom: -12px; width: 1px; background: #e2e8f0; z-index: 0;"></div>
+                        <div style="width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; background: #16a34a; color: #fff; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; position: relative; z-index: 1;">3</div>
+                        <div style="flex: 1;">
+                          <div style="font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 3px;">Set your home area</div>
+                          <div style="font-size: 13.5px; color: #475569; line-height: 1.65;">Allow location permission or manually select your ward/locality. This personalises your Community Feed and Live Map view.</div>
+                        </div>
+                      </div>
+
+                      <div style="display: flex; gap: 14px; margin-bottom: 20px; position: relative;">
+                        <div style="position: absolute; left: 11px; top: 28px; bottom: -12px; width: 1px; background: #e2e8f0; z-index: 0;"></div>
+                        <div style="width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; background: #16a34a; color: #fff; font-size: 11.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; position: relative; z-index: 1;">4</div>
+                        <div style="flex: 1;">
+                          <div style="font-size: 14px; font-weight: 600; color: #0f172a; margin-bottom: 3px;">Start reporting</div>
+                          <div style="font-size: 13.5px; color: #475569; line-height: 1.65;">Your account is ready. Tap <strong>+ Report Issue</strong> to file your first civic issue in under 60 seconds.</div>
+                        </div>
+                      </div>
+</div>
+                    <div style="padding: 16px; border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.05); border-radius: 0 8px 8px 0; margin: 16px 0 32px;">
+                      <div style="font-weight: 600; color: #1e293b; font-size: 14px; margin-bottom: 4px;">💡 Complete your profile</div>
+                      <div style="font-size: 13px; color: #475569; line-height: 1.5;">Adding your name and photo helps the admin team verify reports faster and award <strong style="font-weight: 600; color: #0f172a;">certificates</strong> to deserving contributors.</div>
+                    </div>
+
+                    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                      <div style="font-size: 13px; color: #64748b; font-weight: 500;">Was this guide helpful?</div>
+                      <div style="display: flex; gap: 8px;">
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👍 Yes, thanks</button>
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👎 No, needs work</button>
+                      </div>
+                    </div>
+
+</div>
+<div id="guide-submit-report" class="guide-content-panel" style="display: none; width: 100%;">
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                      <div style="display: flex; gap: 8px; font-size: 12px; color: #64748b; font-weight: 500;">
+                        <span>Help Center</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span>Reporting</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span style='color: #16a34a;'>Submit a Report</span>
+                      </div>
+                      <div style="font-size: 12px; color: #64748b;"><i class="ph-duotone ph-clock" style="margin-right: 4px;"></i>3 min read</div>
+                    </div>
+                    <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">Submit a Report</h1>
+                    <div style="font-size: 15px; color: #475569; margin-bottom: 32px; line-height: 1.6;">Filing a civic issue takes less than a minute. Clear photos and accurate location pins lead to faster resolution times.</div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 18px;">
+                      <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 20px; font-size: 12px; font-weight: 500; background: #f8fafc; color: #475569; border: 1px solid #cbd5e1;">🗑️ Plastic Waste</span>
+                      <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 20px; font-size: 12px; font-weight: 500; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">💧 Water Leak</span>
+                      <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 20px; font-size: 12px; font-weight: 500; background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca;">🚧 Road Damage</span>
+                      <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 20px; font-size: 12px; font-weight: 500; background: #fffbeb; color: #92400e; border: 1px solid #fde68a;">💡 Street Light</span>
+                      <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 20px; font-size: 12px; font-weight: 500; background: #f5f3ff; color: #6d28d9; border: 1px solid #ddd6fe;">🌳 Fallen Tree</span>
+                    </div>
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">1</div>
+                      Pick a category
+                    </h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Select the most specific category that matches your issue. This routes it to the right department automatically. If unsure, choose <em style='font-style: italic; color: #0f172a;'>Other</em> and describe in the notes field.</p>
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">2</div>
+                      Pin your location
+                    </h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">The app pre-fills your GPS coordinates. Drag the pin on the mini-map to the exact spot within 10 metres. Accurate pins reduce back-and-forth with field teams by up to 40%.</p>
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">3</div>
+                      Upload a photo
+                    </h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">A photo is required for all reports. Take it from 1-2 metres away in good light. Accepts JPEG/PNG up to 10 MB.</p>
+                    <div style="padding: 16px; border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.05); border-radius: 0 8px 8px 0; margin: 16px 0 32px;">
+                      <div style="font-weight: 600; color: #1e293b; font-size: 14px; margin-bottom: 4px;">💡 Capture context</div>
+                      <div style="font-size: 13px; color: #475569; line-height: 1.5;">Include a landmark or street sign in the frame. It helps field teams locate the issue even when GPS drifts near tall buildings.</div>
+                    </div>
+
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">4</div>
+                      Submit and track
+                    </h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Your report appears on the Live Map within 30 seconds. You will receive push notifications as the status moves from <strong style="font-weight: 600; color: #0f172a;">Open to In Progress to Resolved</strong>.</p>
+                    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                      <div style="font-size: 13px; color: #64748b; font-weight: 500;">Was this guide helpful?</div>
+                      <div style="display: flex; gap: 8px;">
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👍 Yes, thanks</button>
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👎 No, needs work</button>
+                      </div>
+                    </div>
+
+</div>
+<div id="guide-issue-workflow" class="guide-content-panel" style="display: none; width: 100%;">
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                      <div style="display: flex; gap: 8px; font-size: 12px; color: #64748b; font-weight: 500;">
+                        <span>Help Center</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span>Reporting</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span style='color: #16a34a;'>Issue Workflow</span>
+                      </div>
+                      <div style="font-size: 12px; color: #64748b;"><i class="ph-duotone ph-clock" style="margin-right: 4px;"></i>4 min read</div>
+                    </div>
+                    <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">Issue Workflow</h1>
+                    <div style="font-size: 15px; color: #475569; margin-bottom: 32px; line-height: 1.6;">Every report moves through a transparent 4-stage lifecycle, from filing to resolution, with community involvement at every step.</div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin: 16px 0 24px; flex-wrap: wrap;">
+                      <div style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa;">📄 Open</div>
+                      <span style="color: #94a3b8; font-size: 12px;">→</span>
+                      <div style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;">🔧 In Progress</div>
+                      <span style="color: #94a3b8; font-size: 12px;">→</span>
+                      <div style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; background: #faf5ff; color: #7c3aed; border: 1px solid #ddd6fe;">🔍 Under Review</div>
+                      <span style="color: #94a3b8; font-size: 12px;">→</span>
+                      <div style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; background: #f0fdf4; color: #16a34a; border: 1px solid #dcfce7;">✅ Resolved</div>
+                    </div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0 24px;">
+                      <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; cursor: default; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#cbd5e1';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.05)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='0 1px 3px rgba(0,0,0,0.02)';this.style.transform='translateY(0)'">
+                        <span style="font-size: 22px; margin-bottom: 10px; display: block; line-height: 1;">📄</span>
+                        <div style="font-size: 13.5px; font-weight: 600; color: #0f172a; margin-bottom: 4px;">Open</div>
+                        <div style="font-size: 12.5px; color: #64748b; line-height: 1.55;">Report filed by a citizen. Visible on the Live Map. Community can upvote to boost priority.</div>
+                      </div>
+
+                      <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; cursor: default; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#cbd5e1';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.05)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='0 1px 3px rgba(0,0,0,0.02)';this.style.transform='translateY(0)'">
+                        <span style="font-size: 22px; margin-bottom: 10px; display: block; line-height: 1;">🔧</span>
+                        <div style="font-size: 13.5px; font-weight: 600; color: #0f172a; margin-bottom: 4px;">In Progress</div>
+                        <div style="font-size: 12.5px; color: #64748b; line-height: 1.55;">Assigned to a field team or department. Expected resolution date shown to the reporter.</div>
+                      </div>
+
+                      <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; cursor: default; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#cbd5e1';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.05)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='0 1px 3px rgba(0,0,0,0.02)';this.style.transform='translateY(0)'">
+                        <span style="font-size: 22px; margin-bottom: 10px; display: block; line-height: 1;">🔍</span>
+                        <div style="font-size: 13.5px; font-weight: 600; color: #0f172a; margin-bottom: 4px;">Under Review</div>
+                        <div style="font-size: 12.5px; color: #64748b; line-height: 1.55;">Work completed. Admin verifies via photo evidence before closing the issue.</div>
+                      </div>
+
+                      <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; cursor: default; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#cbd5e1';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.05)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='0 1px 3px rgba(0,0,0,0.02)';this.style.transform='translateY(0)'">
+                        <span style="font-size: 22px; margin-bottom: 10px; display: block; line-height: 1;">✅</span>
+                        <div style="font-size: 13.5px; font-weight: 600; color: #0f172a; margin-bottom: 4px;">Resolved</div>
+                        <div style="font-size: 12.5px; color: #64748b; line-height: 1.55;">Issue confirmed closed. Reporter earns community points. Appears in resolved activity feed.</div>
+                      </div>
+</div>
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #fff8e1; color: #a16207; border-color: #fde68a; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">!</div>
+                      Escalation rules
+                    </h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Any issue stuck in <strong style="font-weight: 600; color: #0f172a;">Open</strong> for more than <strong style="font-weight: 600; color: #0f172a;">7 days</strong> is automatically escalated to senior admins. Issues with <strong style="font-weight: 600; color: #0f172a;">50+ upvotes</strong> jump to the top of the queue regardless of age.</p>
+                    <div style="padding: 16px; border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.05); border-radius: 0 8px 8px 0; margin: 16px 0 32px;">
+                      <div style="font-weight: 600; color: #1e293b; font-size: 14px; margin-bottom: 4px;">💡 Community role</div>
+                      <div style="font-size: 13px; color: #475569; line-height: 1.5;">Upvotes from <strong style="font-weight: 600; color: #0f172a;">Verified Reporters</strong> count 2x more than standard accounts when calculating queue priority.</div>
+                    </div>
+
+                    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                      <div style="font-size: 13px; color: #64748b; font-weight: 500;">Was this guide helpful?</div>
+                      <div style="display: flex; gap: 8px;">
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👍 Yes, thanks</button>
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👎 No, needs work</button>
+                      </div>
+                    </div>
+
+</div>
+<div id="guide-live-map-filters" class="guide-content-panel" style="display: none; width: 100%;">
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                      <div style="display: flex; gap: 8px; font-size: 12px; color: #64748b; font-weight: 500;">
+                        <span>Help Center</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span>Reporting</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span style='color: #16a34a;'>Live Map Filters</span>
+                      </div>
+                      <div style="font-size: 12px; color: #64748b;"><i class="ph-duotone ph-clock" style="margin-right: 4px;"></i>3 min read</div>
+                    </div>
+                    <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">Live Map Filters</h1>
+                    <div style="font-size: 15px; color: #475569; margin-bottom: 32px; line-height: 1.6;">Filters help you focus on what matters, whether you are a citizen checking your street or an admin managing an entire ward.</div>
+
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">1</div>
+                      Category filter
+                    </h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Open the filter drawer (funnel icon, top-right of map). Toggle any category on or off. Multiple categories can be active simultaneously.</p>                    <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 12px 0 24px; display: flex; flex-wrap: wrap; gap: 8px;">
+                      <div style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 13px; border-radius: 20px; font-size: 12.5px; border: 1px solid #16a34a; background: #f0fdf4; color: #15803d; font-weight: 500;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #16a34a;"></span>🗑️ Plastic Waste</div>
+                      <div style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 13px; border-radius: 20px; font-size: 12.5px; border: 1px solid #e2e8f0; background: #fff; color: #64748b;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #3b82f6;"></span>💧 Water Leak</div>
+                      <div style="display: inline-flex; align-items: center; gap: 5px; padding: 6px 13px; border-radius: 20px; font-size: 12.5px; border: 1px solid #16a34a; background: #f0fdf4; color: #15803d; font-weight: 500;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #ef4444;"></span>🚧 Road Damage</div>
+                    </div>
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">2</div>
+                      Status filter
+                    </h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Show only <strong style="font-weight: 600; color: #0f172a;">Open</strong>, <strong style="font-weight: 600; color: #0f172a;">In Progress</strong>, or <strong style="font-weight: 600; color: #0f172a;">Resolved</strong> pins. Combining Status and Category filters is the fastest way to audit your ward backlog.</p>
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">3</div>
+                      Date range
+                    </h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Use the date picker to see issues filed in a custom window. Last 7 days, 30 days, or any custom range. Ideal for monthly reports and ward council presentations.</p>
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">4</div>
+                      Heatmap mode
+                    </h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Zoom to city level to automatically switch from individual pins to a colour-density heatmap. <strong style="font-weight: 600; color: #0f172a;">Red = highest density.</strong> Great for spotting neglected neighbourhoods.</p>
+                    <div style="padding: 16px; border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.05); border-radius: 0 8px 8px 0; margin: 16px 0 32px;">
+                      <div style="font-weight: 600; color: #1e293b; font-size: 14px; margin-bottom: 4px;">💡 Save filter presets</div>
+                      <div style="font-size: 13px; color: #475569; line-height: 1.5;">Admins can save filter combinations as <strong style="font-weight: 600; color: #0f172a;">Presets</strong> using the star icon in the filter drawer.</div>
+                    </div>
+
+                    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                      <div style="font-size: 13px; color: #64748b; font-weight: 500;">Was this guide helpful?</div>
+                      <div style="display: flex; gap: 8px;">
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👍 Yes, thanks</button>
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👎 No, needs work</button>
+                      </div>
+                    </div>
+
+</div>
+<div id="guide-manage-users" class="guide-content-panel" style="display: none; width: 100%;">
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                      <div style="display: flex; gap: 8px; font-size: 12px; color: #64748b; font-weight: 500;">
+                        <span>Help Center</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span>Admin Tasks</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span style='color: #16a34a;'>Manage Users</span>
+                      </div>
+                      <div style="font-size: 12px; color: #64748b;"><i class="ph-duotone ph-clock" style="margin-right: 4px;"></i>3 min read</div>
+                    </div>
+                    <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">Manage Users</h1>
+                    <div style="font-size: 15px; color: #475569; margin-bottom: 32px; line-height: 1.6;">Admins can view, verify, suspend, or promote any registered citizen from the Users panel under Admin, then Users.</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0 24px;">
+                      <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; cursor: default; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#cbd5e1';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.05)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='0 1px 3px rgba(0,0,0,0.02)';this.style.transform='translateY(0)'">
+                        <span style="font-size: 22px; margin-bottom: 10px; display: block; line-height: 1;">👤</span>
+                        <div style="font-size: 13.5px; font-weight: 600; color: #0f172a; margin-bottom: 4px;">Citizen</div>
+                        <div style="font-size: 12.5px; color: #64748b; line-height: 1.55;">File reports, upvote issues, and view the Live Map. Default role for all new sign-ups.</div>
+                      </div>
+
+                      <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; cursor: default; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#cbd5e1';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.05)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='0 1px 3px rgba(0,0,0,0.02)';this.style.transform='translateY(0)'">
+                        <span style="font-size: 22px; margin-bottom: 10px; display: block; line-height: 1;">🛡️</span>
+                        <div style="font-size: 13.5px; font-weight: 600; color: #0f172a; margin-bottom: 4px;">Verified Reporter</div>
+                        <div style="font-size: 12.5px; color: #64748b; line-height: 1.55;">Trusted users whose reports skip the auto-moderation queue and post immediately to the map.</div>
+                      </div>
+
+                      <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; cursor: default; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#cbd5e1';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.05)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='0 1px 3px rgba(0,0,0,0.02)';this.style.transform='translateY(0)'">
+                        <span style="font-size: 22px; margin-bottom: 10px; display: block; line-height: 1;">⚙️</span>
+                        <div style="font-size: 13.5px; font-weight: 600; color: #0f172a; margin-bottom: 4px;">Ward Admin</div>
+                        <div style="font-size: 12.5px; color: #64748b; line-height: 1.55;">Assign issues, change status, and generate ward-level PDF reports. Limited to their own ward.</div>
+                      </div>
+
+                      <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; cursor: default; transition: 0.3s; box-shadow: 0 1px 3px rgba(0,0,0,0.02);" onmouseover="this.style.borderColor='#cbd5e1';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.05)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='0 1px 3px rgba(0,0,0,0.02)';this.style.transform='translateY(0)'">
+                        <span style="font-size: 22px; margin-bottom: 10px; display: block; line-height: 1;">🔑</span>
+                        <div style="font-size: 13.5px; font-weight: 600; color: #0f172a; margin-bottom: 4px;">Super Admin</div>
+                        <div style="font-size: 12.5px; color: #64748b; line-height: 1.55;">Full platform access including user management, certificates, system settings, and cross-ward analytics.</div>
+                      </div>
+</div>
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #fff8e1; color: #a16207; border-color: #fde68a; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">!</div>
+                      Suspend vs. Ban
+                    </h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">A <strong style="font-weight: 600; color: #0f172a;">suspension</strong> is temporary (1-30 days) and auto-lifts on the chosen date. A <strong style="font-weight: 600; color: #0f172a;">ban</strong> is permanent and requires Super Admin approval. Both send the user an automated notice.</p>
+                    <div style="padding: 16px; border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.05); border-radius: 0 8px 8px 0; margin: 16px 0 32px;">
+                      <div style="font-weight: 600; color: #1e293b; font-size: 14px; margin-bottom: 4px;">💡 Bulk actions</div>
+                      <div style="font-size: 13px; color: #475569; line-height: 1.5;">Select multiple users via checkbox, then use the <strong style="font-weight: 600; color: #0f172a;">Actions</strong> dropdown to send a broadcast message, change roles, or export a CSV, all in a single step.</div>
+                    </div>
+
+                    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                      <div style="font-size: 13px; color: #64748b; font-weight: 500;">Was this guide helpful?</div>
+                      <div style="display: flex; gap: 8px;">
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👍 Yes, thanks</button>
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👎 No, needs work</button>
+                      </div>
+                    </div>
+
+</div>
+<div id="guide-certificates" class="guide-content-panel" style="display: none; width: 100%;">
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                      <div style="display: flex; gap: 8px; font-size: 12px; color: #64748b; font-weight: 500;">
+                        <span>Help Center</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span>Admin Tasks</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span style='color: #16a34a;'>Certificates</span>
+                      </div>
+                      <div style="font-size: 12px; color: #64748b;"><i class="ph-duotone ph-clock" style="margin-right: 4px;"></i>2 min read</div>
+                    </div>
+                    <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">Certificates</h1>
+                    <div style="font-size: 15px; color: #475569; margin-bottom: 32px; line-height: 1.6;">Reward active contributors with digital certificates. They appear on the user profile and can be downloaded or shared to social media.</div>
+                    <div style="background: linear-gradient(135deg, #16a34a 0%, #064e3b 100%); border-radius: 16px; padding: 24px 28px; color: #fff; margin: 16px 0 24px; position: relative; overflow: hidden; box-shadow: 0 10px 25px rgba(22, 163, 74, 0.2);">
+                      <div style="position: absolute; top: -60px; right: -60px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);"></div>
+                      <div style="font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.8; margin-bottom: 6px;">Certificate of Contribution</div>
+                      <div style="font-size: 22px; font-weight: 700; letter-spacing: -0.4px; margin-bottom: 4px;">Priya Sharma</div>
+                      <div style="font-size: 13px; opacity: 0.85; margin-bottom: 24px;">Top Reporter &middot; Ward 14, Saharanpur &middot; July 2026</div>
+                      <div style="display: flex; justify-content: space-between; font-size: 11.5px; opacity: 0.7;">
+                        <span>Issued by SurakshaSetu Admin</span>
+                        <span>ID: SS-2026-0741</span>
+                      </div>
+                      <div style="position: absolute; right: 28px; top: 50%; transform: translateY(-50%); font-size: 52px; opacity: 0.15; line-height: 1;">🎓</div>
+                    </div>
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">1</div>
+                      Auto-award rules
+                    </h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Certificates are awarded automatically when a user crosses thresholds:</p>                    <div style="display: flex; flex-wrap: wrap; gap: 7px; margin: 8px 0 16px;">
+                      <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 20px; font-size: 12px; font-weight: 500; background: #fffbeb; color: #92400e; border: 1px solid #fde68a;">🥉 Bronze: 10 resolved</span>
+                      <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 20px; font-size: 12px; font-weight: 500; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;">🥈 Silver: 50 resolved</span>
+                      <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 20px; font-size: 12px; font-weight: 500; background: #fffbeb; color: #b45309; border: 1px solid #fcd34d;">🥇 Gold: 100 resolved</span>
+                    </div>                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Thresholds can be adjusted in <code style='background: #f1f5f9; color: #0f172a; padding: 2px 6px; border-radius: 4px; border: 1px solid #e2e8f0; font-size: 13px;'>Settings &rarr; Gamification</code>.</p>
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">2</div>
+                      Manual award
+                    </h2>
+                    <p style="font-size: 15px; color: #475569; margin-bottom: 24px; line-height: 1.6;">Go to <code style='background: #f1f5f9; color: #0f172a; padding: 2px 6px; border-radius: 4px; border: 1px solid #e2e8f0; font-size: 13px;'>Admin &rarr; Users &rarr; [select user] &rarr; Award Certificate</code>. Choose a template, add a personal note, and confirm. The certificate appears on their profile within seconds.</p>
+                    <div style="padding: 16px; border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.05); border-radius: 0 8px 8px 0; margin: 16px 0 32px;">
+                      <div style="font-weight: 600; color: #1e293b; font-size: 14px; margin-bottom: 4px;">💡 Community boost</div>
+                      <div style="font-size: 13px; color: #475569; line-height: 1.5;">Posting monthly certificate announcements in the Community Feed increases report submissions by an average of <strong style="font-weight: 600; color: #0f172a;">23%</strong> in the following week.</div>
+                    </div>
+
+                    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                      <div style="font-size: 13px; color: #64748b; font-weight: 500;">Was this guide helpful?</div>
+                      <div style="display: flex; gap: 8px;">
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👍 Yes, thanks</button>
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👎 No, needs work</button>
+                      </div>
+                    </div>
+
+</div>
+<div id="guide-notifications" class="guide-content-panel" style="display: none; width: 100%;">
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                      <div style="display: flex; gap: 8px; font-size: 12px; color: #64748b; font-weight: 500;">
+                        <span>Help Center</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span>Admin Tasks</span> <i class="ph-bold ph-caret-right" style="margin-top: 2px;"></i> <span style='color: #16a34a;'>Notifications</span>
+                      </div>
+                      <div style="font-size: 12px; color: #64748b;"><i class="ph-duotone ph-clock" style="margin-right: 4px;"></i>2 min read</div>
+                    </div>
+                    <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 8px; font-family: 'Outfit', sans-serif;">Notifications</h1>
+                    <div style="font-size: 15px; color: #475569; margin-bottom: 32px; line-height: 1.6;">Configure which events trigger alerts for yourself as an admin, and for citizens across your ward. All changes save instantly.</div>
+
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">1</div>
+                      Admin alerts
+                    </h2>
+<div style="margin: 8px 0 24px;">
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid #e2e8f0;">
+                      <div style="width: 7px; height: 7px; border-radius: 50%; background: #16a34a; flex-shrink: 0;"></div>
+                      <div style="flex: 1;">
+                        <div style="font-size: 14px; color: #1e293b; font-weight: 500;">New high-priority report filed</div>
+                        <div style="font-size: 11.5px; color: #64748b; margin-top: 1px;">Issues with severity score 8 or above</div>
+                      </div>
+                      <div style="width: 42px; height: 24px; border-radius: 12px; flex-shrink: 0; background: #16a34a; position: relative; cursor: pointer; transition: 0.2s;" onclick="var d=this.querySelector('div'); if(this.style.background==='rgb(226, 232, 240)'){this.style.background='#16a34a';d.style.left='auto';d.style.right='3px'}else{this.style.background='#e2e8f0';d.style.right='auto';d.style.left='3px'}">
+                        <div style="position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: 0.2s;"></div>
+                      </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid #e2e8f0;">
+                      <div style="width: 7px; height: 7px; border-radius: 50%; background: #16a34a; flex-shrink: 0;"></div>
+                      <div style="flex: 1;">
+                        <div style="font-size: 14px; color: #1e293b; font-weight: 500;">Issue stuck Open for 7+ days</div>
+                        <div style="font-size: 11.5px; color: #64748b; margin-top: 1px;">Sent at 9 AM on escalation day</div>
+                      </div>
+                      <div style="width: 42px; height: 24px; border-radius: 12px; flex-shrink: 0; background: #16a34a; position: relative; cursor: pointer; transition: 0.2s;" onclick="var d=this.querySelector('div'); if(this.style.background==='rgb(226, 232, 240)'){this.style.background='#16a34a';d.style.left='auto';d.style.right='3px'}else{this.style.background='#e2e8f0';d.style.right='auto';d.style.left='3px'}">
+                        <div style="position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: 0.2s;"></div>
+                      </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid #e2e8f0;">
+                      <div style="width: 7px; height: 7px; border-radius: 50%; background: #16a34a; flex-shrink: 0;"></div>
+                      <div style="flex: 1;">
+                        <div style="font-size: 14px; color: #1e293b; font-weight: 500;">New user registered in your ward</div>
+                        <div style="font-size: 11.5px; color: #64748b; margin-top: 1px;">Daily digest, not real-time</div>
+                      </div>
+                      <div style="width: 42px; height: 24px; border-radius: 12px; flex-shrink: 0; background: #e2e8f0; position: relative; cursor: pointer; transition: 0.2s;" onclick="var d=this.querySelector('div'); if(this.style.background==='rgb(226, 232, 240)'){this.style.background='#16a34a';d.style.left='auto';d.style.right='3px'}else{this.style.background='#e2e8f0';d.style.right='auto';d.style.left='3px'}">
+                        <div style="position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: 0.2s;"></div>
+                      </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid #e2e8f0;">
+                      <div style="width: 7px; height: 7px; border-radius: 50%; background: #16a34a; flex-shrink: 0;"></div>
+                      <div style="flex: 1;">
+                        <div style="font-size: 14px; color: #1e293b; font-weight: 500;">Certificate auto-awarded</div>
+                        <div style="font-size: 11.5px; color: #64748b; margin-top: 1px;">When thresholds are crossed</div>
+                      </div>
+                      <div style="width: 42px; height: 24px; border-radius: 12px; flex-shrink: 0; background: #e2e8f0; position: relative; cursor: pointer; transition: 0.2s;" onclick="var d=this.querySelector('div'); if(this.style.background==='rgb(226, 232, 240)'){this.style.background='#16a34a';d.style.left='auto';d.style.right='3px'}else{this.style.background='#e2e8f0';d.style.right='auto';d.style.left='3px'}">
+                        <div style="position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: 0.2s;"></div>
+                      </div>
+                    </div>
+</div>
+                    <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #1e293b; margin-top: 32px; margin-bottom: 16px; font-family: 'Outfit', sans-serif;">
+                      <div style="width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; background: #f0fdf4; color: #16a34a; border-color: #dcfce7; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 1px solid;">2</div>
+                      Citizen alerts
+                    </h2>
+<div style="margin: 8px 0 24px;">
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid #e2e8f0;">
+                      <div style="width: 7px; height: 7px; border-radius: 50%; background: #3b82f6; flex-shrink: 0;"></div>
+                      <div style="flex: 1;">
+                        <div style="font-size: 14px; color: #1e293b; font-weight: 500;">Report status changed</div>
+                        <div style="font-size: 11.5px; color: #64748b; margin-top: 1px;">Open to In Progress to Resolved</div>
+                      </div>
+                      <div style="width: 42px; height: 24px; border-radius: 12px; flex-shrink: 0; background: #16a34a; position: relative; cursor: pointer; transition: 0.2s;" onclick="var d=this.querySelector('div'); if(this.style.background==='rgb(226, 232, 240)'){this.style.background='#16a34a';d.style.left='auto';d.style.right='3px'}else{this.style.background='#e2e8f0';d.style.right='auto';d.style.left='3px'}">
+                        <div style="position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: 0.2s;"></div>
+                      </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid #e2e8f0;">
+                      <div style="width: 7px; height: 7px; border-radius: 50%; background: #3b82f6; flex-shrink: 0;"></div>
+                      <div style="flex: 1;">
+                        <div style="font-size: 14px; color: #1e293b; font-weight: 500;">Issue upvoted by 10+ citizens</div>
+                        <div style="font-size: 11.5px; color: #64748b; margin-top: 1px;">Milestone notifications only</div>
+                      </div>
+                      <div style="width: 42px; height: 24px; border-radius: 12px; flex-shrink: 0; background: #16a34a; position: relative; cursor: pointer; transition: 0.2s;" onclick="var d=this.querySelector('div'); if(this.style.background==='rgb(226, 232, 240)'){this.style.background='#16a34a';d.style.left='auto';d.style.right='3px'}else{this.style.background='#e2e8f0';d.style.right='auto';d.style.left='3px'}">
+                        <div style="position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: 0.2s;"></div>
+                      </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid #e2e8f0;">
+                      <div style="width: 7px; height: 7px; border-radius: 50%; background: #3b82f6; flex-shrink: 0;"></div>
+                      <div style="flex: 1;">
+                        <div style="font-size: 14px; color: #1e293b; font-weight: 500;">Certificate awarded</div>
+                        <div style="font-size: 11.5px; color: #64748b; margin-top: 1px;">Immediate push and email</div>
+                      </div>
+                      <div style="width: 42px; height: 24px; border-radius: 12px; flex-shrink: 0; background: #16a34a; position: relative; cursor: pointer; transition: 0.2s;" onclick="var d=this.querySelector('div'); if(this.style.background==='rgb(226, 232, 240)'){this.style.background='#16a34a';d.style.left='auto';d.style.right='3px'}else{this.style.background='#e2e8f0';d.style.right='auto';d.style.left='3px'}">
+                        <div style="position: absolute; top: 3px; right: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.2); transition: 0.2s;"></div>
+                      </div>
+                    </div>
+</div>
+                    <div style="padding: 16px; border-left: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.05); border-radius: 0 8px 8px 0; margin: 16px 0 32px;">
+                      <div style="font-weight: 600; color: #1e293b; font-size: 14px; margin-bottom: 4px;">💡 Quiet hours</div>
+                      <div style="font-size: 13px; color: #475569; line-height: 1.5;">Set quiet hours in <code style='background: #f1f5f9; color: #0f172a; padding: 2px 6px; border-radius: 4px; border: 1px solid #e2e8f0; font-size: 13px;'>Settings &rarr; Notifications &rarr; Schedule</code>. Critical escalations bypass quiet hours. All others queue until morning.</div>
+                    </div>
+
+                    <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                      <div style="font-size: 13px; color: #64748b; font-weight: 500;">Was this guide helpful?</div>
+                      <div style="display: flex; gap: 8px;">
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👍 Yes, thanks</button>
+                        <button onclick="showToast('Feedback submitted. Thank you!')" style="background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 13px; font-weight: 500; color: #475569; cursor: pointer; transition: 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05);" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">👎 No, needs work</button>
+                      </div>
+                    </div>
+
+</div>
+</div>
                 </div>
               </div>
 
@@ -5291,7 +5714,7 @@
 
   <script>
     // Sidebar View Routing
-    function switchAdminView(viewName, linkElement, subView2 = '') {
+    function switchAdminView(viewName, linkElement, subView2 = '', subView3 = '') {
       sessionStorage.setItem('lastAdminPage', viewName);
 
       // Update hash silently in the URL to preserve route on refresh
@@ -5299,6 +5722,9 @@
       let targetHash = '#admin/' + viewName;
       if (viewName === 'help-center' && subView2) {
          targetHash += '/' + subView2;
+         if (subView2 === 'guides' && subView3) {
+            targetHash += '/' + subView3;
+         }
       }
       if (window.location.hash !== targetHash) {
         window.history.replaceState({ page: 'admin', hash: targetHash }, '', window.location.pathname + queryParams + targetHash);
@@ -5407,6 +5833,10 @@
         
         const innerNav = document.getElementById('help-nav-' + internalName);
         if (innerNav) innerNav.classList.add('active');
+        
+        if (internalName === 'guides' && typeof switchGuide === 'function') {
+           switchGuide(subView3 || 'platform-overview', false);
+        }
       }
 
       if (targetLink) {
@@ -5641,6 +6071,39 @@
       } else {
         switchAdminView('help-center', null, helpSubTab);
       }
+    }
+
+    function switchGuide(guideId, pushState = true) {
+      if (!guideId) guideId = 'platform-overview';
+      
+      const targetHash = '#admin/help-center/guides/' + guideId;
+      if (pushState && window.location.hash !== targetHash) {
+        window.history.pushState({ page: 'admin', hash: targetHash }, '', window.location.pathname + window.location.search + targetHash);
+      }
+      
+      document.querySelectorAll('.guide-content-panel').forEach(p => p.style.display = 'none');
+      const targetPanel = document.getElementById('guide-' + guideId);
+      if (targetPanel) targetPanel.style.display = 'block';
+      
+      document.querySelectorAll('.guide-nav-item').forEach(n => {
+        n.classList.remove('active');
+        // Reset styles for items that don't use standard class-based styling if any exist
+        n.style.background = 'transparent';
+        n.style.color = '#475569';
+        n.style.fontWeight = '400';
+      });
+      
+      const targetNav = document.getElementById('guide-nav-' + guideId);
+      if (targetNav) {
+        targetNav.classList.add('active');
+        targetNav.style.background = 'rgba(34, 197, 94, 0.1)';
+        targetNav.style.color = '#16a34a';
+        targetNav.style.fontWeight = '600';
+      }
+      
+      // Reset scroll for guides
+      const guideScroll = document.getElementById('help-page-guides');
+      if (guideScroll) guideScroll.scrollTop = 0;
     }
 
     function switchHelpSubpage(name, btn) {
