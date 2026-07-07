@@ -2,20 +2,19 @@
 require '../../config.php';
 global $conn;
 
-if (!isset($_GET['id']) || !isset($_GET['hash'])) {
-    echo json_encode(['success' => false, 'error' => 'Missing ID or Hash']);
+if (!isset($_GET['q']) || empty(trim($_GET['q']))) {
+    echo json_encode(['success' => false, 'error' => 'Missing query parameter']);
     exit;
 }
 
-$cert_id = $conn->real_escape_string($_GET['id']);
-$hash = $conn->real_escape_string($_GET['hash']);
+$query = $conn->real_escape_string(trim($_GET['q']));
 
 $sql = "SELECT c.*, t.name as template_name 
         FROM certificates c 
         LEFT JOIN certificate_templates t ON c.template_id = t.id 
-        WHERE c.cert_id = ? AND c.hash_sha256 = ?";
+        WHERE c.cert_id = ? OR c.hash_sha256 = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $cert_id, $hash);
+$stmt->bind_param("ss", $query, $query);
 $stmt->execute();
 $res = $stmt->get_result();
 

@@ -25,6 +25,15 @@ function renderStep(step) {
   else if (step === 3) body.innerHTML = renderStep3();
   else if (step === 4) body.innerHTML = renderStep4();
   if (step === 1) initMiniMap();
+  
+  // Reset scroll positions to ensure the user always starts from the top of the step
+  window.scrollTo(0, 0);
+  
+  const reportPage = document.querySelector('.report-page');
+  if (reportPage) reportPage.scrollTop = 0;
+  
+  const pageReport = document.getElementById('page-report');
+  if (pageReport) pageReport.scrollTop = 0;
 }
 
 function renderStep1() {

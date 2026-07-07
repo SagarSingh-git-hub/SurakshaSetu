@@ -1926,12 +1926,9 @@
             </button>
             <div class="admin-subnav">
               <div class="admin-subnav-inner">
-                <a href="#" class="admin-subnav-link" title="Certificate Generation Flow"
+                <a href="#" class="admin-subnav-link" title="Issue certificate"
                   onclick="switchAdminView('cert-issue', this); return false;"><i
-                    class="ph-duotone ph-file-plus"></i><span class="admin-subnav-text">Certificate Generation Flow</span></a>
-                <a href="#" class="admin-subnav-link" title="Bulk Generation"
-                  onclick="switchAdminView('cert-bulk', this); return false;"><i class="ph-duotone ph-files-duplicate"></i><span
-                    class="admin-subnav-text">Bulk Generation</span></a>
+                    class="ph-duotone ph-file-plus"></i><span class="admin-subnav-text">Issue certificate</span></a>
                 <a href="#" class="admin-subnav-link" title="View Certificates"
                   onclick="switchAdminView('cert-view', this); return false;"><i class="ph-duotone ph-files"></i><span
                     class="admin-subnav-text">View Certificates</span></a>
@@ -1941,9 +1938,9 @@
                 <a href="#" class="admin-subnav-link" title="Certificate Templates"
                   onclick="switchAdminView('cert-templates', this); return false;"><i
                     class="ph-duotone ph-paint-brush"></i><span class="admin-subnav-text">Certificate Templates</span></a>
-                <a href="#" class="admin-subnav-link" title="Digital Signature & Hash"
+                <a href="#" class="admin-subnav-link" title="Digital Signature"
                   onclick="switchAdminView('cert-signatures', this); return false;"><i class="ph-duotone ph-pen-nib"></i><span
-                    class="admin-subnav-text">Digital Signature & Hash</span></a>
+                    class="admin-subnav-text">Digital Signature</span></a>
                 <a href="#" class="admin-subnav-link" title="QR & PDF Generation"
                   onclick="switchAdminView('cert-qr-pdf', this); return false;"><i class="ph-duotone ph-qr-code"></i><span
                     class="admin-subnav-text">QR & PDF Generation</span></a>
@@ -3934,19 +3931,6 @@
           </div>
         </div>
         <!-- ADDITIONAL CERTIFICATE MODULE VIEWS -->
-        <div id="admin-view-cert-bulk" style="display: none; padding: 20px;">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;">
-            <div>
-              <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--text);display:flex;align-items:center;gap:8px;">
-                <i class="ph-duotone ph-files-duplicate" style="color:#f59e0b;font-size:20px;"></i> Bulk Generation
-              </div>
-              <div style="font-size:13px;color:var(--text3);margin-top:4px;">Upload a CSV file to issue multiple certificates at once. QR Codes, Digital Signatures, and PDFs will be automatically generated.</div>
-            </div>
-            <button class="btn-primary" onclick="document.getElementById('bulk-issue-modal').style.display='flex'">
-              <i class="ph-bold ph-upload-simple"></i> Open Bulk Upload
-            </button>
-          </div>
-        </div>
 
         <div id="admin-view-cert-verify" style="display: none; padding: 20px;">
           <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--text);margin-bottom:12px;"><i class="ph-duotone ph-shield-check" style="color:#10b981;"></i> Certificate Verification & API</div>
@@ -3954,14 +3938,15 @@
           <div class="admin-widget" style="padding:20px;max-width:500px;">
              <div style="font-size:12px;font-weight:600;margin-bottom:8px;">Enter Certificate ID or Hash</div>
              <div style="display:flex;gap:10px;">
-               <input type="text" placeholder="e.g. CERT-2026-XYZ123" style="flex:1;padding:10px 12px;border-radius:8px;border:1px solid var(--border);outline:none;">
-               <button class="btn-primary">Verify</button>
+               <input type="text" id="verify-input" placeholder="e.g. CERT-2026-XYZ123" style="flex:1;padding:10px 12px;border-radius:8px;border:1px solid var(--border);outline:none;">
+               <button class="btn-primary" onclick="verifyCertificate()">Verify</button>
              </div>
+             <div id="verify-result" style="margin-top: 16px; display: none;"></div>
           </div>
         </div>
 
         <div id="admin-view-cert-signatures" style="display: none; padding: 20px;">
-          <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--text);margin-bottom:12px;"><i class="ph-duotone ph-pen-nib" style="color:#3b82f6;"></i> Digital Signature & Hash (Recommended)</div>
+          <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--text);margin-bottom:12px;"><i class="ph-duotone ph-pen-nib" style="color:#3b82f6;"></i> Digital Signature (Recommended)</div>
           <p style="color:var(--text3);font-size:13px;">Configure cryptographic keys used to digitally sign PDF certificates, ensuring tamper-proof verification via SHA-256 hashes.</p>
           <div class="admin-widget" style="padding:20px;margin-top:20px;max-width:600px;">
             <div style="font-size:14px;font-weight:700;margin-bottom:12px;">Cryptographic Keys</div>
@@ -3975,11 +3960,140 @@
         <div id="admin-view-cert-qr-pdf" style="display: none; padding: 20px;">
           <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--text);margin-bottom:12px;"><i class="ph-duotone ph-qr-code" style="color:#8b5cf6;"></i> QR Code & PDF Generation Settings</div>
           <p style="color:var(--text3);font-size:13px;margin-bottom:24px;">Configure how QR codes are generated (embedded URLs, density) and PDF rendering settings (DPI, color profiles).</p>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <!-- QR Settings -->
+            <div class="admin-widget" style="padding:20px;">
+              <div style="font-size:15px;font-weight:700;margin-bottom:16px;">QR Code Configuration</div>
+              
+              <div class="form-group" style="margin-bottom:16px;">
+                <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Error Correction Level</label>
+                <select class="form-select" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                  <option value="L">Low (7%)</option>
+                  <option value="M" selected>Medium (15%)</option>
+                  <option value="Q">Quartile (25%)</option>
+                  <option value="H">High (30%)</option>
+                </select>
+              </div>
+              
+              <div class="form-group" style="margin-bottom:16px;">
+                <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Embed Logo</label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
+                  <input type="checkbox" checked> Yes, embed logo in center of QR
+                </label>
+              </div>
+
+              <div class="form-group">
+                <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">QR Code Size (px)</label>
+                <input type="number" value="300" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+              </div>
+            </div>
+
+            <!-- PDF Settings -->
+            <div class="admin-widget" style="padding:20px;">
+              <div style="font-size:15px;font-weight:700;margin-bottom:16px;">PDF Engine Settings</div>
+              
+              <div class="form-group" style="margin-bottom:16px;">
+                <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Resolution (DPI)</label>
+                <select class="form-select" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                  <option value="72">72 DPI (Standard)</option>
+                  <option value="150" selected>150 DPI (High)</option>
+                  <option value="300">300 DPI (Print Quality)</option>
+                </select>
+              </div>
+              
+              <div class="form-group" style="margin-bottom:16px;">
+                <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Render Scale (html2canvas)</label>
+                <input type="number" value="2" step="0.5" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+              </div>
+
+              <div class="form-group">
+                <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Color Profile</label>
+                <select class="form-select" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                  <option value="rgb" selected>sRGB (Digital)</option>
+                  <option value="cmyk">CMYK (Print)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <button class="btn-primary" style="margin-top:24px;" onclick="if(typeof showToast === 'function') showToast('✅ Settings Saved Successfully')">Save Preferences</button>
         </div>
 
         <div id="admin-view-cert-email" style="display: none; padding: 20px;">
           <div style="font-size:18px;font-weight:800;font-family:'Outfit',sans-serif;color:var(--text);margin-bottom:12px;"><i class="ph-duotone ph-envelope-simple" style="color:#f43f5e;"></i> Email Integration</div>
           <p style="color:var(--text3);font-size:13px;margin-bottom:24px;">Configure SMTP settings and customize email templates for automatically delivering generated certificates and QR codes to recipients.</p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <!-- SMTP Settings -->
+            <div class="admin-widget" style="padding:20px;">
+              <div style="font-size:15px;font-weight:700;margin-bottom:16px;">SMTP Configuration</div>
+              
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                <div class="form-group">
+                  <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">SMTP Host</label>
+                  <input type="text" placeholder="smtp.gmail.com" value="smtp.mailtrap.io" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                </div>
+                <div class="form-group">
+                  <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Port</label>
+                  <input type="text" placeholder="587" value="2525" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                <div class="form-group">
+                  <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Username</label>
+                  <input type="text" placeholder="Username" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                </div>
+                <div class="form-group">
+                  <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Password</label>
+                  <input type="password" placeholder="••••••••" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                </div>
+              </div>
+              
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+                <div class="form-group">
+                  <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">From Email</label>
+                  <input type="email" value="noreply@surakshasetu.in" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                </div>
+                <div class="form-group">
+                  <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">From Name</label>
+                  <input type="text" value="Suraksha Setu" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                </div>
+              </div>
+            </div>
+
+            <!-- Email Template -->
+            <div class="admin-widget" style="padding:20px;">
+              <div style="font-size:15px;font-weight:700;margin-bottom:16px;">Certificate Delivery Template</div>
+              
+              <div class="form-group" style="margin-bottom:16px;">
+                <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Email Subject</label>
+                <input type="text" value="Your Certificate from Suraksha Setu is Ready" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+              </div>
+              
+              <div class="form-group" style="margin-bottom:16px;">
+                <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Email Body</label>
+                <textarea rows="6" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;font-size:13px;line-height:1.5;">Dear {recipient_name},
+
+Congratulations! Your certificate ({certificate_type}) has been successfully issued. 
+
+Certificate ID: {cert_id}
+Issued On: {issue_date}
+
+Please find the digital certificate attached. You can also verify its authenticity at any time using our online portal or by scanning the QR code on the certificate.
+
+Regards,
+Suraksha Setu Team</textarea>
+              </div>
+              <div style="font-size:11px;color:var(--text3);">Available variables: {recipient_name}, {certificate_type}, {cert_id}, {issue_date}</div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-top:24px;">
+            <button class="btn-primary" onclick="if(typeof showToast === 'function') showToast('✅ Configuration Saved')">Save Configuration</button>
+            <button class="btn-secondary" onclick="if(typeof showToast === 'function') showToast('📨 Test Email Sent')">Send Test Email</button>
+          </div>
         </div>
 
         <!-- HELP CENTER VIEW -->

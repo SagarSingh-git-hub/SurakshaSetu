@@ -940,3 +940,62 @@ function exportCertsCSV() {
     const status = document.getElementById('cert-filter-status')?.value || 'All';
     window.open(CERT_API_URL + `/api/certificates/list_certificates.php?export=1&search=${encodeURIComponent(search)}&type=${encodeURIComponent(type)}&status=${encodeURIComponent(status)}`, '_blank');
 }
+
+async function verifyCertificate() {
+    const input = document.getElementById('verify-input');
+    const resultDiv = document.getElementById('verify-result');
+    if (!input || !resultDiv) return;
+    
+    const query = input.value.trim();
+    if (!query) {
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '<div style="color: var(--red); font-weight: bold;">Please enter a Certificate ID or Hash.</div>';
+        return;
+    }
+
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = '<div style="color: var(--text3); font-weight: 500;">Verifying...</div>';
+
+    try {
+        const res = await fetch(CERT_API_URL + `/api/certificates/verify_certificate.php?q=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        
+        if (data.success && data.valid) {
+            const cert = data.data;
+            resultDiv.innerHTML = `
+                <div style="padding: 16px; background: #dcfce7; border: 1px solid #86efac; border-radius: 8px;">
+                    <div style="color: #15803d; font-size: 16px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                        <i class="ph-bold ph-check-circle" style="font-size: 20px;"></i> Certificate is Valid!
+                    </div>
+                    <div style="font-size: 13px; color: #166534; display: grid; gap: 4px; line-height: 1.5;">
+                        <div><strong>ID:</strong> ${cert.cert_id}</div>
+                        <div><strong>Recipient:</strong> ${cert.recipient_name}</div>
+                        <div><strong>Type:</strong> ${cert.certificate_type}</div>
+                        <div><strong>Issued:</strong> ${cert.issue_date}</div>
+                        <div><strong>Authority:</strong> ${cert.issuing_authority}</div>
+                    </div>
+                </div>
+            `;
+        } else {
+            resultDiv.innerHTML = `
+                <div style="padding: 16px; background: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px;">
+                    <div style="color: #b91c1c; font-size: 16px; font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                        <i class="ph-bold ph-x-circle" style="font-size: 20px;"></i> Invalid Certificate
+                    </div>
+                    <div style="font-size: 13px; color: #991b1b; line-height: 1.5;">
+                        ${data.error || 'This certificate could not be verified or has been tampered with.'}
+                    </div>
+                </div>
+            `;
+        }
+    } catch (err) {
+        console.error("Verification error:", err);
+        resultDiv.innerHTML = `
+            <div style="padding: 16px; background: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px;">
+                <div style="color: #b91c1c; font-size: 14px; font-weight: 800;">
+                    Error connecting to verification server.
+                </div>
+            </div>
+        `;
+    }
+}
