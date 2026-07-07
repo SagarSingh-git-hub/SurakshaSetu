@@ -222,7 +222,15 @@ function adminLogout() {
   );
 }
 
-async function renderAdminDashboard(initialView = 'overview', subSubView = '', subSubSubView = '') {
+async function renderAdminDashboard(initialView = 'overview', subSubView = undefined, subSubSubView = undefined) {
+      // Auto-fill missing sub-views from current URL if we're on the same admin view
+      const parts = window.location.hash.substring(1).split('/');
+      if (parts[0] === 'admin' && parts[1] === initialView) {
+          if (subSubView === undefined) subSubView = parts[2] || '';
+          if (subSubSubView === undefined) subSubSubView = parts[3] || '';
+      }
+      subSubView = subSubView || '';
+      subSubSubView = subSubSubView || '';
       const adminToken = sessionStorage.getItem('adminToken');
       if (!adminToken) {
         console.error('Security Check Failed: Unauthorized access to Admin Dashboard rendering.');
