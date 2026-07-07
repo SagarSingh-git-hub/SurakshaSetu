@@ -2326,7 +2326,7 @@
                 style="background:var(--bg);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif"
                 onclick="exportReportsExcel()">📄 Export Excel</button>
             </div>
-            <div style="overflow-x:auto; overflow-y:auto; max-height: 580px;">
+            <div style="overflow-x:auto;">
               <table class="admin-table" id="admin-table">
                 <thead>
                   <tr>
@@ -2404,13 +2404,18 @@
 
             .m-layout {
               display: grid;
-              grid-template-columns: 1fr 340px;
+              grid-template-columns: minmax(0, 1fr) 340px;
               min-height: 560px;
               background: #fff;
               border: 1px solid var(--border);
               border-radius: 12px;
               overflow: hidden;
               box-shadow: var(--shadow);
+            }
+            @media (max-width: 900px) {
+              .m-layout {
+                grid-template-columns: 1fr;
+              }
             }
 
             .m-map-panel {
