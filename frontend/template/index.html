@@ -1980,20 +1980,20 @@
             </button>
             <div class="admin-subnav">
               <div class="admin-subnav-inner">
-                <a href="/help-center/overview" class="admin-subnav-link"
-                  onclick="navigateHelpCenter('/help-center/overview'); return false;"><i
+                <a href="#" class="admin-subnav-link"
+                  onclick="switchAdminView('help-center', this); switchHelpPage('home'); return false;"><i
                     class="ph-duotone ph-layout"></i><span class="admin-subnav-text">Overview</span></a>
-                <a href="/help-center/faqs" class="admin-subnav-link"
-                  onclick="navigateHelpCenter('/help-center/faqs'); return false;"><i
+                <a href="#" class="admin-subnav-link"
+                  onclick="switchAdminView('help-center', this); switchHelpPage('faq'); return false;"><i
                     class="ph-duotone ph-list-numbers"></i><span class="admin-subnav-text">FAQs</span></a>
-                <a href="/help-center/guides" class="admin-subnav-link"
-                  onclick="navigateHelpCenter('/help-center/guides'); return false;"><i
+                <a href="#" class="admin-subnav-link"
+                  onclick="switchAdminView('help-center', this); switchHelpPage('guides'); return false;"><i
                     class="ph-duotone ph-book-open"></i><span class="admin-subnav-text">Guides & Tutorials</span></a>
-                <a href="/help-center/contact-support" class="admin-subnav-link"
-                  onclick="navigateHelpCenter('/help-center/contact-support'); return false;"><i
+                <a href="#" class="admin-subnav-link"
+                  onclick="switchAdminView('help-center', this); switchHelpPage('contact'); return false;"><i
                     class="ph-duotone ph-envelope-simple"></i><span class="admin-subnav-text">Contact Support</span></a>
-                <a href="/help-center/my-tickets" class="admin-subnav-link"
-                  onclick="navigateHelpCenter('/help-center/my-tickets'); return false;"><i
+                <a href="#" class="admin-subnav-link"
+                  onclick="switchAdminView('help-center', this); switchHelpPage('tickets'); return false;"><i
                     class="ph-duotone ph-ticket"></i><span class="admin-subnav-text">My Tickets</span></a>
                 <div
                   style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin: 12px 12px 4px; letter-spacing: 0.5px;">
@@ -5296,16 +5296,14 @@
 
   <script>
     // Sidebar View Routing
-    function switchAdminView(viewName, linkElement, skipUrlUpdate = false) {
+    function switchAdminView(viewName, linkElement) {
       sessionStorage.setItem('lastAdminPage', viewName);
 
       // Update hash silently in the URL to preserve route on refresh
-      if (!skipUrlUpdate) {
-        const queryParams = window.location.search;
-        const targetHash = '#admin/' + viewName;
-        if (window.location.hash !== targetHash) {
-          window.history.replaceState({ page: 'admin', hash: targetHash }, '', window.location.pathname + queryParams + targetHash);
-        }
+      const queryParams = window.location.search;
+      const targetHash = '#admin/' + viewName;
+      if (window.location.hash !== targetHash) {
+        window.history.replaceState({ page: 'admin', hash: targetHash }, '', window.location.pathname + queryParams + targetHash);
       }
 
       document.getElementById('admin-view-overview').style.display = 'none';
@@ -5646,64 +5644,6 @@
       el.closest('.help-faq-list').querySelectorAll('.help-faq-item').forEach(i => i.classList.remove('open'));
       if (!wasOpen) el.classList.add('open');
     }
-
-    // Help Center Route Sync
-    function navigateHelpCenter(path) {
-        window.history.pushState({}, '', path);
-        syncHelpCenterRoute();
-    }
-
-    function syncHelpCenterRoute() {
-        const path = window.location.pathname;
-        if (!path.startsWith('/help-center')) return;
-
-        // Ensure we are in admin view
-        const appHero = document.querySelector('.hero');
-        if (appHero) appHero.style.display = 'none';
-        const adminPage = document.querySelector('.admin-page');
-        if (adminPage) adminPage.style.display = 'flex';
-
-        // Clear active states
-        document.querySelectorAll('.admin-nav-item').forEach(l => l.classList.remove('active-child'));
-        document.querySelectorAll('.admin-subnav-link, .admin-nav-link').forEach(l => l.classList.remove('active'));
-
-        let page = 'home';
-        let targetText = 'Overview';
-        if (path.includes('/faqs')) { page = 'faq'; targetText = 'FAQs'; }
-        else if (path.includes('/guides')) { page = 'guides'; targetText = 'Guides & Tutorials'; }
-        else if (path.includes('/contact-support')) { page = 'contact'; targetText = 'Contact Support'; }
-        else if (path.includes('/my-tickets')) { page = 'tickets'; targetText = 'My Tickets'; }
-
-        // Find and highlight link based on text
-        let targetLink = null;
-        for (let l of document.querySelectorAll('.admin-subnav-link')) {
-            if (l.innerText.trim() === targetText) {
-                targetLink = l;
-                break;
-            }
-        }
-        
-        if (targetLink) {
-            targetLink.classList.add('active');
-            const parentNavItem = targetLink.closest('.admin-nav-item');
-            if (parentNavItem) parentNavItem.classList.add('active-child');
-        }
-
-        switchAdminView('help-center', null, true);
-        switchHelpPage(page, null);
-    }
-
-    window.addEventListener('popstate', () => {
-        if (window.location.pathname.startsWith('/help-center')) {
-            syncHelpCenterRoute();
-        }
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-        if (window.location.pathname.startsWith('/help-center')) {
-            setTimeout(syncHelpCenterRoute, 50);
-        }
-    });
   </script>
 
 

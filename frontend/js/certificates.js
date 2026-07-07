@@ -744,26 +744,8 @@ async function loadCertificates(page = 1) {
 }
 
 async function updateCertStatus(certId, action) {
-    let actionTitle = action.charAt(0).toUpperCase() + action.slice(1);
-    let actionConfirm = action === 'revoke' ? 'Yes, Revoke' : 'Yes, Reinstate';
+    if(!confirm(`Are you sure you want to ${action} certificate ${certId}?`)) return;
     
-    if (typeof showConfirmModal === 'function') {
-        showConfirmModal(
-            `${actionTitle} Certificate?`,
-            `Are you sure you want to ${action} certificate ${certId}?`,
-            actionConfirm,
-            'Cancel',
-            async () => {
-                executeCertStatusUpdate(certId, action);
-            }
-        );
-    } else {
-        if(!confirm(`Are you sure you want to ${action} certificate ${certId}?`)) return;
-        executeCertStatusUpdate(certId, action);
-    }
-}
-
-async function executeCertStatusUpdate(certId, action) {
     try {
         const res = await fetch(API_URL + '/api/certificates/update_certificate.php', {
             method: 'POST',
@@ -783,7 +765,6 @@ async function executeCertStatusUpdate(certId, action) {
             }
         }
     } catch(e) {
-        console.error(e);
         if(typeof showToast === 'function') {
             showToast('❌ Server error');
         } else {
