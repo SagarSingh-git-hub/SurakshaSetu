@@ -3,9 +3,13 @@ require '../../config.php';
 require_once __DIR__ . '/../log_activity.php';
 global $conn;
 
-$data = json_decode(file_get_contents("php://input"), true);
+$raw_input = file_get_contents("php://input");
+if (empty($raw_input) && php_sapi_name() === 'cli') {
+    $raw_input = file_get_contents("php://stdin");
+}
+$data = json_decode($raw_input, true);
 if (!$data) {
-    echo json_encode(['success' => false, 'error' => 'Invalid data']);
+    echo json_encode(['success' => false, 'error' => 'Invalid data', 'raw_input' => $raw_input]);
     exit;
 }
 
@@ -47,14 +51,23 @@ $row = $res->fetch_assoc();
 $seq = str_pad($row['cnt'] + 1, 4, '0', STR_PAD_LEFT);
 $cert_id = "$prefix-$year-$seq";
 
+// Generate Digital Signature / Hash
+$secret_key = 'SURAKSHA_SETU_SECRET_2026';
+$data_to_hash = $cert_id . $recipient_name . $issue_date . $certificate_type . $secret_key;
+$hash_sha256 = hash('sha256', $data_to_hash);
+
+// Generate QR Code URL (Verification URL)
+$verify_url = "https://surakshasetu.org/verify?id=" . urlencode($cert_id) . "&hash=" . $hash_sha256;
+$qr_code_url = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" . urlencode($verify_url);
+
 // Ensure recipient_type column exists
 $conn->query("ALTER TABLE certificates ADD COLUMN IF NOT EXISTS recipient_type VARCHAR(50) DEFAULT 'Community Member'");
 
-$sql = "INSERT INTO certificates (cert_id, recipient_name, recipient_email, recipient_phone, recipient_zone, certificate_type, issue_date, citation, issuing_authority, co_signatory, template_id, recipient_type) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO certificates (cert_id, recipient_name, recipient_email, recipient_phone, recipient_zone, certificate_type, issue_date, citation, issuing_authority, co_signatory, template_id, recipient_type, hash_sha256, qr_code_url) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssssssssssis", $cert_id, $recipient_name, $recipient_email, $recipient_phone, $recipient_zone, $certificate_type, $issue_date, $citation, $issuing_authority, $co_signatory, $template_id_val, $recipient_type);
 $template_id_val = $template_id > 0 ? $template_id : null;
+$stmt->bind_param("ssssssssssisss", $cert_id, $recipient_name, $recipient_email, $recipient_phone, $recipient_zone, $certificate_type, $issue_date, $citation, $issuing_authority, $co_signatory, $template_id_val, $recipient_type, $hash_sha256, $qr_code_url);
 
 if ($stmt->execute()) {
     // Update template usage

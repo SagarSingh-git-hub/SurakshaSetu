@@ -3313,12 +3313,18 @@
               <div style="font-size:13px;color:var(--text3);margin-top:4px;">Award a recognition certificate to a
                 community member or volunteer.</div>
             </div>
-            <button class="action-btn"
-              onclick="switchAdminView('cert-view', document.querySelector('[onclick*=\'cert-view\']'))"
-              style="padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;gap:6px;cursor:pointer;">
-              <i class="ph-duotone ph-list" style="font-size:16px;"></i> View all
-            </button>
-          </div>
+            <div style="display: flex; gap: 10px;">
+              <button class="action-btn"
+                onclick="document.getElementById('bulk-issue-modal').style.display='flex'"
+                style="padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid #10b981;background:#ecfdf5;color:#047857;display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;">
+                <i class="ph-bold ph-upload-simple" style="font-size:16px;"></i> Bulk Issue (CSV)
+              </button>
+              <button class="action-btn"
+                onclick="switchAdminView('cert-view', document.querySelector('[onclick*=\'cert-view\']'))"
+                style="padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;gap:6px;cursor:pointer;">
+                <i class="ph-duotone ph-list" style="font-size:16px;"></i> View all
+              </button>
+            </div>
 
           <!-- Step Bar -->
           <div style="display:flex;align-items:center;gap:0;margin-bottom:24px;">
@@ -7118,6 +7124,93 @@
         });
       }
     });
+  </script>
+  <!-- Bulk Issue Modal -->
+  <div id="bulk-issue-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+    <div style="background:#fff;border-radius:12px;width:90%;max-width:500px;padding:24px;box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div style="font-size:18px;font-weight:700;color:#1e293b;display:flex;align-items:center;gap:8px;">
+          <i class="ph-bold ph-upload-simple" style="color:#10b981;"></i> Bulk Issue Certificates
+        </div>
+        <button onclick="document.getElementById('bulk-issue-modal').style.display='none'" style="background:none;border:none;cursor:pointer;color:#64748b;font-size:20px;">&times;</button>
+      </div>
+      
+      <p style="font-size:13px;color:#64748b;margin-bottom:20px;">Upload a CSV file to issue multiple certificates at once. Ensure the CSV has headers: <b>Name, Email, Phone, Zone</b>.</p>
+      
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:6px;">Select Template</label>
+        <select id="bulk-template-id" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;color:#0f172a;">
+          <option value="1">Classic Gold</option>
+          <option value="2">Eco Blue</option>
+          <option value="3">Volunteer Purple</option>
+          <option value="4">Drive Green</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom:24px;">
+        <label style="display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:6px;">Upload CSV File</label>
+        <div style="border:2px dashed #cbd5e1;border-radius:8px;padding:32px;text-align:center;background:#f8fafc;cursor:pointer;" onclick="document.getElementById('bulk-csv-input').click()">
+          <i class="ph-duotone ph-file-csv" style="font-size:32px;color:#94a3b8;margin-bottom:8px;"></i>
+          <div style="font-size:14px;color:#475569;font-weight:500;">Click to browse file</div>
+          <input type="file" id="bulk-csv-input" accept=".csv" style="display:none;" onchange="document.getElementById('bulk-csv-name').innerText = this.files[0] ? this.files[0].name : '';">
+        </div>
+        <div id="bulk-csv-name" style="font-size:12px;color:#10b981;margin-top:8px;font-weight:600;"></div>
+      </div>
+      
+      <div style="display:flex;justify-content:flex-end;gap:12px;">
+        <button onclick="document.getElementById('bulk-issue-modal').style.display='none'" style="padding:10px 16px;background:#f1f5f9;color:#475569;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">Cancel</button>
+        <button onclick="uploadBulkCsv()" id="bulk-upload-btn" style="padding:10px 16px;background:#10b981;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;">
+          <i class="ph-bold ph-upload"></i> Process CSV
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function uploadBulkCsv() {
+      const fileInput = document.getElementById('bulk-csv-input');
+      const templateId = document.getElementById('bulk-template-id').value;
+      const btn = document.getElementById('bulk-upload-btn');
+      
+      if (!fileInput.files || fileInput.files.length === 0) {
+        showToast('Please select a CSV file first.');
+        return;
+      }
+      
+      const formData = new FormData();
+      formData.append('csv_file', fileInput.files[0]);
+      formData.append('template_id', templateId);
+      
+      btn.innerHTML = '<i class="ph-bold ph-spinner ph-spin"></i> Processing...';
+      btn.disabled = true;
+      
+      try {
+        const response = await fetch('/SurakshaSetu/backend/api/certificates/bulk_issue.php', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await response.json();
+        
+        if (data.success) {
+          showToast(`Successfully issued ${data.results.success_count} certificates!`);
+          document.getElementById('bulk-issue-modal').style.display = 'none';
+          if(data.results.error_count > 0) {
+            console.error('Bulk errors:', data.results.errors);
+            alert(`Issued ${data.results.success_count} but failed ${data.results.error_count}. Check console for details.`);
+          }
+        } else {
+          showToast('Error: ' + data.error);
+        }
+      } catch (err) {
+        console.error(err);
+        showToast('Network error during upload.');
+      } finally {
+        btn.innerHTML = '<i class="ph-bold ph-upload"></i> Process CSV';
+        btn.disabled = false;
+        fileInput.value = '';
+        document.getElementById('bulk-csv-name').innerText = '';
+      }
+    }
   </script>
 </body>
 
