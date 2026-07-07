@@ -744,33 +744,40 @@ async function loadCertificates(page = 1) {
 }
 
 async function updateCertStatus(certId, action) {
-    if(!confirm(`Are you sure you want to ${action} certificate ${certId}?`)) return;
-    
-    try {
-        const res = await fetch(API_URL + '/api/certificates/update_certificate.php', {
-            method: 'POST',
-            body: JSON.stringify({ cert_id: certId, action: action })
-        });
-        const data = await res.json();
-        if (data.success) {
-            if(typeof showToast === 'function') {
-                showToast(`✅ Certificate ${action} successful!`);
-            }
-            loadCertificates(currentCertPage); // Instantly updates UI and stats
-        } else {
-            if(typeof showToast === 'function') {
-                showToast('❌ Error: ' + data.error);
+    const title = action === 'revoke' ? 'Revoke Certificate?' : 'Reinstate Certificate?';
+    const msg = action === 'revoke' 
+      ? `Are you sure you want to revoke certificate ${certId}? This action cannot be undone.` 
+      : `Are you sure you want to reinstate certificate ${certId}?`;
+    const acceptText = action === 'revoke' ? 'Yes, Revoke' : 'Yes, Reinstate';
+    const isDanger = action === 'revoke';
+
+    window.showCustomConfirm(title, msg, async () => {
+        try {
+            const res = await fetch(API_URL + '/api/certificates/update_certificate.php', {
+                method: 'POST',
+                body: JSON.stringify({ cert_id: certId, action: action })
+            });
+            const data = await res.json();
+            if (data.success) {
+                if(typeof showToast === 'function') {
+                    showToast(`✅ Certificate ${action} successful!`);
+                }
+                loadCertificates(currentCertPage); // Instantly updates UI and stats
             } else {
-                alert('Error: ' + data.error);
+                if(typeof showToast === 'function') {
+                    showToast('❌ Error: ' + data.error);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            }
+        } catch(e) {
+            if(typeof showToast === 'function') {
+                showToast('❌ Server error');
+            } else {
+                alert('Server error');
             }
         }
-    } catch(e) {
-        if(typeof showToast === 'function') {
-            showToast('❌ Server error');
-        } else {
-            alert('Server error');
-        }
-    }
+    }, acceptText, isDanger, "Cancel");
 }
 
 function downloadPDF() {

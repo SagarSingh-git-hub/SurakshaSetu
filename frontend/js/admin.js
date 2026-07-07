@@ -2054,16 +2054,18 @@ const chartInstances = {};
       });
   }
 
-  function showCustomConfirm(title, message, onAccept, acceptText = 'Yes, delete it', isDanger = true) {
+  window.showCustomConfirm = function(title, message, onAccept, acceptText = 'Yes, delete it', isDanger = true, cancelText = 'No, go back') {
     const overlay = document.getElementById('custom-confirm-overlay');
     const titleEl = document.getElementById('confirm-title');
     const msgEl = document.getElementById('confirm-message');
     const acceptBtn = document.getElementById('btn-confirm-accept');
+    const cancelBtn = document.getElementById('btn-confirm-cancel');
     const iconEl = overlay ? overlay.querySelector('i') : null;
     const iconContainer = iconEl ? iconEl.parentElement : null;
 
     if (titleEl) titleEl.innerText = title;
     if (msgEl) msgEl.innerText = message;
+    if (cancelBtn) cancelBtn.innerText = cancelText;
 
     if (acceptBtn) {
       acceptBtn.innerText = acceptText;
@@ -2108,7 +2110,7 @@ const chartInstances = {};
       ? "This is the default template. Please assign another template as default before deleting. Do you still want to delete it?"
       : "Are you sure you want to permanently delete this certificate template, or have you changed your mind?";
 
-    showCustomConfirm("Delete Template?", msg, () => {
+    window.showCustomConfirm("Delete Template?", msg, () => {
       const btnDelete = document.getElementById('btn-preview-delete');
       if (btnDelete) {
          btnDelete.disabled = true;
@@ -3382,9 +3384,24 @@ const chartInstances = {};
   window.ticketsData = [];
   let ticketSearchTimeout = null;
 
-  window.fetchTickets = async function() {
+  window.fetchTickets = async function(force = false) {
     const tableBody = document.getElementById('ticket-table-body');
     if (!tableBody) return;
+
+    if (!force && window.ticketsData && window.ticketsData.length > 0) {
+      renderTickets();
+    } else {
+      tableBody.innerHTML = `<tr>
+        <td colspan="6" style="padding: 24px;">
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div style="height:40px; background:#f1f5f9; border-radius:8px; animation: pulse 1.5s infinite;"></div>
+            <div style="height:40px; background:#f1f5f9; border-radius:8px; animation: pulse 1.5s infinite;"></div>
+            <div style="height:40px; background:#f1f5f9; border-radius:8px; animation: pulse 1.5s infinite;"></div>
+          </div>
+          <style>@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }</style>
+        </td>
+      </tr>`;
+    }
 
     try {
       const res = await fetch(`${API_URL}/api/tickets.php`);
@@ -3649,41 +3666,41 @@ const chartInstances = {};
   };
 
   window.deleteTicket = async function(ticketId) {
-    if (!confirm('Are you sure you want to delete ticket ' + ticketId + '?')) return;
-    
-    // Optimistic UI update
-    const previousData = [...window.ticketsData];
-    window.ticketsData = window.ticketsData.filter(t => t.ticket_id !== ticketId);
-    renderTickets();
-    showToast('Ticket deleted successfully');
+    const msg = `Are you sure you want to permanently delete ticket ${ticketId}? This action cannot be undone.`;
+    window.showCustomConfirm("Delete Ticket?", msg, async () => {
+      // Optimistic UI update
+      const previousData = [...window.ticketsData];
+      window.ticketsData = window.ticketsData.filter(t => t.ticket_id !== ticketId);
+      renderTickets();
+      showToast('Ticket deleted successfully');
 
-    // Fire and forget backend call
-    fetch(`${API_URL}/api/tickets.php?id=${encodeURIComponent(ticketId)}`, {
-      method: 'DELETE'
-    }).then(res => res.json()).then(data => {
-      if (!data.success) {
-        // If delete fails, rollback
-        window.ticketsData = previousData;
-        renderTickets();
-        showToast('Failed to delete ticket', true);
-      }
-    }).catch(e => {
-      console.error('Error deleting ticket:', e);
-      // Only rollback on error if not a demo ticket
-      if (!ticketId.includes('#SS-100')) {
+      // Fire and forget backend call
+      fetch(`${API_URL}/api/tickets.php?id=${encodeURIComponent(ticketId)}`, {
+        method: 'DELETE'
+      }).then(res => res.json()).then(data => {
+        if (!data.success) {
+          // If delete fails, rollback
           window.ticketsData = previousData;
           renderTickets();
           showToast('Failed to delete ticket', true);
-      }
-    });
+        }
+      }).catch(e => {
+        console.error('Error deleting ticket:', e);
+        // Only rollback on error if not a demo ticket
+        if (!ticketId.includes('#SS-100')) {
+            window.ticketsData = previousData;
+            renderTickets();
+            showToast('Failed to delete ticket', true);
+        }
+      });
+    }, "Yes, Delete", true, "Cancel");
   };
 
   // Initial render when script loads
   document.addEventListener('DOMContentLoaded', () => {
     renderFAQs(helpFaqsData.filter(faq => faq.tab === 'faq-reporting'));
     
+    fetchTickets(true); // Fetch immediately on load to prevent delayed rendering
+    
     const urlHash = window.location.hash;
-    if (urlHash.includes('help-center') || document.getElementById('admin-view-help-center')?.style.display === 'block') {
-       fetchTickets();
-    }
   });
