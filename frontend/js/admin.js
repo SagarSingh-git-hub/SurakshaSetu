@@ -222,7 +222,7 @@ function adminLogout() {
   );
 }
 
-async function renderAdminDashboard(initialView = 'overview') {
+async function renderAdminDashboard(initialView = 'overview', subSubView = '') {
       const adminToken = sessionStorage.getItem('adminToken');
       if (!adminToken) {
         console.error('Security Check Failed: Unauthorized access to Admin Dashboard rendering.');
@@ -237,14 +237,14 @@ async function renderAdminDashboard(initialView = 'overview') {
       if (typeof fetchAlerts === 'function') fetchAlerts(); // load alert states for dashboard overview widgets
 
       const activeSubView = initialView || 'overview';
-      const linkElement = document.querySelector(`.admin-subnav-link[onclick*="'${activeSubView}'"]`) ||
+      const linkElement = activeSubView === 'help-center' ? null : (document.querySelector(`.admin-subnav-link[onclick*="'${activeSubView}'"]`) ||
         document.querySelector(`.admin-subnav-link[onclick*="${activeSubView}"]`) ||
         document.querySelector(`.admin-nav-link[onclick*="'${activeSubView}'"]`) ||
-        document.querySelector(`.admin-nav-link[onclick*="${activeSubView}"]`);
+        document.querySelector(`.admin-nav-link[onclick*="${activeSubView}"]`));
 
       // Switch view instantly before data processing
       if (typeof switchAdminView === 'function') {
-        switchAdminView(activeSubView, linkElement);
+        switchAdminView(activeSubView, linkElement, subSubView);
       }
 
       // If reports are already loaded (or we render with 0 initially to show skeleton), update DOM

@@ -83,7 +83,8 @@ function showPage(id, pushHistory = true) {
     const parts = currentHash.split('/');
     let savedAdminPage = sessionStorage.getItem('lastAdminPage');
     const subView = (parts[0] === 'admin' && parts[1]) ? parts[1] : (savedAdminPage || 'overview');
-    routeHash = `admin/${subView}`;
+    const subSubView = parts[2] ? '/' + parts[2] : '';
+    routeHash = `admin/${subView}${subSubView}`;
   }
 
   // Persist the route state with query parameters preserved
@@ -165,7 +166,8 @@ function showPage(id, pushHistory = true) {
       const parts = window.location.hash.substring(1).split('/');
       let savedAdminPage = sessionStorage.getItem('lastAdminPage');
       const sub = (parts[0] === 'admin' && parts[1]) ? parts[1] : (savedAdminPage || 'overview');
-      renderAdminDashboard(sub);
+      const subSub = parts[2] || '';
+      renderAdminDashboard(sub, subSub);
     } else {
       mountAdminLogin();
     }

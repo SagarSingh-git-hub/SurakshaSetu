@@ -1980,20 +1980,15 @@
             </button>
             <div class="admin-subnav">
               <div class="admin-subnav-inner">
-                <a href="#" class="admin-subnav-link"
-                  onclick="switchAdminView('help-center', this); switchHelpPage('home'); return false;"><i
+                <a href="#admin/help-center/overview" class="admin-subnav-link"><i
                     class="ph-duotone ph-layout"></i><span class="admin-subnav-text">Overview</span></a>
-                <a href="#" class="admin-subnav-link"
-                  onclick="switchAdminView('help-center', this); switchHelpPage('faq'); return false;"><i
+                <a href="#admin/help-center/faqs" class="admin-subnav-link"><i
                     class="ph-duotone ph-list-numbers"></i><span class="admin-subnav-text">FAQs</span></a>
-                <a href="#" class="admin-subnav-link"
-                  onclick="switchAdminView('help-center', this); switchHelpPage('guides'); return false;"><i
+                <a href="#admin/help-center/guides" class="admin-subnav-link"><i
                     class="ph-duotone ph-book-open"></i><span class="admin-subnav-text">Guides & Tutorials</span></a>
-                <a href="#" class="admin-subnav-link"
-                  onclick="switchAdminView('help-center', this); switchHelpPage('contact'); return false;"><i
+                <a href="#admin/help-center/contact-support" class="admin-subnav-link"><i
                     class="ph-duotone ph-envelope-simple"></i><span class="admin-subnav-text">Contact Support</span></a>
-                <a href="#" class="admin-subnav-link"
-                  onclick="switchAdminView('help-center', this); switchHelpPage('tickets'); return false;"><i
+                <a href="#admin/help-center/my-tickets" class="admin-subnav-link"><i
                     class="ph-duotone ph-ticket"></i><span class="admin-subnav-text">My Tickets</span></a>
                 <div
                   style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin: 12px 12px 4px; letter-spacing: 0.5px;">
@@ -5296,12 +5291,15 @@
 
   <script>
     // Sidebar View Routing
-    function switchAdminView(viewName, linkElement) {
+    function switchAdminView(viewName, linkElement, subView2 = '') {
       sessionStorage.setItem('lastAdminPage', viewName);
 
       // Update hash silently in the URL to preserve route on refresh
       const queryParams = window.location.search;
-      const targetHash = '#admin/' + viewName;
+      let targetHash = '#admin/' + viewName;
+      if (viewName === 'help-center' && subView2) {
+         targetHash += '/' + subView2;
+      }
       if (window.location.hash !== targetHash) {
         window.history.replaceState({ page: 'admin', hash: targetHash }, '', window.location.pathname + queryParams + targetHash);
       }
@@ -5383,20 +5381,42 @@
         actions.style.display = 'none';
       }
 
-      if (linkElement) {
-        document.querySelectorAll('.admin-subnav-link, .admin-nav-link').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.admin-nav-item').forEach(el => {
-          el.classList.remove('active-child');
-          el.classList.remove('open');
-        });
+      document.querySelectorAll('.admin-subnav-link, .admin-nav-link').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.admin-nav-item').forEach(el => {
+        el.classList.remove('active-child');
+        el.classList.remove('open');
+      });
 
-        linkElement.classList.add('active');
+      let targetLink = linkElement;
+      
+      if (viewName === 'help-center') {
+        const helpSubTab = subView2 || 'overview';
+        targetLink = document.querySelector(`.admin-subnav-link[href="#admin/help-center/${helpSubTab}"]`);
+        
+        let internalName = helpSubTab;
+        if (helpSubTab === 'overview') internalName = 'home';
+        if (helpSubTab === 'faqs') internalName = 'faq';
+        if (helpSubTab === 'contact-support') internalName = 'contact';
+        if (helpSubTab === 'my-tickets') internalName = 'tickets';
+        
+        document.querySelectorAll('.help-nav-item').forEach(n => n.classList.remove('active'));
+        document.querySelectorAll('.help-page').forEach(p => p.classList.remove('active'));
+        
+        const pg = document.getElementById('help-page-' + internalName);
+        if (pg) pg.classList.add('active');
+        
+        const innerNav = document.getElementById('help-nav-' + internalName);
+        if (innerNav) innerNav.classList.add('active');
+      }
+
+      if (targetLink) {
+        targetLink.classList.add('active');
 
         // Highlight active parent nav item
-        const parentNavItem = linkElement.closest('.admin-nav-item');
+        const parentNavItem = targetLink.closest('.admin-nav-item');
         if (parentNavItem) {
           parentNavItem.classList.add('active-child');
-          if (linkElement.classList.contains('admin-subnav-link')) {
+          if (targetLink.classList.contains('admin-subnav-link')) {
             parentNavItem.classList.add('open');
           }
         }
@@ -5441,6 +5461,9 @@
     // Add click events to subnav links
     document.querySelectorAll('.admin-subnav-link').forEach(link => {
       link.addEventListener('click', (e) => {
+        if (link.getAttribute('href') && link.getAttribute('href') !== '#') {
+           return; // Allow standard hash routing
+        }
         e.preventDefault();
         document.querySelectorAll('.admin-subnav-link, .admin-nav-link').forEach(l => l.classList.remove('active'));
         document.querySelectorAll('.admin-nav-item').forEach(l => l.classList.remove('active-child'));
@@ -5601,21 +5624,23 @@
     });
 
     function switchHelpPage(name, navEl) {
-      document.querySelectorAll('.help-nav-item').forEach(n => n.classList.remove('active'));
-      if (navEl) navEl.classList.add('active');
-      document.querySelectorAll('.help-page').forEach(p => p.classList.remove('active'));
-      const pg = document.getElementById('help-page-' + name);
-      if (pg) pg.classList.add('active');
-
-      // Reset scroll instantly
-      document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      setTimeout(() => {
-        document.querySelectorAll('.help-content, .admin-content-wrap, .admin-page, .modal, .help-page, .help-subpage').forEach(el => el.scrollTop = 0);
-        document.documentElement.style.removeProperty('scroll-behavior');
-      }, 50);
+      let helpSubTab = name;
+      if (name === 'home') helpSubTab = 'overview';
+      if (name === 'faq') helpSubTab = 'faqs';
+      if (name === 'contact') helpSubTab = 'contact-support';
+      if (name === 'tickets') helpSubTab = 'my-tickets';
+      
+      const targetHash = '#admin/help-center/' + helpSubTab;
+      
+      if (window.location.hash !== targetHash) {
+        window.history.pushState({ page: 'admin', hash: targetHash }, '', window.location.pathname + window.location.search + targetHash);
+      }
+      
+      if (typeof showPage === 'function') {
+        showPage('admin', false);
+      } else {
+        switchAdminView('help-center', null, helpSubTab);
+      }
     }
 
     function switchHelpSubpage(name, btn) {
