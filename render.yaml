@@ -2,7 +2,7 @@ services:
   - type: web
     name: surakshasetu-api
     env: docker
-    rootDir: backend
+    rootDir: .
     plan: free
     envVars:
       - key: DB_HOST

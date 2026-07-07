@@ -86,6 +86,9 @@ CREATE TABLE IF NOT EXISTS certificates (
     co_signatory VARCHAR(100),
     status VARCHAR(50) DEFAULT 'Active',
     template_id INT,
+    pdf_url VARCHAR(500) NULL,
+    qr_code_url VARCHAR(500) NULL,
+    hash_sha256 VARCHAR(64) NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (template_id) REFERENCES certificate_templates(id) ON DELETE SET NULL
 );
@@ -192,3 +195,9 @@ CREATE TABLE IF NOT EXISTS support_tickets (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+-- Migrations for existing setups
+ALTER TABLE certificates ADD COLUMN IF NOT EXISTS recipient_type VARCHAR(50) DEFAULT 'Community Member';
+ALTER TABLE certificates ADD COLUMN IF NOT EXISTS pdf_url VARCHAR(500) NULL;
+ALTER TABLE certificates ADD COLUMN IF NOT EXISTS qr_code_url VARCHAR(500) NULL;
+ALTER TABLE certificates ADD COLUMN IF NOT EXISTS hash_sha256 VARCHAR(64) NULL;

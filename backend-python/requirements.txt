@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pymysql
+boto3
+reportlab
+qrcode
+python-multipart
+python-dotenv
+Pillow
