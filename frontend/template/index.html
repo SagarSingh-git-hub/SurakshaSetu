@@ -2405,7 +2405,6 @@
             .m-layout {
               display: grid;
               grid-template-columns: minmax(0, 1fr) 340px;
-              min-height: 560px;
               background: #fff;
               border: 1px solid var(--border);
               border-radius: 12px;
@@ -2422,12 +2421,14 @@
               position: relative;
               overflow: hidden;
               border-right: 1px solid var(--border);
+              display: flex;
+              flex-direction: column;
             }
 
             .m-map-canvas {
               width: 100%;
-              height: 100%;
-              min-height: 560px;
+              flex: 1;
+              min-height: 500px;
               position: relative;
               background: #f8fafc;
               z-index: 1;
@@ -2608,8 +2609,6 @@
 
             .m-list {
               flex: 1;
-              overflow-y: auto;
-              max-height: 515px;
             }
 
             .m-list::-webkit-scrollbar {
@@ -2681,8 +2680,6 @@
             .m-detail {
               padding: 20px;
               display: none;
-              overflow-y: auto;
-              max-height: 515px;
             }
 
             .m-detail.show {
@@ -2887,7 +2884,7 @@
 
           <div class="m-layout">
             <div class="m-map-panel" style="position: relative;">
-              <div id="live-leaflet-map" style="width: 100%; height: 100%; min-height: 560px;"></div>
+              <div id="live-leaflet-map" style="width: 100%; flex: 1; min-height: 500px;"></div>
 
               <div class="m-legend"
                 style="position: absolute; bottom: 24px; left: 16px; height: fit-content; z-index: 1000; background: rgba(255,255,255,0.9); padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; pointer-events: none;">
