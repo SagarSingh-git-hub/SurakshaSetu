@@ -235,6 +235,9 @@ function initCustomSelects() {
     if (select.id === 'cert-area') {
       optionsContainer.classList.add('area-dropdown-menu');
     }
+    
+    // Store reference to container for cleanup
+    select.customOptionsContainer = optionsContainer;
 
     Array.from(select.options).forEach((option, index) => {
       const optionDiv = document.createElement('div');
@@ -242,34 +245,26 @@ function initCustomSelects() {
       if (option.selected) optionDiv.classList.add('selected');
       optionDiv.textContent = option.text;
 
-      optionDiv.addEventListener('click', () => {
+      optionDiv.addEventListener('mousedown', (e) => {
+        // Prevent default to avoid blur issues if any
+        e.preventDefault();
+        e.stopPropagation();
+
         // Update native select
         select.selectedIndex = index;
 
-        if (select.id === 'cert-area') {
-          // 1. Update UI optimistically and instantly
-          triggerText.textContent = option.text;
-          optionsContainer.querySelectorAll('.custom-select-option').forEach(el => el.classList.remove('selected'));
-          optionDiv.classList.add('selected');
-          wrapper.classList.remove('open');
-          optionsContainer.classList.remove('show-dropdown');
+        // Update UI optimistically and instantly for ALL selects
+        triggerText.textContent = option.text;
+        optionsContainer.querySelectorAll('.custom-select-option').forEach(el => el.classList.remove('selected'));
+        optionDiv.classList.add('selected');
+        wrapper.classList.remove('open');
+        optionsContainer.classList.remove('show-dropdown');
 
-          // 2. Perform backend/heavy operations asynchronously
-          setTimeout(() => {
-            select.dispatchEvent(new Event('change'));
-            select.dispatchEvent(new Event('input'));
-          }, 0);
-        } else {
-          // Standard behavior for other selects
+        // Dispatch events asynchronously to avoid UI freezing
+        setTimeout(() => {
           select.dispatchEvent(new Event('change'));
           select.dispatchEvent(new Event('input'));
-
-          triggerText.textContent = option.text;
-          optionsContainer.querySelectorAll('.custom-select-option').forEach(el => el.classList.remove('selected'));
-          optionDiv.classList.add('selected');
-          wrapper.classList.remove('open');
-          optionsContainer.classList.remove('show-dropdown');
-        }
+        }, 0);
       });
       optionsContainer.appendChild(optionDiv);
     });
@@ -345,6 +340,10 @@ function refreshCustomSelect(select) {
   const wrapper = select.nextElementSibling;
   if (wrapper && wrapper.classList.contains('custom-select-wrapper')) {
     wrapper.remove();
+  }
+  if (select.customOptionsContainer) {
+    select.customOptionsContainer.remove();
+    select.customOptionsContainer = null;
   }
   select.classList.remove('custom-select-hidden');
   initCustomSelects();

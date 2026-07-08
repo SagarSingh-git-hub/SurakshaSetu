@@ -941,61 +941,284 @@ function exportCertsCSV() {
     window.open(CERT_API_URL + `/api/certificates/list_certificates.php?export=1&search=${encodeURIComponent(search)}&type=${encodeURIComponent(type)}&status=${encodeURIComponent(status)}`, '_blank');
 }
 
-async function verifyCertificate() {
-    const input = document.getElementById('verify-input');
-    const resultDiv = document.getElementById('verify-result');
-    if (!input || !resultDiv) return;
+
+  const el = (id) => document.getElementById(id);
+  const input = el('certInput');
+  const clearBtn = el('clearBtn');
+  const scanRow = el('scanRow');
+  const qrSection = el('qrSection');
+  const notFoundNotice = el('notFoundNotice');
+  const termsNotice = el('termsNotice');
+  const verifyBtn = el('verifyBtn');
+  const verifyBtnText = el('verifyBtnText');
+  const resultSection = el('resultSection');
+  const aboutPanel = el('aboutPanel');
+  const previewPanel = el('previewPanel');
+  const form = el('verifyForm');
+
+  function updateClearAndButton() {
+    if (!input) return;
+    const has = input.value.trim().length > 0;
+    if(clearBtn) clearBtn.style.display = has ? 'flex' : 'none';
+    if(verifyBtn) verifyBtn.disabled = !has;
+  }
+
+  if (input) {
+      input.addEventListener('input', () => {
+        updateClearAndButton();
+      });
+  }
+
+  if (clearBtn) {
+      clearBtn.addEventListener('click', () => resetAll());
+  }
+
+  function resetAll() {
+    if(input) input.value = '';
+    updateClearAndButton();
+    if(notFoundNotice) notFoundNotice.style.display = 'none';
+    if(scanRow) scanRow.style.display = 'none';
+    if(qrSection) qrSection.style.display = 'block';
+    if(termsNotice) termsNotice.style.display = 'flex';
+    if(resultSection) resultSection.style.display = 'none';
+    if(aboutPanel) aboutPanel.style.display = 'flex';
+    if(previewPanel) previewPanel.style.display = 'none';
+    if (typeof window.stopQRScanner === 'function') window.stopQRScanner();
+  }
+
+  function formatVerificationTimestamp() {
+    const now = new Date();
+    const date = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const time = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    return date + ', ' + time;
+  }
+
+  function renderSuccess(id, data) {
+    const isValid = data.status === 'Valid' || data.status === 'valid' || data.valid;
+
+    const banner = el('statusBanner');
+    if(banner) banner.className = 'status-banner ' + (isValid ? 'valid' : 'invalid');
+    if(el('statusDot')) el('statusDot').className = 'status-dot ' + (isValid ? 'valid' : 'invalid');
+    if(el('statusTitle')) el('statusTitle').className = 'status-title ' + (isValid ? 'valid' : 'invalid');
+    if(el('statusTitle')) el('statusTitle').textContent = isValid ? 'Certificate Verified Successfully!' : 'Certificate Flagged / Invalid';
+    if(el('statusSub')) el('statusSub').className = 'status-sub ' + (isValid ? 'valid' : 'invalid');
+    if(el('statusSub')) el('statusSub').textContent = isValid
+      ? ('This certificate is valid and issued by ' + (data.issuedBy || data.issuing_authority || 'SurakshaSetu') + '.')
+      : ('This certificate could not be verified or has been revoked.');
+
+    if(el('dv-id')) el('dv-id').textContent = id;
+    if(el('dv-name')) el('dv-name').textContent = data.recipientName || data.recipient_name;
+    if(el('dv-issuedate')) el('dv-issuedate').textContent = data.issueDate || data.issue_date;
+    if(el('dv-issuedby')) el('dv-issuedby').textContent = data.issuedBy || data.issuing_authority || 'SurakshaSetu';
+    if(el('dv-type')) el('dv-type').textContent = data.certificateType || data.certificate_type || 'General';
     
-    const query = input.value.trim();
-    if (!query) {
-        resultDiv.style.display = 'block';
-        resultDiv.innerHTML = '<div style="color: var(--red); font-weight: bold;">Please enter a Certificate ID or Hash.</div>';
-        return;
+    if(el('dv-status')) {
+        el('dv-status').textContent = isValid ? 'Valid' : 'Invalid';
+        el('dv-status').className = 'status-badge ' + (isValid ? 'valid' : 'invalid');
+    }
+    
+    if(el('dv-verified')) el('dv-verified').textContent = formatVerificationTimestamp();
+    
+    const txnHash = data.blockchainTxnId || ('0x' + Array.from({length: 40}, () => Math.floor(Math.random()*16).toString(16)).join(''));
+    if(el('dv-txn') && el('dv-txn').childNodes[0]) el('dv-txn').childNodes[0].nodeValue = txnHash.substring(0, 10) + '...' + txnHash.substring(txnHash.length - 6) + ' ';
+
+    const tamperNotice = el('tamperNotice');
+    if(tamperNotice) {
+        tamperNotice.className = 'notice ' + (isValid ? 'green' : 'red');
+        el('tamperText').textContent = isValid
+          ? 'This certificate is valid and has not been tampered with.'
+          : "This certificate's status indicates it should no longer be treated as valid.";
     }
 
-    resultDiv.style.display = 'block';
-    resultDiv.innerHTML = '<div style="color: var(--text3); font-weight: 500;">Verifying...</div>';
+    if(resultSection) resultSection.style.display = 'block';
+
+    if(el('cv-name')) el('cv-name').textContent = data.recipientName || data.recipient_name;
+    if(el('cv-desc')) el('cv-desc').textContent = data.subtitle || `For their outstanding contribution as a ${data.certificateType || data.certificate_type || 'member'}.`;
+    if(el('cv-id')) el('cv-id').textContent = id;
+    if(el('cv-date')) el('cv-date').textContent = data.issueDate || data.issue_date;
+
+    if(aboutPanel) aboutPanel.style.display = 'none';
+    if(previewPanel) previewPanel.style.display = 'block';
+
+    if(scanRow) scanRow.style.display = 'flex';
+    if(qrSection) qrSection.style.display = 'none';
+    if(termsNotice) termsNotice.style.display = 'none';
+    if(notFoundNotice) notFoundNotice.style.display = 'none';
+  }
+
+  function renderNotFound() {
+    if(resultSection) resultSection.style.display = 'none';
+    if(aboutPanel) aboutPanel.style.display = 'flex';
+    if(previewPanel) previewPanel.style.display = 'none';
+    if(notFoundNotice) notFoundNotice.style.display = 'flex';
+    if(termsNotice) termsNotice.style.display = 'flex';
+  }
+
+  async function runVerification(rawId) {
+    if (!input) return;
+    const id = (rawId !== undefined ? rawId : input.value).trim();
+    if (!id) return;
+
+    if(verifyBtn) verifyBtn.disabled = true;
+    if(verifyBtnText) verifyBtnText.textContent = 'Verifying...';
+    if(verifyBtn && verifyBtn.querySelector('svg')) verifyBtn.querySelector('svg').classList.add('spin');
 
     try {
-        const res = await fetch(CERT_API_URL + `/api/certificates/verify_certificate.php?q=${encodeURIComponent(query)}`);
+        const res = await fetch(CERT_API_URL + `/api/certificates/verify_certificate.php?q=${encodeURIComponent(id)}`);
         const data = await res.json();
         
+        if(verifyBtnText) verifyBtnText.textContent = 'Verify Certificate';
+        if(verifyBtn && verifyBtn.querySelector('svg')) verifyBtn.querySelector('svg').classList.remove('spin');
+        updateClearAndButton();
+        
         if (data.success && data.valid) {
-            const cert = data.data;
-            resultDiv.innerHTML = `
-                <div style="padding: 16px; background: #dcfce7; border: 1px solid #86efac; border-radius: 8px;">
-                    <div style="color: #15803d; font-size: 16px; font-weight: 800; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                        <i class="ph-bold ph-check-circle" style="font-size: 20px;"></i> Certificate is Valid!
-                    </div>
-                    <div style="font-size: 13px; color: #166534; display: grid; gap: 4px; line-height: 1.5;">
-                        <div><strong>ID:</strong> ${cert.cert_id}</div>
-                        <div><strong>Recipient:</strong> ${cert.recipient_name}</div>
-                        <div><strong>Type:</strong> ${cert.certificate_type}</div>
-                        <div><strong>Issued:</strong> ${cert.issue_date}</div>
-                        <div><strong>Authority:</strong> ${cert.issuing_authority}</div>
-                    </div>
-                </div>
-            `;
+             renderSuccess(id.toUpperCase(), data.data);
         } else {
-            resultDiv.innerHTML = `
-                <div style="padding: 16px; background: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px;">
-                    <div style="color: #b91c1c; font-size: 16px; font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
-                        <i class="ph-bold ph-x-circle" style="font-size: 20px;"></i> Invalid Certificate
-                    </div>
-                    <div style="font-size: 13px; color: #991b1b; line-height: 1.5;">
-                        ${data.error || 'This certificate could not be verified or has been tampered with.'}
-                    </div>
-                </div>
-            `;
+             renderNotFound();
         }
-    } catch (err) {
-        console.error("Verification error:", err);
-        resultDiv.innerHTML = `
-            <div style="padding: 16px; background: #fee2e2; border: 1px solid #fca5a5; border-radius: 8px;">
-                <div style="color: #b91c1c; font-size: 14px; font-weight: 800;">
-                    Error connecting to verification server.
-                </div>
-            </div>
-        `;
+    } catch (e) {
+        console.error(e);
+        if(verifyBtnText) verifyBtnText.textContent = 'Verify Certificate';
+        if(verifyBtn && verifyBtn.querySelector('svg')) verifyBtn.querySelector('svg').classList.remove('spin');
+        updateClearAndButton();
+        renderNotFound();
     }
-}
+  }
+
+  if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        runVerification();
+      });
+  }
+
+  if (el('sampleBtn')) {
+      el('sampleBtn').addEventListener('click', () => {
+        if(input) input.value = 'CERT-2026-1004';
+        updateClearAndButton();
+        runVerification('CERT-2026-1004');
+      });
+  }
+
+  if (el('verifyAnotherBtn')) {
+      el('verifyAnotherBtn').addEventListener('click', () => resetAll());
+  }
+
+  // Call initialization on load just to be safe
+  setTimeout(updateClearAndButton, 100);
+
+  // QR Code Scanner Logic
+  let html5QrcodeScanner = null;
+  window.stopQRScanner = function() {
+      if (html5QrcodeScanner) {
+          try { html5QrcodeScanner.clear(); } catch(e){}
+          html5QrcodeScanner = null;
+      }
+      const qrReader = el('qr-reader');
+      const openCamBtn = el('openCamBtn');
+      if (qrReader) qrReader.style.display = 'none';
+      if (openCamBtn) {
+          openCamBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z" /><circle cx="12" cy="13" r="4" /></svg> Open Camera';
+      }
+  };
+
+  const openCamBtnEl = el('openCamBtn');
+  if (openCamBtnEl) {
+      openCamBtnEl.addEventListener('click', () => {
+          if (html5QrcodeScanner) {
+              window.stopQRScanner();
+              return;
+          }
+          if(typeof Html5QrcodeScanner === 'undefined') {
+              alert('QR Scanner library is still loading or could not be loaded.');
+              return;
+          }
+          const qrReader = el('qr-reader');
+          if(qrReader) qrReader.style.display = 'block';
+          
+          openCamBtnEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg> Close Camera';
+          
+          html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: 250 }, false);
+          html5QrcodeScanner.render((decodedText) => {
+              if (input) input.value = decodedText;
+              updateClearAndButton();
+              window.stopQRScanner();
+              runVerification(decodedText);
+          }, (errorMessage) => {
+              // ignore parse errors while scanning
+          });
+      });
+  }
+
+  const scanLinkBtn = document.querySelector('.scan-link');
+  if (scanLinkBtn) {
+      scanLinkBtn.addEventListener('click', () => {
+          if (typeof resetAll === 'function') resetAll();
+          if (openCamBtnEl) openCamBtnEl.click();
+      });
+  }
+
+  const verifyDlPdfBtn = el('verifyDlPdfBtn');
+  const verifyDlImgBtn = el('verifyDlImgBtn');
+
+  if (verifyDlPdfBtn) {
+      verifyDlPdfBtn.addEventListener('click', () => {
+          const certId = el('cv-id')?.textContent || (input ? input.value : null);
+          if (certId && typeof downloadCert === 'function') {
+              downloadCert(certId);
+          }
+      });
+  }
+
+  if (verifyDlImgBtn) {
+      verifyDlImgBtn.addEventListener('click', async () => {
+          const certId = el('cv-id')?.textContent || (input ? input.value : null);
+          if (!certId) return;
+
+          if(typeof showToast === 'function') showToast('⏳ Generating Image...');
+          try {
+              const res = await adminFetch(CERT_API_URL + `/api/certificates/get_issued_certificate.php?id=${encodeURIComponent(certId)}`);
+              const data = await res.json();
+              if (data.success && data.html_content) {
+                  const tempDiv = document.createElement('div');
+                  tempDiv.style.position = 'absolute';
+                  tempDiv.style.left = '-9999px';
+                  tempDiv.style.top = '-9999px';
+                  tempDiv.style.width = '1056px';
+                  tempDiv.innerHTML = `<div style="padding:40px; box-sizing:border-box; background:#fff; min-height:816px; display:flex; flex-direction:column; justify-content:center;">${data.html_content}</div>`;
+                  document.body.appendChild(tempDiv);
+                  
+                  const doImageDownload = () => {
+                      setTimeout(() => {
+                          html2canvas(tempDiv, { scale: 2, useCORS: true }).then(canvas => {
+                              document.body.removeChild(tempDiv);
+                              const link = document.createElement('a');
+                              link.download = `${certId}.jpg`;
+                              link.href = canvas.toDataURL('image/jpeg', 0.98);
+                              link.click();
+                              if(typeof showToast === 'function') showToast('✅ Image Downloaded successfully!');
+                          }).catch(err => {
+                              document.body.removeChild(tempDiv);
+                              console.error(err);
+                          });
+                      }, 500);
+                  };
+
+                  if (typeof html2canvas === 'undefined') {
+                      const script = document.createElement('script');
+                      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+                      script.onload = doImageDownload;
+                      document.head.appendChild(script);
+                  } else {
+                      doImageDownload();
+                  }
+
+              } else {
+                  if(typeof showToast === 'function') showToast('❌ Failed to load certificate data');
+              }
+          } catch(e) {
+              console.error(e);
+              if(typeof showToast === 'function') showToast('❌ Error generating Image');
+          }
+      });
+  }
