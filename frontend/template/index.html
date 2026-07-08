@@ -7323,43 +7323,124 @@ Suraksha Setu Team</textarea>
     });
   </script>
   <!-- Bulk Issue Modal -->
-  <div id="bulk-issue-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
-    <div style="background:#fff;border-radius:12px;width:90%;max-width:500px;padding:24px;box-shadow:0 10px 25px rgba(0,0,0,0.2);">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-        <div style="font-size:18px;font-weight:700;color:#1e293b;display:flex;align-items:center;gap:8px;">
-          <i class="ph-bold ph-upload-simple" style="color:#10b981;"></i> Bulk Issue Certificates
+  <div id="bulk-issue-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15, 23, 42, 0.4);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+    <div style="background:#fff;border-radius:16px;width:90%;max-width:640px;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); overflow:hidden;">
+      
+      <!-- Header section -->
+      <div style="padding: 24px 32px; border-bottom: 1px solid #f1f5f9; position: relative; overflow: hidden;">
+        <!-- Close button -->
+        <button onclick="document.getElementById('bulk-issue-modal').style.display='none'" style="position: absolute; top: 24px; right: 24px; background: white; border: 1px solid #e2e8f0; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #475569; font-size: 16px; transition: all 0.2s; z-index: 10;">&times;</button>
+        
+        <div style="display: flex; gap: 16px; align-items: flex-start; position: relative; z-index: 2;">
+          <div style="width: 48px; height: 48px; background: #ecfdf5; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <i class="ph-bold ph-upload-simple" style="color: #10b981; font-size: 24px;"></i>
+          </div>
+          <div>
+            <h2 style="margin: 0 0 8px 0; font-size: 20px; font-weight: 700; color: #0f172a;">Bulk Issue Certificates</h2>
+            <p style="margin: 0; font-size: 13px; color: #475569; line-height: 1.5; max-width: 85%;">Upload a CSV file to issue multiple certificates at once.<br>Ensure the CSV has headers: <span style="color: #10b981; font-weight: 600;">Name, Email, Phone, Zone</span>.</p>
+          </div>
         </div>
-        <button onclick="document.getElementById('bulk-issue-modal').style.display='none'" style="background:none;border:none;cursor:pointer;color:#64748b;font-size:20px;">&times;</button>
+        
+        <!-- Decorative leaf SVG placeholder -->
+        <div style="position: absolute; right: -20px; bottom: 0; opacity: 0.8; z-index: 1; pointer-events: none;">
+          <svg width="150" height="90" viewBox="0 0 150 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M120 40C120 40 100 20 80 40C60 60 80 90 80 90C80 90 100 70 120 40Z" fill="#d1fae5" opacity="0.6"/>
+            <path d="M140 60C140 60 125 45 110 60C95 75 110 95 110 95C110 95 125 80 140 60Z" fill="#a7f3d0" opacity="0.8"/>
+            <path d="M150 75C150 75 140 65 130 75C120 85 130 95 130 95C130 95 140 85 150 75Z" fill="#10b981" opacity="0.9"/>
+            <rect x="115" y="55" width="24" height="30" rx="4" fill="white" stroke="#e2e8f0" stroke-width="1.5" transform="rotate(15 115 55)"/>
+            <rect x="120" y="65" width="14" height="8" rx="2" fill="#10b981" transform="rotate(15 120 65)"/>
+            <text x="123" y="71" font-family="sans-serif" font-size="5" font-weight="bold" fill="white" transform="rotate(15 123 71)">CSV</text>
+          </svg>
+        </div>
       </div>
       
-      <p style="font-size:13px;color:#64748b;margin-bottom:20px;">Upload a CSV file to issue multiple certificates at once. Ensure the CSV has headers: <b>Name, Email, Phone, Zone</b>.</p>
-      
-      <div style="margin-bottom:16px;">
-        <label style="display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:6px;">Select Template</label>
-        <select id="bulk-template-id" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;color:#0f172a;">
-          <option value="1">Classic Gold</option>
-          <option value="2">Eco Blue</option>
-          <option value="3">Volunteer Purple</option>
-          <option value="4">Drive Green</option>
-        </select>
-      </div>
+      <div style="padding: 24px 32px 32px 32px;">
+        <!-- Step 1 -->
+        <div style="margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+            <div style="width: 24px; height: 24px; background: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0;">1</div>
+            <label style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Select Template</label>
+          </div>
+          <p style="margin: 0 0 12px 36px; font-size: 13px; color: #64748b;">Choose a certificate template to use for all records.</p>
+          
+          <div style="margin-left: 36px;">
+            <div style="position: relative;">
+              <div style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #f59e0b; font-size: 18px; display: flex; align-items: center;">
+                <i class="ph-duotone ph-medal"></i>
+              </div>
+              <select id="bulk-template-id" style="width: 100%; padding: 12px 16px 12px 42px; border: 1px solid #10b981; border-radius: 8px; font-size: 14px; color: #0f172a; outline: none; appearance: none; background: white; cursor: pointer;">
+                <option value="1">Classic Gold</option>
+                <option value="2">Eco Blue</option>
+                <option value="3">Volunteer Purple</option>
+                <option value="4">Drive Green</option>
+              </select>
+              <div style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #64748b; display: flex; align-items: center;">
+                <i class="ph-bold ph-caret-down"></i>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <div style="margin-bottom:24px;">
-        <label style="display:block;font-size:13px;font-weight:600;color:#334155;margin-bottom:6px;">Upload CSV File</label>
-        <div style="border:2px dashed #cbd5e1;border-radius:8px;padding:32px;text-align:center;background:#f8fafc;cursor:pointer;" onclick="document.getElementById('bulk-csv-input').click()">
-          <i class="ph-duotone ph-file-csv" style="font-size:32px;color:#94a3b8;margin-bottom:8px;"></i>
-          <div style="font-size:14px;color:#475569;font-weight:500;">Click to browse file</div>
-          <input type="file" id="bulk-csv-input" accept=".csv" style="display:none;" onchange="document.getElementById('bulk-csv-name').innerText = this.files[0] ? this.files[0].name : '';">
+        <!-- Step 2 -->
+        <div style="margin-bottom: 8px;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+            <div style="width: 24px; height: 24px; background: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0;">2</div>
+            <label style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0;">Upload CSV File</label>
+          </div>
+          <p style="margin: 0 0 12px 36px; font-size: 13px; color: #64748b;">Upload your CSV file containing the recipient details.</p>
+          
+          <div style="margin-left: 36px;">
+            <div style="border: 1px dashed #a7f3d0; border-radius: 8px; padding: 32px 24px; text-align: center; background: #f8fafc; cursor: pointer; transition: all 0.2s;" onclick="document.getElementById('bulk-csv-input').click()" onmouseover="this.style.borderColor='#10b981';this.style.background='#f0fdf4';" onmouseout="this.style.borderColor='#a7f3d0';this.style.background='#f8fafc';">
+              
+              <div style="width: 42px; height: 50px; background: white; border: 1px solid #e2e8f0; border-radius: 6px; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); position: relative;">
+                <span style="color: #10b981; font-weight: 800; font-size: 12px;">CSV</span>
+                <div style="position: absolute; top: 0; right: 0; border-width: 0 10px 10px 0; border-style: solid; border-color: #f8fafc #f8fafc #e2e8f0 #e2e8f0; border-radius: 0 6px 0 4px;"></div>
+              </div>
+
+              <div style="font-size: 14px; color: #0f172a; font-weight: 600; margin-bottom: 6px;">Drag & drop your CSV file here</div>
+              <div style="font-size: 12px; color: #94a3b8; margin-bottom: 12px;">or</div>
+              
+              <div style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border: 1px solid #cbd5e1; border-radius: 6px; background: white; color: #10b981; font-size: 13px; font-weight: 600;">
+                <i class="ph-bold ph-folder-notch-open"></i> Browse File
+              </div>
+              
+              <input type="file" id="bulk-csv-input" accept=".csv" style="display:none;" onchange="
+                const file = this.files[0];
+                if(file) {
+                  document.getElementById('bulk-csv-name').innerText = file.name;
+                  document.getElementById('bulk-csv-name-container').style.display = 'flex';
+                } else {
+                  document.getElementById('bulk-csv-name-container').style.display = 'none';
+                }">
+            </div>
+            
+            <div id="bulk-csv-name-container" style="display: none; margin-top: 12px; padding: 10px 14px; background: #ecfdf5; border-radius: 6px; border: 1px solid #a7f3d0; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 8px; color: #065f46; font-size: 13px; font-weight: 500;">
+                <i class="ph-fill ph-file-csv" style="font-size: 18px;"></i> <span id="bulk-csv-name"></span>
+              </div>
+              <i class="ph-bold ph-check-circle" style="color: #10b981; font-size: 16px;"></i>
+            </div>
+            
+            <div style="margin-top: 16px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #64748b;">
+              <i class="ph-regular ph-info" style="color: #10b981; font-size: 16px;"></i>
+              <span>Make sure your CSV file includes the headers:</span>
+              <span style="padding: 2px 6px; background: #ecfdf5; color: #10b981; border-radius: 4px; font-weight: 600;">Name</span>
+              <span style="padding: 2px 6px; background: #ecfdf5; color: #10b981; border-radius: 4px; font-weight: 600;">Email</span>
+              <span style="padding: 2px 6px; background: #ecfdf5; color: #10b981; border-radius: 4px; font-weight: 600;">Phone</span>
+              <span style="padding: 2px 6px; background: #ecfdf5; color: #10b981; border-radius: 4px; font-weight: 600;">Zone</span>
+            </div>
+          </div>
         </div>
-        <div id="bulk-csv-name" style="font-size:12px;color:#10b981;margin-top:8px;font-weight:600;"></div>
       </div>
       
-      <div style="display:flex;justify-content:flex-end;gap:12px;">
-        <button onclick="document.getElementById('bulk-issue-modal').style.display='none'" style="padding:10px 16px;background:#f1f5f9;color:#475569;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;">Cancel</button>
-        <button onclick="uploadBulkCsv()" id="bulk-upload-btn" style="padding:10px 16px;background:#10b981;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;">
-          <i class="ph-bold ph-upload"></i> Process CSV
+      <!-- Footer -->
+      <div style="padding: 16px 32px; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; gap: 12px; background: #fff;">
+        <button onclick="document.getElementById('bulk-issue-modal').style.display='none'" style="padding: 10px 20px; background: #fff; color: #0f172a; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='#fff';">Cancel</button>
+        <button onclick="uploadBulkCsv()" id="bulk-upload-btn" style="padding: 10px 20px; background: #10b981; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='#059669';" onmouseout="this.style.background='#10b981';">
+          <i class="ph-bold ph-upload-simple"></i> Process CSV
         </button>
       </div>
+      
     </div>
   </div>
 
