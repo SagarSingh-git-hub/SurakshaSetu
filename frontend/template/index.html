@@ -3331,7 +3331,7 @@
                 community member or volunteer.</div>
             </div>
             <div style="display: flex; gap: 10px;">
-              <button class="action-btn" onclick="document.getElementById('bulk-issue-modal').style.display='flex'"
+              <button class="action-btn" onclick="openBulkIssueModal()"
                 style="padding:8px 16px;border-radius:8px;font-size:13px;border:1px solid #10b981;background:#ecfdf5;color:#047857;display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;">
                 <i class="ph-bold ph-upload-simple" style="font-size:16px;"></i> Bulk Issue (CSV)
               </button>
@@ -7936,12 +7936,12 @@ Suraksha Setu Team</textarea>
   <div id="bulk-issue-modal"
     style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(31, 41, 55, 0.6);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(6px); font-family: 'Outfit', sans-serif;">
     <div
-      style="background:#fff;border-radius:16px;width:min(95vw, 680px);max-height:85vh;box-shadow:0 20px 40px rgba(0,0,0,0.15); display:flex; flex-direction:column; position: relative;">
+      style="background:#fff;border-radius:16px;width:min(95vw, 680px);max-height:85vh;box-shadow:0 20px 40px rgba(0,0,0,0.15); display:flex; flex-direction:column; position: relative; overflow: hidden;">
 
       <!-- Header section -->
       <div style="padding: 24px 32px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: flex-start; gap: 20px; position: relative; overflow: hidden; flex-shrink: 0;">
         <!-- Close button -->
-        <button onclick="document.getElementById('bulk-issue-modal').style.display='none'"
+        <button onclick="closeBulkIssueModal()"
           style="position: absolute; top: 24px; right: 24px; background: white; border: 1px solid #e2e8f0; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #64748b; font-size: 16px; transition: all 0.2s; z-index: 10;">&times;</button>
 
         <!-- Icon -->
@@ -7992,10 +7992,7 @@ Suraksha Setu Team</textarea>
               </div>
               <select id="bulk-template-id"
                 style="width: 100%; height: 44px; padding: 0 16px 0 42px; border: 1px solid #10b981; border-radius: 8px; font-size: 14px; color: #0f172a; outline: none; appearance: none; background: white; cursor: pointer; font-weight: 500;">
-                <option value="1">Classic Gold</option>
-                <option value="2">Eco Blue</option>
-                <option value="3">Volunteer Purple</option>
-                <option value="4">Drive Green</option>
+                <option value="">Loading templates...</option>
               </select>
               <div style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #64748b; font-size: 16px; display: flex; align-items: center;">
                 <i class="ph-bold ph-caret-down"></i>
@@ -8066,7 +8063,7 @@ Suraksha Setu Team</textarea>
 
       <!-- Footer -->
       <div style="padding: 16px 32px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: flex-end; gap: 16px; background: #fff; flex-shrink: 0;">
-        <button onclick="document.getElementById('bulk-issue-modal').style.display='none'"
+        <button onclick="closeBulkIssueModal()"
           style="padding: 10px 20px; background: #fff; color: #0f172a; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;"
           onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='#fff';">Cancel</button>
         <button onclick="uploadBulkCsv()" id="bulk-upload-btn"
@@ -8080,6 +8077,31 @@ Suraksha Setu Team</textarea>
   </div>
 
   <script>
+    async function openBulkIssueModal() {
+      document.getElementById('bulk-issue-modal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      
+      const select = document.getElementById('bulk-template-id');
+      select.innerHTML = '<option value="">Loading templates...</option>';
+      try {
+        const res = await fetch('/SurakshaSetu/backend/api/certificates/get_templates.php');
+        const data = await res.json();
+        if(data.success && data.templates) {
+          select.innerHTML = data.templates.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+        } else {
+          select.innerHTML = '<option value="">Failed to load templates</option>';
+        }
+      } catch(e) {
+        console.error(e);
+        select.innerHTML = '<option value="">Error loading templates</option>';
+      }
+    }
+
+    function closeBulkIssueModal() {
+      document.getElementById('bulk-issue-modal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
     async function uploadBulkCsv() {
       const fileInput = document.getElementById('bulk-csv-input');
       const templateId = document.getElementById('bulk-template-id').value;
@@ -8106,7 +8128,7 @@ Suraksha Setu Team</textarea>
 
         if (data.success) {
           showToast(`Successfully issued ${data.results.success_count} certificates!`);
-          document.getElementById('bulk-issue-modal').style.display = 'none';
+          closeBulkIssueModal();
           if (data.results.error_count > 0) {
             console.error('Bulk errors:', data.results.errors);
             alert(`Issued ${data.results.success_count} but failed ${data.results.error_count}. Check console for details.`);
