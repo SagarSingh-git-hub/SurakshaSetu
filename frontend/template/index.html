@@ -7936,34 +7936,33 @@ Suraksha Setu Team</textarea>
   <div id="bulk-issue-modal"
     style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(31, 41, 55, 0.6);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(6px); font-family: 'Outfit', sans-serif;">
     <div
-      style="background:#fff;border-radius:28px;width:min(90vw, 1280px);max-height:90vh;box-shadow:0 30px 60px rgba(0,0,0,0.15); display:flex; flex-direction:column; position: relative;">
+      style="background:#fff;border-radius:16px;width:min(95vw, 680px);max-height:85vh;box-shadow:0 20px 40px rgba(0,0,0,0.15); display:flex; flex-direction:column; position: relative;">
 
       <!-- Header section -->
-      <div style="padding: 40px; border-bottom: 2px solid #f1f5f9; display: flex; align-items: flex-start; gap: 32px; position: relative; overflow: hidden; min-height: 170px; flex-shrink: 0;">
+      <div style="padding: 24px 32px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: flex-start; gap: 20px; position: relative; overflow: hidden; flex-shrink: 0;">
         <!-- Close button -->
         <button onclick="document.getElementById('bulk-issue-modal').style.display='none'"
-          style="position: absolute; top: 40px; right: 40px; background: white; border: 2px solid #e2e8f0; border-radius: 50%; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #64748b; font-size: 28px; transition: all 0.2s; z-index: 10;">&times;</button>
+          style="position: absolute; top: 24px; right: 24px; background: white; border: 1px solid #e2e8f0; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #64748b; font-size: 16px; transition: all 0.2s; z-index: 10;">&times;</button>
 
         <!-- Icon -->
-        <div style="width: 96px; height: 96px; background: #ecfdf5; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; z-index: 2;">
-          <i class="ph-bold ph-upload-simple" style="color: #10b981; font-size: 48px;"></i>
+        <div style="width: 56px; height: 56px; background: #ecfdf5; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; z-index: 2;">
+          <i class="ph-bold ph-upload-simple" style="color: #10b981; font-size: 28px;"></i>
         </div>
         
         <!-- Text -->
-        <div style="z-index: 2; padding-top: 8px;">
-          <h2 style="margin: 0 0 16px 0; font-size: 52px; font-weight: 700; color: #0f172a; letter-spacing: -1px;">Bulk Issue Certificates</h2>
-          <p style="margin: 0; font-size: 18px; color: #475569; line-height: 1.6;">Upload a CSV file to issue multiple certificates at once.<br>Ensure the CSV has headers: <span style="color: #10b981; font-weight: 600;">Name, Email, Phone, Zone</span>.</p>
+        <div style="z-index: 2; padding-top: 4px;">
+          <h2 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 700; color: #0f172a;">Bulk Issue Certificates</h2>
+          <p style="margin: 0; font-size: 13px; color: #475569; line-height: 1.5;">Upload a CSV file to issue multiple certificates at once.<br>Ensure the CSV has headers: <span style="color: #10b981; font-weight: 600;">Name, Email, Phone, Zone</span>.</p>
         </div>
 
-        <!-- Decorative leaf SVG -->
-        <div style="position: absolute; right: 0; bottom: 0; pointer-events: none; z-index: 1;">
+        <!-- Decorative leaf SVG scaled down -->
+        <div style="position: absolute; right: -20px; bottom: 0; pointer-events: none; z-index: 1; transform: scale(0.6); transform-origin: bottom right;">
           <svg width="400" height="200" viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M360 80C360 80 340 40 310 60C280 80 290 130 310 150C330 170 360 80 360 80Z" fill="#d1fae5"/>
             <path d="M300 200C300 200 240 120 160 160C80 200 100 200 100 200H300Z" fill="#86efac"/>
             <path d="M400 200C400 200 340 120 260 160C180 200 200 200 200 200H400Z" fill="#a7f3d0"/>
             <path d="M350 200C350 200 310 100 210 140C110 180 130 200 130 200H350Z" fill="#4ade80"/>
             <path d="M250 200C250 200 190 100 110 140C30 180 50 200 50 200H250Z" fill="#22c55e"/>
-            
             <g transform="rotate(15 270 120)">
               <path d="M250 80H310V180H250V80Z" fill="white" stroke="#e2e8f0" stroke-width="4"/>
               <path d="M290 80V100H310" fill="#f8fafc" stroke="#e2e8f0" stroke-width="4"/>
@@ -7976,29 +7975,29 @@ Suraksha Setu Team</textarea>
         </div>
       </div>
 
-      <div style="padding: 40px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 32px;">
+      <div style="padding: 24px 32px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 24px;">
         
         <!-- Step 1 -->
         <div>
-          <div style="display: flex; align-items: center; gap: 24px; margin-bottom: 12px;">
-            <div style="width: 44px; height: 44px; background: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; flex-shrink: 0;">1</div>
-            <h3 style="font-size: 32px; font-weight: 600; color: #0f172a; margin: 0;">Select Template</h3>
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+            <div style="width: 26px; height: 26px; background: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0;">1</div>
+            <h3 style="font-size: 16px; font-weight: 600; color: #0f172a; margin: 0;">Select Template</h3>
           </div>
-          <p style="margin: 0 0 24px 68px; font-size: 18px; color: #64748b;">Choose a certificate template to use for all records.</p>
+          <p style="margin: 0 0 12px 38px; font-size: 13px; color: #64748b;">Choose a certificate template to use for all records.</p>
 
-          <div style="margin-left: 68px;">
+          <div style="margin-left: 38px;">
             <div style="position: relative;">
-              <div style="position: absolute; left: 24px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #f59e0b; font-size: 32px; display: flex; align-items: center;">
+              <div style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #f59e0b; font-size: 18px; display: flex; align-items: center;">
                 <i class="ph-duotone ph-medal"></i>
               </div>
               <select id="bulk-template-id"
-                style="width: 100%; height: 74px; padding: 0 24px 0 72px; border: 2px solid #10b981; border-radius: 18px; font-size: 22px; color: #0f172a; outline: none; appearance: none; background: white; cursor: pointer; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.05); font-weight: 500;">
+                style="width: 100%; height: 44px; padding: 0 16px 0 42px; border: 1px solid #10b981; border-radius: 8px; font-size: 14px; color: #0f172a; outline: none; appearance: none; background: white; cursor: pointer; font-weight: 500;">
                 <option value="1">Classic Gold</option>
                 <option value="2">Eco Blue</option>
                 <option value="3">Volunteer Purple</option>
                 <option value="4">Drive Green</option>
               </select>
-              <div style="position: absolute; right: 24px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #64748b; font-size: 24px; display: flex; align-items: center;">
+              <div style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #64748b; font-size: 16px; display: flex; align-items: center;">
                 <i class="ph-bold ph-caret-down"></i>
               </div>
             </div>
@@ -8007,28 +8006,31 @@ Suraksha Setu Team</textarea>
 
         <!-- Step 2 -->
         <div>
-          <div style="display: flex; align-items: center; gap: 24px; margin-bottom: 12px;">
-            <div style="width: 44px; height: 44px; background: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; flex-shrink: 0;">2</div>
-            <h3 style="font-size: 32px; font-weight: 600; color: #0f172a; margin: 0;">Upload CSV File</h3>
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+            <div style="width: 26px; height: 26px; background: #10b981; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0;">2</div>
+            <h3 style="font-size: 16px; font-weight: 600; color: #0f172a; margin: 0;">Upload CSV File</h3>
           </div>
-          <p style="margin: 0 0 24px 68px; font-size: 18px; color: #64748b;">Upload your CSV file containing the recipient details.</p>
+          <p style="margin: 0 0 12px 38px; font-size: 13px; color: #64748b;">Upload your CSV file containing the recipient details.</p>
 
-          <div style="margin-left: 68px;">
+          <div style="margin-left: 38px;">
             <div
-              style="height: 320px; border: 2px dashed #C8E6D0; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; cursor: pointer; transition: all 0.2s;"
+              style="border: 1px dashed #a7f3d0; border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; background: #ffffff; cursor: pointer; transition: all 0.2s;"
               onclick="document.getElementById('bulk-csv-input').click()"
               onmouseover="this.style.borderColor='#10b981';this.style.background='#f0fdf4';"
-              onmouseout="this.style.borderColor='#C8E6D0';this.style.background='#ffffff';">
+              onmouseout="this.style.borderColor='#a7f3d0';this.style.background='#ffffff';">
 
-              <div style="width: 80px; height: 96px; background: white; border: 2px solid #e2e8f0; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; position: relative;">
-                <span style="color: #10b981; font-weight: 800; font-size: 22px;">CSV</span>
-                <div style="position: absolute; top: -2px; right: -2px; border-width: 0 24px 24px 0; border-style: solid; border-color: #ffffff #ffffff #e2e8f0 #e2e8f0; border-radius: 0 12px 0 8px;"></div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 32px; height: 40px; background: white; border: 1px solid #e2e8f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0;">
+                  <span style="color: #10b981; font-weight: 800; font-size: 10px;">CSV</span>
+                  <div style="position: absolute; top: -1px; right: -1px; border-width: 0 10px 10px 0; border-style: solid; border-color: #ffffff #ffffff #e2e8f0 #e2e8f0; border-radius: 0 4px 0 2px;"></div>
+                </div>
+                <div>
+                  <div style="font-size: 14px; color: #0f172a; font-weight: 600; text-align: left; margin-bottom: 2px;">Drag & drop your CSV file here</div>
+                  <div style="font-size: 12px; color: #94a3b8; text-align: left;">or click to browse</div>
+                </div>
               </div>
 
-              <div style="font-size: 22px; color: #0f172a; font-weight: 600; margin-bottom: 16px;">Drag & drop your CSV file here</div>
-              <div style="font-size: 18px; color: #94a3b8; margin-bottom: 24px;">or</div>
-
-              <div style="display: inline-flex; align-items: center; gap: 12px; padding: 12px 32px; border: 2px solid #cbd5e1; border-radius: 12px; background: white; color: #10b981; font-size: 22px; font-weight: 600; transition: all 0.2s;">
+              <div style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: white; color: #10b981; font-size: 13px; font-weight: 600; transition: all 0.2s;">
                 <i class="ph-bold ph-folder-open"></i> Browse File
               </div>
 
@@ -8043,34 +8045,34 @@ Suraksha Setu Team</textarea>
             </div>
 
             <div id="bulk-csv-name-container"
-              style="display: none; margin-top: 24px; padding: 16px 24px; background: #ecfdf5; border-radius: 12px; border: 2px solid #a7f3d0; align-items: center; justify-content: space-between;">
-              <div style="display: flex; align-items: center; gap: 12px; color: #065f46; font-size: 22px; font-weight: 500;">
-                <i class="ph-fill ph-file-csv" style="font-size: 32px;"></i> <span id="bulk-csv-name"></span>
+              style="display: none; margin-top: 12px; padding: 10px 16px; background: #ecfdf5; border-radius: 8px; border: 1px solid #a7f3d0; align-items: center; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 8px; color: #065f46; font-size: 14px; font-weight: 500;">
+                <i class="ph-fill ph-file-csv" style="font-size: 20px;"></i> <span id="bulk-csv-name"></span>
               </div>
-              <i class="ph-bold ph-check-circle" style="color: #10b981; font-size: 28px;"></i>
+              <i class="ph-bold ph-check-circle" style="color: #10b981; font-size: 18px;"></i>
             </div>
 
-            <div style="margin-top: 24px; display: flex; align-items: center; gap: 12px; font-size: 18px; color: #64748b;">
-              <i class="ph-regular ph-info" style="color: #10b981; font-size: 24px;"></i>
-              <span>Make sure your CSV file includes the headers:</span>
-              <span style="padding: 4px 12px; background: #ecfdf5; color: #10b981; border-radius: 6px; font-weight: 600;">Name</span>
-              <span style="padding: 4px 12px; background: #ecfdf5; color: #10b981; border-radius: 6px; font-weight: 600;">Email</span>
-              <span style="padding: 4px 12px; background: #ecfdf5; color: #10b981; border-radius: 6px; font-weight: 600;">Phone</span>
-              <span style="padding: 4px 12px; background: #ecfdf5; color: #10b981; border-radius: 6px; font-weight: 600;">Zone</span>
+            <div style="margin-top: 12px; display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748b;">
+              <i class="ph-regular ph-info" style="color: #10b981; font-size: 16px;"></i>
+              <span>Headers needed:</span>
+              <span style="padding: 2px 6px; background: #ecfdf5; color: #10b981; border-radius: 4px; font-weight: 600;">Name</span>
+              <span style="padding: 2px 6px; background: #ecfdf5; color: #10b981; border-radius: 4px; font-weight: 600;">Email</span>
+              <span style="padding: 2px 6px; background: #ecfdf5; color: #10b981; border-radius: 4px; font-weight: 600;">Phone</span>
+              <span style="padding: 2px 6px; background: #ecfdf5; color: #10b981; border-radius: 4px; font-weight: 600;">Zone</span>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Footer -->
-      <div style="height: 110px; padding: 0 40px; border-top: 2px solid #f1f5f9; display: flex; align-items: center; justify-content: flex-end; gap: 24px; background: #fff; flex-shrink: 0;">
+      <div style="padding: 16px 32px; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: flex-end; gap: 16px; background: #fff; flex-shrink: 0;">
         <button onclick="document.getElementById('bulk-issue-modal').style.display='none'"
-          style="width: 170px; height: 64px; background: #fff; color: #0f172a; border: 2px solid #e2e8f0; border-radius: 18px; font-size: 22px; font-weight: 600; cursor: pointer; transition: all 0.2s;"
+          style="padding: 10px 20px; background: #fff; color: #0f172a; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;"
           onmouseover="this.style.background='#f8fafc';" onmouseout="this.style.background='#fff';">Cancel</button>
         <button onclick="uploadBulkCsv()" id="bulk-upload-btn"
-          style="width: 270px; height: 64px; background: #10b981; color: #fff; border: none; border-radius: 18px; font-size: 22px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; transition: all 0.2s;"
+          style="padding: 10px 24px; background: #10b981; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;"
           onmouseover="this.style.background='#059669';" onmouseout="this.style.background='#10b981';">
-          <i class="ph-bold ph-upload-simple" style="font-size: 26px;"></i> Process CSV
+          <i class="ph-bold ph-upload-simple" style="font-size: 16px;"></i> Process CSV
         </button>
       </div>
 
