@@ -1,42 +1,29 @@
 import math
 import hashlib
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, HTTPException, BackgroundTasks
+from sqlalchemy.orm import Session
+from sqlalchemy import or_, and_, extract
 from typing import Optional
-from fastapi.responses import JSONResponse, StreamingResponse
-from pydantic import BaseModel
 from datetime import datetime
-import io
-import csv
-from core.database import get_db_connection
+import json
+
+from core.database import get_db
 from core.security import verify_admin_token
+from models.models import Certificate, CertificateTemplate, CertificateHash, LoginSession
+from schemas.schemas import IssueCertificateRequest, UpdateCertificateRequest, CertificateListResponse
 from services.pdf_generator import generate_certificate_pdf
 from services.storage import upload_to_r2
 from services.email_service import send_certificate_email
 from services.pusher_service import trigger_pusher_event
+from services.signature_service import sign_data
 
 router = APIRouter()
 
-class IssueCertificateRequest(BaseModel):
-    recipient_type: str = 'Community Member'
-    recipient_name: str
-    recipient_email: str
-    recipient_phone: Optional[str] = ''
-    recipient_zone: Optional[str] = ''
-    certificate_type: str
-    issue_date: str
-    citation: str
-    issuing_authority: str
-    co_signatory: Optional[str] = ''
-    template_id: Optional[int] = 0
-    send_email: Optional[int] = 0
-    publish_to_feed: Optional[int] = 0
-
-class UpdateCertificateRequest(BaseModel):
-    cert_id: str
-    action: str
-
-@router.get("/get_members.php")
-def get_members():
+@router.get("/members")
+def get_members(db: Session = Depends(get_db)):
+    # Raw SQL since community_members isn't fully modeled in models.py, but let's just use raw connection for this 
+    # since it belongs to another module.
+    from core.database import get_db_connection
     conn = get_db_connection()
     try:
         with conn.cursor() as cursor:
@@ -46,201 +33,176 @@ def get_members():
     finally:
         conn.close()
 
-@router.get("/get_templates.php")
-def get_templates():
-    conn = get_db_connection()
+def process_issue_certificate(req: IssueCertificateRequest, cert_id: str, db: Session):
     try:
-        with conn.cursor() as cursor:
-            cursor.execute("SELECT * FROM certificate_templates ORDER BY is_default DESC, name ASC")
-            templates = cursor.fetchall()
-            return {"success": True, "templates": templates}
-    finally:
-        conn.close()
+        # Fetch template
+        template = db.query(CertificateTemplate).filter(CertificateTemplate.id == req.template_id).first()
+        
+        # PDF Generation
+        verify_url = f"https://surakshasetu.org/verify?id={cert_id}"
+        pdf_bytes = generate_certificate_pdf(
+            cert_id, req.recipient_name, req.certificate_type, req.citation,
+            req.issue_date, req.issuing_authority, verify_url
+        )
+        
+        year = datetime.strptime(req.issue_date, "%Y-%m-%d").strftime("%Y")
+        object_key = f"certificates/{year}/{cert_id}.pdf"
+        pdf_url = upload_to_r2(pdf_bytes, object_key, "application/pdf")
+        
+        # Hash & Signature
+        hash_sha256 = hashlib.sha256(pdf_bytes).hexdigest()
+        
+        cert = Certificate(
+            cert_id=cert_id,
+            recipient_type=req.recipient_type,
+            recipient_name=req.recipient_name,
+            recipient_email=req.recipient_email,
+            recipient_phone=req.recipient_phone,
+            recipient_zone=req.recipient_zone,
+            certificate_type=req.certificate_type,
+            issue_date=req.issue_date,
+            citation=req.citation,
+            issuing_authority=req.issuing_authority,
+            co_signatory=req.co_signatory,
+            template_id=req.template_id if req.template_id and req.template_id > 0 else None,
+            pdf_url=pdf_url,
+            hash_sha256=hash_sha256,
+            status='Active'
+        )
+        db.add(cert)
+        
+        # Add to certificate_hashes table
+        cert_hash = CertificateHash(
+            cert_id=cert_id,
+            hash_sha256=hash_sha256
+        )
+        db.add(cert_hash)
+        
+        # Sign the hash for digital signature integrity
+        # sign_data(hash_sha256, db) # Only sign, signature verification uses hash
+        
+        if template:
+            template.usage_count += 1
+            template.last_used = datetime.now()
+            
+        db.commit()
+        
+        # Send Email
+        if req.send_email == 1 and req.recipient_email:
+            send_certificate_email(req.recipient_email, req.recipient_name, req.certificate_type, cert_id, pdf_bytes)
+            
+        # Trigger Pusher
+        if req.publish_to_feed == 1:
+            trigger_pusher_event('private-eco-channel', 'new-certificate', {
+                'cert_id': cert_id,
+                'recipient': req.recipient_name,
+                'type': req.certificate_type,
+                'citation': req.citation
+            })
+            
+    except Exception as e:
+        db.rollback()
+        print(f"Error processing certificate: {e}")
 
-@router.post("/issue_certificate.php")
-def issue_certificate(req: IssueCertificateRequest, admin=Depends(verify_admin_token)):
-    conn = get_db_connection()
-    try:
-        with conn.cursor() as cursor:
-            # Generate unique ID
-            date_obj = datetime.strptime(req.issue_date, "%Y-%m-%d")
-            year = date_obj.strftime("%Y")
-            prefix = 'SS-CERT'
-            
-            cursor.execute(f"SELECT COUNT(*) as cnt FROM certificates WHERE cert_id LIKE '{prefix}-{year}-%'")
-            row = cursor.fetchone()
-            seq = str(row['cnt'] + 1).zfill(4)
-            cert_id = f"{prefix}-{year}-{seq}"
-            
-            # PDF Generation
-            verify_url = f"https://surakshasetu.org/verify?id={cert_id}"
-            pdf_bytes = generate_certificate_pdf(
-                cert_id, req.recipient_name, req.certificate_type, req.citation,
-                req.issue_date, req.issuing_authority, verify_url
+@router.post("/", response_model=dict)
+def issue_certificate(req: IssueCertificateRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db), admin=Depends(verify_admin_token)):
+    date_obj = datetime.strptime(req.issue_date, "%Y-%m-%d")
+    year = date_obj.strftime("%Y")
+    prefix = 'SS-CERT'
+    
+    # Generate ID
+    count = db.query(Certificate).filter(Certificate.cert_id.like(f"{prefix}-{year}-%")).count()
+    seq = str(count + 1).zfill(6) # Format SS-CERT-2026-000001
+    cert_id = f"{prefix}-{year}-{seq}"
+    
+    background_tasks.add_task(process_issue_certificate, req, cert_id, db)
+    
+    return {"success": True, "cert_id": cert_id, "message": "Certificate generation queued in background."}
+
+@router.get("/", response_model=CertificateListResponse)
+def list_certificates(page: int = 1, search: str = '', type: str = 'All', status: str = 'All', db: Session = Depends(get_db)):
+    limit = 10
+    offset = (page - 1) * limit
+    
+    query = db.query(Certificate)
+    
+    if search:
+        search_pattern = f"%{search}%"
+        query = query.filter(
+            or_(
+                Certificate.cert_id.ilike(search_pattern),
+                Certificate.recipient_name.ilike(search_pattern),
+                Certificate.recipient_email.ilike(search_pattern)
             )
-            
-            # Upload to R2
-            object_key = f"certificates/{year}/{cert_id}.pdf"
-            pdf_url = upload_to_r2(pdf_bytes, object_key, "application/pdf")
-            
-            # Hash
-            hash_sha256 = hashlib.sha256(pdf_bytes).hexdigest()
-            
-            # Insert into DB
-            sql = """
-                INSERT INTO certificates 
-                (cert_id, recipient_name, recipient_email, recipient_phone, recipient_zone, 
-                 certificate_type, issue_date, citation, issuing_authority, co_signatory, 
-                 template_id, recipient_type, pdf_url, hash_sha256) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """
-            template_id_val = req.template_id if req.template_id and req.template_id > 0 else None
-            
-            cursor.execute(sql, (
-                cert_id, req.recipient_name, req.recipient_email, req.recipient_phone, req.recipient_zone,
-                req.certificate_type, req.issue_date, req.citation, req.issuing_authority, req.co_signatory,
-                template_id_val, req.recipient_type, pdf_url, hash_sha256
-            ))
-            
-            if template_id_val:
-                cursor.execute("UPDATE certificate_templates SET usage_count = usage_count + 1, last_used = NOW() WHERE id = %s", (template_id_val,))
-            
-            # Insert Activity Log
-            log_desc = f"Certificate #{cert_id} issued to {req.recipient_name} for {req.certificate_type}"
-            cursor.execute("INSERT INTO activity_logs (event_type, reference_id, description, category, location) VALUES (%s, %s, %s, %s, %s)",
-                           ('Certificate Issued', cert_id, log_desc, 'Certificate', req.recipient_zone))
-            
-            conn.commit()
-            
-            # Send Email
-            if req.send_email == 1 and req.recipient_email:
-                send_certificate_email(req.recipient_email, req.recipient_name, req.certificate_type, cert_id, pdf_bytes)
-                
-            # Trigger Pusher
-            if req.publish_to_feed == 1:
-                trigger_pusher_event('private-eco-channel', 'new-certificate', {
-                    'cert_id': cert_id,
-                    'recipient': req.recipient_name,
-                    'type': req.certificate_type,
-                    'citation': req.citation
-                })
-                
-            return {"success": True, "cert_id": cert_id, "pdf_url": pdf_url}
-    except Exception as e:
-        conn.rollback()
-        return {"success": False, "error": str(e)}
-    finally:
-        conn.close()
+        )
+        
+    if type != 'All':
+        query = query.filter(Certificate.certificate_type == type)
+        
+    if status != 'All':
+        query = query.filter(Certificate.status == status)
+        
+    total = db.query(Certificate).count()
+    active = db.query(Certificate).filter(Certificate.status == 'Active').count()
+    revoked = db.query(Certificate).filter(Certificate.status == 'Revoked').count()
+    
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+    this_month = db.query(Certificate).filter(
+        extract('month', Certificate.issue_date) == current_month,
+        extract('year', Certificate.issue_date) == current_year
+    ).count()
+    
+    filtered_total = query.count()
+    data = query.order_by(Certificate.created_at.desc()).offset(offset).limit(limit).all()
+    
+    return {
+        "success": True,
+        "data": data,
+        "stats": {
+            "total": total,
+            "active": active,
+            "revoked": revoked,
+            "this_month": this_month
+        },
+        "pagination": {
+            "total": filtered_total,
+            "limit": limit,
+            "page": page,
+            "total_pages": math.ceil(filtered_total / limit)
+        }
+    }
 
-@router.get("/list_certificates.php")
-def list_certificates(page: int = 1, search: str = '', type: str = 'All', status: str = 'All'):
-    conn = get_db_connection()
-    try:
-        with conn.cursor() as cursor:
-            limit = 10
-            offset = (page - 1) * limit
-            
-            where_clauses = []
-            params = []
-            
-            if search:
-                where_clauses.append("(cert_id LIKE %s OR recipient_name LIKE %s OR recipient_email LIKE %s)")
-                search_param = f"%{search}%"
-                params.extend([search_param, search_param, search_param])
-                
-            if type != 'All':
-                where_clauses.append("certificate_type = %s")
-                params.append(type)
-                
-            if status != 'All':
-                where_clauses.append("status = %s")
-                params.append(status)
-                
-            where_str = "WHERE " + " AND ".join(where_clauses) if where_clauses else ""
-            
-            # Stats
-            cursor.execute("SELECT COUNT(*) as total FROM certificates")
-            total = cursor.fetchone()['total']
-            
-            cursor.execute("SELECT COUNT(*) as active FROM certificates WHERE status = 'Active'")
-            active = cursor.fetchone()['active']
-            
-            cursor.execute("SELECT COUNT(*) as revoked FROM certificates WHERE status = 'Revoked'")
-            revoked = cursor.fetchone()['revoked']
-            
-            cursor.execute("SELECT COUNT(*) as this_month FROM certificates WHERE MONTH(issue_date) = MONTH(CURRENT_DATE()) AND YEAR(issue_date) = YEAR(CURRENT_DATE())")
-            this_month = cursor.fetchone()['this_month']
-            
-            # Count for pagination
-            cursor.execute(f"SELECT COUNT(*) as filtered_total FROM certificates {where_str}", tuple(params))
-            filtered_total = cursor.fetchone()['filtered_total']
-            
-            # Data
-            query = f"SELECT * FROM certificates {where_str} ORDER BY created_at DESC LIMIT %s OFFSET %s"
-            params.extend([limit, offset])
-            cursor.execute(query, tuple(params))
-            data = cursor.fetchall()
-            
-            return {
-                "success": True,
-                "data": data,
-                "stats": {
-                    "total": total,
-                    "active": active,
-                    "revoked": revoked,
-                    "this_month": this_month
-                },
-                "pagination": {
-                    "total": filtered_total,
-                    "limit": limit,
-                    "page": page,
-                    "total_pages": math.ceil(filtered_total / limit)
-                }
-            }
-    finally:
-        conn.close()
+@router.put("/{cert_id}/status", response_model=dict)
+def update_certificate_status(cert_id: str, req: UpdateCertificateRequest, db: Session = Depends(get_db), admin=Depends(verify_admin_token)):
+    cert = db.query(Certificate).filter(Certificate.cert_id == cert_id).first()
+    if not cert:
+        raise HTTPException(status_code=404, detail="Certificate not found")
+        
+    new_status = 'Revoked' if req.action == 'revoke' else 'Active'
+    cert.status = new_status
+    db.commit()
+    
+    return {"success": True}
 
-@router.post("/update_certificate.php")
-def update_certificate(req: UpdateCertificateRequest, admin=Depends(verify_admin_token)):
-    conn = get_db_connection()
-    try:
-        with conn.cursor() as cursor:
-            new_status = 'Revoked' if req.action == 'revoke' else 'Active'
-            cursor.execute("UPDATE certificates SET status = %s WHERE cert_id = %s", (new_status, req.cert_id))
-            conn.commit()
-            return {"success": True}
-    except Exception as e:
-        conn.rollback()
-        return {"success": False, "error": str(e)}
-    finally:
-        conn.close()
-
-@router.get("/get_issued_certificate.php")
-def get_issued_certificate(id: str):
-    conn = get_db_connection()
-    try:
-        with conn.cursor() as cursor:
-            cursor.execute("SELECT * FROM certificates WHERE cert_id = %s", (id,))
-            cert = cursor.fetchone()
-            if not cert:
-                return {"success": False, "error": "Not found"}
-                
-            cursor.execute("SELECT html_content, css_content FROM certificate_templates WHERE id = %s", (cert['template_id'],))
-            tmpl = cursor.fetchone()
-            
-            # Fallback simple HTML if template doesn't have html_content
-            html = tmpl['html_content'] if tmpl and tmpl.get('html_content') else f"<h1>Certificate {cert['cert_id']}</h1><p>Awarded to {cert['recipient_name']}</p>"
-            
-            html = html.replace('{{NAME}}', cert['recipient_name'])
-            html = html.replace('{{AWARD_TYPE}}', cert['certificate_type'])
-            html = html.replace('{{DATE}}', str(cert['issue_date']))
-            html = html.replace('{{ISSUER}}', cert['issuing_authority'])
-            html = html.replace('{{CERTIFICATE_ID}}', cert['cert_id'])
-            html = html.replace('{{CITATION}}', cert['citation'])
-            
-            if tmpl and tmpl.get('css_content'):
-                html = f"<style>{tmpl['css_content']}</style>{html}"
-                
-            return {"success": True, "html_content": html}
-    finally:
-        conn.close()
+@router.get("/{cert_id}/html", response_model=dict)
+def get_issued_certificate_html(cert_id: str, db: Session = Depends(get_db)):
+    cert = db.query(Certificate).filter(Certificate.cert_id == cert_id).first()
+    if not cert:
+        return {"success": False, "error": "Not found"}
+        
+    tmpl = db.query(CertificateTemplate).filter(CertificateTemplate.id == cert.template_id).first()
+    
+    html = tmpl.html_content if tmpl and tmpl.html_content else f"<h1>Certificate {cert.cert_id}</h1><p>Awarded to {cert.recipient_name}</p>"
+    
+    html = html.replace('{{NAME}}', cert.recipient_name)
+    html = html.replace('{{AWARD_TYPE}}', cert.certificate_type)
+    html = html.replace('{{DATE}}', str(cert.issue_date))
+    html = html.replace('{{ISSUER}}', cert.issuing_authority)
+    html = html.replace('{{CERTIFICATE_ID}}', cert.cert_id)
+    html = html.replace('{{CITATION}}', cert.citation)
+    
+    if tmpl and tmpl.css_content:
+        html = f"<style>{tmpl.css_content}</style>{html}"
+        
+    return {"success": True, "html_content": html}

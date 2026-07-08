@@ -161,7 +161,7 @@ function initCertificates() {
 
 async function loadMembers() {
     try {
-        const res = await fetch(API_URL + '/api/certificates/get_members.php');
+        const res = await fetch(CERT_API_URL + '/api/v1/certificates/members');
         const data = await res.json();
         if (data.success) {
             certMembers = data.data;
@@ -186,7 +186,7 @@ async function loadTemplates(force = false) {
         return;
     }
     try {
-        const res = await adminFetch(CERT_API_URL + '/api/certificates/get_templates.php');
+        const res = await adminFetch(CERT_API_URL + '/api/v1/templates/');
         const data = await res.json();
         if (data.success) {
             certTemplates = data.templates || data.data || [];
@@ -572,7 +572,7 @@ async function issueCertificate() {
     btn.innerHTML = '<i class="ph-duotone ph-spinner animate-spin"></i> Issuing...';
 
     try {
-        const res = await adminFetch(CERT_API_URL + '/api/certificates/issue_certificate.php', {
+        const res = await adminFetch(CERT_API_URL + '/api/v1/certificates/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -650,7 +650,7 @@ async function loadCertificates(page = 1) {
     const status = document.getElementById('cert-filter-status')?.value || 'All';
     
     try {
-        const res = await adminFetch(CERT_API_URL + `/api/certificates/list_certificates.php?page=${page}&search=${encodeURIComponent(search)}&type=${encodeURIComponent(type)}&status=${encodeURIComponent(status)}`);
+        const res = await adminFetch(CERT_API_URL + `/api/v1/certificates/?page=${page}&search=${encodeURIComponent(search)}&type=${encodeURIComponent(type)}&status=${encodeURIComponent(status)}`);
         const data = await res.json();
         
         if (data.success) {
@@ -754,7 +754,7 @@ async function updateCertStatus(certId, action) {
 
     window.showCustomConfirm(title, msg, async () => {
         try {
-            const res = await adminFetch(CERT_API_URL + '/api/certificates/update_certificate.php', {
+            const res = await adminFetch(CERT_API_URL + `/api/v1/certificates/${certId}/status`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ cert_id: certId, action: action })
@@ -838,7 +838,7 @@ function downloadPDF() {
 
 async function viewIssuedCertificate(certId) {
     try {
-        const res = await adminFetch(CERT_API_URL + `/api/certificates/get_issued_certificate.php?id=${encodeURIComponent(certId)}`);
+        const res = await adminFetch(CERT_API_URL + `/api/v1/certificates/${encodeURIComponent(certId)}/html`);
         const data = await res.json();
         
         if (data.success && data.html_content) {
@@ -898,7 +898,7 @@ async function downloadCert(certId) {
     if(typeof showToast === 'function') showToast('⏳ Generating PDF...');
 
     try {
-        const res = await adminFetch(CERT_API_URL + `/api/certificates/get_issued_certificate.php?id=${encodeURIComponent(certId)}`);
+        const res = await adminFetch(CERT_API_URL + `/api/v1/certificates/${encodeURIComponent(certId)}/html`);
         const data = await res.json();
         
         if (data.success && data.html_content) {
@@ -1177,7 +1177,7 @@ function exportCertsCSV() {
 
           if(typeof showToast === 'function') showToast('⏳ Generating Image...');
           try {
-              const res = await adminFetch(CERT_API_URL + `/api/certificates/get_issued_certificate.php?id=${encodeURIComponent(certId)}`);
+              const res = await adminFetch(CERT_API_URL + `/api/v1/certificates/${encodeURIComponent(certId)}/html`);
               const data = await res.json();
               if (data.success && data.html_content) {
                   const tempDiv = document.createElement('div');
@@ -1222,3 +1222,1016 @@ function exportCertsCSV() {
           }
       });
   }
+
+// --- Certificate Security (Digital Signature) Module ---
+
+let csInitialized = false;
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Add an observer to detect when the view becomes visible if it's managed via standard admin UI
+    const targetNode = document.getElementById('admin-view-cert-signatures');
+    if(targetNode) {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                    if (targetNode.style.display !== 'none' && !csInitialized) {
+                        initDigitalSignaturePage();
+                    }
+                }
+            });
+        });
+        observer.observe(targetNode, { attributes: true });
+    }
+});
+
+async function initDigitalSignaturePage() {
+    csInitialized = true;
+    await fetchCertificateSecurityStatus();
+    
+    // Bind Event Listeners
+    document.getElementById('cs-toggle-signing')?.addEventListener('change', async (e) => {
+        const enabled = e.target.checked;
+        const label = document.getElementById('cs-toggle-label');
+        if(label) label.innerText = 'Updating...';
+        
+        try {
+            const res = await adminFetch(CERT_API_URL + '/api/v1/certificate/security', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ enabled })
+            });
+            const data = await res.json();
+            if (data.success) {
+                if(typeof showToast === 'function') showToast(`Digital signing ${enabled ? 'enabled' : 'disabled'}`);
+                fetchCertificateSecurityStatus();
+            } else {
+                if(typeof showToast === 'function') showToast(data.error || 'Failed to toggle signing', 'error');
+                e.target.checked = !enabled; // revert
+                if(label) label.innerText = !enabled ? 'Signing Enabled' : 'Signing Disabled';
+            }
+        } catch (err) {
+            console.error(err);
+            e.target.checked = !enabled; // revert
+            if(label) label.innerText = !enabled ? 'Signing Enabled' : 'Signing Disabled';
+        }
+    });
+
+    document.getElementById('cs-btn-download')?.addEventListener('click', async () => {
+        try {
+            const res = await adminFetch(CERT_API_URL + '/api/v1/certificate/security/public-key');
+            const data = await res.json();
+            if (data.success) {
+                const blob = new Blob([data.public_key], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = data.filename || 'public_key.pem';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                fetchCertificateSecurityStatus();
+            } else {
+                if(typeof showToast === 'function') showToast(data.error || 'Failed to download key', 'error');
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    });
+
+    document.getElementById('cs-btn-rotate')?.addEventListener('click', () => {
+        if(window.showCustomConfirm) {
+            window.showCustomConfirm('Rotate Keys', 'Are you sure you want to generate a new key pair? Only future certificates will be signed with the new key.', async () => {
+                rotateKeys();
+            });
+        } else {
+            if(confirm('Are you sure you want to generate a new key pair? Only future certificates will be signed with the new key.')) rotateKeys();
+        }
+    });
+
+    document.getElementById('cs-btn-generate')?.addEventListener('click', () => {
+        if(window.showCustomConfirm) {
+            window.showCustomConfirm('Generate New Key Pair', 'Generating a new key pair will only affect future certificates. Previously issued certificates will continue using the old key for verification.', async () => {
+                rotateKeys();
+            });
+        } else {
+            if(confirm('Generating a new key pair will only affect future certificates. Previously issued certificates will continue using the old key for verification.')) rotateKeys();
+        }
+    });
+
+    document.getElementById('cs-btn-test')?.addEventListener('click', async () => {
+        const certId = document.getElementById('cs-test-cert-id').value.trim();
+        if(!certId) return;
+        
+        try {
+            const res = await adminFetch(CERT_API_URL + '/api/v1/certificate/security/test', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cert_id: certId })
+            });
+            const data = await res.json();
+            const resultsDiv = document.getElementById('cs-test-results');
+            resultsDiv.style.display = 'block';
+            
+            document.getElementById('cs-test-cert-id-val').innerText = certId;
+            
+            if (data.success) {
+                document.getElementById('cs-test-algo').innerText = data.data.algorithm || '-';
+                document.getElementById('cs-test-hash-algo').innerText = data.data.hash_algorithm || '-';
+                document.getElementById('cs-test-cert-status').innerText = data.data.status || '-';
+                document.getElementById('cs-test-ts').innerText = new Date(data.data.timestamp).toLocaleString();
+                document.getElementById('cs-test-hash').innerText = data.data.hash || '-';
+                
+                const statusDiv = document.getElementById('cs-test-status');
+                const iconDiv = document.getElementById('cs-test-icon');
+                if(data.data.signature_valid) {
+                    statusDiv.innerText = 'Signature Valid';
+                    statusDiv.style.color = '#166534';
+                    iconDiv.innerHTML = '<i class="ph-fill ph-check-circle" style="color:#10b981; font-size:24px;"></i>';
+                } else {
+                    statusDiv.innerText = 'Signature Invalid';
+                    statusDiv.style.color = '#b91c1c';
+                    iconDiv.innerHTML = '<i class="ph-fill ph-x-circle" style="color:#ef4444; font-size:24px;"></i>';
+                }
+            } else {
+                document.getElementById('cs-test-algo').innerText = '-';
+                document.getElementById('cs-test-hash-algo').innerText = '-';
+                document.getElementById('cs-test-cert-status').innerText = '-';
+                document.getElementById('cs-test-ts').innerText = '-';
+                document.getElementById('cs-test-hash').innerText = '-';
+                
+                document.getElementById('cs-test-status').innerText = data.error || 'Verification Failed';
+                document.getElementById('cs-test-status').style.color = '#b91c1c';
+                document.getElementById('cs-test-icon').innerHTML = '<i class="ph-fill ph-warning" style="color:#f59e0b; font-size:24px;"></i>';
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    });
+}
+
+async function rotateKeys() {
+    try {
+        const res = await adminFetch(CERT_API_URL + '/api/v1/certificate/security/rotate', {
+            method: 'POST'
+        });
+        const data = await res.json();
+        if (data.success) {
+            if(typeof showToast === 'function') showToast('Keys rotated successfully');
+            fetchCertificateSecurityStatus();
+        } else {
+            if(typeof showToast === 'function') showToast(data.error || 'Failed to rotate keys', 'error');
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function fetchCertificateSecurityStatus() {
+    try {
+        const res = await adminFetch(CERT_API_URL + '/api/v1/certificate/security/status');
+        const data = await res.json();
+        
+        if (data.success && data.data) {
+            const info = data.data;
+            document.getElementById('cs-algorithm').innerText = info.algorithm || '-';
+            document.getElementById('cs-hash-algorithm').innerText = info.hash_algorithm || '-';
+            document.getElementById('cs-version').innerText = info.version || '-';
+            document.getElementById('cs-fingerprint').innerText = info.fingerprint || 'No active key available.';
+            
+            document.getElementById('km-version').innerText = info.version || '-';
+            document.getElementById('km-fingerprint').innerText = info.fingerprint || '-';
+            
+            document.getElementById('cs-created').innerText = info.created_at ? new Date(info.created_at).toLocaleDateString() : '-';
+            document.getElementById('cs-expires').innerText = info.expires_at ? new Date(info.expires_at).toLocaleDateString() : 'Never';
+            document.getElementById('cs-rotated').innerText = info.last_rotation ? new Date(info.last_rotation).toLocaleDateString() : '-';
+            
+            document.getElementById('km-created').innerText = info.created_at ? new Date(info.created_at).toLocaleDateString() : '-';
+            document.getElementById('km-expires').innerText = info.expires_at ? new Date(info.expires_at).toLocaleDateString() : 'Never';
+            
+            const toggle = document.getElementById('cs-toggle-signing');
+            if(toggle) toggle.checked = info.signing_enabled;
+            const toggleLabel = document.getElementById('cs-toggle-label');
+            if(toggleLabel) {
+                toggleLabel.innerText = info.signing_enabled ? 'Signing Enabled' : 'Signing Disabled';
+                toggleLabel.style.color = info.signing_enabled ? '#10b981' : 'var(--text2)';
+            }
+            
+            // Populate Stats
+            document.getElementById('stat-certs-signed').innerText = (info.certificates_signed && info.certificates_signed > 0) ? info.certificates_signed.toLocaleString() : '-';
+            document.getElementById('stat-total-rotations').innerText = (info.total_rotations && info.total_rotations > 0) ? info.total_rotations : '-';
+            
+            let lastVer = 'No data yet';
+            if (info.last_verification) {
+                const diffMs = new Date() - new Date(info.last_verification);
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMins / 60);
+                const diffDays = Math.floor(diffHours / 24);
+                
+                if (diffMins < 1) lastVer = 'Just now';
+                else if (diffMins < 60) lastVer = diffMins + ' min ago';
+                else if (diffHours < 24) lastVer = diffHours + ' hr ago';
+                else if (diffDays === 1) lastVer = '1 day ago';
+                else if (diffDays < 30) lastVer = diffDays + ' days ago';
+                else lastVer = new Date(info.last_verification).toLocaleDateString();
+            }
+            document.getElementById('stat-last-verification').innerText = lastVer;
+            document.getElementById('stat-active-version').innerText = info.version || '-';
+            
+            // Populate Audit Log Timeline
+            const timeline = document.getElementById('cs-audit-timeline');
+            if(timeline) {
+                timeline.innerHTML = '';
+                if(info.logs && info.logs.length > 0) {
+                    info.logs.forEach(log => {
+                        const item = document.createElement('div');
+                        item.style.cssText = 'display:flex; gap:16px; align-items:flex-start;';
+                        
+                        let iconHTML = '<div style="background:#f8fafc; border:1px solid var(--border); border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:var(--text2); flex-shrink:0;"><i class="ph-bold ph-activity"></i></div>';
+                        if(log.action.includes('Enabled')) iconHTML = '<div style="background:#dcfce7; border:1px solid #bbf7d0; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:#10b981; flex-shrink:0;"><i class="ph-bold ph-check"></i></div>';
+                        else if(log.action.includes('Disabled')) iconHTML = '<div style="background:#fee2e2; border:1px solid #fecaca; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:#ef4444; flex-shrink:0;"><i class="ph-bold ph-x"></i></div>';
+                        else if(log.action.includes('Rotated')) iconHTML = '<div style="background:#e0e7ff; border:1px solid #c7d2fe; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; color:#6366f1; flex-shrink:0;"><i class="ph-bold ph-arrows-clockwise"></i></div>';
+                        
+                        item.innerHTML = `
+                            ${iconHTML}
+                            <div style="flex:1; padding-bottom:16px; border-bottom:1px solid var(--border);">
+                              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                                <span style="font-size:14px; font-weight:600; color:var(--text);">${log.action}</span>
+                                <span style="font-size:12px; color:var(--text3);">${log.date} ${log.time}</span>
+                              </div>
+                              <div style="font-size:13px; color:var(--text2); margin-bottom:4px;">${log.description || '-'}</div>
+                              <div style="font-size:12px; color:var(--text3);">By: <span style="font-weight:500;">${log.performed_by}</span></div>
+                            </div>
+                        `;
+                        timeline.appendChild(item);
+                    });
+                    if(timeline.lastElementChild) {
+                        timeline.lastElementChild.querySelector('div[style*="border-bottom"]').style.borderBottom = 'none';
+                    }
+                } else {
+                    timeline.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text3); font-size:14px; background:#f8fafc; border-radius:8px; border:1px dashed var(--border);">No security events yet.</div>';
+                }
+            }
+        }
+    } catch (err) {
+        console.error('Failed to fetch certificate security status', err);
+    }
+}
+
+
+// ==========================================
+// QR & PDF Settings Management (qpset)
+// ==========================================
+
+let qpsetCurrentSettings = null;
+
+// Initialization called when the view is opened or explicitly
+async function loadQRPDFSettings() {
+    try {
+        const res = await adminFetch(CERT_API_URL + '/api/v1/certificate/settings');
+        if(res.ok) {
+            const data = await res.json();
+            qpsetCurrentSettings = data;
+            qpsetPopulateForm(data);
+            qpsetRenderLivePreview();
+        }
+    } catch(err) {
+        console.error("Failed to load settings", err);
+    }
+}
+
+function qpsetPopulateForm(data) {
+    if(!data) return;
+    
+    // QR Settings
+    if(data.qr_settings) {
+        document.getElementById('qpset-qr-ecc').value = data.qr_settings.error_correction;
+        document.getElementById('qpset-qr-size').value = data.qr_settings.size_px;
+        document.getElementById('qpset-qr-margin').value = data.qr_settings.margin;
+        document.getElementById('qpset-qr-embed-logo').checked = data.qr_settings.embed_logo;
+        document.getElementById('qpset-qr-logo-size').value = data.qr_settings.logo_size;
+        document.getElementById('qpset-qr-fg').value = data.qr_settings.fg_color;
+        document.getElementById('qpset-qr-fg-txt').value = data.qr_settings.fg_color;
+        document.getElementById('qpset-qr-bg').value = data.qr_settings.bg_color;
+        document.getElementById('qpset-qr-bg-txt').value = data.qr_settings.bg_color;
+        document.getElementById('qpset-qr-url-format').value = data.qr_settings.url_format;
+        document.getElementById('qpset-qr-auto').checked = data.qr_settings.auto_generate;
+    }
+    
+    // PDF Settings
+    if(data.pdf_settings) {
+        document.getElementById('qpset-pdf-size').value = data.pdf_settings.page_size;
+        document.getElementById('qpset-pdf-orientation').value = data.pdf_settings.orientation;
+        document.getElementById('qpset-pdf-dpi').value = data.pdf_settings.resolution;
+        document.getElementById('qpset-pdf-compression').value = data.pdf_settings.compression;
+        document.getElementById('qpset-pdf-color').value = data.pdf_settings.color_profile;
+        document.getElementById('qpset-pdf-font').checked = data.pdf_settings.font_embedding;
+        document.getElementById('qpset-pdf-meta').checked = data.pdf_settings.embed_metadata;
+        document.getElementById('qpset-pdf-opt').checked = data.pdf_settings.optimize;
+    }
+
+    // Branding Settings
+    if(data.branding_settings) {
+        document.getElementById('qpset-brand-sig').value = data.branding_settings.default_signature_block || '';
+        document.getElementById('qpset-brand-footer').value = data.branding_settings.default_footer || '';
+        document.getElementById('qpset-brand-vfooter').value = data.branding_settings.verification_footer || '';
+        document.getElementById('qpset-brand-web').value = data.branding_settings.official_website || '';
+        document.getElementById('qpset-brand-wm-pos').value = data.branding_settings.watermark_position || 'Center';
+        document.getElementById('qpset-brand-wm-txt').value = data.branding_settings.watermark_text || '';
+        document.getElementById('qpset-brand-wm-op').value = data.branding_settings.watermark_opacity || 0.1;
+        document.getElementById('qpset-brand-seal').checked = data.branding_settings.default_seal;
+        document.getElementById('qpset-brand-h-pos').value = data.branding_settings.header_logo_pos || 'Top Left';
+        document.getElementById('qpset-brand-f-align').value = data.branding_settings.footer_alignment || 'Center';
+    }
+
+    // Output Preferences
+    if(data.output_preferences) {
+        document.getElementById('qpset-out-qr').checked = data.output_preferences.auto_qr;
+        document.getElementById('qpset-out-pdf').checked = data.output_preferences.auto_pdf;
+        document.getElementById('qpset-out-r2').checked = data.output_preferences.upload_r2;
+        document.getElementById('qpset-out-email').checked = data.output_preferences.auto_email;
+        document.getElementById('qpset-out-feed').checked = data.output_preferences.publish_feed;
+        document.getElementById('qpset-out-dl').checked = data.output_preferences.download_after;
+        document.getElementById('qpset-out-local').checked = data.output_preferences.retain_local;
+    }
+
+    // Advanced Settings
+    if(data.performance_settings) {
+        document.getElementById('qpset-adv-cache').checked = data.performance_settings.cache_qr;
+        document.getElementById('qpset-adv-parallel').checked = data.performance_settings.parallel_pdf;
+        document.getElementById('qpset-adv-opt-img').checked = data.performance_settings.optimize_images;
+        document.getElementById('qpset-adv-strip').checked = data.performance_settings.strip_metadata;
+        document.getElementById('qpset-adv-cleanup').checked = data.performance_settings.auto_cleanup;
+        document.getElementById('qpset-adv-retention').value = data.performance_settings.retention_hours || 12;
+    }
+
+    if(typeof refreshCustomSelect === 'function') {
+        document.querySelectorAll('#admin-view-cert-qr-pdf .filter-select').forEach(refreshCustomSelect);
+    }
+}
+
+// Render Live Preview on Change
+function qpsetRenderLivePreview() {
+    const size = document.getElementById('qpset-qr-size').value || 300;
+    const fg = document.getElementById('qpset-qr-fg').value.replace('#', '');
+    const bg = document.getElementById('qpset-qr-bg').value.replace('#', '');
+    const margin = document.getElementById('qpset-qr-margin').value || 4;
+    const embedLogo = document.getElementById('qpset-qr-embed-logo').checked;
+    const format = document.getElementById('qpset-qr-url-format').value;
+    const ecc = document.getElementById('qpset-qr-ecc').value;
+    const logoSizePerc = document.getElementById('qpset-qr-logo-size').value || 20;
+
+    // Update Stats
+    document.getElementById('qpset-preview-qrsize').innerText = size + 'px';
+    const dpi = document.getElementById('qpset-pdf-dpi').value;
+    document.getElementById('qpset-preview-dpi').innerText = dpi;
+
+    // File size estimation
+    let baseKB = 150;
+    if(dpi == '300') baseKB = 1200;
+    if(dpi == '600') baseKB = 3500;
+    document.getElementById('qpset-preview-filesize').innerText = '~' + (baseKB >= 1000 ? (baseKB/1000).toFixed(1) + 'MB' : baseKB + 'KB');
+
+    // Update QR Image (Using goqr.me API for easy dynamic coloring and margin simulation in frontend)
+    const previewUrl = "https://surakshasetu.org" + format.replace('{certificate_id}', 'SS-CERT-0001').replace('{token}', 'SS-CERT-0001');
+    document.getElementById('qpset-qr-url-preview').value = previewUrl;
+
+    const qrImg = document.getElementById('qpset-preview-qr-img');
+    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(previewUrl)}&color=${fg}&bgcolor=${bg}&margin=${margin}&ecc=${ecc}`;
+
+    // Logo
+    const logoEl = document.getElementById('qpset-preview-qr-logo');
+    logoEl.style.display = embedLogo ? 'flex' : 'none';
+    
+    const logoImg = document.getElementById('qpset-preview-logo-img');
+    if (logoImg) {
+        const absSize = 150 * (logoSizePerc / 100);
+        logoImg.width = absSize;
+        logoImg.height = absSize;
+    }
+}
+
+// Bind Live Preview Events
+document.addEventListener('DOMContentLoaded', () => {
+    const idsToWatch = [
+        'qpset-qr-ecc', 'qpset-qr-size', 'qpset-qr-margin', 'qpset-qr-embed-logo', 'qpset-qr-logo-size', 
+        'qpset-qr-fg', 'qpset-qr-bg', 'qpset-qr-url-format', 'qpset-pdf-dpi'
+    ];
+    idsToWatch.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) {
+            el.addEventListener('input', qpsetRenderLivePreview);
+            el.addEventListener('change', qpsetRenderLivePreview);
+        }
+    });
+
+    
+    const logoInput = document.getElementById('qpset-brand-logo');
+    if (logoInput) {
+        logoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const img = document.getElementById('qpset-preview-logo-img') || document.querySelector('#qpset-preview-qr-logo img');
+                    if (img) {
+                        img.src = ev.target.result;
+                        // Auto-enable embed logo checkbox and render
+                        const embedCheck = document.getElementById('qpset-qr-embed-logo');
+                        if(embedCheck && !embedCheck.checked) {
+                            embedCheck.checked = true;
+                        }
+                        qpsetRenderLivePreview();
+                    }
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Color picker sync
+    const fgColor = document.getElementById('qpset-qr-fg');
+    const fgTxt = document.getElementById('qpset-qr-fg-txt');
+    if(fgColor && fgTxt) {
+        fgColor.addEventListener('input', () => { fgTxt.value = fgColor.value; qpsetRenderLivePreview(); });
+        fgTxt.addEventListener('input', () => { fgColor.value = fgTxt.value; qpsetRenderLivePreview(); });
+    }
+    
+    const bgColor = document.getElementById('qpset-qr-bg');
+    const bgTxt = document.getElementById('qpset-qr-bg-txt');
+    if(bgColor && bgTxt) {
+        bgColor.addEventListener('input', () => { bgTxt.value = bgColor.value; qpsetRenderLivePreview(); });
+        bgTxt.addEventListener('input', () => { bgColor.value = bgTxt.value; qpsetRenderLivePreview(); });
+    }
+
+    // Call load when view opens if it's not already doing so
+    // We can hook into the sidebar click or just call it if we are on that view.
+});
+
+async function qpsetSavePreferences() {
+    const data = {
+        qr_settings: {
+            error_correction: document.getElementById('qpset-qr-ecc').value,
+            size_px: parseInt(document.getElementById('qpset-qr-size').value) || 300,
+            margin: parseInt(document.getElementById('qpset-qr-margin').value) || 4,
+            embed_logo: document.getElementById('qpset-qr-embed-logo').checked,
+            logo_size: parseInt(document.getElementById('qpset-qr-logo-size').value) || 20,
+            fg_color: document.getElementById('qpset-qr-fg').value,
+            bg_color: document.getElementById('qpset-qr-bg').value,
+            url_format: document.getElementById('qpset-qr-url-format').value,
+            auto_generate: document.getElementById('qpset-qr-auto').checked
+        },
+        pdf_settings: {
+            engine: "ReportLab",
+            page_size: document.getElementById('qpset-pdf-size').value,
+            orientation: document.getElementById('qpset-pdf-orientation').value,
+            resolution: parseInt(document.getElementById('qpset-pdf-dpi').value) || 150,
+            compression: document.getElementById('qpset-pdf-compression').value,
+            color_profile: document.getElementById('qpset-pdf-color').value,
+            font_embedding: document.getElementById('qpset-pdf-font').checked,
+            embed_metadata: document.getElementById('qpset-pdf-meta').checked,
+            optimize: document.getElementById('qpset-pdf-opt').checked,
+            naming: "SS-CERT-{year}-{id}.pdf"
+        },
+        branding_settings: {
+            default_footer: document.getElementById('qpset-brand-footer').value,
+            verification_footer: document.getElementById('qpset-brand-vfooter').value,
+            official_website: document.getElementById('qpset-brand-web').value,
+            default_signature_block: document.getElementById('qpset-brand-sig').value,
+            default_seal: document.getElementById('qpset-brand-seal').checked,
+            watermark_text: document.getElementById('qpset-brand-wm-txt').value,
+            watermark_opacity: parseFloat(document.getElementById('qpset-brand-wm-op').value) || 0.1,
+            watermark_position: document.getElementById('qpset-brand-wm-pos').value,
+            header_logo_pos: document.getElementById('qpset-brand-h-pos').value,
+            footer_alignment: document.getElementById('qpset-brand-f-align').value
+        },
+        output_preferences: {
+            auto_qr: document.getElementById('qpset-out-qr').checked,
+            auto_pdf: document.getElementById('qpset-out-pdf').checked,
+            upload_r2: document.getElementById('qpset-out-r2').checked,
+            auto_email: document.getElementById('qpset-out-email').checked,
+            publish_feed: document.getElementById('qpset-out-feed').checked,
+            download_after: document.getElementById('qpset-out-dl').checked,
+            retain_local: document.getElementById('qpset-out-local').checked
+        },
+        performance_settings: {
+            cache_qr: document.getElementById('qpset-adv-cache').checked,
+            parallel_pdf: document.getElementById('qpset-adv-parallel').checked,
+            optimize_images: document.getElementById('qpset-adv-opt-img').checked,
+            strip_metadata: document.getElementById('qpset-adv-strip').checked,
+            auto_cleanup: document.getElementById('qpset-adv-cleanup').checked,
+            retention_hours: parseInt(document.getElementById('qpset-adv-retention').value) || 12
+        },
+        storage_settings: {
+            provider: "Cloudflare R2"
+        }
+    };
+
+    try {
+        const res = await adminFetch(CERT_API_URL + '/api/v1/certificate/settings', {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+        if(res.ok) {
+            const resData = await res.json();
+            if(resData.status === 'success') {
+            if(typeof showToast === 'function') showToast('✅ Preferences saved successfully!');
+            else alert('Preferences saved successfully!');
+        }
+        }
+    } catch(err) {
+        console.error("Save failed", err);
+        alert("Failed to save preferences.");
+    }
+}
+
+async function qpsetResetToDefault() {
+    if(confirm("Are you sure you want to reset all QR & PDF generation settings to their default values?")) {
+        try {
+            const res = await adminFetch(CERT_API_URL + '/api/v1/certificate/settings/reset', { method: 'POST' });
+            if(res.ok) {
+                const resData = await res.json();
+                if(resData.status === 'success') {
+                if(typeof showToast === 'function') showToast('✅ Reset to defaults.');
+                await loadQRPDFSettings();
+            }
+            }
+        } catch(err) {
+            console.error("Reset failed", err);
+        }
+    }
+}
+
+async function qpsetExportConfig() {
+    try {
+        const res = await adminFetch(CERT_API_URL + '/api/v1/certificate/settings/export');
+        if(res.ok) {
+            const data = await res.json();
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'surakshasetu-generation-config.json';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    } catch(err) {
+        console.error("Export failed", err);
+    }
+}
+
+function qpsetImportConfig() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = async (ev) => {
+            try {
+                const data = JSON.parse(ev.target.result);
+                qpsetPopulateForm(data);
+                qpsetRenderLivePreview();
+                if(typeof showToast === 'function') showToast('✅ Configuration imported. Don\'t forget to Save!');
+            } catch(err) {
+                alert("Invalid configuration file.");
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+
+async function qpsetGenerateSample(type) {
+    if(typeof showToast === 'function') showToast(`Generating sample ${type.toUpperCase()}...`);
+    try {
+        const res = await adminFetch(CERT_API_URL + '/api/v1/certificate/settings/sample', { method: 'POST' });
+        if(res.ok) {
+            const resData = await res.json();
+            if(resData.status === 'success') {
+                if(typeof showToast === 'function') showToast(`✅ Sample ${type.toUpperCase()} generated successfully.`);
+            }
+        }
+    } catch(err) {
+        console.error("Sample gen failed", err);
+    }
+}
+
+function qpsetApplyPreset(type) {
+    if(type === 'web') {
+        document.getElementById('qpset-pdf-dpi').value = "150";
+        document.getElementById('qpset-pdf-compression').value = "High";
+        document.getElementById('qpset-pdf-color').value = "sRGB";
+        document.getElementById('qpset-pdf-meta').checked = false;
+        document.getElementById('qpset-pdf-opt').checked = true;
+        document.getElementById('qpset-qr-size').value = "250";
+        document.getElementById('qpset-qr-ecc').value = "L";
+    } else if(type === 'print') {
+        document.getElementById('qpset-pdf-dpi').value = "300";
+        document.getElementById('qpset-pdf-compression').value = "Medium";
+        document.getElementById('qpset-pdf-color').value = "CMYK";
+        document.getElementById('qpset-pdf-meta').checked = true;
+        document.getElementById('qpset-pdf-opt').checked = false;
+        document.getElementById('qpset-qr-size').value = "400";
+        document.getElementById('qpset-qr-ecc').value = "M";
+    } else if(type === 'archive') {
+        document.getElementById('qpset-pdf-dpi').value = "600";
+        document.getElementById('qpset-pdf-compression').value = "Low";
+        document.getElementById('qpset-pdf-color').value = "sRGB";
+        document.getElementById('qpset-pdf-meta').checked = true;
+        document.getElementById('qpset-pdf-opt').checked = false;
+        document.getElementById('qpset-qr-size').value = "500";
+        document.getElementById('qpset-qr-ecc').value = "Q";
+    }
+    qpsetRenderLivePreview();
+    
+    // Update Preset UI
+    const presets = ['web', 'print', 'archive'];
+    presets.forEach(p => {
+        const el = document.getElementById('qpset-preset-' + p);
+        if(el) {
+            el.style.border = '1px solid var(--border)';
+            el.style.background = '#fff';
+            
+            const title = document.getElementById('qpset-preset-' + p + '-title');
+            if(title) title.style.color = 'var(--text)';
+            
+            [1, 2, 3].forEach(i => {
+                const detail = document.getElementById('qpset-preset-' + p + '-t' + i);
+                if(detail) detail.style.color = 'var(--text2)';
+            });
+        }
+    });
+
+    const activeEl = document.getElementById('qpset-preset-' + type);
+    if(activeEl) {
+        activeEl.style.border = '1px solid #16a34a';
+        activeEl.style.background = '#f0fdf4';
+        
+        const activeTitle = document.getElementById('qpset-preset-' + type + '-title');
+        if(activeTitle) activeTitle.style.color = '#166534';
+        
+        [1, 2, 3].forEach(i => {
+            const activeDetail = document.getElementById('qpset-preset-' + type + '-t' + i);
+            if(activeDetail) activeDetail.style.color = '#15803d';
+        });
+    }
+
+    if(typeof refreshCustomSelect === 'function') {
+        document.querySelectorAll('#admin-view-cert-qr-pdf .filter-select').forEach(refreshCustomSelect);
+    }
+
+    if(typeof showToast === 'function') showToast('✅ Preset applied.');
+}
+
+
+let qpsetInitialized = false;
+
+document.addEventListener('DOMContentLoaded', () => {
+    const qpsetNode = document.getElementById('admin-view-cert-qr-pdf');
+    if(qpsetNode) {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                    if (qpsetNode.style.display !== 'none' && !qpsetInitialized) {
+                        qpsetInitialized = true;
+                        loadQRPDFSettings();
+                    }
+                }
+            });
+        });
+        observer.observe(qpsetNode, { attributes: true });
+    }
+});
+
+
+// ==========================================
+// Email Integration Settings Management
+// ==========================================
+
+let emailsetInitialized = false;
+
+async function loadEmailSettings() {
+    try {
+        const res = await adminFetch(CERT_API_URL + '/api/v1/email/settings');
+        if(res.ok) {
+            const data = await res.json();
+            if(data.success && data.data) {
+                emailsetPopulateForm(data.data);
+                emailsetRenderLivePreview();
+            }
+        }
+    } catch(err) {
+        console.error("Failed to load email settings", err);
+    }
+}
+
+function emailsetPopulateForm(data) {
+    if(!data) return;
+    
+    // SMTP Config
+    if(data.smtp_config && Object.keys(data.smtp_config).length > 0) {
+        document.getElementById('emailset-provider').value = data.smtp_config.provider || 'Custom';
+        document.getElementById('emailset-encryption').value = data.smtp_config.encryption || 'TLS';
+        document.getElementById('emailset-host').value = data.smtp_config.host || '';
+        document.getElementById('emailset-port').value = data.smtp_config.port || '';
+        document.getElementById('emailset-user').value = data.smtp_config.username || '';
+        document.getElementById('emailset-pass').value = data.smtp_config.password || '';
+        document.getElementById('emailset-from-name').value = data.smtp_config.from_name || '';
+        document.getElementById('emailset-from-email').value = data.smtp_config.from_email || '';
+        document.getElementById('emailset-reply-email').value = data.smtp_config.reply_email || '';
+        document.getElementById('emailset-bounce-email').value = data.smtp_config.bounce_email || '';
+    }
+
+    // Template Config
+    if(data.template_settings && Object.keys(data.template_settings).length > 0) {
+        document.getElementById('emailset-tpl-subject').value = data.template_settings.subject || '';
+        document.getElementById('emailset-tpl-body').value = data.template_settings.body || '';
+    }
+
+    // Delivery Settings
+    if(data.delivery_settings && Object.keys(data.delivery_settings).length > 0) {
+        document.getElementById('emailset-del-immediate').checked = data.delivery_settings.immediate;
+        document.getElementById('emailset-del-pdf').checked = data.delivery_settings.attach_pdf;
+        document.getElementById('emailset-del-qr').checked = data.delivery_settings.attach_qr;
+        document.getElementById('emailset-del-tracking').checked = data.delivery_settings.tracking;
+    }
+
+    // Automation Settings
+    if(data.automation_settings && Object.keys(data.automation_settings).length > 0) {
+        document.getElementById('emailset-auto-retries').value = data.automation_settings.max_retries || '0';
+        document.getElementById('emailset-auto-interval').value = data.automation_settings.retry_interval || '5';
+        document.getElementById('emailset-auto-notify').checked = data.automation_settings.notify_admin;
+    }
+
+    // Branding Settings
+    if(data.branding_settings && Object.keys(data.branding_settings).length > 0) {
+        document.getElementById('emailset-brand-color').value = data.branding_settings.primary_color || '#16a34a';
+        document.getElementById('emailset-brand-color-txt').value = data.branding_settings.primary_color || '#16a34a';
+        document.getElementById('emailset-brand-footer').value = data.branding_settings.footer_text || '';
+    }
+
+    if(typeof refreshCustomSelect === 'function') {
+        document.querySelectorAll('#admin-view-cert-email .filter-select').forEach(refreshCustomSelect);
+    }
+}
+
+async function emailsetSave() {
+    const btn = event.target;
+    const oldText = btn.innerHTML;
+    btn.innerHTML = 'Saving...';
+    btn.disabled = true;
+
+    const data = {
+        smtp_config: {
+            provider: document.getElementById('emailset-provider').value,
+            encryption: document.getElementById('emailset-encryption').value,
+            host: document.getElementById('emailset-host').value,
+            port: document.getElementById('emailset-port').value,
+            username: document.getElementById('emailset-user').value,
+            password: document.getElementById('emailset-pass').value,
+            from_name: document.getElementById('emailset-from-name').value,
+            from_email: document.getElementById('emailset-from-email').value,
+            reply_email: document.getElementById('emailset-reply-email').value,
+            bounce_email: document.getElementById('emailset-bounce-email').value
+        },
+        template_settings: {
+            subject: document.getElementById('emailset-tpl-subject').value,
+            body: document.getElementById('emailset-tpl-body').value
+        },
+        delivery_settings: {
+            immediate: document.getElementById('emailset-del-immediate').checked,
+            attach_pdf: document.getElementById('emailset-del-pdf').checked,
+            attach_qr: document.getElementById('emailset-del-qr').checked,
+            tracking: document.getElementById('emailset-del-tracking').checked
+        },
+        automation_settings: {
+            max_retries: document.getElementById('emailset-auto-retries').value,
+            retry_interval: document.getElementById('emailset-auto-interval').value,
+            notify_admin: document.getElementById('emailset-auto-notify').checked
+        },
+        branding_settings: {
+            primary_color: document.getElementById('emailset-brand-color').value,
+            footer_text: document.getElementById('emailset-brand-footer').value
+        }
+    };
+
+    try {
+        const res = await adminFetch(CERT_API_URL + '/api/v1/email/settings', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json'}
+        });
+        if(res.ok) {
+            const resData = await res.json();
+            if(resData.success) {
+                if(typeof showToast === 'function') showToast('✅ Email Configuration Saved successfully!');
+            }
+        }
+    } catch(err) {
+        console.error("Save failed", err);
+    } finally {
+        btn.innerHTML = oldText;
+        btn.disabled = false;
+    }
+}
+
+async function emailsetTestConnection() {
+    const data = {
+        smtp_config: {
+            host: document.getElementById('emailset-host').value,
+            port: document.getElementById('emailset-port').value
+        },
+        template_settings: {},
+        delivery_settings: {},
+        automation_settings: {},
+        branding_settings: {}
+    };
+    
+    if(typeof showToast === 'function') showToast('Testing connection...');
+    
+    try {
+        const res = await adminFetch(CERT_API_URL + '/api/v1/email/test', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json'}
+        });
+        if(res.ok) {
+            const resData = await res.json();
+            if(resData.success) {
+                if(typeof showToast === 'function') showToast('✅ SMTP Connection Successful!');
+            } else {
+                if(typeof showToast === 'function') showToast('❌ SMTP Failed: ' + (resData.error || 'Unknown Error'), 'error');
+            }
+        }
+    } catch(err) {
+        console.error("Test failed", err);
+    }
+}
+
+async function emailsetSendTestEmail() {
+    emailsetTestConnection();
+}
+
+async function emailsetReset() {
+    if(confirm("Are you sure you want to reset all Email Integration settings to default?")) {
+        try {
+            const res = await adminFetch(CERT_API_URL + '/api/v1/email/reset', { method: 'POST' });
+            if(res.ok) {
+                if(typeof showToast === 'function') showToast('✅ Reset to defaults.');
+                await loadEmailSettings();
+            }
+        } catch(err) {
+            console.error("Reset failed", err);
+        }
+    }
+}
+
+async function emailsetExport() {
+    try {
+        const res = await adminFetch(CERT_API_URL + '/api/v1/email/export');
+        if(res.ok) {
+            const data = await res.json();
+            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'surakshasetu-email-config.json';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    } catch(err) {
+        console.error("Export failed", err);
+    }
+}
+
+function emailsetInsertVar(variableText) {
+    const textarea = document.getElementById('emailset-tpl-body');
+    if(!textarea) return;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    textarea.value = text.substring(0, start) + variableText + text.substring(end);
+    textarea.selectionStart = textarea.selectionEnd = start + variableText.length;
+    textarea.focus();
+    emailsetRenderLivePreview();
+}
+
+function emailsetInsertFormat(formatText) {
+    const textarea = document.getElementById('emailset-tpl-body');
+    if(!textarea) return;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    const selected = text.substring(start, end);
+    const replacement = formatText + selected + formatText;
+    textarea.value = text.substring(0, start) + replacement + text.substring(end);
+    textarea.selectionStart = textarea.selectionEnd = start + replacement.length;
+    textarea.focus();
+    emailsetRenderLivePreview();
+}
+
+function emailsetRenderLivePreview() {
+    const subject = document.getElementById('emailset-tpl-subject');
+    const body = document.getElementById('emailset-tpl-body');
+    const fromName = document.getElementById('emailset-from-name');
+    const fromEmail = document.getElementById('emailset-from-email');
+    const footerTxt = document.getElementById('emailset-brand-footer');
+    
+    const prevSub = document.getElementById('emailset-prev-subject');
+    const prevBody = document.getElementById('emailset-prev-body');
+    const prevFromName = document.getElementById('emailset-prev-from-name');
+    const prevFromEmail = document.getElementById('emailset-prev-from-email');
+    const prevInitial = document.getElementById('emailset-prev-initial');
+    const prevFooter = document.getElementById('emailset-prev-footer');
+    const prevBtnPdf = document.getElementById('emailset-prev-btn-pdf');
+    const prevBtnQr = document.getElementById('emailset-prev-btn-qr');
+    const primaryColor = document.getElementById('emailset-brand-color').value || '#16a34a';
+    const attachPdf = document.getElementById('emailset-del-pdf');
+    const attachQr = document.getElementById('emailset-del-qr');
+
+    if(subject && prevSub) prevSub.innerText = subject.value || 'No Subject';
+    if(fromName && prevFromName) {
+        prevFromName.innerText = fromName.value || 'Organization';
+        if(prevInitial && fromName.value) prevInitial.innerText = fromName.value.charAt(0).toUpperCase();
+        if(prevInitial) prevInitial.style.background = primaryColor;
+    }
+    if(fromEmail && prevFromEmail) prevFromEmail.innerText = `<${fromEmail.value || 'noreply@domain.com'}>`;
+    if(footerTxt && prevFooter) prevFooter.innerText = footerTxt.value;
+    if(prevBtnPdf) {
+        prevBtnPdf.style.background = primaryColor;
+        prevBtnPdf.style.display = (attachPdf && attachPdf.checked) ? 'flex' : 'none';
+    }
+    if(prevBtnQr) {
+        prevBtnQr.style.background = primaryColor;
+        prevBtnQr.style.display = (attachQr && attachQr.checked) ? 'flex' : 'none';
+    }
+
+    if(body && prevBody) {
+        let text = body.value;
+        // Apply mock variables
+        const mockVars = {
+            '{{recipient_name}}': 'John Doe',
+            '{{certificate_name}}': 'Advanced React Development',
+            '{{certificate_type}}': 'Completion Certificate',
+            '{{certificate_id}}': 'SS-CERT-2026-X89P',
+            '{{issue_date}}': new Date().toLocaleDateString(),
+            '{{organization_name}}': 'SurakshaSetu',
+            '{{issuer_name}}': 'Sagar Singh'
+        };
+        for(let key in mockVars) {
+            text = text.split(key).join(`<strong>${mockVars[key]}</strong>`);
+        }
+        
+        // Convert simple formatting
+        text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        
+        // Convert newlines to breaks
+        text = text.replace(/\n/g, '<br>');
+        prevBody.innerHTML = text;
+    }
+}
+
+// Bind Live Preview Events for Email
+document.addEventListener('DOMContentLoaded', () => {
+    const idsToWatch = [
+        'emailset-tpl-subject', 'emailset-tpl-body', 'emailset-from-name', 'emailset-from-email',
+        'emailset-brand-color', 'emailset-brand-footer', 'emailset-del-pdf', 'emailset-del-qr'
+    ];
+    idsToWatch.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) {
+            el.addEventListener('input', emailsetRenderLivePreview);
+            el.addEventListener('change', emailsetRenderLivePreview);
+        }
+    });
+
+    const emailColorPicker = document.getElementById('emailset-brand-color');
+    const emailColorTxt = document.getElementById('emailset-brand-color-txt');
+    if(emailColorPicker && emailColorTxt) {
+        emailColorPicker.addEventListener('input', (e) => {
+            emailColorTxt.value = e.target.value;
+        });
+        emailColorTxt.addEventListener('input', (e) => {
+            emailColorPicker.value = e.target.value;
+            emailsetRenderLivePreview();
+        });
+    }
+
+    const emailNode = document.getElementById('admin-view-cert-email');
+    if(emailNode) {
+        const emailObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                    if (emailNode.style.display !== 'none' && !emailsetInitialized) {
+                        emailsetInitialized = true;
+                        loadEmailSettings();
+                    }
+                }
+            });
+        });
+        emailObserver.observe(emailNode, { attributes: true });
+    }
+});

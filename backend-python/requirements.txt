@@ -7,3 +7,7 @@ qrcode
 python-multipart
 python-dotenv
 Pillow
+sqlalchemy
+pydantic
+pydantic-settings
+cryptography
