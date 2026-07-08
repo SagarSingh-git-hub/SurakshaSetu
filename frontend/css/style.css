@@ -4824,18 +4824,24 @@ body:has(#page-map.active) {
   height: 24px;
   flex-shrink: 0;
 }
+
 .toggle-switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
+
 .toggle-switch .slider {
   position: absolute;
   cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #cbd5e1;
   transition: .4s;
 }
+
 .toggle-switch .slider:before {
   position: absolute;
   content: "";
@@ -4846,18 +4852,55 @@ body:has(#page-map.active) {
   background-color: white;
   transition: .4s;
 }
-.toggle-switch input:checked + .slider {
+
+.toggle-switch input:checked+.slider {
   background-color: #10b981;
 }
-.toggle-switch input:focus + .slider {
+
+.toggle-switch input:focus+.slider {
   box-shadow: 0 0 1px #10b981;
 }
-.toggle-switch input:checked + .slider:before {
+
+.toggle-switch input:checked+.slider:before {
   transform: translateX(20px);
 }
+
 .toggle-switch .slider.round {
   border-radius: 34px;
 }
+
 .toggle-switch .slider.round:before {
   border-radius: 50%;
+}
+
+/* ===== RESPONSIVE FIXES FOR ADMIN VIEWS ===== */
+@media (max-width: 1024px) {
+
+  #admin-view-cert-qr-pdf>div:nth-child(2),
+  #admin-view-cert-email>div:nth-child(2) {
+    flex-direction: column !important;
+  }
+
+  #admin-view-cert-qr-pdf>div:nth-child(2)>div,
+  #admin-view-cert-email>div:nth-child(2)>div {
+    width: 100% !important;
+    max-width: 100% !important;
+    position: static !important;
+    min-width: 100% !important;
+  }
+}
+
+@media (max-width: 768px) {
+
+  #admin-view-cert-signatures div[style*="grid-template-columns"],
+  #admin-view-cert-qr-pdf div[style*="grid-template-columns"],
+  #admin-view-cert-email div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  #admin-view-cert-signatures .admin-widget,
+  #admin-view-cert-qr-pdf .admin-widget,
+  #admin-view-cert-email .admin-widget {
+    padding: 16px !important;
+  }
 }
