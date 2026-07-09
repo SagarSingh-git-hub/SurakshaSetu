@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from core.database import get_db
 from models.models import Certificate, VerificationLog, CertificateTemplate, CertificateHash
@@ -7,47 +7,71 @@ from services.signature_service import verify_signature
 
 router = APIRouter()
 
-@router.get("/{identifier}", response_model=VerifyResponse)
-def verify_certificate(identifier: str, db: Session = Depends(get_db)):
-    # identifier could be cert_id or hash
+@router.get("/{identifier}", response_model=dict)
+def verify_certificate(identifier: str, request: Request, db: Session = Depends(get_db)):
+    # identifier could be cert_id, hash, or verification_token
     cert = db.query(Certificate).filter(
-        (Certificate.cert_id == identifier) | (Certificate.hash_sha256 == identifier)
+        (Certificate.cert_id == identifier) | 
+        (Certificate.hash_sha256 == identifier) |
+        (Certificate.verification_token == identifier)
     ).first()
     
+    ip_address = request.client.host if request.client else "Unknown"
+    
     if not cert:
-        return {"success": False, "error": "Certificate not found or invalid."}
+        log = VerificationLog(cert_id=identifier, ip_address=ip_address, status='Forged')
+        db.add(log)
+        db.commit()
+        return {"success": False, "valid": False, "error": "Certificate not found or forged."}
         
-    # Log verification attempt
-    # Since this is a public endpoint, we don't have IP easily without Request object, but we'll leave it as None for now
-    log = VerificationLog(
-        cert_id=cert.cert_id,
-        status=cert.status
-    )
+    if cert.status == 'Revoked':
+        log = VerificationLog(cert_id=cert.cert_id, ip_address=ip_address, status='Revoked')
+        db.add(log)
+        db.commit()
+        return {
+            "success": True, 
+            "valid": False,
+            "status": "Revoked",
+            "error": "This certificate has been revoked.",
+            "data": {
+                "recipient_name": cert.recipient_name,
+                "issue_date": cert.issue_date.strftime("%Y-%m-%d"),
+                "certificate_type": cert.certificate_type
+            }
+        }
+        
+    if cert.status == 'Expired':
+        log = VerificationLog(cert_id=cert.cert_id, ip_address=ip_address, status='Expired')
+        db.add(log)
+        db.commit()
+        return {"success": True, "valid": False, "status": "Expired", "error": "Certificate has expired."}
+
+    # Check signature integrity
+    cert_hash = db.query(CertificateHash).filter(CertificateHash.cert_id == cert.cert_id).first()
+    if not cert_hash or cert_hash.hash_sha256 != cert.hash_sha256:
+        log = VerificationLog(cert_id=cert.cert_id, ip_address=ip_address, status='Forged')
+        db.add(log)
+        db.commit()
+        return {"success": False, "valid": False, "status": "Forged", "error": "Data integrity check failed. Certificate may be forged."}
+
+    # Valid
+    log = VerificationLog(cert_id=cert.cert_id, ip_address=ip_address, status='Valid')
     db.add(log)
     db.commit()
     
-    if cert.status == 'Revoked':
-        return {"success": False, "error": f"Certificate {cert.cert_id} has been revoked."}
-        
-    # Check signature integrity
-    cert_hash = db.query(CertificateHash).filter(CertificateHash.cert_id == cert.cert_id).first()
-    is_authentic = False
-    if cert_hash:
-        # verify_signature handles checking the RSA signature of the hash
-        # We did not strictly require signatures on every cert creation but we check if it matches
-        # The prompt says: "Display Valid, Revoked, Expired, Invalid"
-        is_authentic = True # Simplified for now, assuming PDF hash matches DB hash
-        
     return {
         "success": True,
+        "valid": True,
+        "status": "Valid",
         "data": {
             "cert_id": cert.cert_id,
             "recipient_name": cert.recipient_name,
             "certificate_type": cert.certificate_type,
-            "issue_date": cert.issue_date,
+            "issue_date": cert.issue_date.strftime("%Y-%m-%d"),
             "issuing_authority": cert.issuing_authority,
-            "status": cert.status,
+            "citation": cert.citation,
             "pdf_url": cert.pdf_url,
-            "is_authentic": is_authentic
+            "key_version": cert.signature_key_version,
+            "hash": cert.hash_sha256
         }
     }

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from core.database import get_db
 from core.security import verify_admin_token
-from models.models import SystemCertificateSetting
+from models.models import SystemCertificateSetting, ActivityLog
 from schemas.schemas import SettingUpdate
 from typing import List
 
@@ -24,6 +24,15 @@ def update_settings(settings: List[SettingUpdate], db: Session = Depends(get_db)
         else:
             new_setting = SystemCertificateSetting(setting_key=setting.key, setting_value=setting.value)
             db.add(new_setting)
+            
+        activity_log = ActivityLog(
+            event_type="Settings Updated",
+            reference_id=setting.key,
+            description=f"System setting '{setting.key}' was updated by admin.",
+            category="System Settings",
+            location="Settings API"
+        )
+        db.add(activity_log)
     
     db.commit()
     return {"success": True}

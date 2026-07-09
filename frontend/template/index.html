@@ -4932,19 +4932,23 @@
                     gap: 12px;
                     margin-bottom: 18px;
                   }
+
                   #admin-view-cert-verify .search-flex-row .input-wrap {
                     flex: 1;
                     margin-bottom: 0;
                   }
+
                   #admin-view-cert-verify .search-flex-row .verify-btn {
                     width: auto;
                     padding: 0 24px;
                     white-space: nowrap;
                   }
+
                   @media (max-width: 576px) {
                     #admin-view-cert-verify .search-flex-row {
                       flex-direction: column;
                     }
+
                     #admin-view-cert-verify .search-flex-row .verify-btn {
                       width: 100%;
                       padding: 14px 24px;
@@ -4953,7 +4957,7 @@
                 </style>
                 <form id="verifyForm">
                   <label class="field-label" for="certInput">Certificate ID or Hash</label>
-                  
+
                   <div class="search-flex-row">
                     <div class="input-wrap">
                       <input id="certInput" type="text" placeholder="e.g. SS-CERT-2026-0000" autocomplete="off" />
@@ -4965,7 +4969,7 @@
                         </svg>
                       </button>
                     </div>
-                    
+
                     <button type="submit" class="verify-btn" id="verifyBtn" disabled>
                       <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
@@ -5011,7 +5015,9 @@
                         </svg>
                         Open Camera
                       </button>
-                      <div id="qr-reader" style="width: 100%; display: none; margin-top: 16px; border-radius: 8px; overflow: hidden; border: 1px solid #E2E8E4;"></div>
+                      <div id="qr-reader"
+                        style="width: 100%; display: none; margin-top: 16px; border-radius: 8px; overflow: hidden; border: 1px solid #E2E8E4;">
+                      </div>
                     </div>
                   </div>
 
@@ -5324,81 +5330,104 @@
         </div>
 
         <div id="admin-view-cert-signatures" style="display: none;">
-          <div style="background: linear-gradient(90deg, #ffffff 0%, #f0fdf4 100%); border-radius: 12px; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+          <div
+            style="background: linear-gradient(90deg, #ffffff 0%, #f0fdf4 100%); border-radius: 12px; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <div style="display: flex; align-items: center; gap: 24px; z-index: 2;">
-              <div style="background: #e6f7eb; border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(22, 163, 74, 0.12);">
+              <div
+                style="background: #e6f7eb; border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(22, 163, 74, 0.12);">
                 <i class="ph-fill ph-shield-check" style="color: #16a34a; font-size: 32px;"></i>
               </div>
               <div>
-                <div style="font-size: 22px; font-weight: 800; color: #0f172a; font-family:'Outfit',sans-serif; margin-bottom: 6px;">Certificate Security</div>
-                <div style="color: #64748b; font-size: 13px; font-weight: 500;">Manage cryptographic keys, configure digital signing, and monitor verification integrity.</div>
+                <div
+                  style="font-size: 22px; font-weight: 800; color: #0f172a; font-family:'Outfit',sans-serif; margin-bottom: 6px;">
+                  Certificate Security</div>
+                <div style="color: #64748b; font-size: 13px; font-weight: 500;">Manage cryptographic keys, configure
+                  digital signing, and monitor verification integrity.</div>
               </div>
             </div>
-            
+
             <!-- Abstract background decoration imitating the illustration -->
-            <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 450px; pointer-events: none; opacity: 0.8;">
-              <svg width="100%" height="100%" viewBox="0 0 450 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <div
+              style="position: absolute; right: 0; top: 0; bottom: 0; width: 450px; pointer-events: none; opacity: 0.8;">
+              <svg width="100%" height="100%" viewBox="0 0 450 120" preserveAspectRatio="none"
+                xmlns="http://www.w3.org/2000/svg">
                 <!-- Document -->
-                <rect x="250" y="20" width="100" height="120" rx="4" fill="#ffffff" stroke="#86efac" stroke-width="2"/>
-                <line x1="265" y1="40" x2="335" y2="40" stroke="#bbf7d0" stroke-width="2" stroke-linecap="round"/>
-                <line x1="265" y1="55" x2="335" y2="55" stroke="#bbf7d0" stroke-width="2" stroke-linecap="round"/>
-                <line x1="265" y1="70" x2="315" y2="70" stroke="#bbf7d0" stroke-width="2" stroke-linecap="round"/>
-                <line x1="265" y1="85" x2="335" y2="85" stroke="#bbf7d0" stroke-width="2" stroke-linecap="round"/>
+                <rect x="250" y="20" width="100" height="120" rx="4" fill="#ffffff" stroke="#86efac" stroke-width="2" />
+                <line x1="265" y1="40" x2="335" y2="40" stroke="#bbf7d0" stroke-width="2" stroke-linecap="round" />
+                <line x1="265" y1="55" x2="335" y2="55" stroke="#bbf7d0" stroke-width="2" stroke-linecap="round" />
+                <line x1="265" y1="70" x2="315" y2="70" stroke="#bbf7d0" stroke-width="2" stroke-linecap="round" />
+                <line x1="265" y1="85" x2="335" y2="85" stroke="#bbf7d0" stroke-width="2" stroke-linecap="round" />
                 <!-- Shield -->
-                <path d="M220 50 L250 40 L280 50 L280 75 C280 95 250 110 250 110 C250 110 220 95 220 75 Z" fill="#16a34a"/>
-                <path d="M240 75 L250 85 L265 65" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M220 50 L250 40 L280 50 L280 75 C280 95 250 110 250 110 C250 110 220 95 220 75 Z"
+                  fill="#16a34a" />
+                <path d="M240 75 L250 85 L265 65" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"
+                  stroke-linejoin="round" />
                 <!-- Pen/Stylus -->
-                <path d="M360 40 L370 30 L390 50 L380 60 Z" fill="#16a34a"/>
-                <path d="M360 40 L330 90 L320 95 L325 85 L380 60 Z" fill="#22c55e"/>
+                <path d="M360 40 L370 30 L390 50 L380 60 Z" fill="#16a34a" />
+                <path d="M360 40 L330 90 L320 95 L325 85 L380 60 Z" fill="#22c55e" />
                 <!-- Leaves / Accents -->
-                <path d="M150 120 C170 80 200 100 220 120 Z" fill="#bbf7d0" opacity="0.6"/>
-                <path d="M380 120 C390 70 420 90 440 120 Z" fill="#86efac" opacity="0.5"/>
-                <circle cx="380" cy="25" r="3" fill="#16a34a"/>
-                <circle cx="410" cy="50" r="2" fill="#16a34a" opacity="0.6"/>
+                <path d="M150 120 C170 80 200 100 220 120 Z" fill="#bbf7d0" opacity="0.6" />
+                <path d="M380 120 C390 70 420 90 440 120 Z" fill="#86efac" opacity="0.5" />
+                <circle cx="380" cy="25" r="3" fill="#16a34a" />
+                <circle cx="410" cy="50" r="2" fill="#16a34a" opacity="0.6" />
               </svg>
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px; margin-bottom: 24px;">
-            
+          <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px; margin-bottom: 24px;">
+
             <!-- SECTION 1: Certificate Security Status -->
             <div class="admin-widget" style="padding:24px; display:flex; flex-direction:column;">
               <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;">
                 <i class="ph-fill ph-lock-key" style="color:var(--text2);"></i> Certificate Security Status
               </div>
-              
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border);">
-                <span style="font-size:13px; color:var(--text2); cursor:help;" title="Current operational status of the security module.">Security Status</span>
-                <span id="cs-status-badge" style="background:#dcfce7;color:#166534;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:4px;"><i class="ph-fill ph-check-circle"></i> Active</span>
+
+              <div
+                style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border);">
+                <span style="font-size:13px; color:var(--text2); cursor:help;"
+                  title="Current operational status of the security module.">Security Status</span>
+                <span id="cs-status-badge"
+                  style="background:#dcfce7;color:#166534;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:4px;"><i
+                    class="ph-fill ph-check-circle"></i> Active</span>
               </div>
-              
+
               <div style="display:flex; flex-direction:column; gap:12px; flex:1;">
                 <div style="display:flex; justify-content:space-between;">
-                  <span style="font-size:13px; color:var(--text2); cursor:help;" title="The asymmetric cryptographic algorithm used.">Signing Algorithm</span>
+                  <span style="font-size:13px; color:var(--text2); cursor:help;"
+                    title="The asymmetric cryptographic algorithm used.">Signing Algorithm</span>
                   <span id="cs-algorithm" style="font-size:13px; font-weight:600; color:var(--text);">-</span>
                 </div>
                 <div style="display:flex; justify-content:space-between;">
-                  <span style="font-size:13px; color:var(--text2); cursor:help;" title="The hashing algorithm applied to the certificate data.">Hash Algorithm</span>
+                  <span style="font-size:13px; color:var(--text2); cursor:help;"
+                    title="The hashing algorithm applied to the certificate data.">Hash Algorithm</span>
                   <span id="cs-hash-algorithm" style="font-size:13px; font-weight:600; color:var(--text);">-</span>
                 </div>
                 <div style="display:flex; justify-content:space-between;">
-                  <span style="font-size:13px; color:var(--text2); cursor:help;" title="The sequential identifier of the currently active key.">Current Key Version</span>
+                  <span style="font-size:13px; color:var(--text2); cursor:help;"
+                    title="The sequential identifier of the currently active key.">Current Key Version</span>
                   <span id="cs-version" style="font-size:13px; font-weight:600; color:var(--text);">-</span>
                 </div>
                 <div style="display:flex; flex-direction:column; gap:4px; margin: 4px 0;">
-                  <span style="font-size:13px; color:var(--text2); cursor:help;" title="Unique SHA-256 fingerprint identifying the active public key.">Public Key Fingerprint</span>
-                  <span id="cs-fingerprint" style="font-size:12px; font-family:monospace; color:var(--text3); word-break:break-all; background:#f8fafc; padding:8px; border-radius:6px; border:1px solid var(--border);">No active key available.</span>
+                  <span style="font-size:13px; color:var(--text2); cursor:help;"
+                    title="Unique SHA-256 fingerprint identifying the active public key.">Public Key Fingerprint</span>
+                  <span id="cs-fingerprint"
+                    style="font-size:12px; font-family:monospace; color:var(--text3); word-break:break-all; background:#f8fafc; padding:8px; border-radius:6px; border:1px solid var(--border);">No
+                    active key available.</span>
                 </div>
                 <div style="display:flex; justify-content:space-between;">
-                  <span style="font-size:13px; color:var(--text2); cursor:help;" title="The date the active key pair was generated.">Created On</span>
+                  <span style="font-size:13px; color:var(--text2); cursor:help;"
+                    title="The date the active key pair was generated.">Created On</span>
                   <span id="cs-created" style="font-size:13px; font-weight:500; color:var(--text);">-</span>
                 </div>
                 <div style="display:flex; justify-content:space-between;">
-                  <span style="font-size:13px; color:var(--text2); cursor:help;" title="When this key is scheduled to expire (if applicable).">Expires On</span>
+                  <span style="font-size:13px; color:var(--text2); cursor:help;"
+                    title="When this key is scheduled to expire (if applicable).">Expires On</span>
                   <span id="cs-expires" style="font-size:13px; font-weight:500; color:var(--text);">-</span>
                 </div>
                 <div style="display:flex; justify-content:space-between;">
-                  <span style="font-size:13px; color:var(--text2); cursor:help;" title="The last time the signing key was updated.">Last Rotation</span>
+                  <span style="font-size:13px; color:var(--text2); cursor:help;"
+                    title="The last time the signing key was updated.">Last Rotation</span>
                   <span id="cs-rotated" style="font-size:13px; font-weight:500; color:var(--text);">-</span>
                 </div>
               </div>
@@ -5407,37 +5436,47 @@
             <div style="display: flex; flex-direction: column; gap: 24px;">
               <!-- SECTION 7: Security Statistics -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-chart-bar"></i> Security Statistics
                 </div>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
-                  
-                  <div style="background:#fff; padding:16px; border-radius:8px; border:1px solid var(--border); display:flex; flex-direction:column;">
-                    <div style="font-size:12px; font-weight:500; color:var(--text2); margin-bottom:12px;">Certificates Signed</div>
+
+                  <div
+                    style="background:#fff; padding:16px; border-radius:8px; border:1px solid var(--border); display:flex; flex-direction:column;">
+                    <div style="font-size:12px; font-weight:500; color:var(--text2); margin-bottom:12px;">Certificates
+                      Signed</div>
                     <div style="display:flex; justify-content:space-between; align-items:flex-end;">
                       <div id="stat-certs-signed" style="font-size:20px; font-weight:800; color:#0f172a;">-</div>
                       <i class="ph-bold ph-file-text" style="color:#16a34a; font-size:20px;"></i>
                     </div>
                   </div>
 
-                  <div style="background:#fff; padding:16px; border-radius:8px; border:1px solid var(--border); display:flex; flex-direction:column;">
-                    <div style="font-size:12px; font-weight:500; color:var(--text2); margin-bottom:12px;">Total Rotations</div>
+                  <div
+                    style="background:#fff; padding:16px; border-radius:8px; border:1px solid var(--border); display:flex; flex-direction:column;">
+                    <div style="font-size:12px; font-weight:500; color:var(--text2); margin-bottom:12px;">Total
+                      Rotations</div>
                     <div style="display:flex; justify-content:space-between; align-items:flex-end;">
                       <div id="stat-total-rotations" style="font-size:20px; font-weight:800; color:#0f172a;">-</div>
                       <i class="ph-bold ph-arrows-clockwise" style="color:#16a34a; font-size:20px;"></i>
                     </div>
                   </div>
 
-                  <div style="background:#fff; padding:16px; border-radius:8px; border:1px solid var(--border); display:flex; flex-direction:column;">
-                    <div style="font-size:12px; font-weight:500; color:var(--text2); margin-bottom:12px;">Last Verification</div>
+                  <div
+                    style="background:#fff; padding:16px; border-radius:8px; border:1px solid var(--border); display:flex; flex-direction:column;">
+                    <div style="font-size:12px; font-weight:500; color:var(--text2); margin-bottom:12px;">Last
+                      Verification</div>
                     <div style="display:flex; justify-content:space-between; align-items:flex-end;">
-                      <div id="stat-last-verification" style="font-size:16px; font-weight:800; color:#0f172a;">No data yet</div>
+                      <div id="stat-last-verification" style="font-size:16px; font-weight:800; color:#0f172a;">No data
+                        yet</div>
                       <i class="ph-bold ph-clock" style="color:#16a34a; font-size:20px;"></i>
                     </div>
                   </div>
 
-                  <div style="background:#fff; padding:16px; border-radius:8px; border:1px solid var(--border); display:flex; flex-direction:column;">
-                    <div style="font-size:12px; font-weight:500; color:var(--text2); margin-bottom:12px;">Active Version</div>
+                  <div
+                    style="background:#fff; padding:16px; border-radius:8px; border:1px solid var(--border); display:flex; flex-direction:column;">
+                    <div style="font-size:12px; font-weight:500; color:var(--text2); margin-bottom:12px;">Active Version
+                    </div>
                     <div style="display:flex; justify-content:space-between; align-items:flex-end;">
                       <div id="stat-active-version" style="font-size:16px; font-weight:800; color:#0f172a;">-</div>
                       <i class="ph-bold ph-shield-check" style="color:#16a34a; font-size:20px;"></i>
@@ -5450,13 +5489,16 @@
               <!-- SECTION 2: Certificate Signing -->
               <div class="admin-widget" style="padding:24px;">
                 <div style="font-size:16px;font-weight:700;margin-bottom:8px;">Certificate Signing</div>
-                <p style="font-size:13px; color:var(--text3); margin-bottom:16px; line-height:1.5;">All newly generated certificates will be digitally signed. Existing certificates remain valid.</p>
-                <div style="display:flex; align-items:center; gap:12px; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border);">
+                <p style="font-size:13px; color:var(--text3); margin-bottom:16px; line-height:1.5;">All newly generated
+                  certificates will be digitally signed. Existing certificates remain valid.</p>
+                <div
+                  style="display:flex; align-items:center; gap:12px; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border);">
                   <label class="toggle-switch">
                     <input type="checkbox" id="cs-toggle-signing">
                     <span class="slider round"></span>
                   </label>
-                  <span id="cs-toggle-label" style="font-size:14px; font-weight:600; color:var(--text2);">Signing Disabled</span>
+                  <span id="cs-toggle-label" style="font-size:14px; font-weight:600; color:var(--text2);">Signing
+                    Disabled</span>
                 </div>
               </div>
             </div>
@@ -5466,90 +5508,136 @@
               <div style="font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
                 <i class="ph-fill ph-key" style="color:var(--text2);"></i> Key Management
               </div>
-              <div style="padding:16px; background:#f8fafc; border:1px solid var(--border); border-radius:8px; margin-bottom:20px;">
+              <div
+                style="padding:16px; background:#f8fafc; border:1px solid var(--border); border-radius:8px; margin-bottom:20px;">
                 <div style="font-size:13px; font-weight:700; margin-bottom:12px; color:var(--text);">Current Key</div>
                 <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                  <span style="font-size:13px; color:var(--text2);">Version</span><span id="km-version" style="font-size:13px; font-weight:600;">-</span>
+                  <span style="font-size:13px; color:var(--text2);">Version</span><span id="km-version"
+                    style="font-size:13px; font-weight:600;">-</span>
                 </div>
                 <div style="display:flex; flex-direction:column; gap:4px; margin-bottom:8px;">
                   <span style="font-size:13px; color:var(--text2);">Fingerprint</span>
-                  <span id="km-fingerprint" style="font-size:12px; font-family:monospace; color:var(--text3); word-break:break-all;">-</span>
+                  <span id="km-fingerprint"
+                    style="font-size:12px; font-family:monospace; color:var(--text3); word-break:break-all;">-</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                  <span style="font-size:13px; color:var(--text2);">Created</span><span id="km-created" style="font-size:13px; font-weight:500;">-</span>
+                  <span style="font-size:13px; color:var(--text2);">Created</span><span id="km-created"
+                    style="font-size:13px; font-weight:500;">-</span>
                 </div>
                 <div style="display:flex; justify-content:space-between;">
-                  <span style="font-size:13px; color:var(--text2);">Expires</span><span id="km-expires" style="font-size:13px; font-weight:500;">-</span>
+                  <span style="font-size:13px; color:var(--text2);">Expires</span><span id="km-expires"
+                    style="font-size:13px; font-weight:500;">-</span>
                 </div>
               </div>
               <div style="display:flex; flex-direction:column; gap:12px; margin-top:auto;">
-                <button id="cs-btn-rotate" style="width:100%; justify-content:center; padding:12px; background:#16a34a; color:#fff; border:none; border-radius:8px; font-weight:600; font-size:14px; display:flex; align-items:center; gap:8px; cursor:pointer;"><i class="ph-bold ph-arrows-clockwise"></i> Rotate Keys</button>
-                <button id="cs-btn-generate" style="width:100%; justify-content:center; padding:12px; background:#fff; color:#16a34a; border:1px solid var(--border); border-radius:8px; font-weight:600; font-size:14px; display:flex; align-items:center; gap:8px; cursor:pointer;"><i class="ph-bold ph-plus"></i> Generate New Key Pair</button>
-                <button id="cs-btn-download" style="width:100%; justify-content:center; padding:12px; background:#fff; color:#16a34a; border:1px solid var(--border); border-radius:8px; font-weight:600; font-size:14px; display:flex; align-items:center; gap:8px; cursor:pointer;"><i class="ph-bold ph-download-simple"></i> Download Public Key</button>
+                <button id="cs-btn-rotate"
+                  style="width:100%; justify-content:center; padding:12px; background:#16a34a; color:#fff; border:none; border-radius:8px; font-weight:600; font-size:14px; display:flex; align-items:center; gap:8px; cursor:pointer;"><i
+                    class="ph-bold ph-arrows-clockwise"></i> Rotate Keys</button>
+                <button id="cs-btn-generate"
+                  style="width:100%; justify-content:center; padding:12px; background:#fff; color:#16a34a; border:1px solid var(--border); border-radius:8px; font-weight:600; font-size:14px; display:flex; align-items:center; gap:8px; cursor:pointer;"><i
+                    class="ph-bold ph-plus"></i> Generate New Key Pair</button>
+                <button id="cs-btn-download"
+                  style="width:100%; justify-content:center; padding:12px; background:#fff; color:#16a34a; border:1px solid var(--border); border-radius:8px; font-weight:600; font-size:14px; display:flex; align-items:center; gap:8px; cursor:pointer;"><i
+                    class="ph-bold ph-download-simple"></i> Download Public Key</button>
               </div>
             </div>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px; margin-bottom: 24px;">
+          <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px; margin-bottom: 24px;">
             <!-- SECTION 3: Verification Methods -->
             <div class="admin-widget" style="padding:24px;">
               <div style="font-size:16px;font-weight:700;margin-bottom:16px;">Verification Methods</div>
               <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
-                <div style="display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color:var(--text);">
-                  <div style="background:#16a34a; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center;"><i class="ph-bold ph-check" style="color:#fff; font-size:14px;"></i></div> SHA-256 Hash Verification
+                <div
+                  style="display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color:var(--text);">
+                  <div
+                    style="background:#16a34a; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center;">
+                    <i class="ph-bold ph-check" style="color:#fff; font-size:14px;"></i></div> SHA-256 Hash Verification
                 </div>
-                <div style="display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color:var(--text);">
-                  <div style="background:#16a34a; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center;"><i class="ph-bold ph-check" style="color:#fff; font-size:14px;"></i></div> RSA Digital Signature
+                <div
+                  style="display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color:var(--text);">
+                  <div
+                    style="background:#16a34a; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center;">
+                    <i class="ph-bold ph-check" style="color:#fff; font-size:14px;"></i></div> RSA Digital Signature
                 </div>
-                <div style="display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color:var(--text);">
-                  <div style="background:#16a34a; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center;"><i class="ph-bold ph-check" style="color:#fff; font-size:14px;"></i></div> QR Code Verification
+                <div
+                  style="display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color:var(--text);">
+                  <div
+                    style="background:#16a34a; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center;">
+                    <i class="ph-bold ph-check" style="color:#fff; font-size:14px;"></i></div> QR Code Verification
                 </div>
               </div>
-              <div style="font-size:12px; font-weight:600; color:var(--text2); margin-bottom:8px;">Verification URL</div>
+              <div style="font-size:12px; font-weight:600; color:var(--text2); margin-bottom:8px;">Verification URL
+              </div>
               <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                <input type="text" id="cs-verify-url" value="https://surakshasetu.org/verify" readonly style="flex:1; min-width:200px; padding:10px; border-radius:8px; border:1px solid var(--border); font-size:13px; outline:none; background:#f8fafc; color:var(--text2);">
-                <button onclick="navigator.clipboard.writeText(document.getElementById('cs-verify-url').value); if(typeof showToast === 'function') showToast('Copied to clipboard');" style="padding:10px 16px; border-radius:8px; border:1px solid var(--border); background:#fff; color:#16a34a; font-weight:600; font-size:13px; display:flex; align-items:center; gap:6px; cursor:pointer;"><i class="ph-bold ph-copy"></i> Copy</button>
-                <button onclick="window.open(document.getElementById('cs-verify-url').value, '_blank')" style="padding:10px 16px; border-radius:8px; border:none; background:#16a34a; color:#fff; font-weight:600; font-size:13px; display:flex; align-items:center; gap:6px; cursor:pointer;"><i class="ph-bold ph-arrow-square-out"></i> Open</button>
+                <input type="text" id="cs-verify-url" value="https://surakshasetu.org/verify" readonly
+                  style="flex:1; min-width:200px; padding:10px; border-radius:8px; border:1px solid var(--border); font-size:13px; outline:none; background:#f8fafc; color:var(--text2);">
+                <button
+                  onclick="navigator.clipboard.writeText(document.getElementById('cs-verify-url').value); if(typeof showToast === 'function') showToast('Copied to clipboard');"
+                  style="padding:10px 16px; border-radius:8px; border:1px solid var(--border); background:#fff; color:#16a34a; font-weight:600; font-size:13px; display:flex; align-items:center; gap:6px; cursor:pointer;"><i
+                    class="ph-bold ph-copy"></i> Copy</button>
+                <button onclick="window.open(document.getElementById('cs-verify-url').value, '_blank')"
+                  style="padding:10px 16px; border-radius:8px; border:none; background:#16a34a; color:#fff; font-weight:600; font-size:13px; display:flex; align-items:center; gap:6px; cursor:pointer;"><i
+                    class="ph-bold ph-arrow-square-out"></i> Open</button>
               </div>
             </div>
 
             <!-- SECTION 5: Signature Verification Test -->
             <div class="admin-widget" style="padding:24px;">
               <div style="font-size:16px;font-weight:700;margin-bottom:12px;">Signature Verification Test</div>
-              <div style="font-size:13px; color:var(--text2); margin-bottom:16px;">Enter a certificate ID to verify its authenticity.</div>
+              <div style="font-size:13px; color:var(--text2); margin-bottom:16px;">Enter a certificate ID to verify its
+                authenticity.</div>
               <div style="display:flex; gap:12px; margin-bottom:16px;">
-                <input type="text" id="cs-test-cert-id" placeholder="Certificate ID (e.g. SS-CERT-000001)" style="flex:1; padding:12px 16px; border-radius:8px; border:1px solid var(--border); font-size:13px; outline:none; transition: border-color 0.2s;">
-                <button id="cs-btn-test" style="padding:12px 24px; border-radius:8px; border:none; background:#16a34a; color:#fff; font-weight:600; font-size:14px; cursor:pointer; min-width:100px;">Verify</button>
+                <input type="text" id="cs-test-cert-id" placeholder="Certificate ID (e.g. SS-CERT-000001)"
+                  style="flex:1; padding:12px 16px; border-radius:8px; border:1px solid var(--border); font-size:13px; outline:none; transition: border-color 0.2s;">
+                <button id="cs-btn-test"
+                  style="padding:12px 24px; border-radius:8px; border:none; background:#16a34a; color:#fff; font-weight:600; font-size:14px; cursor:pointer; min-width:100px;">Verify</button>
               </div>
-              <div id="cs-test-results" style="display:none; padding:16px; border-radius:8px; border:1px solid var(--border); background:#f8fafc;">
-                <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border);">
+              <div id="cs-test-results"
+                style="display:none; padding:16px; border-radius:8px; border:1px solid var(--border); background:#f8fafc;">
+                <div
+                  style="display:flex; align-items:center; gap:8px; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--border);">
                   <div id="cs-test-icon"></div>
                   <div id="cs-test-status" style="font-size:15px; font-weight:700;"></div>
                 </div>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
                   <div>
-                    <div style="font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">Certificate ID</div>
+                    <div
+                      style="font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">
+                      Certificate ID</div>
                     <div id="cs-test-cert-id-val" style="font-size:13px; font-weight:600; color:var(--text);">-</div>
                   </div>
                   <div>
-                    <div style="font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">Status</div>
+                    <div
+                      style="font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">
+                      Status</div>
                     <div id="cs-test-cert-status" style="font-size:13px; font-weight:600; color:var(--text);">-</div>
                   </div>
                   <div>
-                    <div style="font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">Signing Algorithm</div>
+                    <div
+                      style="font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">
+                      Signing Algorithm</div>
                     <div id="cs-test-algo" style="font-size:13px; font-weight:500; color:var(--text);">-</div>
                   </div>
                   <div>
-                    <div style="font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">Hash Algorithm</div>
+                    <div
+                      style="font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">
+                      Hash Algorithm</div>
                     <div id="cs-test-hash-algo" style="font-size:13px; font-weight:500; color:var(--text);">-</div>
                   </div>
                   <div style="grid-column: 1 / -1;">
-                    <div style="font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">Verified At</div>
+                    <div
+                      style="font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">
+                      Verified At</div>
                     <div id="cs-test-ts" style="font-size:13px; font-weight:500; color:var(--text);">-</div>
                   </div>
                   <div style="grid-column: 1 / -1;">
-                    <div style="font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">Fingerprint Hash</div>
-                    <div id="cs-test-hash" style="font-size:11px; font-family:monospace; color:var(--text2); word-break:break-all;">-</div>
+                    <div
+                      style="font-size:11px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px;">
+                      Fingerprint Hash</div>
+                    <div id="cs-test-hash"
+                      style="font-size:11px; font-family:monospace; color:var(--text2); word-break:break-all;">-</div>
                   </div>
                 </div>
               </div>
@@ -5569,28 +5657,36 @@
 
             <div style="display: flex; flex-direction: column; gap: 24px;">
               <!-- SECTION 6: Private Key Security -->
-              <div class="admin-widget" style="padding:24px; background:linear-gradient(to bottom, #ffffff, #f8fafc); border:1px solid var(--border);">
-                <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;">
+              <div class="admin-widget"
+                style="padding:24px; background:linear-gradient(to bottom, #ffffff, #f8fafc); border:1px solid var(--border);">
+                <div
+                  style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;">
                   <i class="ph-fill ph-shield-check" style="color:#10b981; font-size:20px;"></i> Private Key Security
                 </div>
                 <div style="display:flex; flex-direction:column; gap:12px; font-size:13px; color:var(--text2);">
                   <div style="display:flex; align-items:flex-start; gap:8px;">
-                    <i class="ph-bold ph-check" style="color:#10b981; margin-top:2px;"></i> <span>Stored securely on dedicated server</span>
+                    <i class="ph-bold ph-check" style="color:#10b981; margin-top:2px;"></i> <span>Stored securely on
+                      dedicated server</span>
                   </div>
                   <div style="display:flex; align-items:flex-start; gap:8px;">
-                    <i class="ph-bold ph-check" style="color:#10b981; margin-top:2px;"></i> <span>Never exposed through any API endpoint</span>
+                    <i class="ph-bold ph-check" style="color:#10b981; margin-top:2px;"></i> <span>Never exposed through
+                      any API endpoint</span>
                   </div>
                   <div style="display:flex; align-items:flex-start; gap:8px;">
-                    <i class="ph-bold ph-check" style="color:#10b981; margin-top:2px;"></i> <span>Never downloadable by administrators</span>
+                    <i class="ph-bold ph-check" style="color:#10b981; margin-top:2px;"></i> <span>Never downloadable by
+                      administrators</span>
                   </div>
                   <div style="display:flex; align-items:flex-start; gap:8px;">
-                    <i class="ph-bold ph-check" style="color:#10b981; margin-top:2px;"></i> <span>Encrypted at rest</span>
+                    <i class="ph-bold ph-check" style="color:#10b981; margin-top:2px;"></i> <span>Encrypted at
+                      rest</span>
                   </div>
                   <div style="display:flex; align-items:flex-start; gap:8px;">
-                    <i class="ph-bold ph-check" style="color:#10b981; margin-top:2px;"></i> <span>Never stored directly inside database</span>
+                    <i class="ph-bold ph-check" style="color:#10b981; margin-top:2px;"></i> <span>Never stored directly
+                      inside database</span>
                   </div>
                   <div style="display:flex; align-items:flex-start; gap:8px;">
-                    <i class="ph-bold ph-check" style="color:#10b981; margin-top:2px;"></i> <span>Used exclusively during certificate generation</span>
+                    <i class="ph-bold ph-check" style="color:#10b981; margin-top:2px;"></i> <span>Used exclusively
+                      during certificate generation</span>
                   </div>
                 </div>
               </div>
@@ -5598,19 +5694,31 @@
               <!-- SECTION 9: Future Compatibility -->
               <div class="admin-widget" style="padding:24px;">
                 <div style="font-size:16px;font-weight:700;margin-bottom:16px;">Standards Compatibility</div>
-                
-                <div style="font-size:12px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px;">Current</div>
+
+                <div
+                  style="font-size:12px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px;">
+                  Current</div>
                 <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px;">
-                  <span style="background:#dcfce7; color:#166534; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid #bbf7d0;">RSA-2048</span>
-                  <span style="background:#dcfce7; color:#166534; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid #bbf7d0;">SHA-256</span>
-                  <span style="background:#dcfce7; color:#166534; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid #bbf7d0;">QR Verification</span>
+                  <span
+                    style="background:#dcfce7; color:#166534; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid #bbf7d0;">RSA-2048</span>
+                  <span
+                    style="background:#dcfce7; color:#166534; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid #bbf7d0;">SHA-256</span>
+                  <span
+                    style="background:#dcfce7; color:#166534; padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid #bbf7d0;">QR
+                    Verification</span>
                 </div>
-                
-                <div style="font-size:12px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px;">Future Ready</div>
+
+                <div
+                  style="font-size:12px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px;">
+                  Future Ready</div>
                 <div style="display:flex; flex-wrap:wrap; gap:8px;">
-                  <span style="background:#f1f5f9; color:var(--text2); padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid var(--border);">PKCS#12</span>
-                  <span style="background:#f1f5f9; color:var(--text2); padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid var(--border);">X.509</span>
-                  <span style="background:#f1f5f9; color:var(--text2); padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid var(--border);">Adobe PDF Signature</span>
+                  <span
+                    style="background:#f1f5f9; color:var(--text2); padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid var(--border);">PKCS#12</span>
+                  <span
+                    style="background:#f1f5f9; color:var(--text2); padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid var(--border);">X.509</span>
+                  <span
+                    style="background:#f1f5f9; color:var(--text2); padding:4px 12px; border-radius:999px; font-size:11px; font-weight:600; border:1px solid var(--border);">Adobe
+                    PDF Signature</span>
                 </div>
               </div>
             </div>
@@ -5619,44 +5727,54 @@
 
         <div id="admin-view-cert-qr-pdf" style="display: none;">
           <!-- Header Banner -->
-          <div style="background: linear-gradient(90deg, #ffffff 0%, #f5f3ff 100%); border-radius: 12px; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+          <div
+            style="background: linear-gradient(90deg, #ffffff 0%, #f5f3ff 100%); border-radius: 12px; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <div style="display: flex; align-items: center; gap: 24px; z-index: 2;">
-              <div style="background: #ede9fe; border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(139, 92, 246, 0.12);">
+              <div
+                style="background: #ede9fe; border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(139, 92, 246, 0.12);">
                 <i class="ph-fill ph-qr-code" style="color: #8b5cf6; font-size: 32px;"></i>
               </div>
               <div>
-                <div style="font-size: 22px; font-weight: 800; color: #0f172a; font-family:'Outfit',sans-serif; margin-bottom: 6px;">QR & PDF Generation</div>
-                <div style="color: #64748b; font-size: 13px; font-weight: 500;">Manage QR code generation, PDF rendering, branding, output quality, storage, and certificate generation preferences.</div>
+                <div
+                  style="font-size: 22px; font-weight: 800; color: #0f172a; font-family:'Outfit',sans-serif; margin-bottom: 6px;">
+                  QR & PDF Generation</div>
+                <div style="color: #64748b; font-size: 13px; font-weight: 500;">Manage QR code generation, PDF
+                  rendering, branding, output quality, storage, and certificate generation preferences.</div>
               </div>
             </div>
             <!-- Decorative SVG -->
-            <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 450px; pointer-events: none; opacity: 0.8;">
-              <svg width="100%" height="100%" viewBox="0 0 450 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="250" y="20" width="100" height="120" rx="4" fill="#ffffff" stroke="#c4b5fd" stroke-width="2"/>
-                <line x1="265" y1="40" x2="335" y2="40" stroke="#ddd6fe" stroke-width="2" stroke-linecap="round"/>
-                <line x1="265" y1="55" x2="335" y2="55" stroke="#ddd6fe" stroke-width="2" stroke-linecap="round"/>
-                <rect x="265" y="70" width="30" height="30" fill="#a78bfa" rx="2"/>
-                <path d="M270 75 h20 v20 h-20 z" fill="#8b5cf6"/>
+            <div
+              style="position: absolute; right: 0; top: 0; bottom: 0; width: 450px; pointer-events: none; opacity: 0.8;">
+              <svg width="100%" height="100%" viewBox="0 0 450 120" preserveAspectRatio="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <rect x="250" y="20" width="100" height="120" rx="4" fill="#ffffff" stroke="#c4b5fd" stroke-width="2" />
+                <line x1="265" y1="40" x2="335" y2="40" stroke="#ddd6fe" stroke-width="2" stroke-linecap="round" />
+                <line x1="265" y1="55" x2="335" y2="55" stroke="#ddd6fe" stroke-width="2" stroke-linecap="round" />
+                <rect x="265" y="70" width="30" height="30" fill="#a78bfa" rx="2" />
+                <path d="M270 75 h20 v20 h-20 z" fill="#8b5cf6" />
               </svg>
             </div>
           </div>
 
           <!-- Main Layout -->
           <div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
-            
+
             <!-- Left Column: Settings (Flex 1) -->
             <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 24px;">
-              
+
               <!-- SECTION 1: QR CODE CONFIGURATION -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-qr-code"></i> QR Code Configuration
                 </div>
-                
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-bottom:16px;">
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Error Correction Level</label>
-                    <select id="qpset-qr-ecc" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Error Correction
+                      Level</label>
+                    <select id="qpset-qr-ecc" class="form-select filter-select w-full"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
                       <option value="L">L (7%)</option>
                       <option value="M">M (15%)</option>
                       <option value="Q">Q (25%)</option>
@@ -5664,19 +5782,50 @@
                     </select>
                   </div>
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">QR Size (px) [150 - 1000]</label>
-                    <input type="number" id="qpset-qr-size" min="150" max="1000" value="300" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">QR Size (px) [150 -
+                      1000]</label>
+                    <input type="number" id="qpset-qr-size" min="150" max="1000" value="300"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                  </div>
+                  <div class="form-group">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">QR Margin (0-20
+                      px)</label>
+                    <input type="number" id="qpset-qr-margin" min="0" max="20" value="4"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                 </div>
 
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap:16px; margin-bottom:16px;">
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">QR Margin (0-20 px)</label>
-                    <input type="number" id="qpset-qr-margin" min="0" max="20" value="4" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Logo Size (%)</label>
+                    <input type="number" id="qpset-qr-logo-size" min="10" max="35" value="20"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Embed Organization Logo</label>
-                    <label style="display:flex;align-items:center;gap:8px;font-size:13px;padding-top:10px;cursor:pointer;">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Foreground
+                      Color</label>
+                    <div style="display:flex; gap:8px;">
+                      <input type="color" id="qpset-qr-fg" value="#000000"
+                        style="width:40px;height:40px;padding:0;border:none;border-radius:8px;cursor:pointer;">
+                      <input type="text" id="qpset-qr-fg-txt" value="#000000"
+                        style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Background
+                      Color</label>
+                    <div style="display:flex; gap:8px;">
+                      <input type="color" id="qpset-qr-bg" value="#ffffff"
+                        style="width:40px;height:40px;padding:0;border:none;border-radius:8px;cursor:pointer;">
+                      <input type="text" id="qpset-qr-bg-txt" value="#ffffff"
+                        style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Embed Organization
+                      Logo</label>
+                    <label
+                      style="display:flex;align-items:center;gap:8px;font-size:13px;padding-top:10px;cursor:pointer;">
                       <div class="toggle-switch">
                         <input type="checkbox" id="qpset-qr-embed-logo" checked>
                         <span class="slider"></span>
@@ -5686,69 +5835,66 @@
                   </div>
                 </div>
 
-                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-bottom:16px;">
+                <div style="display:grid; grid-template-columns: 1fr 2.5fr 1fr; gap:16px;">
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Logo Size (%)</label>
-                    <input type="number" id="qpset-qr-logo-size" min="10" max="35" value="20" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Verification URL
+                      Format</label>
+                    <select id="qpset-qr-url-format" class="form-select filter-select w-full"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                      <option value="/verify/{certificate_id}">/verify/{certificate_id}</option>
+                      <option value="/verify?token={token}">/verify?token={token}</option>
+                    </select>
                   </div>
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Foreground Color</label>
-                    <div style="display:flex; gap:8px;">
-                      <input type="color" id="qpset-qr-fg" value="#000000" style="width:40px;height:40px;padding:0;border:none;border-radius:8px;cursor:pointer;">
-                      <input type="text" id="qpset-qr-fg-txt" value="#000000" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
-                    </div>
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Preview URL</label>
+                    <input type="text" id="qpset-qr-url-preview" value="https://surakshasetu.org/verify/SS-CERT-0001"
+                      readonly
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;background:#f8fafc;color:var(--text2);">
                   </div>
-                  <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Background Color</label>
-                    <div style="display:flex; gap:8px;">
-                      <input type="color" id="qpset-qr-bg" value="#ffffff" style="width:40px;height:40px;padding:0;border:none;border-radius:8px;cursor:pointer;">
-                      <input type="text" id="qpset-qr-bg-txt" value="#ffffff" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
-                    </div>
+                  <div class="form-group"
+                    style="display:flex;flex-direction:column;justify-content:flex-end; padding-left:32px;">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Auto Generate
+                      QR</label>
+                    <label
+                      style="display:flex;align-items:center;gap:8px;font-size:13px;padding-bottom:10px;cursor:pointer;">
+                      <div class="toggle-switch">
+                        <input type="checkbox" id="qpset-qr-auto" checked>
+                        <span class="slider"></span>
+                      </div>
+                      <span>Generate automatically on certificate issue</span>
+                    </label>
                   </div>
-                </div>
-
-                <div class="form-group" style="margin-bottom:16px;">
-                  <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Verification URL Format</label>
-                  <select id="qpset-qr-url-format" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
-                    <option value="/verify/{certificate_id}">/verify/{certificate_id}</option>
-                    <option value="/verify?token={token}">/verify?token={token}</option>
-                  </select>
-                </div>
-
-                <div class="form-group" style="margin-bottom:16px;">
-                  <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Preview URL</label>
-                  <input type="text" id="qpset-qr-url-preview" value="https://surakshasetu.org/verify/SS-CERT-0001" readonly style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;background:#f8fafc;color:var(--text2);">
-                </div>
-
-                <div class="form-group">
-                  <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Auto Generate QR</label>
-                  <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
-                    <div class="toggle-switch">
-                      <input type="checkbox" id="qpset-qr-auto" checked>
-                      <span class="slider"></span>
-                    </div>
-                    <span>Generate automatically on certificate issue</span>
-                  </label>
                 </div>
               </div>
 
               <!-- SECTION 2: PDF RENDERING ENGINE -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-file-pdf"></i> PDF Rendering Engine
                 </div>
-                
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-bottom:16px;">
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">PDF Engine</label>
-                    <input type="text" value="ReportLab" readonly style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;background:#f8fafc;color:var(--text2);">
+                    <input type="text" value="ReportLab" readonly
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;background:#f8fafc;color:var(--text2);">
                   </div>
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Page Size</label>
-                    <select id="qpset-pdf-size" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                    <select id="qpset-pdf-size" class="form-select filter-select w-full"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
                       <option value="A4">A4</option>
                       <option value="Letter">Letter</option>
                       <option value="Legal">Legal</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Color Profile</label>
+                    <select id="qpset-pdf-color" class="form-select filter-select w-full"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                      <option value="sRGB">sRGB</option>
+                      <option value="CMYK">CMYK</option>
                     </select>
                   </div>
                 </div>
@@ -5756,14 +5902,16 @@
                 <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-bottom:16px;">
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Orientation</label>
-                    <select id="qpset-pdf-orientation" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                    <select id="qpset-pdf-orientation" class="form-select filter-select w-full"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
                       <option value="Landscape">Landscape</option>
                       <option value="Portrait">Portrait</option>
                     </select>
                   </div>
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Resolution</label>
-                    <select id="qpset-pdf-dpi" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                    <select id="qpset-pdf-dpi" class="form-select filter-select w-full"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
                       <option value="150">150 DPI</option>
                       <option value="300">300 DPI</option>
                       <option value="600">600 DPI</option>
@@ -5771,7 +5919,8 @@
                   </div>
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Compression</label>
-                    <select id="qpset-pdf-compression" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                    <select id="qpset-pdf-compression" class="form-select filter-select w-full"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
                       <option value="Low">Low</option>
                       <option value="Medium" selected>Medium</option>
                       <option value="High">High</option>
@@ -5779,99 +5928,100 @@
                   </div>
                 </div>
 
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
+                <div style="display:grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap:16px;">
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Color Profile</label>
-                    <select id="qpset-pdf-color" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
-                      <option value="sRGB">sRGB</option>
-                      <option value="CMYK">CMYK</option>
-                    </select>
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Output File Naming
+                      Example</label>
+                    <input type="text" value="SS-CERT-2026-000001.pdf" readonly
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;background:#f8fafc;color:var(--text2);">
                   </div>
-                  <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Output File Naming Example</label>
-                    <input type="text" value="SS-CERT-2026-000001.pdf" readonly style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;background:#f8fafc;color:var(--text2);">
+                  <div class="form-group" style="display:flex;flex-direction:column;justify-content:flex-end;">
+                    <label
+                      style="display:flex;align-items:center;gap:8px;font-size:13px;padding-bottom:10px;cursor:pointer;">
+                      <div class="toggle-switch">
+                        <input type="checkbox" id="qpset-pdf-font" checked>
+                        <span class="slider"></span>
+                      </div>
+                      <span>Font Embedding</span>
+                    </label>
                   </div>
-                </div>
-
-                <div style="display:flex; flex-wrap:wrap; gap:24px;">
-                  <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
-                    <div class="toggle-switch">
-                      <input type="checkbox" id="qpset-pdf-font" checked>
-                      <span class="slider"></span>
-                    </div>
-                    <span>Font Embedding</span>
-                  </label>
-                  <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
-                    <div class="toggle-switch">
-                      <input type="checkbox" id="qpset-pdf-meta" checked>
-                      <span class="slider"></span>
-                    </div>
-                    <span>Embed Metadata</span>
-                  </label>
-                  <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
-                    <div class="toggle-switch">
-                      <input type="checkbox" id="qpset-pdf-opt" checked>
-                      <span class="slider"></span>
-                    </div>
-                    <span>Enable PDF Optimization</span>
-                  </label>
+                  <div class="form-group" style="display:flex;flex-direction:column;justify-content:flex-end;">
+                    <label
+                      style="display:flex;align-items:center;gap:8px;font-size:13px;padding-bottom:10px;cursor:pointer;">
+                      <div class="toggle-switch">
+                        <input type="checkbox" id="qpset-pdf-meta" checked>
+                        <span class="slider"></span>
+                      </div>
+                      <span>Embed Metadata</span>
+                    </label>
+                  </div>
+                  <div class="form-group" style="display:flex;flex-direction:column;justify-content:flex-end;">
+                    <label
+                      style="display:flex;align-items:center;gap:8px;font-size:13px;padding-bottom:10px;cursor:pointer;">
+                      <div class="toggle-switch">
+                        <input type="checkbox" id="qpset-pdf-opt" checked>
+                        <span class="slider"></span>
+                      </div>
+                      <span>Enable PDF Optimization</span>
+                    </label>
+                  </div>
                 </div>
               </div>
 
               <!-- SECTION 3: CERTIFICATE BRANDING -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-palette"></i> Certificate Branding
                 </div>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Organization Logo</label>
-                    <input type="file" id="qpset-brand-logo" accept="image/png, image/jpeg" style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Organization
+                      Logo</label>
+                    <input type="file" id="qpset-brand-logo" accept="image/png, image/jpeg"
+                      style="width:100%;padding:8px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Default Signature Block</label>
-                    <input type="text" id="qpset-brand-sig" value="Authorized Signatory" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
-                  </div>
-                </div>
-
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
-                  <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Default Footer</label>
-                    <input type="text" id="qpset-brand-footer" value="Verifiable securely at SurakshaSetu." style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
-                  </div>
-                  <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Verification Footer</label>
-                    <input type="text" id="qpset-brand-vfooter" value="Scanned copy" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Default Signature
+                      Block</label>
+                    <input type="text" id="qpset-brand-sig" value="Authorized Signatory"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                 </div>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Official Website</label>
-                    <input type="url" id="qpset-brand-web" value="https://surakshasetu.org" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Default
+                      Footer</label>
+                    <input type="text" id="qpset-brand-footer" value="Verifiable securely at SurakshaSetu."
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Watermark Position</label>
-                    <select id="qpset-brand-wm-pos" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
-                      <option value="Center">Center</option>
-                      <option value="Tiled">Tiled</option>
-                      <option value="Bottom Right">Bottom Right</option>
-                    </select>
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Verification
+                      Footer</label>
+                    <input type="text" id="qpset-brand-vfooter" value="Scanned copy"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                 </div>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-bottom:16px;">
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Watermark Text</label>
-                    <input type="text" id="qpset-brand-wm-txt" value="SURAKSHA SETU" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Official
+                      Website</label>
+                    <input type="url" id="qpset-brand-web" value="https://surakshasetu.org"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Watermark Opacity</label>
-                    <input type="number" id="qpset-brand-wm-op" min="0.05" max="1" step="0.05" value="0.1" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Watermark
+                      Text</label>
+                    <input type="text" id="qpset-brand-wm-txt" value="SURAKSHA SETU"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
-                  <div class="form-group" style="display:flex;flex-direction:column;justify-content:flex-end;">
-                    <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;padding-bottom:10px;">
+                  <div class="form-group"
+                    style="display:flex;flex-direction:column;justify-content:flex-end; padding-left:48px;">
+                    <label
+                      style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;padding-bottom:10px;">
                       <div class="toggle-switch">
                         <input type="checkbox" id="qpset-brand-seal" checked>
                         <span class="slider"></span>
@@ -5881,215 +6031,433 @@
                   </div>
                 </div>
 
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap:16px;">
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Header Logo Position</label>
-                    <select id="qpset-brand-h-pos" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Watermark
+                      Position</label>
+                    <select id="qpset-brand-wm-pos" class="form-select filter-select w-full"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                      <option value="Center">Center</option>
+                      <option value="Tiled">Tiled</option>
+                      <option value="Bottom Right">Bottom Right</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Header Logo
+                      Position</label>
+                    <select id="qpset-brand-h-pos" class="form-select filter-select w-full"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
                       <option value="Top Left">Top Left</option>
                       <option value="Top Center">Top Center</option>
                       <option value="Top Right">Top Right</option>
                     </select>
                   </div>
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Footer Alignment</label>
-                    <select id="qpset-brand-f-align" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Footer
+                      Alignment</label>
+                    <select id="qpset-brand-f-align" class="form-select filter-select w-full"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
                       <option value="Left">Left</option>
                       <option value="Center">Center</option>
                       <option value="Right">Right</option>
                     </select>
+                  </div>
+                  <div class="form-group">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Watermark
+                      Opacity</label>
+                    <input type="number" id="qpset-brand-wm-op" min="0.05" max="1" step="0.05" value="0.1"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                 </div>
               </div>
 
               <!-- SECTION 5: EXPORT QUALITY -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-export"></i> Export Quality Presets
                 </div>
-                
+
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:16px;">
-                  <div id="qpset-preset-web" style="border:1px solid #16a34a; background:#f0fdf4; border-radius:8px; padding:16px; cursor:pointer;" onclick="qpsetApplyPreset('web')">
-                    <div id="qpset-preset-web-title" style="font-weight:700; color:#166534; margin-bottom:8px;">Web Optimized</div>
-                    <div id="qpset-preset-web-t1" style="font-size:12px; color:#15803d; margin-bottom:4px;"><i class="ph-fill ph-file-pdf"></i> Est. File Size: ~150KB</div>
-                    <div id="qpset-preset-web-t2" style="font-size:12px; color:#15803d; margin-bottom:4px;"><i class="ph-fill ph-clock"></i> Gen Time: ~0.2s</div>
-                    <div id="qpset-preset-web-t3" style="font-size:12px; color:#15803d;"><i class="ph-fill ph-check-circle"></i> Recommended for Emails</div>
+                  <div id="qpset-preset-web"
+                    style="border:1px solid #16a34a; background:#f0fdf4; border-radius:8px; padding:16px; cursor:pointer;"
+                    onclick="qpsetApplyPreset('web')">
+                    <div id="qpset-preset-web-title" style="font-weight:700; color:#166534; margin-bottom:8px;">Web
+                      Optimized</div>
+                    <div id="qpset-preset-web-t1" style="font-size:12px; color:#15803d; margin-bottom:4px;"><i
+                        class="ph-fill ph-file-pdf"></i> Est. File Size: ~150KB</div>
+                    <div id="qpset-preset-web-t2" style="font-size:12px; color:#15803d; margin-bottom:4px;"><i
+                        class="ph-fill ph-clock"></i> Gen Time: ~0.2s</div>
+                    <div id="qpset-preset-web-t3" style="font-size:12px; color:#15803d;"><i
+                        class="ph-fill ph-check-circle"></i> Recommended for Emails</div>
                   </div>
-                  <div id="qpset-preset-print" style="border:1px solid var(--border); background:#fff; border-radius:8px; padding:16px; cursor:pointer;" onclick="qpsetApplyPreset('print')">
-                    <div id="qpset-preset-print-title" style="font-weight:700; color:var(--text); margin-bottom:8px;">Print Optimized</div>
-                    <div id="qpset-preset-print-t1" style="font-size:12px; color:var(--text2); margin-bottom:4px;"><i class="ph-fill ph-file-pdf"></i> Est. File Size: ~1.2MB</div>
-                    <div id="qpset-preset-print-t2" style="font-size:12px; color:var(--text2); margin-bottom:4px;"><i class="ph-fill ph-clock"></i> Gen Time: ~0.8s</div>
-                    <div id="qpset-preset-print-t3" style="font-size:12px; color:var(--text2);"><i class="ph-fill ph-check-circle"></i> Recommended for Printing</div>
+                  <div id="qpset-preset-print"
+                    style="border:1px solid var(--border); background:#fff; border-radius:8px; padding:16px; cursor:pointer;"
+                    onclick="qpsetApplyPreset('print')">
+                    <div id="qpset-preset-print-title" style="font-weight:700; color:var(--text); margin-bottom:8px;">
+                      Print Optimized</div>
+                    <div id="qpset-preset-print-t1" style="font-size:12px; color:var(--text2); margin-bottom:4px;"><i
+                        class="ph-fill ph-file-pdf"></i> Est. File Size: ~1.2MB</div>
+                    <div id="qpset-preset-print-t2" style="font-size:12px; color:var(--text2); margin-bottom:4px;"><i
+                        class="ph-fill ph-clock"></i> Gen Time: ~0.8s</div>
+                    <div id="qpset-preset-print-t3" style="font-size:12px; color:var(--text2);"><i
+                        class="ph-fill ph-check-circle"></i> Recommended for Printing</div>
                   </div>
-                  <div id="qpset-preset-archive" style="border:1px solid var(--border); background:#fff; border-radius:8px; padding:16px; cursor:pointer;" onclick="qpsetApplyPreset('archive')">
-                    <div id="qpset-preset-archive-title" style="font-weight:700; color:var(--text); margin-bottom:8px;">Archive Quality</div>
-                    <div id="qpset-preset-archive-t1" style="font-size:12px; color:var(--text2); margin-bottom:4px;"><i class="ph-fill ph-file-pdf"></i> Est. File Size: ~3.5MB</div>
-                    <div id="qpset-preset-archive-t2" style="font-size:12px; color:var(--text2); margin-bottom:4px;"><i class="ph-fill ph-clock"></i> Gen Time: ~1.5s</div>
-                    <div id="qpset-preset-archive-t3" style="font-size:12px; color:var(--text2);"><i class="ph-fill ph-check-circle"></i> Best for Long-term storage</div>
+                  <div id="qpset-preset-archive"
+                    style="border:1px solid var(--border); background:#fff; border-radius:8px; padding:16px; cursor:pointer;"
+                    onclick="qpsetApplyPreset('archive')">
+                    <div id="qpset-preset-archive-title" style="font-weight:700; color:var(--text); margin-bottom:8px;">
+                      Archive Quality</div>
+                    <div id="qpset-preset-archive-t1" style="font-size:12px; color:var(--text2); margin-bottom:4px;"><i
+                        class="ph-fill ph-file-pdf"></i> Est. File Size: ~3.5MB</div>
+                    <div id="qpset-preset-archive-t2" style="font-size:12px; color:var(--text2); margin-bottom:4px;"><i
+                        class="ph-fill ph-clock"></i> Gen Time: ~1.5s</div>
+                    <div id="qpset-preset-archive-t3" style="font-size:12px; color:var(--text2);"><i
+                        class="ph-fill ph-check-circle"></i> Best for Long-term storage</div>
                   </div>
                 </div>
               </div>
 
               <!-- SECTION 6: OUTPUT PREFERENCES -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-sliders"></i> Default Output Preferences
                 </div>
-                
-                <div style="display:flex; flex-direction:column; gap:16px;">
-                  <label style="display:flex;align-items:center;gap:12px;cursor:pointer;">
-                    <div class="toggle-switch"><input type="checkbox" id="qpset-out-qr" checked><span class="slider"></span></div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+                  <label
+                    style="display:flex;align-items:center;gap:16px;cursor:pointer;border:1px solid var(--border);padding:16px;border-radius:12px;background:#fff;transition:box-shadow 0.2s;">
+                    <div class="toggle-switch"><input type="checkbox" id="qpset-out-qr" checked><span
+                        class="slider"></span></div>
                     <div>
-                      <div style="font-size:14px;font-weight:600;">Generate QR Automatically</div>
-                      <div style="font-size:12px;color:var(--text3);">Create a QR code when a new certificate is issued.</div>
+                      <div style="font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text);">Generate QR
+                        Automatically</div>
+                      <div style="font-size:12px;color:var(--text3);line-height:1.4;">Create a QR code when a new
+                        certificate is issued.</div>
                     </div>
                   </label>
-                  <label style="display:flex;align-items:center;gap:12px;cursor:pointer;">
-                    <div class="toggle-switch"><input type="checkbox" id="qpset-out-pdf" checked><span class="slider"></span></div>
+                  <label
+                    style="display:flex;align-items:center;gap:16px;cursor:pointer;border:1px solid var(--border);padding:16px;border-radius:12px;background:#fff;transition:box-shadow 0.2s;">
+                    <div class="toggle-switch"><input type="checkbox" id="qpset-out-r2" checked><span
+                        class="slider"></span></div>
                     <div>
-                      <div style="font-size:14px;font-weight:600;">Generate PDF Automatically</div>
-                      <div style="font-size:12px;color:var(--text3);">Render the PDF document upon certificate issue.</div>
+                      <div style="font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text);">Upload to
+                        Cloudflare R2</div>
+                      <div style="font-size:12px;color:var(--text3);line-height:1.4;">Store generated assets in secure
+                        cloud storage.</div>
                     </div>
                   </label>
-                  <label style="display:flex;align-items:center;gap:12px;cursor:pointer;">
-                    <div class="toggle-switch"><input type="checkbox" id="qpset-out-r2" checked><span class="slider"></span></div>
+                  <label
+                    style="display:flex;align-items:center;gap:16px;cursor:pointer;border:1px solid var(--border);padding:16px;border-radius:12px;background:#fff;transition:box-shadow 0.2s;">
+                    <div class="toggle-switch"><input type="checkbox" id="qpset-out-pdf" checked><span
+                        class="slider"></span></div>
                     <div>
-                      <div style="font-size:14px;font-weight:600;">Upload to Cloudflare R2</div>
-                      <div style="font-size:12px;color:var(--text3);">Store generated assets in secure cloud storage.</div>
+                      <div style="font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text);">Generate PDF
+                        Automatically</div>
+                      <div style="font-size:12px;color:var(--text3);line-height:1.4;">Render the PDF document upon
+                        certificate issue.</div>
                     </div>
                   </label>
-                  <label style="display:flex;align-items:center;gap:12px;cursor:pointer;">
-                    <div class="toggle-switch"><input type="checkbox" id="qpset-out-email"><span class="slider"></span></div>
+                  <label
+                    style="display:flex;align-items:center;gap:16px;cursor:pointer;border:1px solid var(--border);padding:16px;border-radius:12px;background:#fff;transition:box-shadow 0.2s;">
+                    <div class="toggle-switch"><input type="checkbox" id="qpset-out-email"><span class="slider"></span>
+                    </div>
                     <div>
-                      <div style="font-size:14px;font-weight:600;">Email Certificate Automatically</div>
-                      <div style="font-size:12px;color:var(--text3);">Send PDF and QR via email to the recipient instantly.</div>
+                      <div style="font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text);">Email Certificate
+                        Automatically</div>
+                      <div style="font-size:12px;color:var(--text3);line-height:1.4;">Send PDF and QR via email to the
+                        recipient instantly.</div>
                     </div>
                   </label>
-                  <label style="display:flex;align-items:center;gap:12px;cursor:pointer;">
-                    <div class="toggle-switch"><input type="checkbox" id="qpset-out-feed"><span class="slider"></span></div>
+                  <label
+                    style="display:flex;align-items:center;gap:16px;cursor:pointer;border:1px solid var(--border);padding:16px;border-radius:12px;background:#fff;transition:box-shadow 0.2s;">
+                    <div class="toggle-switch"><input type="checkbox" id="qpset-out-dl"><span class="slider"></span>
+                    </div>
                     <div>
-                      <div style="font-size:14px;font-weight:600;">Publish to Community Feed</div>
-                      <div style="font-size:12px;color:var(--text3);">Make the issuance visible in the public activity feed.</div>
+                      <div style="font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text);">Download After
+                        Generation</div>
+                      <div style="font-size:12px;color:var(--text3);line-height:1.4;">Prompt the browser to download
+                        files automatically.</div>
                     </div>
                   </label>
-                  <label style="display:flex;align-items:center;gap:12px;cursor:pointer;">
-                    <div class="toggle-switch"><input type="checkbox" id="qpset-out-dl"><span class="slider"></span></div>
+                  <label
+                    style="display:flex;align-items:center;gap:16px;cursor:pointer;border:1px solid var(--border);padding:16px;border-radius:12px;background:#fff;transition:box-shadow 0.2s;">
+                    <div class="toggle-switch"><input type="checkbox" id="qpset-out-feed"><span class="slider"></span>
+                    </div>
                     <div>
-                      <div style="font-size:14px;font-weight:600;">Download After Generation</div>
-                      <div style="font-size:12px;color:var(--text3);">Prompt the browser to download files automatically.</div>
+                      <div style="font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text);">Publish to
+                        Community Feed</div>
+                      <div style="font-size:12px;color:var(--text3);line-height:1.4;">Make the issuance visible in the
+                        public activity feed.</div>
                     </div>
                   </label>
-                  <label style="display:flex;align-items:center;gap:12px;cursor:pointer;">
-                    <div class="toggle-switch"><input type="checkbox" id="qpset-out-local" checked><span class="slider"></span></div>
+                  <label
+                    style="display:flex;align-items:center;gap:16px;cursor:pointer;border:1px solid var(--border);padding:16px;border-radius:12px;background:#fff;transition:box-shadow 0.2s;">
+                    <div class="toggle-switch"><input type="checkbox" id="qpset-out-local" checked><span
+                        class="slider"></span></div>
                     <div>
-                      <div style="font-size:14px;font-weight:600;">Retain Local Backup</div>
-                      <div style="font-size:12px;color:var(--text3);">Keep a copy on the application server disk.</div>
+                      <div style="font-size:14px;font-weight:600;margin-bottom:4px;color:var(--text);">Retain Local
+                        Backup</div>
+                      <div style="font-size:12px;color:var(--text3);line-height:1.4;">Keep a copy on the application
+                        server disk.</div>
                     </div>
                   </label>
                 </div>
               </div>
 
-              <!-- SECTION 10: ADVANCED SETTINGS -->
-              <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+              <!-- SECTION 10 & 13: ADVANCED SETTINGS & CONTROLS -->
+              <style>
+                .qpset-btn {
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  gap: 8px;
+                  border-radius: 8px;
+                  font-weight: 600;
+                  cursor: pointer;
+                  transition: all 0.2s ease;
+                  outline: none;
+                  border: none;
+                  color: white;
+                }
+
+                .qpset-btn:hover {
+                  transform: translateY(-2px);
+                  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                }
+
+                .qpset-btn:active {
+                  transform: translateY(0);
+                  box-shadow: none;
+                }
+
+                .btn-save {
+                  background: #16A34A;
+                  padding: 12px 24px;
+                  font-size: 14px;
+                }
+
+                .btn-save:hover {
+                  background: #15803D;
+                }
+
+                .btn-reset {
+                  background: #6B7280;
+                  padding: 12px 24px;
+                  font-size: 14px;
+                }
+
+                .btn-reset:hover {
+                  background: #4B5563;
+                }
+
+                .btn-export {
+                  background: #4F46E5;
+                  padding: 12px 24px;
+                  font-size: 14px;
+                }
+
+                .btn-export:hover {
+                  background: #4338CA;
+                }
+
+                .btn-import {
+                  background: #0891B2;
+                  padding: 12px 24px;
+                  font-size: 14px;
+                }
+
+                .btn-import:hover {
+                  background: #0E7490;
+                }
+
+                .btn-sample-qr {
+                  background: #10B981;
+                  padding: 12px 24px;
+                  font-size: 14px;
+                }
+
+                .btn-sample-qr:hover {
+                  background: #059669;
+                }
+
+                .btn-sample-pdf {
+                  background: #DC2626;
+                  padding: 12px 24px;
+                  font-size: 14px;
+                }
+
+                .btn-sample-pdf:hover {
+                  background: #B91C1C;
+                }
+
+                .btn-sample-cert {
+                  background: #15803D;
+                  padding: 12px 24px;
+                  font-size: 14px;
+                }
+
+                .btn-sample-cert:hover {
+                  background: #166534;
+                }
+
+                .btn-pdf-outline {
+                  background: #ffffff;
+                  color: #EF4444;
+                  border: 1px solid #EF4444;
+                  padding: 8px 16px;
+                  font-size: 12px;
+                  border-radius: 6px;
+                }
+
+                .btn-pdf-outline:hover {
+                  background: #FEF2F2;
+                  color: #DC2626;
+                  border-color: #DC2626;
+                  transform: translateY(-1px);
+                }
+
+                .btn-qr-outline {
+                  background: #ffffff;
+                  color: #2563EB;
+                  border: 1px solid #2563EB;
+                  padding: 8px 16px;
+                  font-size: 12px;
+                  border-radius: 6px;
+                }
+
+                .btn-qr-outline:hover {
+                  background: #EFF6FF;
+                  color: #1D4ED8;
+                  border-color: #1D4ED8;
+                  transform: translateY(-1px);
+                }
+              </style>
+
+              <div class="admin-widget" style="padding:24px; margin-bottom:40px;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-gear-six"></i> Advanced Settings
                 </div>
-                
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
-                  <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
-                    <div class="toggle-switch"><input type="checkbox" id="qpset-adv-cache" checked><span class="slider"></span></div>
-                    <span>Cache Generated QR Codes</span>
-                  </label>
-                  <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
-                    <div class="toggle-switch"><input type="checkbox" id="qpset-adv-parallel"><span class="slider"></span></div>
-                    <span>Enable Parallel PDF Generation</span>
-                  </label>
-                </div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
-                  <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
-                    <div class="toggle-switch"><input type="checkbox" id="qpset-adv-opt-img" checked><span class="slider"></span></div>
-                    <span>Optimize Images</span>
-                  </label>
-                  <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
-                    <div class="toggle-switch"><input type="checkbox" id="qpset-adv-strip"><span class="slider"></span></div>
-                    <span>Strip Metadata</span>
-                  </label>
-                </div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
-                  <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
-                    <div class="toggle-switch"><input type="checkbox" id="qpset-adv-cleanup" checked><span class="slider"></span></div>
-                    <span>Auto Cleanup Temporary Files</span>
-                  </label>
-                  <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Temporary File Retention</label>
-                    <select id="qpset-adv-retention" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
-                      <option value="1">1 Hour</option>
-                      <option value="12" selected>12 Hours</option>
-                      <option value="24">24 Hours</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
 
-              <!-- SECTION 13: SAVE CONTROLS -->
-              <div style="display:flex; gap:16px; margin-top:10px;">
-                <button class="btn-primary" onclick="qpsetSavePreferences()" style="flex:1; justify-content:center;">
-                  <i class="ph-bold ph-floppy-disk"></i> Save Preferences
-                </button>
-                <button class="pf-btn" onclick="qpsetResetToDefault()" style="flex:1; justify-content:center;">
-                  <i class="ph-bold ph-arrow-counter-clockwise"></i> Reset to Default
-                </button>
-              </div>
-              <div style="display:flex; gap:16px; margin-bottom:40px;">
-                <button class="pf-btn" onclick="qpsetExportConfig()" style="flex:1; justify-content:center;">
-                  <i class="ph-bold ph-download-simple"></i> Export Configuration
-                </button>
-                <button class="pf-btn" onclick="qpsetImportConfig()" style="flex:1; justify-content:center;">
-                  <i class="ph-bold ph-upload-simple"></i> Import Configuration
-                </button>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:32px;">
+
+                  <!-- Left Column: Settings -->
+                  <div style="display:flex; flex-direction:column; gap:16px;">
+                    <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
+                      <div class="toggle-switch"><input type="checkbox" id="qpset-adv-cache" checked><span
+                          class="slider"></span></div>
+                      <span>Cache Generated QR Codes</span>
+                    </label>
+                    <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
+                      <div class="toggle-switch"><input type="checkbox" id="qpset-adv-opt-img" checked><span
+                          class="slider"></span></div>
+                      <span>Optimize Images</span>
+                    </label>
+                    <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
+                      <div class="toggle-switch"><input type="checkbox" id="qpset-adv-cleanup" checked><span
+                          class="slider"></span></div>
+                      <span>Auto Cleanup Temporary Files</span>
+                    </label>
+                    <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
+                      <div class="toggle-switch"><input type="checkbox" id="qpset-adv-parallel"><span
+                          class="slider"></span></div>
+                      <span>Enable Parallel PDF Generation</span>
+                    </label>
+                    <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
+                      <div class="toggle-switch"><input type="checkbox" id="qpset-adv-strip"><span
+                          class="slider"></span></div>
+                      <span>Strip Metadata</span>
+                    </label>
+                    <div class="form-group" style="margin-top:4px;">
+                      <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Temporary File
+                        Retention</label>
+                      <select id="qpset-adv-retention" class="form-select filter-select w-full"
+                        style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                        <option value="1">1 Hour</option>
+                        <option value="12" selected>12 Hours</option>
+                        <option value="24">24 Hours</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Right Column: Actions -->
+                  <div style="display:flex; flex-direction:column; gap:16px;">
+                    <button class="qpset-btn btn-save" onclick="qpsetSavePreferences()" style="width:100%;">
+                      <i class="ph-bold ph-floppy-disk" style="font-size:18px;"></i> Save Preferences
+                    </button>
+                    <button class="qpset-btn btn-reset" onclick="qpsetResetToDefault()" style="width:100%;">
+                      <i class="ph-bold ph-arrow-counter-clockwise" style="font-size:18px;"></i> Reset to Default
+                    </button>
+                    <button class="qpset-btn btn-export" onclick="qpsetExportConfig()" style="width:100%;">
+                      <i class="ph-bold ph-download-simple" style="font-size:18px;"></i> Export Configuration
+                    </button>
+                    <button class="qpset-btn btn-import" onclick="qpsetImportConfig()" style="width:100%;">
+                      <i class="ph-bold ph-upload-simple" style="font-size:18px;"></i> Import Configuration
+                    </button>
+                  </div>
+
+                </div>
               </div>
 
             </div>
 
             <!-- Right Column: Live Preview & Stats (Fixed Width 400px) -->
             <div style="width: 400px; display: flex; flex-direction: column; gap: 24px; position: sticky; top: 20px;">
-              
+
               <!-- SECTION 4: LIVE PREVIEW -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-eye"></i> Live Preview
                 </div>
-                
-                <div style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:24px; display:flex; flex-direction:column; align-items:center; margin-bottom:16px;">
-                  <div style="font-size:12px; font-weight:600; color:var(--text2); margin-bottom:16px; text-transform:uppercase; letter-spacing:1px;">QR Code Preview</div>
-                  
+
+                <div
+                  style="background:#f8fafc; border:1px solid var(--border); border-radius:12px; padding:24px; display:flex; flex-direction:column; align-items:center; margin-bottom:16px;">
+                  <div
+                    style="font-size:12px; font-weight:600; color:var(--text2); margin-bottom:16px; text-transform:uppercase; letter-spacing:1px;">
+                    QR Code Preview</div>
+
                   <!-- Dynamic QR Preview Container -->
-                  <div id="qpset-preview-qr-container" style="background:#fff; padding:12px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.05); position:relative;">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://surakshasetu.org/verify/SS-CERT-0001" id="qpset-preview-qr-img" width="150" height="150" style="display:block;">
+                  <div id="qpset-preview-qr-container"
+                    style="background:#fff; padding:12px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.05); position:relative;">
+                    <img
+                      src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://surakshasetu.org/verify/SS-CERT-0001"
+                      id="qpset-preview-qr-img" width="150" height="150" style="display:block;">
                     <!-- Logo Overlay -->
-                    <div id="qpset-preview-qr-logo" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; padding:4px; border-radius:4px; display:flex;">
-                      <img id="qpset-preview-logo-img" src="/img/logo.png" width="30" height="30" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\'><rect width=\'30\' height=\'30\' fill=\'#16a34a\'/></svg>'">
+                    <div id="qpset-preview-qr-logo"
+                      style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; padding:4px; border-radius:4px; display:flex;">
+                      <img id="qpset-preview-logo-img" src="/img/logo.png" width="30" height="30"
+                        onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\'><rect width=\'30\' height=\'30\' fill=\'#16a34a\'/></svg>'">
                     </div>
                   </div>
                 </div>
 
-                <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text2); margin-bottom:8px;">
+                <div
+                  style="display:flex; justify-content:space-between; font-size:12px; color:var(--text2); margin-bottom:8px;">
                   <span>Current DPI: <strong id="qpset-preview-dpi" style="color:var(--text);">150</strong></span>
                   <span>QR Size: <strong id="qpset-preview-qrsize" style="color:var(--text);">300px</strong></span>
                 </div>
                 <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text2);">
-                  <span>Est. File Size: <strong id="qpset-preview-filesize" style="color:var(--text);">~1.2MB</strong></span>
+                  <span>Est. File Size: <strong id="qpset-preview-filesize"
+                      style="color:var(--text);">~1.2MB</strong></span>
                   <span>PDF Engine: <strong style="color:var(--text);">ReportLab</strong></span>
                 </div>
               </div>
 
               <!-- SECTION 7: STORAGE INFORMATION -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-hard-drives"></i> Storage Information
                 </div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--border);">
+                <div
+                  style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid var(--border);">
                   <span style="font-size:13px; color:var(--text2);">Cloudflare R2 Status</span>
-                  <span style="background:#dcfce7;color:#166534;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;"><i class="ph-fill ph-check-circle"></i> Connected</span>
+                  <span
+                    style="background:#dcfce7;color:#166534;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;"><i
+                      class="ph-fill ph-check-circle"></i> Connected</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
                   <span style="font-size:13px; color:var(--text2);">Storage Used</span>
@@ -6115,7 +6483,8 @@
 
               <!-- SECTION 8: PERFORMANCE -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-trend-up"></i> Performance
                 </div>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
@@ -6140,31 +6509,39 @@
 
               <!-- SECTION 9: SAMPLE GENERATION -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-flask"></i> Sample Generation
                 </div>
-                <div style="font-size:12px; color:var(--text3); margin-bottom:16px;">Generate temporary preview files to test configurations without issuing real certificates.</div>
-                
-                <div style="display:flex; flex-direction:column; gap:12px;">
-                  <button class="pf-btn" onclick="qpsetGenerateSample('qr')" style="justify-content:center; background:#f0fdf4; border-color:#bbf7d0; color:#166534;">
-                    <i class="ph-bold ph-qr-code"></i> Generate Sample QR
+                <div style="font-size:12px; color:var(--text3); margin-bottom:16px;">Generate temporary preview files to
+                  test configurations without issuing real certificates.</div>
+
+                <div style="display:flex; flex-direction:column; gap:14px;">
+                  <button class="qpset-btn btn-sample-qr" onclick="qpsetGenerateSample('qr')">
+                    <i class="ph-bold ph-qr-code" style="font-size:18px;"></i> Generate Sample QR
                   </button>
-                  <button class="pf-btn" onclick="qpsetGenerateSample('pdf')" style="justify-content:center; background:#f0fdf4; border-color:#bbf7d0; color:#166534;">
-                    <i class="ph-bold ph-file-pdf"></i> Generate Sample PDF
+                  <button class="qpset-btn btn-sample-pdf" onclick="qpsetGenerateSample('pdf')">
+                    <i class="ph-bold ph-file-pdf" style="font-size:18px;"></i> Generate Sample PDF
                   </button>
-                  <button class="btn-primary" onclick="qpsetGenerateSample('cert')" style="justify-content:center;">
-                    <i class="ph-bold ph-certificate"></i> Generate Complete Sample
+                  <button class="qpset-btn btn-sample-cert" onclick="qpsetGenerateSample('cert')"
+                    style="margin-top:4px;">
+                    <i class="ph-bold ph-certificate" style="font-size:18px;"></i> Generate Complete Sample
                   </button>
-                  <div style="display:flex; gap:12px; margin-top:8px;">
-                    <button class="pf-btn" style="flex:1; justify-content:center; font-size:12px; padding:6px;"><i class="ph-bold ph-download-simple"></i> PDF</button>
-                    <button class="pf-btn" style="flex:1; justify-content:center; font-size:12px; padding:6px;"><i class="ph-bold ph-download-simple"></i> QR</button>
+                  <div style="display:flex; gap:12px; margin-top:4px;">
+                    <button class="qpset-btn btn-pdf-outline" style="flex:1;">
+                      <i class="ph-bold ph-download-simple"></i> PDF
+                    </button>
+                    <button class="qpset-btn btn-qr-outline" style="flex:1;">
+                      <i class="ph-bold ph-download-simple"></i> QR
+                    </button>
                   </div>
                 </div>
               </div>
 
               <!-- SECTION 11: SYSTEM INFORMATION -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-info"></i> System Information
                 </div>
                 <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
@@ -6187,16 +6564,18 @@
 
             </div>
           </div>
-          
+
           <!-- SECTION 12: AUDIT HISTORY -->
-          <div class="admin-widget" style="padding:24px; margin-bottom:40px;">
-            <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+          <div class="admin-widget" style="padding:24px; margin-top:80px; margin-bottom:40px;">
+            <div
+              style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
               <i class="ph-bold ph-clock-counter-clockwise"></i> Audit History
             </div>
             <div style="overflow-x:auto;">
               <table style="width:100%; border-collapse:collapse; text-align:left;">
                 <thead>
-                  <tr style="border-bottom:2px solid var(--border); color:var(--text3); font-size:12px; text-transform:uppercase;">
+                  <tr
+                    style="border-bottom:2px solid var(--border); color:var(--text3); font-size:12px; text-transform:uppercase;">
                     <th style="padding:12px 16px;">Action</th>
                     <th style="padding:12px 16px;">Administrator</th>
                     <th style="padding:12px 16px;">Date & Time</th>
@@ -6206,7 +6585,8 @@
                 <tbody id="qpset-audit-table">
                   <!-- JS Will Populate -->
                   <tr>
-                    <td colspan="4" style="padding:32px; text-align:center; color:var(--text3); font-size:13px;">No configuration changes have been recorded yet.</td>
+                    <td colspan="4" style="padding:32px; text-align:center; color:var(--text3); font-size:13px;">No
+                      configuration changes have been recorded yet.</td>
                   </tr>
                 </tbody>
               </table>
@@ -6216,60 +6596,79 @@
         </div>
 
 
-                <div id="admin-view-cert-email" style="display: none;">
+        <div id="admin-view-cert-email" style="display: none;">
           <!-- Header Banner -->
-          <div style="background: linear-gradient(90deg, #ffffff 0%, #fff1f2 100%); border-radius: 12px; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+          <div
+            style="background: linear-gradient(90deg, #ffffff 0%, #fff1f2 100%); border-radius: 12px; padding: 28px 32px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <div style="display: flex; align-items: center; gap: 24px; z-index: 2;">
-              <div style="background: #ffe4e6; border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(244, 63, 94, 0.12);">
+              <div
+                style="background: #ffe4e6; border-radius: 20px; padding: 18px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(244, 63, 94, 0.12);">
                 <i class="ph-fill ph-envelope-simple" style="color: #e11d48; font-size: 32px;"></i>
               </div>
               <div>
-                <div style="font-size: 22px; font-weight: 800; color: #0f172a; font-family:'Outfit',sans-serif; margin-bottom: 6px;">Email Integration</div>
-                <div style="color: #64748b; font-size: 13px; font-weight: 500;">Configure SMTP, email templates, delivery preferences, monitoring, and email security for certificate distribution.</div>
+                <div
+                  style="font-size: 22px; font-weight: 800; color: #0f172a; font-family:'Outfit',sans-serif; margin-bottom: 6px;">
+                  Email Integration</div>
+                <div style="color: #64748b; font-size: 13px; font-weight: 500;">Configure SMTP, email templates,
+                  delivery preferences, monitoring, and email security for certificate distribution.</div>
               </div>
             </div>
             <!-- Decorative SVG -->
-            <div style="position: absolute; right: 0; top: 0; bottom: 0; width: 450px; pointer-events: none; opacity: 0.8;">
-              <svg width="100%" height="100%" viewBox="0 0 450 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="250" y="30" width="80" height="60" rx="4" fill="#ffffff" stroke="#fecdd3" stroke-width="2"/>
-                <path d="M250 30 L290 60 L330 30" fill="none" stroke="#fecdd3" stroke-width="2"/>
-                <circle cx="350" cy="60" r="20" fill="#fbcfe8"/>
-                <path d="M343 60 l5 5 l10 -10" fill="none" stroke="#e11d48" stroke-width="2"/>
+            <div
+              style="position: absolute; right: 0; top: 0; bottom: 0; width: 450px; pointer-events: none; opacity: 0.8;">
+              <svg width="100%" height="100%" viewBox="0 0 450 120" preserveAspectRatio="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <rect x="250" y="30" width="80" height="60" rx="4" fill="#ffffff" stroke="#fecdd3" stroke-width="2" />
+                <path d="M250 30 L290 60 L330 30" fill="none" stroke="#fecdd3" stroke-width="2" />
+                <circle cx="350" cy="60" r="20" fill="#fbcfe8" />
+                <path d="M343 60 l5 5 l10 -10" fill="none" stroke="#e11d48" stroke-width="2" />
               </svg>
             </div>
           </div>
 
           <div style="display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap;">
-            
+
             <!-- LEFT COLUMN: SETTINGS -->
             <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 24px;">
-            
+
               <!-- SECTION 1 & 2 & 3: SMTP Settings -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-hard-drives"></i> SMTP Configuration & Status
                 </div>
-                
+
                 <!-- Status Row -->
-                <div style="display:flex; gap:16px; margin-bottom:24px; background:#f8fafc; padding:16px; border-radius:8px; border:1px solid var(--border);">
-                    <div style="flex:1;">
-                        <div style="font-size:11px; color:var(--text3); font-weight:600; text-transform:uppercase; margin-bottom:4px;">Connection Status</div>
-                        <div id="emailset-status" style="font-size:14px; font-weight:700; color:#16a34a;"><i class="ph-fill ph-check-circle"></i> Connected</div>
+                <div
+                  style="display:flex; gap:16px; margin-bottom:24px; background:#f8fafc; padding:16px; border-radius:8px; border:1px solid var(--border);">
+                  <div style="flex:1;">
+                    <div
+                      style="font-size:11px; color:var(--text3); font-weight:600; text-transform:uppercase; margin-bottom:4px;">
+                      Connection Status</div>
+                    <div id="emailset-status" style="font-size:14px; font-weight:700; color:#16a34a;"><i
+                        class="ph-fill ph-check-circle"></i> Connected</div>
+                  </div>
+                  <div style="flex:1;">
+                    <div
+                      style="font-size:11px; color:var(--text3); font-weight:600; text-transform:uppercase; margin-bottom:4px;">
+                      Emails Sent Today</div>
+                    <div id="emailset-daily-count" style="font-size:14px; font-weight:700; color:var(--text);">0 / 1000
                     </div>
-                    <div style="flex:1;">
-                        <div style="font-size:11px; color:var(--text3); font-weight:600; text-transform:uppercase; margin-bottom:4px;">Emails Sent Today</div>
-                        <div id="emailset-daily-count" style="font-size:14px; font-weight:700; color:var(--text);">0 / 1000</div>
+                  </div>
+                  <div style="flex:1;">
+                    <div
+                      style="font-size:11px; color:var(--text3); font-weight:600; text-transform:uppercase; margin-bottom:4px;">
+                      Queue Status</div>
+                    <div id="emailset-queue-count" style="font-size:14px; font-weight:700; color:var(--text);">0 Pending
                     </div>
-                    <div style="flex:1;">
-                        <div style="font-size:11px; color:var(--text3); font-weight:600; text-transform:uppercase; margin-bottom:4px;">Queue Status</div>
-                        <div id="emailset-queue-count" style="font-size:14px; font-weight:700; color:var(--text);">0 Pending</div>
-                    </div>
+                  </div>
                 </div>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">SMTP Provider</label>
-                    <select id="emailset-provider" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                    <select id="emailset-provider" class="form-select filter-select w-full"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
                       <option value="Custom">Custom SMTP</option>
                       <option value="SendGrid">SendGrid</option>
                       <option value="Amazon SES">Amazon SES</option>
@@ -6279,7 +6678,8 @@
                   </div>
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Encryption</label>
-                    <select id="emailset-encryption" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                    <select id="emailset-encryption" class="form-select filter-select w-full"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
                       <option value="TLS">TLS</option>
                       <option value="SSL">SSL</option>
                       <option value="STARTTLS">STARTTLS</option>
@@ -6291,77 +6691,99 @@
                 <div style="display:grid; grid-template-columns: 2fr 1fr; gap:16px; margin-bottom:16px;">
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">SMTP Host</label>
-                    <input type="text" id="emailset-host" placeholder="smtp.example.com" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <input type="text" id="emailset-host" placeholder="smtp.example.com"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Port</label>
-                    <input type="number" id="emailset-port" placeholder="587" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <input type="number" id="emailset-port" placeholder="587"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                 </div>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:24px;">
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Username</label>
-                    <input type="text" id="emailset-user" placeholder="SMTP Username" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <input type="text" id="emailset-user" placeholder="SMTP Username"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Password</label>
-                    <input type="password" id="emailset-pass" placeholder="••••••••" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <input type="password" id="emailset-pass" placeholder="••••••••"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                 </div>
-                
+
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">From Name</label>
-                    <input type="text" id="emailset-from-name" placeholder="SurakshaSetu Certificates" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <input type="text" id="emailset-from-name" placeholder="SurakshaSetu Certificates"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">From Email</label>
-                    <input type="email" id="emailset-from-email" placeholder="noreply@surakshasetu.org" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <input type="email" id="emailset-from-email" placeholder="noreply@surakshasetu.org"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                 </div>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:24px;">
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Reply-To Email</label>
-                    <input type="email" id="emailset-reply-email" placeholder="support@surakshasetu.org" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Reply-To
+                      Email</label>
+                    <input type="email" id="emailset-reply-email" placeholder="support@surakshasetu.org"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Bounce Email</label>
-                    <input type="email" id="emailset-bounce-email" placeholder="bounces@surakshasetu.org" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <input type="email" id="emailset-bounce-email" placeholder="bounces@surakshasetu.org"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                 </div>
 
                 <!-- Test Actions -->
-                <div style="border-top:1px solid var(--border); padding-top:20px; display:flex; justify-content:space-between; align-items:center;">
-                    <div style="font-size:12px; color:var(--text2);">Test your configuration before saving.</div>
-                    <div style="display:flex; gap:12px;">
-                        <button class="btn-secondary" onclick="emailsetTestConnection()" style="padding:8px 16px;">Test Connection</button>
-                    </div>
+                <div
+                  style="border-top:1px solid var(--border); padding-top:20px; display:flex; justify-content:space-between; align-items:center;">
+                  <div style="font-size:12px; color:var(--text2);">Test your configuration before saving.</div>
+                  <div style="display:flex; gap:12px;">
+                    <button class="btn-secondary" onclick="emailsetTestConnection()" style="padding:8px 16px;">Test
+                      Connection</button>
+                  </div>
                 </div>
               </div>
 
               <!-- SECTION 4: Email Template Builder -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-browser"></i> Email Template Builder
                 </div>
-                <div style="font-size:13px; color:var(--text3); margin-bottom:20px;">Design the email sent to recipients when a certificate is generated.</div>
+                <div style="font-size:13px; color:var(--text3); margin-bottom:20px;">Design the email sent to recipients
+                  when a certificate is generated.</div>
 
                 <div class="form-group" style="margin-bottom:16px;">
                   <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Email Subject</label>
-                  <input type="text" id="emailset-tpl-subject" value="Your Certificate from SurakshaSetu is Ready" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                  <input type="text" id="emailset-tpl-subject" value="Your Certificate from SurakshaSetu is Ready"
+                    style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                 </div>
 
                 <div class="form-group" style="margin-bottom:16px;">
-                  <label style="font-size:12px;font-weight:600;display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <label
+                    style="font-size:12px;font-weight:600;display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
                     <span>Email Body (HTML)</span>
                     <div style="display:flex; gap:8px;">
-                        <button style="background:none; border:none; color:var(--text2); cursor:pointer; padding:4px; font-size:16px;" title="Insert Bold" onclick="emailsetInsertFormat('**')"><i class="ph-bold ph-text-b"></i></button>
-                        <button style="background:none; border:none; color:var(--text2); cursor:pointer; padding:4px; font-size:16px;" title="Insert Italic" onclick="emailsetInsertFormat('*')"><i class="ph-bold ph-text-italic"></i></button>
+                      <button
+                        style="background:none; border:none; color:var(--text2); cursor:pointer; padding:4px; font-size:16px;"
+                        title="Insert Bold" onclick="emailsetInsertFormat('**')"><i
+                          class="ph-bold ph-text-b"></i></button>
+                      <button
+                        style="background:none; border:none; color:var(--text2); cursor:pointer; padding:4px; font-size:16px;"
+                        title="Insert Italic" onclick="emailsetInsertFormat('*')"><i
+                          class="ph-bold ph-text-italic"></i></button>
                     </div>
                   </label>
-                  <textarea id="emailset-tpl-body" rows="10" style="width:100%;padding:12px;border-radius:8px;border:1px solid var(--border);outline:none;font-family:monospace;font-size:13px;resize:vertical;">Dear {{recipient_name}},
+                  <textarea id="emailset-tpl-body" rows="10"
+                    style="width:100%;padding:12px;border-radius:8px;border:1px solid var(--border);outline:none;font-family:monospace;font-size:13px;resize:vertical;">Dear {{recipient_name}},
 
 We are pleased to inform you that your certificate "{{certificate_name}}" has been successfully issued by {{organization_name}}.
 
@@ -6375,82 +6797,105 @@ Best regards,
                 </div>
 
                 <div style="background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:16px;">
-                    <div style="font-size:12px; font-weight:700; color:var(--text); margin-bottom:12px;">Available Variables</div>
-                    <div style="display:flex; flex-wrap:wrap; gap:8px; font-family:monospace; font-size:11px;">
-                        <span style="background:#fff; border:1px solid #e2e8f0; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="emailsetInsertVar('{{recipient_name}}')">{{recipient_name}}</span>
-                        <span style="background:#fff; border:1px solid #e2e8f0; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="emailsetInsertVar('{{certificate_name}}')">{{certificate_name}}</span>
-                        <span style="background:#fff; border:1px solid #e2e8f0; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="emailsetInsertVar('{{certificate_type}}')">{{certificate_type}}</span>
-                        <span style="background:#fff; border:1px solid #e2e8f0; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="emailsetInsertVar('{{certificate_id}}')">{{certificate_id}}</span>
-                        <span style="background:#fff; border:1px solid #e2e8f0; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="emailsetInsertVar('{{issue_date}}')">{{issue_date}}</span>
-                        <span style="background:#fff; border:1px solid #e2e8f0; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="emailsetInsertVar('{{organization_name}}')">{{organization_name}}</span>
-                        <span style="background:#fff; border:1px solid #e2e8f0; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="emailsetInsertVar('{{issuer_name}}')">{{issuer_name}}</span>
-                    </div>
+                  <div style="font-size:12px; font-weight:700; color:var(--text); margin-bottom:12px;">Available
+                    Variables</div>
+                  <div style="display:flex; flex-wrap:wrap; gap:8px; font-family:monospace; font-size:11px;">
+                    <span
+                      style="background:#fff; border:1px solid #e2e8f0; padding:4px 8px; border-radius:4px; cursor:pointer;"
+                      onclick="emailsetInsertVar('{{recipient_name}}')">{{recipient_name}}</span>
+                    <span
+                      style="background:#fff; border:1px solid #e2e8f0; padding:4px 8px; border-radius:4px; cursor:pointer;"
+                      onclick="emailsetInsertVar('{{certificate_name}}')">{{certificate_name}}</span>
+                    <span
+                      style="background:#fff; border:1px solid #e2e8f0; padding:4px 8px; border-radius:4px; cursor:pointer;"
+                      onclick="emailsetInsertVar('{{certificate_type}}')">{{certificate_type}}</span>
+                    <span
+                      style="background:#fff; border:1px solid #e2e8f0; padding:4px 8px; border-radius:4px; cursor:pointer;"
+                      onclick="emailsetInsertVar('{{certificate_id}}')">{{certificate_id}}</span>
+                    <span
+                      style="background:#fff; border:1px solid #e2e8f0; padding:4px 8px; border-radius:4px; cursor:pointer;"
+                      onclick="emailsetInsertVar('{{issue_date}}')">{{issue_date}}</span>
+                    <span
+                      style="background:#fff; border:1px solid #e2e8f0; padding:4px 8px; border-radius:4px; cursor:pointer;"
+                      onclick="emailsetInsertVar('{{organization_name}}')">{{organization_name}}</span>
+                    <span
+                      style="background:#fff; border:1px solid #e2e8f0; padding:4px 8px; border-radius:4px; cursor:pointer;"
+                      onclick="emailsetInsertVar('{{issuer_name}}')">{{issuer_name}}</span>
+                  </div>
                 </div>
               </div>
 
               <!-- SECTION 6: Delivery Settings -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-paper-plane-tilt"></i> Delivery Settings
                 </div>
-                
+
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
-                    <label style="display:flex;align-items:center;gap:12px;font-size:13px;cursor:pointer; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border);">
-                      <div class="toggle-switch">
-                        <input type="checkbox" id="emailset-del-immediate" checked>
-                        <span class="slider"></span>
-                      </div>
-                      <div style="flex:1;">
-                        <div style="font-weight:600; color:var(--text);">Send Immediately</div>
-                        <div style="font-size:11px; color:var(--text3);">Dispatch email right after generation</div>
-                      </div>
-                    </label>
+                  <label
+                    style="display:flex;align-items:center;gap:12px;font-size:13px;cursor:pointer; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border);">
+                    <div class="toggle-switch">
+                      <input type="checkbox" id="emailset-del-immediate" checked>
+                      <span class="slider"></span>
+                    </div>
+                    <div style="flex:1;">
+                      <div style="font-weight:600; color:var(--text);">Send Immediately</div>
+                      <div style="font-size:11px; color:var(--text3);">Dispatch email right after generation</div>
+                    </div>
+                  </label>
 
-                    <label style="display:flex;align-items:center;gap:12px;font-size:13px;cursor:pointer; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border);">
-                      <div class="toggle-switch">
-                        <input type="checkbox" id="emailset-del-pdf" checked>
-                        <span class="slider"></span>
-                      </div>
-                      <div style="flex:1;">
-                        <div style="font-weight:600; color:var(--text);">Attach PDF</div>
-                        <div style="font-size:11px; color:var(--text3);">Include certificate as PDF attachment</div>
-                      </div>
-                    </label>
+                  <label
+                    style="display:flex;align-items:center;gap:12px;font-size:13px;cursor:pointer; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border);">
+                    <div class="toggle-switch">
+                      <input type="checkbox" id="emailset-del-pdf" checked>
+                      <span class="slider"></span>
+                    </div>
+                    <div style="flex:1;">
+                      <div style="font-weight:600; color:var(--text);">Attach PDF</div>
+                      <div style="font-size:11px; color:var(--text3);">Include certificate as PDF attachment</div>
+                    </div>
+                  </label>
 
-                    <label style="display:flex;align-items:center;gap:12px;font-size:13px;cursor:pointer; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border);">
-                      <div class="toggle-switch">
-                        <input type="checkbox" id="emailset-del-qr">
-                        <span class="slider"></span>
-                      </div>
-                      <div style="flex:1;">
-                        <div style="font-weight:600; color:var(--text);">Attach QR Code</div>
-                        <div style="font-size:11px; color:var(--text3);">Include standalone QR image</div>
-                      </div>
-                    </label>
+                  <label
+                    style="display:flex;align-items:center;gap:12px;font-size:13px;cursor:pointer; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border);">
+                    <div class="toggle-switch">
+                      <input type="checkbox" id="emailset-del-qr">
+                      <span class="slider"></span>
+                    </div>
+                    <div style="flex:1;">
+                      <div style="font-weight:600; color:var(--text);">Attach QR Code</div>
+                      <div style="font-size:11px; color:var(--text3);">Include standalone QR image</div>
+                    </div>
+                  </label>
 
-                    <label style="display:flex;align-items:center;gap:12px;font-size:13px;cursor:pointer; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border);">
-                      <div class="toggle-switch">
-                        <input type="checkbox" id="emailset-del-tracking" checked>
-                        <span class="slider"></span>
-                      </div>
-                      <div style="flex:1;">
-                        <div style="font-weight:600; color:var(--text);">Delivery Tracking</div>
-                        <div style="font-size:11px; color:var(--text3);">Track open and click rates</div>
-                      </div>
-                    </label>
+                  <label
+                    style="display:flex;align-items:center;gap:12px;font-size:13px;cursor:pointer; background:#f8fafc; padding:12px 16px; border-radius:8px; border:1px solid var(--border);">
+                    <div class="toggle-switch">
+                      <input type="checkbox" id="emailset-del-tracking" checked>
+                      <span class="slider"></span>
+                    </div>
+                    <div style="flex:1;">
+                      <div style="font-weight:600; color:var(--text);">Delivery Tracking</div>
+                      <div style="font-size:11px; color:var(--text3);">Track open and click rates</div>
+                    </div>
+                  </label>
                 </div>
               </div>
-              
+
               <!-- SECTION 11: Automation Settings -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-robot"></i> Automation Rules
                 </div>
-                
+
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Max Retries for Failures</label>
-                    <select id="emailset-auto-retries" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Max Retries for
+                      Failures</label>
+                    <select id="emailset-auto-retries" class="form-select filter-select w-full"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
                       <option value="0">Do not retry</option>
                       <option value="1">1 Attempt</option>
                       <option value="3">3 Attempts</option>
@@ -6458,15 +6903,17 @@ Best regards,
                     </select>
                   </div>
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Retry Interval</label>
-                    <select id="emailset-auto-interval" class="form-select filter-select w-full" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Retry
+                      Interval</label>
+                    <select id="emailset-auto-interval" class="form-select filter-select w-full"
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);">
                       <option value="5">5 Minutes</option>
                       <option value="15">15 Minutes</option>
                       <option value="60">1 Hour</option>
                     </select>
                   </div>
                 </div>
-                
+
                 <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;">
                   <div class="toggle-switch">
                     <input type="checkbox" id="emailset-auto-notify" checked>
@@ -6478,152 +6925,195 @@ Best regards,
 
               <!-- SECTION 12: Email Branding -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-paint-brush"></i> Email Branding
                 </div>
-                
+
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
                   <div class="form-group">
-                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Primary Brand Color</label>
+                    <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Primary Brand
+                      Color</label>
                     <div style="display:flex; gap:8px;">
-                        <input type="color" id="emailset-brand-color" value="#16a34a" style="width:40px;height:40px;padding:0;border:none;border-radius:8px;cursor:pointer;">
-                        <input type="text" id="emailset-brand-color-txt" value="#16a34a" style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                      <input type="color" id="emailset-brand-color" value="#16a34a"
+                        style="width:40px;height:40px;padding:0;border:none;border-radius:8px;cursor:pointer;">
+                      <input type="text" id="emailset-brand-color-txt" value="#16a34a"
+                        style="flex:1;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                     </div>
                   </div>
                   <div class="form-group">
                     <label style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Footer Text</label>
-                    <input type="text" id="emailset-brand-footer" value="© 2026 SurakshaSetu. All rights reserved." style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
+                    <input type="text" id="emailset-brand-footer" value="© 2026 SurakshaSetu. All rights reserved."
+                      style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);outline:none;">
                   </div>
                 </div>
               </div>
 
               <!-- SECTION 9 & 10: Recent History -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-clock-counter-clockwise"></i> Recent Delivery History
                 </div>
-                
+
                 <div style="border:1px solid var(--border); border-radius:8px; overflow:hidden;">
-                    <table style="width:100%; border-collapse:collapse; font-size:13px; text-align:left;">
-                        <thead style="background:#f8fafc; border-bottom:1px solid var(--border);">
-                            <tr>
-                                <th style="padding:12px 16px; font-weight:600; color:var(--text2);">Recipient</th>
-                                <th style="padding:12px 16px; font-weight:600; color:var(--text2);">Status</th>
-                                <th style="padding:12px 16px; font-weight:600; color:var(--text2);">Time</th>
-                            </tr>
-                        </thead>
-                        <tbody id="emailset-history-tbody">
-                            <!-- Injected by JS -->
-                            <tr><td colspan="3" style="padding:16px; text-align:center; color:var(--text3);">No email activity yet.</td></tr>
-                        </tbody>
-                    </table>
+                  <table style="width:100%; border-collapse:collapse; font-size:13px; text-align:left;">
+                    <thead style="background:#f8fafc; border-bottom:1px solid var(--border);">
+                      <tr>
+                        <th style="padding:12px 16px; font-weight:600; color:var(--text2);">Recipient</th>
+                        <th style="padding:12px 16px; font-weight:600; color:var(--text2);">Status</th>
+                        <th style="padding:12px 16px; font-weight:600; color:var(--text2);">Time</th>
+                      </tr>
+                    </thead>
+                    <tbody id="emailset-history-tbody">
+                      <!-- Injected by JS -->
+                      <tr>
+                        <td colspan="3" style="padding:16px; text-align:center; color:var(--text3);">No email activity
+                          yet.</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
             </div>
 
             <!-- RIGHT COLUMN: PREVIEW & STATS -->
-            <div style="flex: 0 1 400px; min-width: 300px; display:flex; flex-direction:column; gap:24px; position: sticky; top: 24px; align-self: flex-start;">
-              
+            <div
+              style="flex: 0 1 400px; min-width: 300px; display:flex; flex-direction:column; gap:24px; position: sticky; top: 24px; align-self: flex-start;">
+
               <!-- SECTION 5: LIVE EMAIL PREVIEW -->
               <div class="admin-widget" style="padding:0; overflow:hidden;">
-                <div style="padding:16px 20px; border-bottom:1px solid var(--border); background:#f8fafc; display:flex; align-items:center; justify-content:space-between;">
-                    <div style="font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;color:#1e293b;">
-                        <i class="ph-bold ph-device-mobile"></i> Live Email Preview
-                    </div>
+                <div
+                  style="padding:16px 20px; border-bottom:1px solid var(--border); background:#f8fafc; display:flex; align-items:center; justify-content:space-between;">
+                  <div style="font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                    <i class="ph-bold ph-device-mobile"></i> Live Email Preview
+                  </div>
                 </div>
-                
+
                 <!-- Gmail Style Container -->
                 <div style="padding:0; background:#f0f2f5;">
-                    
-                    <!-- Subject/Sender Header -->
-                    <div style="padding:16px; background:#fff; border-bottom:1px solid #e2e8f0;">
-                        <div id="emailset-prev-subject" style="font-size:16px; font-weight:700; color:#202124; margin-bottom:8px; line-height:1.4;">Your Certificate from SurakshaSetu is Ready</div>
-                        <div style="display:flex; align-items:center; gap:12px;">
-                            <div id="emailset-prev-initial" style="width:40px; height:40px; border-radius:50%; background:#16a34a; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:18px;">S</div>
-                            <div>
-                                <div style="display:flex; align-items:center; gap:8px;">
-                                    <span id="emailset-prev-from-name" style="font-size:14px; font-weight:600; color:#202124;">Suraksha Setu</span>
-                                    <span id="emailset-prev-from-email" style="font-size:12px; color:#5f6368;">&lt;noreply@surakshasetu.org&gt;</span>
-                                </div>
-                                <div style="font-size:11px; color:#5f6368;">to recipient@example.com</div>
-                            </div>
+
+                  <!-- Subject/Sender Header -->
+                  <div style="padding:16px; background:#fff; border-bottom:1px solid #e2e8f0;">
+                    <div id="emailset-prev-subject"
+                      style="font-size:16px; font-weight:700; color:#202124; margin-bottom:8px; line-height:1.4;">Your
+                      Certificate from SurakshaSetu is Ready</div>
+                    <div style="display:flex; align-items:center; gap:12px;">
+                      <div id="emailset-prev-initial"
+                        style="width:40px; height:40px; border-radius:50%; background:#16a34a; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:18px;">
+                        S</div>
+                      <div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span id="emailset-prev-from-name"
+                            style="font-size:14px; font-weight:600; color:#202124;">Suraksha Setu</span>
+                          <span id="emailset-prev-from-email"
+                            style="font-size:12px; color:#5f6368;">&lt;noreply@surakshasetu.org&gt;</span>
                         </div>
+                        <div style="font-size:11px; color:#5f6368;">to recipient@example.com</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Email Body Container -->
+                  <div style="padding:24px 16px; background:#fff; min-height:400px;">
+
+                    <!-- Embedded Logo -->
+                    <div style="text-align:center; margin-bottom:24px;">
+                      <img src="/img/logo.png" height="40" alt="Logo" onerror="this.style.display='none'">
                     </div>
 
-                    <!-- Email Body Container -->
-                    <div style="padding:24px 16px; background:#fff; min-height:400px;">
-                        
-                        <!-- Embedded Logo -->
-                        <div style="text-align:center; margin-bottom:24px;">
-                            <img src="/img/logo.png" height="40" alt="Logo" onerror="this.style.display='none'">
-                        </div>
-
-                        <!-- Rendered Content -->
-                        <div id="emailset-prev-body" style="font-size:14px; color:#3c4043; line-height:1.6; white-space:pre-wrap; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-                        </div>
-                        
-                        <!-- Simulated Buttons -->
-                        <div style="margin-top:32px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-                            <div id="emailset-prev-btn-pdf" style="background:#16a34a; color:#fff; padding:10px 20px; border-radius:6px; font-size:14px; font-weight:600; text-align:center; display:flex; align-items:center; gap:6px;"><i class="ph-bold ph-download-simple"></i> Download PDF</div>
-                            <div id="emailset-prev-btn-qr" style="background:#16a34a; color:#fff; padding:10px 20px; border-radius:6px; font-size:14px; font-weight:600; text-align:center; display:none; align-items:center; gap:6px;"><i class="ph-bold ph-qr-code"></i> View QR Code</div>
-                            <div id="emailset-prev-btn-verify" style="background:#fff; color:#1e293b; border:1px solid #cbd5e1; padding:10px 20px; border-radius:6px; font-size:14px; font-weight:600; text-align:center; display:flex; align-items:center; gap:6px;"><i class="ph-bold ph-shield-check"></i> Verify Now</div>
-                        </div>
-
-                        <div id="emailset-prev-footer" style="margin-top:40px; padding-top:20px; border-top:1px solid #e2e8f0; font-size:11px; color:#9aa0a6; text-align:center;">
-                            © 2026 SurakshaSetu. All rights reserved.
-                        </div>
+                    <!-- Rendered Content -->
+                    <div id="emailset-prev-body"
+                      style="font-size:14px; color:#3c4043; line-height:1.6; white-space:pre-wrap; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
                     </div>
+
+                    <!-- Simulated Buttons -->
+                    <div style="margin-top:32px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                      <div id="emailset-prev-btn-pdf"
+                        style="background:#16a34a; color:#fff; padding:10px 20px; border-radius:6px; font-size:14px; font-weight:600; text-align:center; display:flex; align-items:center; gap:6px;">
+                        <i class="ph-bold ph-download-simple"></i> Download PDF</div>
+                      <div id="emailset-prev-btn-qr"
+                        style="background:#16a34a; color:#fff; padding:10px 20px; border-radius:6px; font-size:14px; font-weight:600; text-align:center; display:none; align-items:center; gap:6px;">
+                        <i class="ph-bold ph-qr-code"></i> View QR Code</div>
+                      <div id="emailset-prev-btn-verify"
+                        style="background:#fff; color:#1e293b; border:1px solid #cbd5e1; padding:10px 20px; border-radius:6px; font-size:14px; font-weight:600; text-align:center; display:flex; align-items:center; gap:6px;">
+                        <i class="ph-bold ph-shield-check"></i> Verify Now</div>
+                    </div>
+
+                    <div id="emailset-prev-footer"
+                      style="margin-top:40px; padding-top:20px; border-top:1px solid #e2e8f0; font-size:11px; color:#9aa0a6; text-align:center;">
+                      © 2026 SurakshaSetu. All rights reserved.
+                    </div>
+                  </div>
 
                 </div>
               </div>
 
               <!-- SECTION 7: Email Security -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-shield-check" style="color:#16a34a;"></i> Security Capabilities
                 </div>
                 <div style="display:flex; flex-direction:column; gap:12px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; border-bottom:1px solid var(--border);">
-                        <span style="font-size:13px; color:var(--text);">Password Encryption</span>
-                        <span style="background:#dcfce7; color:#166534; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600;">Active AES-256</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; border-bottom:1px solid var(--border);">
-                        <span style="font-size:13px; color:var(--text);">DKIM Signature</span>
-                        <span style="background:#f1f5f9; color:var(--text2); padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600;">Provider Dependent</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:13px; color:var(--text);">SPF/DMARC Record</span>
-                        <span style="background:#f1f5f9; color:var(--text2); padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600;">Provider Dependent</span>
-                    </div>
+                  <div
+                    style="display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; border-bottom:1px solid var(--border);">
+                    <span style="font-size:13px; color:var(--text);">Password Encryption</span>
+                    <span
+                      style="background:#dcfce7; color:#166534; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600;">Active
+                      AES-256</span>
+                  </div>
+                  <div
+                    style="display:flex; justify-content:space-between; align-items:center; padding-bottom:8px; border-bottom:1px solid var(--border);">
+                    <span style="font-size:13px; color:var(--text);">DKIM Signature</span>
+                    <span
+                      style="background:#f1f5f9; color:var(--text2); padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600;">Provider
+                      Dependent</span>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:13px; color:var(--text);">SPF/DMARC Record</span>
+                    <span
+                      style="background:#f1f5f9; color:var(--text2); padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600;">Provider
+                      Dependent</span>
+                  </div>
                 </div>
               </div>
 
               <!-- SECTION 13: System Information -->
               <div class="admin-widget" style="padding:24px;">
-                <div style="font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:#1e293b;">
+                <div
+                  style="font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:#1e293b;">
                   <i class="ph-bold ph-info"></i> System Information
                 </div>
-                <div style="display:flex; flex-direction:column; gap:8px; font-size:12px; color:var(--text2); font-family:monospace;">
-                    <div>SMTP Engine: smtplib v3.x</div>
-                    <div>Template Engine: Jinja2 v3.1</div>
-                    <div>Background Tasks: FastAPI BackgroundTasks</div>
-                    <div>Version: SS-EMAIL-1.0.0</div>
+                <div
+                  style="display:flex; flex-direction:column; gap:8px; font-size:12px; color:var(--text2); font-family:monospace;">
+                  <div>SMTP Engine: smtplib v3.x</div>
+                  <div>Template Engine: Jinja2 v3.1</div>
+                  <div>Background Tasks: FastAPI BackgroundTasks</div>
+                  <div>Version: SS-EMAIL-1.0.0</div>
                 </div>
               </div>
 
             </div>
           </div>
-          
+
           <!-- SECTION 15: Save Controls -->
-          <div style="margin-top:24px; padding:24px; background:#fff; border:1px solid var(--border); border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
-             <div>
-                <button class="btn-secondary" onclick="emailsetReset()" style="color:#ef4444; border-color:#fecaca; background:#fef2f2;">Reset Defaults</button>
-             </div>
-             <div style="display:flex; gap:16px;">
-                <button class="btn-secondary" onclick="emailsetExport()">Export Config</button>
-                <button class="btn-primary" onclick="emailsetSave()" style="padding:10px 32px; font-size:15px;">Save Configuration</button>
-             </div>
+          <div
+            style="margin-top:24px; padding:24px; background:#fff; border:1px solid var(--border); border-radius:12px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <button class="qpset-btn btn-reset" onclick="emailsetReset()">
+                <i class="ph-bold ph-arrow-counter-clockwise" style="font-size:18px;"></i> Reset Defaults
+              </button>
+            </div>
+            <div style="display:flex; gap:16px;">
+              <button class="qpset-btn btn-export" onclick="emailsetExport()">
+                <i class="ph-bold ph-export" style="font-size:18px;"></i> Export Config
+              </button>
+              <button class="qpset-btn btn-save" onclick="emailsetSave()">
+                <i class="ph-bold ph-floppy-disk" style="font-size:18px;"></i> Save Configuration
+              </button>
+            </div>
           </div>
 
         </div>
@@ -10685,6 +11175,171 @@ Best regards,
         document.getElementById('bulk-csv-name').innerText = '';
       }
     }
+  </script>
+
+  <script>
+    // System Settings Persistence Logic
+    function getAuthToken() {
+      return localStorage.getItem('token') || localStorage.getItem('admin_token') || sessionStorage.getItem('token') || '';
+    }
+
+    async function qpsetSavePreferences() {
+      const settings = {};
+      document.querySelectorAll('[id^="qpset-"]').forEach(el => {
+        if (el.id.includes('btn') || el.id.includes('prev')) return; 
+        if (el.type === 'checkbox') settings[el.id] = el.checked;
+        else if (el.value !== undefined) settings[el.id] = el.value;
+      });
+      
+      const payload = [{ key: 'qr_pdf_settings', value: JSON.stringify(settings) }];
+      
+      try {
+        const res = await fetch('/api/v1/settings/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getAuthToken()
+          },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) showToast('QR & PDF Preferences saved successfully!');
+        else showToast('Failed to save preferences. Token missing or invalid.');
+      } catch (e) {
+        console.error(e);
+        showToast('Error saving preferences.');
+      }
+    }
+
+    async function emailsetSave() {
+      const settings = {};
+      document.querySelectorAll('[id^="emailset-"]').forEach(el => {
+        if (el.id.includes('btn') || el.id.includes('prev') || el.id.includes('status') || el.id.includes('count')) return; 
+        if (el.type === 'checkbox') settings[el.id] = el.checked;
+        else if (el.value !== undefined) settings[el.id] = el.value;
+      });
+      
+      const payload = [{ key: 'email_settings', value: JSON.stringify(settings) }];
+      
+      try {
+        const res = await fetch('/api/v1/settings/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getAuthToken()
+          },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) showToast('Email settings saved successfully!');
+        else showToast('Failed to save email settings. Token missing or invalid.');
+      } catch (e) {
+        console.error(e);
+        showToast('Error saving email settings.');
+      }
+    }
+
+    // Load Settings on page load
+    async function loadSystemSettings() {
+      try {
+        const res = await fetch('/api/v1/settings/', {
+          headers: { 'Authorization': 'Bearer ' + getAuthToken() }
+        });
+        const data = await res.json();
+        
+        if (data.success && data.settings) {
+          if (data.settings.qr_pdf_settings) {
+            const qrPdf = JSON.parse(data.settings.qr_pdf_settings);
+            Object.keys(qrPdf).forEach(key => {
+              const el = document.getElementById(key);
+              if (el) {
+                if (el.type === 'checkbox') el.checked = qrPdf[key];
+                else el.value = qrPdf[key];
+              }
+            });
+          }
+          if (data.settings.email_settings) {
+            const emailSet = JSON.parse(data.settings.email_settings);
+            Object.keys(emailSet).forEach(key => {
+              const el = document.getElementById(key);
+              if (el) {
+                if (el.type === 'checkbox') el.checked = emailSet[key];
+                else el.value = emailSet[key];
+              }
+            });
+          }
+        }
+      } catch (e) {
+        console.warn('Could not load system settings or token missing', e);
+      }
+    }
+
+    async function issueCertificate() {
+      const btn = document.getElementById('btn-issue-cert');
+      const ogHtml = btn.innerHTML;
+      btn.innerHTML = '<i class="ph-bold ph-spinner ph-spin"></i> Issuing...';
+      btn.disabled = true;
+
+      try {
+        // Collect data
+        const payload = {
+          recipient_name: document.getElementById('cert-full-name')?.value || '',
+          recipient_email: document.getElementById('cert-email')?.value || '',
+          recipient_phone: document.getElementById('cert-phone')?.value || '',
+          recipient_zone: (document.getElementById('cert-area')?.value || '') + ' ' + (document.getElementById('cert-city')?.value || ''),
+          certificate_type: document.getElementById('cert-type')?.value || 'Community Champion',
+          issue_date: document.getElementById('cert-issue-date')?.value || new Date().toISOString().split('T')[0],
+          citation: document.getElementById('cert-citation')?.value || '',
+          issuing_authority: document.getElementById('cert-issuing-authority')?.value || '',
+          co_signatory: document.getElementById('cert-co-signatory')?.value || '',
+          template_id: parseInt(document.getElementById('cert-type')?.value) || 1, // mapping cert-type or defaulting to 1 for now
+          send_email: document.getElementById('cert-send-email')?.checked ? 1 : 0,
+          publish_to_feed: document.getElementById('cert-publish-feed')?.checked ? 1 : 0
+        };
+
+        if (!payload.recipient_name || !payload.recipient_email || !payload.citation) {
+          showToast('Please fill all required fields');
+          btn.innerHTML = ogHtml;
+          btn.disabled = false;
+          return;
+        }
+
+        const res = await fetch('/api/v1/certificates/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getAuthToken()
+          },
+          body: JSON.stringify(payload)
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+          const msgEl = document.getElementById('cert-issued-msg');
+          if (msgEl) {
+            msgEl.innerHTML = `<i class="ph-duotone ph-check-circle" style="font-size:18px;"></i> Generated ${data.cert_id} & Sent to ${payload.recipient_email}!`;
+            msgEl.style.display = 'flex';
+          }
+          showToast('Certificate successfully issued!');
+          
+          // Trigger global event for real-time synchronization
+          window.dispatchEvent(new CustomEvent('CERTIFICATE_ISSUED', { detail: data }));
+          
+        } else {
+          showToast('Error: ' + (data.detail || data.error || 'Unknown error'));
+        }
+      } catch (e) {
+        console.error(e);
+        showToast('Network error during issuance');
+      } finally {
+        btn.innerHTML = ogHtml;
+        btn.disabled = false;
+      }
+    }
+
+    // Call load settings once DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(loadSystemSettings, 500); // Wait slightly for token auth logic if any
+    });
   </script>
 </body>
 

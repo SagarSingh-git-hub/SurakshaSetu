@@ -83,6 +83,8 @@ class CertificateResponse(BaseModel):
     pdf_url: Optional[str]
     qr_code_url: Optional[str]
     hash_sha256: Optional[str]
+    signature_key_version: Optional[str]
+    verification_token: Optional[str]
     created_at: datetime
     
     class Config:

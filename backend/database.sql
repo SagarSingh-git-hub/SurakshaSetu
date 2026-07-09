@@ -197,7 +197,33 @@ CREATE TABLE IF NOT EXISTS support_tickets (
 );
 
 -- Migrations for existing setups
-ALTER TABLE certificates ADD COLUMN IF NOT EXISTS recipient_type VARCHAR(50) DEFAULT 'Community Member';
-ALTER TABLE certificates ADD COLUMN IF NOT EXISTS pdf_url VARCHAR(500) NULL;
-ALTER TABLE certificates ADD COLUMN IF NOT EXISTS qr_code_url VARCHAR(500) NULL;
-ALTER TABLE certificates ADD COLUMN IF NOT EXISTS hash_sha256 VARCHAR(64) NULL;
+ALTER TABLE certificates ADD COLUMN recipient_type VARCHAR(50) DEFAULT 'Community Member';
+ALTER TABLE certificates ADD COLUMN pdf_url VARCHAR(500) NULL;
+ALTER TABLE certificates ADD COLUMN qr_code_url VARCHAR(500) NULL;
+ALTER TABLE certificates ADD COLUMN hash_sha256 VARCHAR(64) NULL;
+ALTER TABLE certificates ADD COLUMN signature_key_version VARCHAR(50) NULL;
+ALTER TABLE certificates ADD COLUMN verification_token VARCHAR(100) UNIQUE NULL;
+
+-- Table for Digital Signature Keys
+CREATE TABLE IF NOT EXISTS digital_signature_keys (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    key_version VARCHAR(50) UNIQUE NOT NULL,
+    private_key TEXT NOT NULL,
+    public_key TEXT NOT NULL,
+    passphrase_hash VARCHAR(255) NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    rotated_at DATETIME NULL
+);
+
+-- Table for Certificate Audit Logs
+CREATE TABLE IF NOT EXISTS certificate_audit_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cert_id VARCHAR(50) NOT NULL,
+    action VARCHAR(50) NOT NULL, -- e.g., 'Draft', 'Generated', 'Signed', 'Uploaded', 'Issued', 'Delivered', 'Revoked', 'Verified'
+    administrator VARCHAR(100) DEFAULT 'System',
+    ip_address VARCHAR(45) NULL,
+    reason TEXT NULL,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cert_id) REFERENCES certificates(cert_id) ON DELETE CASCADE
+);

@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 # Load env from parent dir .env if exists, or local
 load_dotenv(dotenv_path="../backend/.env")
 
-from routers import certificates, templates, verify, settings, certificate_security, email, certificate_settings
+from routers import certificates, templates, verify, settings, certificate_security, email, certificate_settings, audit
 
 app = FastAPI(title="SurakshaSetu Certificate API")
 
@@ -36,6 +36,7 @@ app.include_router(settings.router, prefix="/api/v1/settings", tags=["settings"]
 app.include_router(certificate_security.router, prefix="/api/v1/certificate/security", tags=["certificate_security"])
 app.include_router(email.router, prefix="/api/v1/email", tags=["email"])
 app.include_router(certificate_settings.router, prefix="/api/v1/certificate/settings", tags=["certificate_settings"])
+app.include_router(audit.router, prefix="/api/v1/audit", tags=["audit"])
 
 @app.get("/")
 def read_root():

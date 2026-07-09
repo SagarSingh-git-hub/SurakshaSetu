@@ -7,7 +7,7 @@ from typing import Optional
 
 from core.database import get_db
 from core.security import verify_admin_token
-from models.models import SignatureKey, CertificateSecurityLog, SystemCertificateSetting, Certificate, CertificateHash, VerificationLog
+from models.models import SignatureKey, CertificateSecurityLog, SystemCertificateSetting, Certificate, CertificateHash, VerificationLog, ActivityLog
 from services.signature_service import generate_rsa_key_pair, verify_signature
 
 router = APIRouter()
@@ -19,6 +19,17 @@ def log_security_event(db: Session, action: str, performed_by: str, description:
         description=description
     )
     db.add(log)
+    
+    # Also log to global activity log
+    activity_log = ActivityLog(
+        event_type="Security Event",
+        reference_id="SYSTEM",
+        description=f"{action} - {description}",
+        category="Security",
+        location="System"
+    )
+    db.add(activity_log)
+    
     db.commit()
 
 @router.get("/status")

@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function initCertificates() {
     loadMembers();
     loadTemplates();
+    loadCertStats();
     loadCertificates();
 
     // Input Validations
@@ -585,35 +586,28 @@ async function issueCertificate() {
             
             msg.style.display = 'flex';
             msg.innerHTML = `<i class="ph-duotone ph-check-circle" style="font-size:18px;"></i> Issued ${data.cert_id} to ${payload.recipient_email}!`;
-            if(typeof showToast === 'function') showToast(`✅ Successfully issued ${data.cert_id}`);
+            if(typeof showToast === 'function') showToast(`✅ Successfully queued ${data.cert_id}`);
             
-            // Reset state
-            setTimeout(() => {
-                msg.style.display = 'none';
-                document.getElementById('cert-full-name').value = '';
-                document.getElementById('cert-email').value = '';
-                document.getElementById('cert-phone').value = '';
-                document.getElementById('cert-pin').value = '';
-                document.getElementById('cert-area').innerHTML = '<option value="">— Select Area —</option>';
-                document.getElementById('cert-city').value = '';
-                document.getElementById('cert-state').value = '';
-                document.getElementById('cert-citation').value = '';
-                renderLivePreview();
-            }, 3000);
+            // Keep button disabled until complete
+            btn.innerHTML = '<i class="ph-duotone ph-spinner animate-spin"></i> Generating... 0%';
+            btn.setAttribute('data-active-job', data.job_id);
             
-            loadCertificates(); // Refresh list
+            // Reset state (we don't reset until it's done, but we can reset the form fields early if we want)
+            // Or we just listen to the JOB_PROGRESS event
+            loadCertificates(); // Refresh list to show Draft
         } else {
             if(typeof showToast === 'function') showToast('❌ Error issuing certificate: ' + data.error);
             else alert('Error issuing certificate: ' + data.error);
+            btn.disabled = false;
+            btn.innerHTML = '<i class="ph-bold ph-award" style="font-size:14px;"></i> Issue certificate';
         }
     } catch(e) {
         console.error(e);
         if(typeof showToast === 'function') showToast('❌ Server error issuing certificate');
         else alert('Server error');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ph-bold ph-award" style="font-size:14px;"></i> Issue certificate';
     }
-    
-    btn.disabled = false;
-    btn.innerHTML = '<i class="ph-bold ph-award" style="font-size:14px;"></i> Issue certificate';
 }
 
 let searchTimeout;
@@ -643,6 +637,35 @@ function clearCertSearch() {
     loadCertificates(1);
 }
 
+async function loadCertStats() {
+    try {
+        const res = await adminFetch(CERT_API_URL + '/api/v1/certificates/dashboard-stats');
+        const json = await res.json();
+        if(json.success) {
+            const data = json.data;
+            const totalEl = document.getElementById('cert-stat-total');
+            if (totalEl) totalEl.innerText = data.total_issued;
+            
+            const activeEl = document.getElementById('cert-stat-active');
+            if (activeEl) activeEl.innerText = data.active;
+            
+            const monthEl = document.getElementById('cert-stat-month');
+            if (monthEl) monthEl.innerText = data.issued_month;
+            
+            const revokedEl = document.getElementById('cert-stat-revoked');
+            if (revokedEl) revokedEl.innerText = data.revoked;
+            
+            const weekEl = document.getElementById('cert-stat-week');
+            if (weekEl) weekEl.innerText = data.issued_week;
+            
+            const todayEl = document.getElementById('cert-stat-today');
+            if (todayEl) todayEl.innerText = data.issued_today;
+        }
+    } catch (e) {
+        console.error('Failed to load dashboard stats', e);
+    }
+}
+
 async function loadCertificates(page = 1) {
     currentCertPage = page;
     const search = document.getElementById('cert-search-input')?.value || '';
@@ -654,16 +677,6 @@ async function loadCertificates(page = 1) {
         const data = await res.json();
         
         if (data.success) {
-            // Update stats
-            const totalEl = document.getElementById('cert-stat-total');
-            if (totalEl) totalEl.innerText = data.stats.total;
-            const activeEl = document.getElementById('cert-stat-active');
-            if (activeEl) activeEl.innerText = data.stats.active;
-            const monthEl = document.getElementById('cert-stat-month');
-            if (monthEl) monthEl.innerText = data.stats.this_month;
-            const revokedEl = document.getElementById('cert-stat-revoked');
-            if (revokedEl) revokedEl.innerText = data.stats.revoked;
-            
             // Render table
             const tbody = document.getElementById('cert-table-body');
             if (tbody) {
@@ -1064,7 +1077,7 @@ function exportCertsCSV() {
     if(verifyBtn && verifyBtn.querySelector('svg')) verifyBtn.querySelector('svg').classList.add('spin');
 
     try {
-        const res = await fetch(CERT_API_URL + `/api/certificates/verify_certificate.php?q=${encodeURIComponent(id)}`);
+        const res = await fetch(CERT_API_URL + `/api/v1/verify/${encodeURIComponent(id)}`);
         const data = await res.json();
         
         if(verifyBtnText) verifyBtnText.textContent = 'Verify Certificate';
@@ -2233,5 +2246,64 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         emailObserver.observe(emailNode, { attributes: true });
+    }
+});
+
+// Global Event Bus Listeners
+window.addEventListener('JOB_PROGRESS', (e) => {
+    const data = e.detail;
+    const btn = document.getElementById('btn-issue-cert');
+    const msg = document.getElementById('cert-issued-msg');
+    
+    if (btn && btn.getAttribute('data-active-job') === data.job_id) {
+        btn.innerHTML = `<i class="ph-duotone ph-spinner animate-spin"></i> ${data.status}... ${data.progress}%`;
+        msg.style.display = 'flex';
+        msg.innerHTML = `<i class="ph-duotone ph-spinner animate-spin" style="font-size:18px;"></i> Working: ${data.status} [${data.progress}%]`;
+        
+        if (data.status === 'Completed' || data.progress === 100) {
+            btn.disabled = false;
+            btn.removeAttribute('data-active-job');
+            btn.innerHTML = '<i class="ph-bold ph-award" style="font-size:14px;"></i> Issue certificate';
+            msg.innerHTML = `<i class="ph-duotone ph-check-circle" style="font-size:18px;"></i> Successfully completed!`;
+            
+            setTimeout(() => {
+                msg.style.display = 'none';
+                document.getElementById('cert-full-name').value = '';
+                document.getElementById('cert-email').value = '';
+                document.getElementById('cert-phone').value = '';
+                document.getElementById('cert-pin').value = '';
+                document.getElementById('cert-area').innerHTML = '<option value="">— Select Area —</option>';
+                document.getElementById('cert-city').value = '';
+                document.getElementById('cert-state').value = '';
+                document.getElementById('cert-citation').value = '';
+                renderLivePreview();
+            }, 3000);
+        }
+    }
+    
+    // Auto refresh the list row if visible
+    if (typeof loadCertificates === 'function') {
+        loadCertificates(currentCertPage);
+    }
+});
+
+window.addEventListener('CERTIFICATE_ISSUED', (e) => {
+    // A certificate was successfully issued, we must refresh the certificate list globally
+    console.log('[Event Bus] CERTIFICATE_ISSUED event caught! Reloading certificates.');
+    if (typeof loadCertificates === 'function') {
+        loadCertificates(currentCertPage); // reload current page
+    }
+    
+    // Auto-update dashboard metrics if applicable
+    if (typeof loadCertStats === 'function') {
+        loadCertStats();
+    }
+});
+
+window.addEventListener('CERTIFICATE_EMAIL_SENT', (e) => {
+    console.log('[Event Bus] CERTIFICATE_EMAIL_SENT event caught!');
+    // If the email view or list is open, refresh it
+    if (typeof loadEmailSettings === 'function' && document.getElementById('admin-view-cert-email') && document.getElementById('admin-view-cert-email').style.display !== 'none') {
+        loadEmailSettings(); // refreshing the dashboard counts
     }
 });

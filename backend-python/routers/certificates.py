@@ -9,9 +9,11 @@ import json
 
 from core.database import get_db
 from core.security import verify_admin_token
-from models.models import Certificate, CertificateTemplate, CertificateHash, LoginSession
+from models.models import Certificate, CertificateTemplate, CertificateHash, LoginSession, ActivityLog, BackgroundJob, VerificationLog, CertificateAuditLog
+import uuid
+import secrets
 from schemas.schemas import IssueCertificateRequest, UpdateCertificateRequest, CertificateListResponse
-from services.pdf_generator import generate_certificate_pdf
+from services.pdf_generator import generate_certificate_pdf, generate_certificate_qr
 from services.storage import upload_to_r2
 from services.email_service import send_certificate_email
 from services.pusher_service import trigger_pusher_event
@@ -33,25 +35,44 @@ def get_members(db: Session = Depends(get_db)):
     finally:
         conn.close()
 
-def process_issue_certificate(req: IssueCertificateRequest, cert_id: str, db: Session):
+def process_issue_certificate(req: IssueCertificateRequest, cert_id: str, job_id: str, db: Session):
+    # Fetch job to update status
+    job = db.query(BackgroundJob).filter(BackgroundJob.job_id == job_id).first()
+    if job:
+        job.status = 'Processing'
+        db.commit()
+
+    def update_status(status_str, progress_percent):
+        if job:
+            payload_data = json.loads(job.payload) if job.payload else {}
+            payload_data['progress'] = progress_percent
+            payload_data['status_text'] = status_str
+            job.payload = json.dumps(payload_data)
+            db.commit()
+            
+            trigger_pusher_event('private-eco-channel', 'job-progress', {
+                'job_id': job_id,
+                'cert_id': cert_id,
+                'status': status_str,
+                'progress': progress_percent
+            })
+
+    def log_audit(action, reason=None):
+        audit = CertificateAuditLog(
+            cert_id=cert_id,
+            action=action,
+            administrator='System',
+            reason=reason
+        )
+        db.add(audit)
+        db.commit()
+
     try:
         # Fetch template
         template = db.query(CertificateTemplate).filter(CertificateTemplate.id == req.template_id).first()
         
-        # PDF Generation
-        verify_url = f"https://surakshasetu.org/verify?id={cert_id}"
-        pdf_bytes = generate_certificate_pdf(
-            cert_id, req.recipient_name, req.certificate_type, req.citation,
-            req.issue_date, req.issuing_authority, verify_url
-        )
-        
-        year = datetime.strptime(req.issue_date, "%Y-%m-%d").strftime("%Y")
-        object_key = f"certificates/{year}/{cert_id}.pdf"
-        pdf_url = upload_to_r2(pdf_bytes, object_key, "application/pdf")
-        
-        # Hash & Signature
-        hash_sha256 = hashlib.sha256(pdf_bytes).hexdigest()
-        
+        # 1. Draft
+        verification_token = secrets.token_urlsafe(16)
         cert = Certificate(
             cert_id=cert_id,
             recipient_type=req.recipient_type,
@@ -65,33 +86,76 @@ def process_issue_certificate(req: IssueCertificateRequest, cert_id: str, db: Se
             issuing_authority=req.issuing_authority,
             co_signatory=req.co_signatory,
             template_id=req.template_id if req.template_id and req.template_id > 0 else None,
-            pdf_url=pdf_url,
-            hash_sha256=hash_sha256,
-            status='Active'
+            status='Draft',
+            verification_token=verification_token
         )
         db.add(cert)
+        db.commit()
+        log_audit('Draft', 'Initial record created')
+        update_status('Draft', 10)
         
-        # Add to certificate_hashes table
-        cert_hash = CertificateHash(
-            cert_id=cert_id,
-            hash_sha256=hash_sha256
+        # 2. PDF & QR Generation
+        verify_url = f"https://surakshasetu.org/verify?id={cert_id}&token={verification_token}"
+        pdf_bytes = generate_certificate_pdf(
+            cert_id, req.recipient_name, req.certificate_type, req.citation,
+            req.issue_date, req.issuing_authority, verify_url
         )
+        qr_bytes = generate_certificate_qr(verify_url)
+        
+        cert.status = 'Generated'
+        db.commit()
+        log_audit('Generated', 'PDF and QR generated')
+        update_status('Generated', 30)
+        
+        # 3. Hash & Signature
+        hash_sha256 = hashlib.sha256(pdf_bytes).hexdigest()
+        cert.hash_sha256 = hash_sha256
+        db.commit()
+        
+        cert_hash = CertificateHash(cert_id=cert_id, hash_sha256=hash_sha256)
         db.add(cert_hash)
         
         # Sign the hash for digital signature integrity
-        # sign_data(hash_sha256, db) # Only sign, signature verification uses hash
+        key_version = sign_data(hash_sha256, db)
+        cert.signature_key_version = key_version
+        cert.status = 'Signed'
+        db.commit()
+        log_audit('Signed', f'Digitally signed with key {key_version}')
+        update_status('Signed', 50)
+        
+        # 4. Upload to Cloudflare R2
+        year = datetime.strptime(req.issue_date, "%Y-%m-%d").strftime("%Y")
+        object_key = f"certificates/{year}/{cert_id}.pdf"
+        pdf_url = upload_to_r2(pdf_bytes, object_key, "application/pdf")
+        
+        qr_object_key = f"certificates/{year}/{cert_id}_qr.png"
+        qr_url = upload_to_r2(qr_bytes, qr_object_key, "image/png")
+        
+        cert.pdf_url = pdf_url
+        cert.qr_code_url = qr_url
+        cert.status = 'Uploaded'
+        db.commit()
+        log_audit('Uploaded', 'Assets stored in Cloudflare R2')
+        update_status('Uploaded', 70)
+        
+        # 5. Issue
+        cert.status = 'Issued'
         
         if template:
             template.usage_count += 1
             template.last_used = datetime.now()
             
-        db.commit()
-        
-        # Send Email
-        if req.send_email == 1 and req.recipient_email:
-            send_certificate_email(req.recipient_email, req.recipient_name, req.certificate_type, cert_id, pdf_bytes)
+        if job:
+            job.status = 'Completed'
+            payload_data = json.loads(job.payload) if job.payload else {}
+            payload_data['progress'] = 100
+            payload_data['status_text'] = 'Completed'
+            job.payload = json.dumps(payload_data)
             
-        # Trigger Pusher
+        db.commit()
+        log_audit('Issued', 'Certificate fully issued and active')
+        
+        # Trigger Pusher for new certificate
         if req.publish_to_feed == 1:
             trigger_pusher_event('private-eco-channel', 'new-certificate', {
                 'cert_id': cert_id,
@@ -100,9 +164,25 @@ def process_issue_certificate(req: IssueCertificateRequest, cert_id: str, db: Se
                 'citation': req.citation
             })
             
+        # 6. Send Email
+        if req.send_email == 1 and req.recipient_email:
+            send_certificate_email(req.recipient_email, req.recipient_name, req.certificate_type, cert_id, pdf_bytes)
+            cert.status = 'Delivered'
+            db.commit()
+            log_audit('Delivered', f'Email sent to {req.recipient_email}')
+            trigger_pusher_event('private-eco-channel', 'certificate-email-sent', {
+                'cert_id': cert_id,
+                'recipient_email': req.recipient_email
+            })
+            
     except Exception as e:
         db.rollback()
         print(f"Error processing certificate: {e}")
+        if job:
+            job.status = 'Failed'
+            job.error_message = str(e)
+            db.commit()
+        log_audit('Failed', f'Error during issuance: {str(e)}')
 
 @router.post("/", response_model=dict)
 def issue_certificate(req: IssueCertificateRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db), admin=Depends(verify_admin_token)):
@@ -115,9 +195,79 @@ def issue_certificate(req: IssueCertificateRequest, background_tasks: Background
     seq = str(count + 1).zfill(6) # Format SS-CERT-2026-000001
     cert_id = f"{prefix}-{year}-{seq}"
     
-    background_tasks.add_task(process_issue_certificate, req, cert_id, db)
+    # Create BackgroundJob tracking record
+    job_id = str(uuid.uuid4())
+    job = BackgroundJob(
+        job_id=job_id,
+        job_type='issue_certificate',
+        payload=json.dumps({"cert_id": cert_id, "recipient": req.recipient_name}),
+        status='Pending'
+    )
+    db.add(job)
+    db.commit()
     
-    return {"success": True, "cert_id": cert_id, "message": "Certificate generation queued in background."}
+    background_tasks.add_task(process_issue_certificate, req, cert_id, job_id, db)
+    
+    return {"success": True, "cert_id": cert_id, "job_id": job_id, "message": "Certificate generation queued in background."}
+
+@router.get("/jobs/{job_id}", response_model=dict)
+def get_job_status(job_id: str, db: Session = Depends(get_db), admin=Depends(verify_admin_token)):
+    job = db.query(BackgroundJob).filter(BackgroundJob.job_id == job_id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+        
+    return {
+        "success": True,
+        "job_id": job.job_id,
+        "status": job.status,
+        "error_message": job.error_message,
+        "payload": json.loads(job.payload) if job.payload else None
+    }
+
+@router.get("/dashboard-stats", response_model=dict)
+def get_dashboard_stats(db: Session = Depends(get_db)):
+    today = datetime.now().date()
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+    
+    # We define 'This Week' as last 7 days
+    from datetime import timedelta
+    week_ago = today - timedelta(days=7)
+    
+    total = db.query(Certificate).count()
+    active = db.query(Certificate).filter(Certificate.status.in_(['Issued', 'Delivered', 'Active'])).count()
+    revoked = db.query(Certificate).filter(Certificate.status == 'Revoked').count()
+    expired = db.query(Certificate).filter(Certificate.status == 'Expired').count()
+    
+    issued_today = db.query(Certificate).filter(Certificate.issue_date == today).count()
+    issued_week = db.query(Certificate).filter(Certificate.issue_date >= week_ago).count()
+    issued_month = db.query(Certificate).filter(
+        extract('month', Certificate.issue_date) == current_month,
+        extract('year', Certificate.issue_date) == current_year
+    ).count()
+    
+    last_cert = db.query(Certificate).order_by(Certificate.created_at.desc()).first()
+    
+    delivery_success = db.query(Certificate).filter(Certificate.status == 'Delivered').count()
+    
+    return {
+        "success": True,
+        "data": {
+            "total_issued": total,
+            "active": active,
+            "revoked": revoked,
+            "expired": expired,
+            "issued_today": issued_today,
+            "issued_week": issued_week,
+            "issued_month": issued_month,
+            "delivery_success": delivery_success,
+            "last_certificate": {
+                "cert_id": last_cert.cert_id,
+                "recipient_name": last_cert.recipient_name,
+                "created_at": last_cert.created_at.strftime("%Y-%m-%d %H:%M:%S")
+            } if last_cert else None
+        }
+    }
 
 @router.get("/", response_model=CertificateListResponse)
 def list_certificates(page: int = 1, search: str = '', type: str = 'All', status: str = 'All', db: Session = Depends(get_db)):
@@ -132,7 +282,10 @@ def list_certificates(page: int = 1, search: str = '', type: str = 'All', status
             or_(
                 Certificate.cert_id.ilike(search_pattern),
                 Certificate.recipient_name.ilike(search_pattern),
-                Certificate.recipient_email.ilike(search_pattern)
+                Certificate.recipient_email.ilike(search_pattern),
+                Certificate.hash_sha256.ilike(search_pattern),
+                Certificate.verification_token.ilike(search_pattern),
+                Certificate.issuing_authority.ilike(search_pattern)
             )
         )
         
@@ -181,6 +334,17 @@ def update_certificate_status(cert_id: str, req: UpdateCertificateRequest, db: S
         
     new_status = 'Revoked' if req.action == 'revoke' else 'Active'
     cert.status = new_status
+    
+    # Audit Log
+    activity_log = ActivityLog(
+        event_type=f"Certificate {new_status}",
+        reference_id=cert_id,
+        description=f"Status of certificate {cert_id} changed to {new_status} by admin.",
+        category="Status Change",
+        location="System"
+    )
+    db.add(activity_log)
+    
     db.commit()
     
     return {"success": True}

@@ -39,7 +39,7 @@ def generate_certificate_pdf(cert_id: str, recipient_name: str, cert_type: str, 
     img = qr.make_image(fill_color="black", back_color="white")
     
     qr_buffer = BytesIO()
-    img.save(qr_buffer, format="PNG")
+    img.save(qr_buffer)
     qr_buffer.seek(0)
     
     from reportlab.lib.utils import ImageReader
@@ -49,3 +49,13 @@ def generate_certificate_pdf(cert_id: str, recipient_name: str, cert_type: str, 
     c.save()
     
     return buffer.getvalue()
+
+def generate_certificate_qr(verify_url: str) -> bytes:
+    qr = qrcode.QRCode(version=1, box_size=10, border=2)
+    qr.add_data(verify_url)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+    
+    qr_buffer = BytesIO()
+    img.save(qr_buffer)
+    return qr_buffer.getvalue()

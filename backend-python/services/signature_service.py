@@ -32,7 +32,7 @@ def generate_rsa_key_pair(db: Session):
     
     # Store in DB
     sig_key = SignatureKey(
-        kid=kid,
+        version='v1.0',
         public_key=pem_public.decode('utf-8'),
         private_key_encrypted=pem_private.decode('utf-8'),
         status='Active'

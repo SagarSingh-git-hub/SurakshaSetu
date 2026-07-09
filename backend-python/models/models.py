@@ -40,6 +40,8 @@ class Certificate(Base):
     pdf_url = Column(String(500))
     qr_code_url = Column(String(500))
     hash_sha256 = Column(String(64))
+    signature_key_version = Column(String(50), nullable=True)
+    verification_token = Column(String(100), unique=True, index=True, nullable=True)
     created_at = Column(DateTime, default=func.now())
 
 class CertificateHash(Base):
@@ -49,6 +51,30 @@ class CertificateHash(Base):
     cert_id = Column(String(50), unique=True, nullable=False, index=True)
     hash_sha256 = Column(String(64), nullable=False)
     created_at = Column(DateTime, default=func.now())
+
+class ActivityLog(Base):
+    __tablename__ = "activity_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    event_type = Column(String(100), nullable=False)
+    reference_id = Column(String(50), nullable=False)
+    description = Column(Text, nullable=False)
+    category = Column(String(50))
+    location = Column(String(255))
+    created_at = Column(DateTime, default=func.now())
+
+class BackgroundJob(Base):
+    __tablename__ = "background_jobs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    job_id = Column(String(50), unique=True, nullable=False, index=True)
+    job_type = Column(String(50), nullable=False) # e.g., 'issue_certificate'
+    payload = Column(Text, nullable=True) # JSON payload
+    status = Column(String(20), default='Pending') # Pending, Processing, Completed, Failed
+    error_message = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=func.now())
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+
 
 class VerificationLog(Base):
     __tablename__ = "verification_logs"
@@ -143,6 +169,17 @@ class EmailIntegrationSetting(Base):
     updated_by = Column(String(100), nullable=True)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
+
+class CertificateAuditLog(Base):
+    __tablename__ = "certificate_audit_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    cert_id = Column(String(50), ForeignKey("certificates.cert_id", ondelete="CASCADE"), nullable=False, index=True)
+    action = Column(String(50), nullable=False) # Draft, Generated, Signed, Uploaded, Issued, Delivered, Revoked, Verified, Archived
+    administrator = Column(String(100), default='System')
+    ip_address = Column(String(45), nullable=True)
+    reason = Column(Text, nullable=True)
+    timestamp = Column(DateTime, default=func.now())
 
 class EmailAuditLog(Base):
     __tablename__ = "email_audit_logs"

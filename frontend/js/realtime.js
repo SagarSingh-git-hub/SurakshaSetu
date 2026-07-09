@@ -135,9 +135,26 @@ function initRealtime() {
 
     channel.bind('new-activity', function(data) {
         console.log('New activity received:', data);
+        window.dispatchEvent(new CustomEvent('NEW_ACTIVITY', { detail: data }));
         if (currentPage === 'admin' && typeof renderLiveActivityFeed === 'function') {
             renderLiveActivityFeed();
         }
+    });
+
+    channel.bind('job-progress', function(data) {
+        console.log('Job progress received:', data);
+        window.dispatchEvent(new CustomEvent('JOB_PROGRESS', { detail: data }));
+    });
+
+    channel.bind('new-certificate', function(data) {
+        console.log('New certificate received:', data);
+        showToast('🏆 New certificate issued!');
+        window.dispatchEvent(new CustomEvent('CERTIFICATE_ISSUED', { detail: data }));
+    });
+
+    channel.bind('certificate-email-sent', function(data) {
+        console.log('Certificate email sent:', data);
+        window.dispatchEvent(new CustomEvent('CERTIFICATE_EMAIL_SENT', { detail: data }));
     });
 
     channel.bind('update-priority', function(data) {
