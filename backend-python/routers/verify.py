@@ -71,7 +71,36 @@ def verify_certificate(identifier: str, request: Request, db: Session = Depends(
             "issuing_authority": cert.issuing_authority,
             "citation": cert.citation,
             "pdf_url": cert.pdf_url,
+            "qr_code_url": cert.qr_code_url,
             "key_version": cert.signature_key_version,
             "hash": cert.hash_sha256
         }
     }
+
+@router.get("/{identifier}/html", response_model=dict)
+def get_verified_certificate_html(identifier: str, db: Session = Depends(get_db)):
+    cert = db.query(Certificate).filter(
+        (Certificate.cert_id == identifier) | 
+        (Certificate.hash_sha256 == identifier) |
+        (Certificate.verification_token == identifier)
+    ).first()
+    
+    if not cert or cert.status not in ['Active', 'Issued', 'Delivered']:
+        return {"success": False, "error": "Not found or invalid"}
+        
+    tmpl = db.query(CertificateTemplate).filter(CertificateTemplate.id == cert.template_id).first()
+    
+    html = tmpl.html_content if tmpl and tmpl.html_content else f"<h1>Certificate {cert.cert_id}</h1><p>Awarded to {cert.recipient_name}</p>"
+    
+    html = html.replace('{{NAME}}', cert.recipient_name)
+    html = html.replace('{{AWARD_TYPE}}', cert.certificate_type)
+    html = html.replace('{{DATE}}', str(cert.issue_date))
+    html = html.replace('{{ISSUER}}', cert.issuing_authority)
+    html = html.replace('{{CERTIFICATE_ID}}', cert.cert_id)
+    html = html.replace('{{CITATION}}', cert.citation)
+    
+    if tmpl and tmpl.css_content:
+        html = f"<style>{tmpl.css_content}</style>{html}"
+        
+    return {"success": True, "html_content": html}
+

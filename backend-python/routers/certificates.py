@@ -22,7 +22,7 @@ from services.signature_service import sign_data
 router = APIRouter()
 
 @router.get("/members")
-def get_members(db: Session = Depends(get_db)):
+def get_members(db: Session = Depends(get_db), admin=Depends(verify_admin_token)):
     # Raw SQL since community_members isn't fully modeled in models.py, but let's just use raw connection for this 
     # since it belongs to another module.
     from core.database import get_db_connection
@@ -225,7 +225,7 @@ def get_job_status(job_id: str, db: Session = Depends(get_db), admin=Depends(ver
     }
 
 @router.get("/dashboard-stats", response_model=dict)
-def get_dashboard_stats(db: Session = Depends(get_db)):
+def get_dashboard_stats(db: Session = Depends(get_db), admin=Depends(verify_admin_token)):
     today = datetime.now().date()
     current_month = datetime.now().month
     current_year = datetime.now().year
@@ -270,8 +270,7 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
     }
 
 @router.get("/", response_model=CertificateListResponse)
-def list_certificates(page: int = 1, search: str = '', type: str = 'All', status: str = 'All', db: Session = Depends(get_db)):
-    limit = 10
+def list_certificates(page: int = 1, limit: int = 10, search: str = '', type: str = 'All', status: str = 'All', db: Session = Depends(get_db), admin=Depends(verify_admin_token)):
     offset = (page - 1) * limit
     
     query = db.query(Certificate)
@@ -350,7 +349,7 @@ def update_certificate_status(cert_id: str, req: UpdateCertificateRequest, db: S
     return {"success": True}
 
 @router.get("/{cert_id}/html", response_model=dict)
-def get_issued_certificate_html(cert_id: str, db: Session = Depends(get_db)):
+def get_issued_certificate_html(cert_id: str, db: Session = Depends(get_db), admin=Depends(verify_admin_token)):
     cert = db.query(Certificate).filter(Certificate.cert_id == cert_id).first()
     if not cert:
         return {"success": False, "error": "Not found"}

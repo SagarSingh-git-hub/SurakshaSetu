@@ -1032,6 +1032,10 @@ function exportCertsCSV() {
     
     if(el('dv-verified')) el('dv-verified').textContent = formatVerificationTimestamp();
     
+    if(verifyDlPdfBtn && data.pdf_url) {
+        verifyDlPdfBtn.dataset.url = data.pdf_url;
+    }
+    
     const txnHash = data.blockchainTxnId || ('0x' + Array.from({length: 40}, () => Math.floor(Math.random()*16).toString(16)).join(''));
     if(el('dv-txn') && el('dv-txn').childNodes[0]) el('dv-txn').childNodes[0].nodeValue = txnHash.substring(0, 10) + '...' + txnHash.substring(txnHash.length - 6) + ' ';
 
@@ -1175,9 +1179,16 @@ function exportCertsCSV() {
   const verifyDlImgBtn = el('verifyDlImgBtn');
 
   if (verifyDlPdfBtn) {
-      verifyDlPdfBtn.addEventListener('click', () => {
+      verifyDlPdfBtn.addEventListener('click', async () => {
           const certId = el('cv-id')?.textContent || (input ? input.value : null);
-          if (certId && typeof downloadCert === 'function') {
+          if (!certId) return;
+          
+          if(verifyDlPdfBtn.dataset.url) {
+              window.open(verifyDlPdfBtn.dataset.url, '_blank');
+              return;
+          }
+
+          if (typeof downloadCert === 'function') {
               downloadCert(certId);
           }
       });
@@ -1190,7 +1201,7 @@ function exportCertsCSV() {
 
           if(typeof showToast === 'function') showToast('⏳ Generating Image...');
           try {
-              const res = await adminFetch(CERT_API_URL + `/api/v1/certificates/${encodeURIComponent(certId)}/html`);
+              const res = await fetch(CERT_API_URL + `/api/v1/verify/${encodeURIComponent(certId)}/html`);
               const data = await res.json();
               if (data.success && data.html_content) {
                   const tempDiv = document.createElement('div');

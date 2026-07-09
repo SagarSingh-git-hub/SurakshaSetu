@@ -90,7 +90,9 @@ CREATE TABLE IF NOT EXISTS certificates (
     qr_code_url VARCHAR(500) NULL,
     hash_sha256 VARCHAR(64) NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (template_id) REFERENCES certificate_templates(id) ON DELETE SET NULL
+    FOREIGN KEY (template_id) REFERENCES certificate_templates(id) ON DELETE SET NULL,
+    INDEX idx_status (status),
+    INDEX idx_cert_type (certificate_type)
 );
 
 -- Insert dummy data for Community Members

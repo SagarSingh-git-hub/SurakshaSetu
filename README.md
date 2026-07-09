@@ -13,7 +13,7 @@
 
 <hr />
 
-Suraksha Setu is a high-fidelity, privacy-first civic tech platform that bridges the gap between citizens spotting environmental issues and green organizations taking action. Built on a decoupled frontend and backend architecture, it leverages interactive GIS spatial layers, Canvas-based 3D trigonometry, real-time NGO analytics dashboards, and a RESTful PHP API.
+Suraksha Setu is a high-fidelity, privacy-first civic tech platform that bridges the gap between citizens spotting environmental issues and green organizations taking action. Built on a decoupled frontend and backend architecture, it leverages interactive GIS spatial layers, **Three.js 3D Globe Visualizations**, advanced **GSAP Animations**, real-time NGO analytics dashboards, and a RESTful PHP API.
 
 ---
 
@@ -21,23 +21,25 @@ Suraksha Setu is a high-fidelity, privacy-first civic tech platform that bridges
 
 - **🔒 Zero-Friction Reporting**: Zero registration, zero cookies, zero background tracking. True anonymity ensures high civic reporting volume.
 - **🗺️ Live GIS Visualizations**: Renders reports in real-time onto an interactive Leaflet mapping coordinate layer with custom dynamic marker pins.
-- **📊 Enterprise-Grade NGO Dashboard**: Provides non-profits and municipal bodies with spatial tracking tables, priority metrics, active HSL charts, and status controls.
-- **⚡ Real-time Updates**: Real-time integration powered by WebSockets (Pusher) ensures live synchronization of reports.
+- **📊 Enterprise-Grade NGO Dashboard**: Provides non-profits and municipal bodies with spatial tracking tables, priority metrics, active Chart.js graphs, and status controls. Includes one-click PDF and Excel (SheetJS) exports.
+- **⚡ Real-time Updates**: Real-time integration powered by WebSockets (Pusher) ensures live synchronization of reports and community feeds.
 - **🤖 Smart AI Image Analysis**: Analyzes user-submitted photos using Gemini AI to automatically categorize and extract tags for environmental hazards.
 - **🚨 Advanced Alert Management**: Automated security anomaly detection (brute force, suspicious IPs) and system health monitoring (CPU, Memory, API status) via dedicated cron jobs and worker queues.
+- **📱 QR Code Integration**: Built-in HTML5 QR code scanning for quick reporting and verification.
+- **🎨 Premium UI/UX**: Immersive user experience built with Tailwind CSS, Phosphor Icons, and fluid animations powered by GSAP, ScrollReveal, and Vanilla-Tilt.
 
 ---
 
 ## 📂 Codebase Directory Mapping
 
 The project is structured into fully decoupled frontend and backend environments:
-
+ 
 ```text
 suraksha-setu/
 ├── frontend/              # Frontend Web Application (Vercel Ready)
 │   ├── template/          # UI Templates (Dashboard, Alerts, Reporting)
 │   ├── css/               # Central Design Token System
-│   └── js/                # Vanilla ES6 Modular Scripts
+│   └── js/                # Modular Scripts (3D, Maps, Realtime, App Logic)
 ├── backend/               # PHP RESTful API Backend (Render Ready)
 │   ├── api/               # Core Endpoints (Reports, Alerts, Auth)
 │   ├── cron/              # Background Monitors & Escalation Workers
@@ -56,7 +58,7 @@ suraksha-setu/
 
 Suraksha Setu employs a decoupled architecture optimized for scalability and reliability:
 
-1. **Frontend Presentation**: Lightweight HTML5/CSS3/Vanilla JS served via CDN (Vercel), communicating securely via Bearer Tokens to the API.
+1. **Frontend Presentation**: Lightweight HTML5/TailwindCSS/JS served via CDN (Vercel), communicating securely via Bearer Tokens to the API. Implements WebGL for 3D elements.
 2. **Backend API Layer**: PHP 8.x REST API handling request validation, sanitization, business logic, and session state.
 3. **Asynchronous Workers**: Dedicated CLI workers (`test_sync_retry.php`) and cron scripts (`system_monitor.php`, `escalate_alerts.php`) run completely isolated from the web server thread, preventing timeouts and ensuring reliable task processing.
 4. **Real-time Event Bus**: Real-time Pusher WebSockets broadcast alerts and updates instantly to connected clients on secure channels.
@@ -70,14 +72,21 @@ Suraksha Setu employs a decoupled architecture optimized for scalability and rel
 
 ## 🛠️ Unified Tech Stack & Libraries
 
-- **Frontend**: HTML5 (Semantic Structure), Vanilla CSS3 (Custom Grid, Flex, Variables), Vanilla ES6 JS
+### **Frontend:**
+- **Structure/Style**: HTML5, Tailwind CSS, Vanilla CSS
+- **Interactivity**: Vanilla ES6 JS
+- **3D & Animations**: Three.js, GSAP, ScrollReveal, Vanilla-tilt
+- **GIS Engine**: LeafletJS v1.9.4 (OpenStreetMap coordinate mapping layers)
+- **Data Visualization**: Chart.js, HTML5 Canvas 2D
+- **Export & Utilities**: HTML2PDF, SheetJS (XLSX), CodeMirror, HTML5-QRCode
+- **Icons & Typography**: Phosphor Icons, Google Fonts (Outfit, Nunito)
+- **Real-Time Integration**: Pusher WebSockets
+
+### **Backend & Infrastructure:**
 - **Backend API**: PHP 8.x
 - **Database**: MySQL (Aiven/Local)
-- **GIS Engine**: LeafletJS v1.9.4 (OpenStreetMap coordinate mapping layers)
-- **Visualization**: HTML5 Canvas 2D Context
-- **Real-Time Integration**: Pusher WebSockets
 - **AI Integration**: Google Gemini API for image analysis
-**Deployments**: Vercel (Frontend), Render / Docker (Backend)
+- **Deployments**: Vercel (Frontend), Render / Docker (Backend)
 - **CI/CD**: GitHub Actions
 
 ---

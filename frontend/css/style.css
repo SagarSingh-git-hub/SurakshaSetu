@@ -4874,33 +4874,3 @@ body:has(#page-map.active) {
 }
 
 /* ===== RESPONSIVE FIXES FOR ADMIN VIEWS ===== */
-@media (max-width: 1024px) {
-
-  #admin-view-cert-qr-pdf>div:nth-child(2),
-  #admin-view-cert-email>div:nth-child(2) {
-    flex-direction: column !important;
-  }
-
-  #admin-view-cert-qr-pdf>div:nth-child(2)>div,
-  #admin-view-cert-email>div:nth-child(2)>div {
-    width: 100% !important;
-    max-width: 100% !important;
-    position: static !important;
-    min-width: 100% !important;
-  }
-}
-
-@media (max-width: 768px) {
-
-  #admin-view-cert-signatures div[style*="grid-template-columns"],
-  #admin-view-cert-qr-pdf div[style*="grid-template-columns"],
-  #admin-view-cert-email div[style*="grid-template-columns"] {
-    grid-template-columns: 1fr !important;
-  }
-
-  #admin-view-cert-signatures .admin-widget,
-  #admin-view-cert-qr-pdf .admin-widget,
-  #admin-view-cert-email .admin-widget {
-    padding: 16px !important;
-  }
-}

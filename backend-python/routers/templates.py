@@ -20,7 +20,7 @@ def create_template(template: TemplateCreate, db: Session = Depends(get_db), adm
     return db_template
 
 @router.get("/", response_model=dict)
-def get_templates(db: Session = Depends(get_db)):
+def get_templates(db: Session = Depends(get_db), admin=Depends(verify_admin_token)):
     # Wrapping in dict to match legacy PHP response {"success": True, "templates": [...]}
     templates = db.query(CertificateTemplate).order_by(CertificateTemplate.is_default.desc(), CertificateTemplate.name.asc()).all()
     return {"success": True, "templates": templates}
