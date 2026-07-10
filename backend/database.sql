@@ -34,14 +34,7 @@ CREATE TABLE IF NOT EXISTS report_tags (
     FOREIGN KEY (report_id) REFERENCES reports(report_id) ON DELETE CASCADE
 );
 
--- Insert dummy data for initial map load
-INSERT IGNORE INTO reports (report_id, category, location_str, lat, lng, description, status, priority) VALUES 
-('ECO-001', 'Garbage', 'Nainital Road, Haldwani', 29.2183, 79.5130, 'Large pile of household waste.', 'Verified', 'High'),
-('ECO-002', 'Water Pollution', 'Gaula River Ghat, Haldwani', 29.2100, 79.5250, 'Industrial discharge turning water dark.', 'In Progress', 'High');
-
-INSERT IGNORE INTO report_tags (report_id, tag_name) VALUES
-('ECO-001', 'waste'), ('ECO-001', 'cleanup'),
-('ECO-002', 'water'), ('ECO-002', 'pollution');
+-- Removed dummy data for initial map load for production
 
 -- Table for Community Members
 CREATE TABLE IF NOT EXISTS community_members (
@@ -95,12 +88,7 @@ CREATE TABLE IF NOT EXISTS certificates (
     INDEX idx_cert_type (certificate_type)
 );
 
--- Insert dummy data for Community Members
-INSERT IGNORE INTO community_members (name, email, phone, zone, role) VALUES 
-('Priya Sharma', 'priya.sharma@surakshasetu.in', '+91 98765 43210', 'Central & East Agra', 'Moderator'),
-('Rohit Kumar', 'rohit.k@surakshasetu.in', '+91 98765 43211', 'North Agra', 'Moderator'),
-('Vikas Pandey', 'vikas.p@gmail.com', '+91 98765 43212', 'East Agra', 'Field Reporter'),
-('Anita Singh', 'anita.s@gmail.com', '+91 98765 43213', 'West Agra', 'Field Reporter');
+-- Removed dummy data for Community Members for production
 
 -- Insert default Templates
 INSERT IGNORE INTO certificate_templates (name, award_type, bg_gradient, primary_color, secondary_color, icon_class, is_default) VALUES 

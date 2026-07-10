@@ -1122,7 +1122,20 @@ function exportCertsCSV() {
   }
 
   // Call initialization on load just to be safe
-  setTimeout(updateClearAndButton, 100);
+  setTimeout(() => {
+    if (window.initialVerifyId) {
+        if(input) input.value = window.initialVerifyId;
+        runVerification(window.initialVerifyId);
+    } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        const idParam = urlParams.get('id');
+        if (idParam) {
+            if(input) input.value = idParam;
+            runVerification(idParam);
+        }
+    }
+    updateClearAndButton();
+  }, 100);
 
   // QR Code Scanner Logic
   let html5QrcodeScanner = null;

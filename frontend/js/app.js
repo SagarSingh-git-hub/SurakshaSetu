@@ -32,6 +32,14 @@ function getRouteFromHash() {
 }
 
 function resolveInitialPage() {
+  if (window.location.pathname.startsWith('/verify/')) {
+    const parts = window.location.pathname.split('/');
+    if (parts.length >= 3 && parts[2]) {
+      window.initialVerifyId = parts[2];
+    }
+    return 'home';
+  }
+
   if (window.location.hash) {
     const route = getRouteFromHash();
     return route.page;

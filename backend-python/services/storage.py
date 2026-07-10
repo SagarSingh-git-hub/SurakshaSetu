@@ -10,8 +10,7 @@ def upload_to_r2(file_data: bytes, object_key: str, mime_type: str = "applicatio
     public_url = os.getenv("R2_PUBLIC_URL", "").rstrip("/")
     
     if not all([account_id, access_key, secret_key, bucket]):
-        print("R2 is not configured.")
-        return None
+        raise ValueError("Cloud Storage is not configured.")
         
     s3 = boto3.client(
         "s3",

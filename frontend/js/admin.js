@@ -1680,16 +1680,22 @@ const chartInstances = {};
       content = codemirrorEditor.getValue();
     }
 
-    // Replace variables with dummy data
-    content = content.replace(/{{NAME}}/g, 'Priya Sharma')
-      .replace(/{{EMAIL}}/g, 'priya@example.com')
-      .replace(/{{ZONE}}/g, 'North Zone')
+    const recName = document.getElementById('issue-recipient-name') ? document.getElementById('issue-recipient-name').value : '';
+    const recEmail = document.getElementById('issue-recipient-email') ? document.getElementById('issue-recipient-email').value : '';
+    const recZone = document.getElementById('issue-recipient-zone') ? document.getElementById('issue-recipient-zone').value : '';
+    const issAuth = document.getElementById('issue-authority') ? document.getElementById('issue-authority').value : '';
+    const cType = document.getElementById('issue-cert-type') ? document.getElementById('issue-cert-type').value : '';
+
+    // Replace variables with dynamic data
+    content = content.replace(/{{NAME}}/g, recName || '[Recipient Name]')
+      .replace(/{{EMAIL}}/g, recEmail || '[Recipient Email]')
+      .replace(/{{ZONE}}/g, recZone || '[Zone]')
       .replace(/{{DATE}}/g, new Date().toLocaleDateString())
-      .replace(/{{ISSUER}}/g, 'Eco Warrior Admin')
-      .replace(/{{CERTIFICATE_ID}}/g, 'CERT-2026-001')
-      .replace(/{{CERTIFICATE_TYPE}}/g, 'Achievement')
-      .replace(/{{AWARD_TYPE}}/g, document.getElementById('builder-tpl-award').value || 'Outstanding Service')
-      .replace(/{{ORGANIZATION}}/g, 'Eco Warrior Foundation');
+      .replace(/{{ISSUER}}/g, issAuth || '[Issuing Authority]')
+      .replace(/{{CERTIFICATE_ID}}/g, '[Certificate ID]')
+      .replace(/{{CERTIFICATE_TYPE}}/g, cType || 'Achievement')
+      .replace(/{{AWARD_TYPE}}/g, document.getElementById('builder-tpl-award') ? document.getElementById('builder-tpl-award').value || '[Award Type]' : '[Award Type]')
+      .replace(/{{ORGANIZATION}}/g, '[Organization]');
 
     const iframe = document.getElementById('live-preview-frame');
     if (!iframe) return;

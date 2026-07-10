@@ -149,26 +149,7 @@ if ($fk_check && $fk_check->num_rows == 0) {
     $results[] = "Foreign key fk_sync_jobs_reports already exists.";
 }
 
-// 4. Initial Dummy Data
-$dummy_alerts_check = $conn->query("SELECT COUNT(*) as cnt FROM alerts");
-$row = $dummy_alerts_check->fetch_assoc();
-if ($row['cnt'] == 0) {
-    $conn->query("INSERT INTO alerts (alert_type, severity, title, description, status, source, action_required) 
-                  VALUES ('security', 'Critical', 'Security — 8 failed login attempts on admin account', 'Account Auto Locked', 'Active', '103.41.62.18', 1)");
-    
-    $conn->query("INSERT INTO alerts (alert_type, severity, title, description, status, source, action_required) 
-                  VALUES ('system', 'High', 'System — Real-time report sync failed', 'Database connection timeout during routine sync. 43 reports queued locally and waiting to be pushed to main cluster.', 'Active', 'sync_service', 1)");
-    
-    $conn->query("INSERT INTO sync_jobs (report_id, status, retry_count) VALUES 
-                  ('ECO-001', 'Failed', 2), 
-                  ('ECO-002', 'Failed', 1)");
-
-    $conn->query("INSERT INTO login_sessions (user_id, ip_address, device, browser, location, status) VALUES 
-                  ('admin@surakshasetu.org', '103.41.62.18', 'Windows 11 PC', 'Chrome 124', 'Dehradun, India', 'Active'),
-                  ('admin@surakshasetu.org', '192.168.1.50', 'MacBook Pro', 'Safari 17', 'Nainital, India', 'Active')");
-
-    $results[] = "Dummy data populated.";
-}
+// 4. Initial Dummy Data removed for production.
 
 echo json_encode(['success' => true, 'results' => $results]);
 ?>

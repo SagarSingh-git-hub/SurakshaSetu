@@ -1,3 +1,4 @@
+import os
 import math
 import hashlib
 from fastapi import APIRouter, Depends, Request, HTTPException, BackgroundTasks
@@ -95,7 +96,8 @@ def process_issue_certificate(req: IssueCertificateRequest, cert_id: str, job_id
         update_status('Draft', 10)
         
         # 2. PDF & QR Generation
-        verify_url = f"https://surakshasetu.org/verify?id={cert_id}&token={verification_token}"
+        app_url = os.getenv("APP_URL", "https://suraksha-setu-chi.vercel.app").rstrip("/")
+        verify_url = f"{app_url}/verify/{cert_id}"
         pdf_bytes = generate_certificate_pdf(
             cert_id, req.recipient_name, req.certificate_type, req.citation,
             req.issue_date, req.issuing_authority, verify_url

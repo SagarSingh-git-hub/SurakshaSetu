@@ -11,8 +11,7 @@ def send_certificate_email(to_email: str, recipient_name: str, cert_type: str, c
     smtp_pass = os.getenv("SMTP_PASS")
     
     if not all([smtp_user, smtp_pass]):
-        print("SMTP is not configured.")
-        return False
+        raise ValueError("SMTP is not configured.")
         
     msg = MIMEMultipart()
     msg['From'] = "no-reply@surakshasetu.org"
@@ -46,4 +45,4 @@ def send_certificate_email(to_email: str, recipient_name: str, cert_type: str, c
         return True
     except Exception as e:
         print(f"Error sending email: {e}")
-        return False
+        raise ValueError(f"Email delivery failed: {e}")
