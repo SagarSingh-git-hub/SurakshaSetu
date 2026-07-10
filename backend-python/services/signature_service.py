@@ -67,8 +67,8 @@ def sign_data(data: str, db: Session) -> str:
     )
     
     import base64
-    return base64.b64encode(signature).decode('utf-8')
-
+    sig_b64 = base64.b64encode(signature).decode('utf-8')
+    return sig_b64, active_key.version
 def verify_signature(data: str, signature_b64: str, db: Session) -> bool:
     # Need to find the key used to sign. For simplicity, we can check all, or check active.
     # In a real system, the certificate would include the KID.

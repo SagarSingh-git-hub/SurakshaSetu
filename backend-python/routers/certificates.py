@@ -118,7 +118,7 @@ def process_issue_certificate(req: IssueCertificateRequest, cert_id: str, job_id
         db.add(cert_hash)
         
         # Sign the hash for digital signature integrity
-        key_version = sign_data(hash_sha256, db)
+        signature, key_version = sign_data(hash_sha256, db)
         cert.signature_key_version = key_version
         cert.status = 'Signed'
         db.commit()
@@ -126,11 +126,10 @@ def process_issue_certificate(req: IssueCertificateRequest, cert_id: str, job_id
         update_status('Signed', 50)
         
         # 4. Upload to Cloudflare R2
-        year = datetime.strptime(req.issue_date, "%Y-%m-%d").strftime("%Y")
-        object_key = f"certificates/{year}/{cert_id}.pdf"
+        object_key = f"certificates/{cert_id}.pdf"
         pdf_url = upload_to_r2(pdf_bytes, object_key, "application/pdf")
         
-        qr_object_key = f"certificates/{year}/{cert_id}_qr.png"
+        qr_object_key = f"certificates/qr/{cert_id}.png"
         qr_url = upload_to_r2(qr_bytes, qr_object_key, "image/png")
         
         cert.pdf_url = pdf_url

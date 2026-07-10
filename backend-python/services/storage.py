@@ -30,4 +30,4 @@ def upload_to_r2(file_data: bytes, object_key: str, mime_type: str = "applicatio
         return f"{public_url}/{object_key}"
     except ClientError as e:
         print(f"Error uploading to R2: {e}")
-        return None
+        raise RuntimeError(f"Cloudflare R2 Upload failed: {str(e)}")
