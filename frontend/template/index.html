@@ -906,6 +906,88 @@
               .social-3d-btn.in:hover {
                 box-shadow: 0 4px 12px rgba(10, 102, 194, 0.4), inset 1px 1px 2px rgba(255, 255, 255, 0.1), inset -1px -1px 3px rgba(0, 0, 0, 0.4);
               }
+
+              /* --- ADMIN VIEWS RESPONSIVENESS --- */
+              @media (max-width: 1024px) {
+                .stat-cards, .cm-kpi-grid, .mod-kpi-grid {
+                  grid-template-columns: repeat(2, 1fr) !important;
+                }
+                .cm-layout, .mod-layout {
+                  flex-direction: column;
+                }
+                .cm-feed, .cm-sidebar, .mod-feed, .mod-sidebar {
+                  width: 100% !important;
+                }
+              }
+              
+              @media (max-width: 768px) {
+                .stat-cards, .cm-kpi-grid, .mod-kpi-grid {
+                  grid-template-columns: 1fr !important;
+                }
+                
+                .cm-banner {
+                  flex-direction: column;
+                  text-align: center;
+                  gap: 16px;
+                }
+                
+                .cm-filter-bar, .mod-filter-bar {
+                  flex-direction: column;
+                  align-items: stretch;
+                }
+                .cm-filter-bar > div, .mod-filter-bar > div,
+                .cm-filter-bar > select, .mod-filter-bar > select,
+                .cm-filter-bar > button, .mod-filter-bar > button {
+                  width: 100% !important;
+                  margin: 0 !important;
+                }
+                
+                .m-filter-bar {
+                  flex-direction: column;
+                  align-items: stretch;
+                }
+                .m-filter-bar > select, .m-filter-bar > button {
+                  width: 100%;
+                }
+                
+                #vol-more-filters-panel > div {
+                  width: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: stretch;
+                }
+                #vol-more-filters-panel > div > input,
+                #vol-more-filters-panel > div > select {
+                  width: 100%;
+                }
+              }
+              
+              @media (max-width: 480px) {
+                .cm-card-header {
+                  flex-direction: column;
+                  align-items: center;
+                  text-align: center;
+                }
+                .cm-action-group {
+                  flex-direction: column;
+                  width: 100%;
+                }
+                .cm-action-btn {
+                  width: 100%;
+                  justify-content: center;
+                }
+                .mod-action-group {
+                  flex-direction: column;
+                  width: 100%;
+                }
+                .mod-action-btn {
+                  width: 100%;
+                  justify-content: center;
+                }
+                .mod-ai-metrics {
+                  grid-template-columns: 1fr 1fr;
+                }
+              }
             </style>
 
             <svg style="width:0; height:0; position:absolute;" aria-hidden="true">
