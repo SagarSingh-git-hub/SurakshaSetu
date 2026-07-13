@@ -1056,21 +1056,27 @@
               style="font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:#ffffff;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:20px">
               Organisation</h4>
             <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:14px">
-              <li><a href="../template/organisation.html#about" style="color:#64748b;text-decoration:none;transition:color .2s"
+              <li><a href="../template/organisation.html#about"
+                  style="color:#64748b;text-decoration:none;transition:color .2s"
                   onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">About Us</a></li>
-              <li><a href="../template/organisation.html#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
+              <li><a href="../template/organisation.html#contact"
+                  style="color:#64748b;text-decoration:none;transition:color .2s"
                   onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">NGO Partnership</a>
               </li>
-              <li><a href="../template/organisation.html#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
+              <li><a href="../template/organisation.html#contact"
+                  style="color:#64748b;text-decoration:none;transition:color .2s"
                   onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Volunteer Program</a>
               </li>
-              <li><a href="../template/organisation.html#impact" style="color:#64748b;text-decoration:none;transition:color .2s"
+              <li><a href="../template/organisation.html#impact"
+                  style="color:#64748b;text-decoration:none;transition:color .2s"
                   onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Impact Reports</a>
               </li>
-              <li><a href="../template/organisation.html#privacy" style="color:#64748b;text-decoration:none;transition:color .2s"
+              <li><a href="../template/organisation.html#privacy"
+                  style="color:#64748b;text-decoration:none;transition:color .2s"
                   onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Privacy Policy</a>
               </li>
-              <li><a href="../template/organisation.html#contact" style="color:#64748b;text-decoration:none;transition:color .2s"
+              <li><a href="../template/organisation.html#contact"
+                  style="color:#64748b;text-decoration:none;transition:color .2s"
                   onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#64748b'">Contact</a></li>
             </ul>
           </div>
@@ -1902,17 +1908,16 @@
             </button>
             <div class="admin-subnav">
               <div class="admin-subnav-inner">
-                <a href="#" class="admin-subnav-link" title="Active Users"><i
+                <a href="#" class="admin-subnav-link" title="Active Users" onclick="switchAdminView('active-users', this); return false;"><i
                     class="ph-duotone ph-user-circle"></i><span class="admin-subnav-text">Active Users</span></a>
-                <a href="#" class="admin-subnav-link" title="Comments Management"><i
-                    class="ph-duotone ph-chat-circle-dots"></i><span class="admin-subnav-text">Comments
-                    Management</span></a>
-                <a href="#" class="admin-subnav-link" title="Community Feed"><i class="ph-duotone ph-rss"></i><span
-                    class="admin-subnav-text">Community Feed</span></a>
-                <a href="#" class="admin-subnav-link" title="User Posts"><i class="ph-duotone ph-article"></i><span
+                <a href="#" class="admin-subnav-link" title="Community Members" onclick="switchAdminView('community-members', this); return false;"><i
+                    class="ph-duotone ph-users"></i><span class="admin-subnav-text">Community
+                    Members</span></a>
+                <a href="#" class="admin-subnav-link" title="User Posts" onclick="switchAdminView('user-posts', this); return false;"><i class="ph-duotone ph-article"></i><span
                     class="admin-subnav-text">User Posts</span></a>
-                <a href="#" class="admin-subnav-link" title="Volunteers"><i class="ph-duotone ph-users-three"></i><span
-                    class="admin-subnav-text">Volunteers</span></a>
+                <a href="#" class="admin-subnav-link" title="Volunteers"
+                  onclick="switchAdminView('volunteers', this); return false;"><i
+                    class="ph-duotone ph-users-three"></i><span class="admin-subnav-text">Volunteers</span></a>
               </div>
             </div>
           </div>
@@ -2950,6 +2955,1530 @@
             </div>
           </div>
         </div>
+
+        <div id="admin-view-active-users" style="display: none; background: #fafafa; padding: 0 0 40px 0;">
+          
+          <!-- Header Area -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+            <div style="display: flex; gap: 16px; align-items: flex-start;">
+              <div style="width: 48px; height: 48px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #0f172a;">
+                <i class="ph-duotone ph-users"></i>
+              </div>
+              <div>
+                <h2 style="font-size: 24px; font-weight: 800; font-family: 'Outfit', sans-serif; color: #0f172a; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;">
+                  Active Users
+                </h2>
+                <div style="font-size: 13px; color: #64748b;">Monitor, manage and engage with your active platform users.</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <button class="btn-secondary" style="height: 40px; padding: 0 16px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; font-weight: 600; color: #334155; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <i class="ph-bold ph-squares-four" style="color: #10b981;"></i> Bulk Actions <i class="ph-bold ph-caret-down" style="font-size: 12px; margin-left: 4px;"></i>
+              </button>
+              <button class="btn-secondary" style="height: 40px; padding: 0 16px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; font-weight: 600; color: #334155; display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <i class="ph-bold ph-paper-plane-tilt"></i> Send Message <i class="ph-bold ph-caret-down" style="font-size: 12px; margin-left: 4px;"></i>
+              </button>
+              <button class="btn-secondary" style="height: 40px; padding: 0 16px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; font-weight: 600; color: #334155; display: flex; align-items: center; gap: 8px; cursor: pointer;" onclick="exportActiveUsersExcel()">
+                <i class="ph-bold ph-download-simple" style="color: #10b981;"></i> Export
+              </button>
+            </div>
+          </div>
+
+          <!-- 5 Stats Cards -->
+          <div class="stat-cards" style="grid-template-columns: repeat(5, 1fr); margin-bottom: 24px;">
+            <div class="stat-card">
+              <div class="stat-card-val" style="color:#10b981;">1,248</div>
+              <div class="stat-card-label">Active Users</div>
+              <div class="stat-card-trend">18.4% from last month</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-card-val" style="color:#3b82f6;">980</div>
+              <div class="stat-card-label">Verified Users</div>
+              <div class="stat-card-trend">78.5% of active users</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-val" style="color:#f97316;">320</div>
+              <div class="stat-card-label">New This Month</div>
+              <div class="stat-card-trend">12.7% from last month</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-val" style="color:#9333ea;">45,230</div>
+              <div class="stat-card-label">Total Contributions</div>
+              <div class="stat-card-trend">Reports, comments & more</div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-val" style="color:#ca8a04;">12,840</div>
+              <div class="stat-card-label">Total Points Earned</div>
+              <div class="stat-card-trend">By active users</div>
+            </div>
+          </div>
+
+          <!-- Main Table Container -->
+          <div style="background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+            
+            <!-- Advanced Toolbar -->
+            <div style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+              
+              <div style="position: relative; width: 300px;">
+                <i class="ph-bold ph-magnifying-glass" style="position: absolute; left: 16px; top: 12px; color: #94a3b8;"></i>
+                <input type="text" id="active-user-search" placeholder="Search by name, email or phone..." style="height: 40px; width: 100%; border-radius: 20px; border: 1px solid #cbd5e1; padding: 0 40px; font-size: 13px; background: #f8fafc;" onkeyup="renderActiveUsers()">
+                <i class="ph-bold ph-x" style="position: absolute; right: 16px; top: 12px; color: #94a3b8; cursor: pointer; display: none;" id="active-user-search-clear" onclick="document.getElementById('active-user-search').value=''; renderActiveUsers();"></i>
+              </div>
+
+              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <select id="active-user-role-filter" class="filter-select" onchange="renderActiveUsers()">
+                  <option value="">All Roles</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Moderator">Moderator</option>
+                  <option value="Volunteer">Volunteer</option>
+                  <option value="User">User</option>
+                </select>
+
+                <select id="active-user-status-filter" class="filter-select" onchange="renderActiveUsers()">
+                  <option value="">All Status</option>
+                  <option value="Active">Active</option>
+                  <option value="Suspended">Suspended</option>
+                </select>
+                
+                <select id="active-user-loc-filter" class="filter-select" onchange="renderActiveUsers()">
+                  <option value="">All Locations</option>
+                  <option value="New Delhi">New Delhi</option>
+                  <option value="Mumbai">Mumbai</option>
+                  <option value="Bengaluru">Bengaluru</option>
+                </select>
+
+                <button class="btn-secondary" onclick="resetActiveUserFilters()" style="height: 40px; border-radius: 20px; padding: 0 16px; background: #fff; border: 1px solid #e2e8f0; color: #ef4444; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <i class="ph-bold ph-arrows-clockwise"></i> Reset
+                </button>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 1000px;">
+                <thead>
+                  <tr style="border-bottom: 2px solid #f1f5f9; background: #f8fafc;">
+                    <th style="padding: 16px; width: 40px; text-align: center;"><input type="checkbox" id="active-users-select-all" onclick="toggleActiveUsersSelectAll(this)" style="cursor: pointer; width: 16px; height: 16px; border-radius: 4px; border: 1px solid #cbd5e1;"></th>
+                    <th style="padding: 16px; font-size: 12px; font-weight: 700; color: #0f172a; text-transform: capitalize;">User</th>
+                    <th style="padding: 16px; font-size: 12px; font-weight: 700; color: #0f172a; text-transform: capitalize;">Role</th>
+                    <th style="padding: 16px; font-size: 12px; font-weight: 700; color: #0f172a; text-transform: capitalize;">Status</th>
+                    <th style="padding: 16px; font-size: 12px; font-weight: 700; color: #0f172a; text-transform: capitalize;">Location</th>
+                    <th style="padding: 16px; font-size: 12px; font-weight: 700; color: #0f172a; text-transform: capitalize;"><div style="display: flex; align-items: center; gap: 4px;">Contributions <i class="ph-bold ph-info" style="color:#94a3b8"></i></div></th>
+                    <th style="padding: 16px; font-size: 12px; font-weight: 700; color: #0f172a; text-transform: capitalize;"><div style="display: flex; align-items: center; gap: 4px;">Points <i class="ph-bold ph-info" style="color:#94a3b8"></i></div></th>
+                    <th style="padding: 16px; font-size: 12px; font-weight: 700; color: #0f172a; text-transform: capitalize; text-align: center;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="active-users-tbody">
+                  <!-- Rows injected via JS -->
+                </tbody>
+              </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-top: 1px solid #f1f5f9; background: #fff; border-radius: 0 0 16px 16px;">
+              <div style="font-size: 13px; color: #64748b; font-weight: 500;" id="active-user-count-display">Showing 1 to 5 of 1,248 users</div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn-secondary" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e2e8f0; background: #fff; color: #64748b; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="prevActiveUserPage()"><i class="ph-bold ph-caret-left"></i></button>
+                <div style="display: flex; gap: 8px; align-items: center;" id="active-users-pagination-nums"></div>
+                <button class="btn-secondary" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #e2e8f0; background: #fff; color: #64748b; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="nextActiveUserPage()"><i class="ph-bold ph-caret-right"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature Footer Banner -->
+          <div style="margin-top: 24px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 20px 24px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;">
+            <div style="display: flex; gap: 12px;">
+              <div style="color: #16a34a; font-size: 20px;"><i class="ph-duotone ph-user-focus"></i></div>
+              <div>
+                <div style="font-size: 13px; font-weight: 700; color: #065f46; margin-bottom: 2px;">User Profiles & Moderation</div>
+                <div style="font-size: 11px; color: #166534; line-height: 1.4;">View, verify and moderate user accounts with ease.</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <div style="color: #16a34a; font-size: 20px;"><i class="ph-duotone ph-chart-line-up"></i></div>
+              <div>
+                <div style="font-size: 13px; font-weight: 700; color: #065f46; margin-bottom: 2px;">Activity Tracking</div>
+                <div style="font-size: 11px; color: #166534; line-height: 1.4;">Track reports, resolutions and last login activity.</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <div style="color: #16a34a; font-size: 20px;"><i class="ph-duotone ph-users-three"></i></div>
+              <div>
+                <div style="font-size: 13px; font-weight: 700; color: #065f46; margin-bottom: 2px;">Role Management</div>
+                <div style="font-size: 11px; color: #166534; line-height: 1.4;">Assign or change roles for users instantly.</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <div style="color: #16a34a; font-size: 20px;"><i class="ph-duotone ph-chat-centered-text"></i></div>
+              <div>
+                <div style="font-size: 13px; font-weight: 700; color: #065f46; margin-bottom: 2px;">Direct Communication</div>
+                <div style="font-size: 11px; color: #166534; line-height: 1.4;">Send emails, notifications or warnings.</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 12px;">
+              <div style="color: #16a34a; font-size: 20px;"><i class="ph-duotone ph-medal"></i></div>
+              <div>
+                <div style="font-size: 13px; font-weight: 700; color: #065f46; margin-bottom: 2px;">Rewards & Gamification</div>
+                <div style="font-size: 11px; color: #166534; line-height: 1.4;">View points, badges and leaderboards.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VOLUNTEERS VIEW -->
+        <!-- Community Members Hub -->
+        <div id="admin-view-community-members" style="display: none; background: #f8fafc; padding: 0 0 40px 0;">
+          <style>
+            .cm-hub-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+            .cm-hub-title-wrap { display: flex; gap: 16px; align-items: flex-start; }
+            .cm-hub-icon-box { width: 56px; height: 56px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; color: #fff; box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4); }
+            .cm-hub-title { font-size: 28px; font-weight: 800; font-family: 'Outfit', sans-serif; color: #0f172a; margin-bottom: 4px; letter-spacing: -0.5px; }
+            .cm-hub-subtitle { font-size: 14px; color: #64748b; max-width: 600px; line-height: 1.5; }
+            
+            .cm-hub-actions { display: flex; gap: 12px; }
+            .cm-btn { height: 44px; padding: 0 20px; border-radius: 12px; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: none; }
+            .cm-btn-primary { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+            .cm-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(16, 185, 129, 0.4); }
+            .cm-btn-secondary { background: #fff; border: 1px solid #e2e8f0; color: #334155; }
+            .cm-btn-secondary:hover { border-color: #cbd5e1; background: #f8fafc; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+            .cm-btn-ghost { background: transparent; color: #475569; }
+            .cm-btn-ghost:hover { background: #f1f5f9; color: #0f172a; }
+            
+            .cm-kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px; }
+            .cm-kpi-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 16px; padding: 20px; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+            .cm-kpi-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 25px rgba(0, 0, 0, 0.06); border-color: rgba(139, 92, 246, 0.3); }
+            .cm-kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--c1, #10b981), var(--c2, #34d399)); opacity: 0; transition: opacity 0.3s; }
+            .cm-kpi-card:hover::before { opacity: 1; }
+            
+            .cm-kpi-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+            .cm-kpi-title { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+            .cm-kpi-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+            .cm-kpi-value { font-size: 28px; font-weight: 800; font-family: 'Outfit', sans-serif; color: #0f172a; margin-bottom: 6px; line-height: 1; }
+            .cm-kpi-trend { display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; }
+            .cm-kpi-trend.up { color: #10b981; }
+            
+            .cm-filter-bar { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(16px); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 16px; padding: 16px; margin-bottom: 24px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+            
+            .cm-layout { display: flex; gap: 24px; align-items: flex-start; }
+            .cm-feed { width: 70%; display: flex; flex-direction: column; gap: 24px; }
+            .cm-sidebar { width: 30%; display: flex; flex-direction: column; gap: 24px; position: sticky; top: 24px; }
+            
+            /* Member Card Styles */
+            .cm-member-card { background: #fff; border-radius: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.03); overflow: hidden; transition: all 0.3s; animation: cmFadeUp 0.5s ease backwards; display: flex; flex-direction: column; }
+            .cm-member-card:hover { box-shadow: 0 12px 30px rgba(0,0,0,0.06); }
+            .cm-card-header { padding: 24px; display: flex; gap: 20px; align-items: flex-start; border-bottom: 1px solid #f1f5f9; position: relative; }
+            
+            .cm-avatar-wrapper { position: relative; }
+            .cm-avatar { width: 72px; height: 72px; border-radius: 20px; object-fit: cover; background: #f1f5f9; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+            .cm-online-dot { width: 14px; height: 14px; background: #10b981; border: 2px solid #fff; border-radius: 50%; position: absolute; bottom: -2px; right: -2px; }
+            
+            .cm-user-info { flex: 1; }
+            .cm-user-name { font-size: 20px; font-weight: 800; color: #0f172a; margin: 0 0 4px 0; display: flex; align-items: center; gap: 8px; }
+            .cm-username { font-size: 14px; color: #64748b; font-weight: 500; }
+            .cm-user-meta { font-size: 13px; color: #475569; display: flex; align-items: center; gap: 12px; margin-top: 8px; font-weight: 600; }
+            
+            .cm-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+            .cm-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; }
+            
+            .cm-card-body { padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+            .cm-section-title { font-size: 12px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+            .cm-bio { font-size: 14px; color: #334155; line-height: 1.5; margin-bottom: 16px; }
+            .cm-skills { display: flex; gap: 6px; flex-wrap: wrap; }
+            .cm-skill-tag { padding: 4px 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 99px; font-size: 12px; color: #475569; font-weight: 600; }
+            
+            .cm-metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+            .cm-metric { background: #f8fafc; padding: 12px; border-radius: 12px; border: 1px solid #f1f5f9; text-align: center; }
+            .cm-metric-val { font-size: 18px; font-weight: 800; color: #0f172a; }
+            .cm-metric-label { font-size: 11px; color: #64748b; font-weight: 600; margin-top: 2px; }
+            
+            .cm-achievements { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+            .cm-ach-badge { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #fef3c7, #fde68a); color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 2px 8px rgba(217, 119, 6, 0.2); }
+            
+            .cm-card-footer { padding: 16px 24px; background: #fafafa; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+            .cm-action-group { display: flex; gap: 8px; }
+            .cm-action-btn { height: 36px; padding: 0 16px; border-radius: 10px; border: 1px solid #e2e8f0; background: #fff; display: flex; align-items: center; gap: 6px; color: #475569; font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+            .cm-action-btn:hover { background: #f1f5f9; color: #0f172a; }
+            .cm-action-btn.primary { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+            .cm-action-btn.primary:hover { background: #2563eb; }
+            
+            .cm-sidebar-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); margin-bottom: 24px; }
+            .cm-sidebar-title { font-size: 14px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+            
+            .cm-chart-placeholder { height: 180px; width: 100%; border-radius: 12px; background: repeating-linear-gradient(45deg, #f8fafc, #f8fafc 10px, #f1f5f9 10px, #f1f5f9 20px); display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 13px; font-weight: 600; }
+            
+            .cm-banner { background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); border-radius: 20px; padding: 32px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden; margin-top: 16px; box-shadow: 0 10px 30px rgba(6, 78, 59, 0.3); }
+            .cm-banner-content { position: relative; z-index: 2; max-width: 600px; }
+            .cm-banner-content h3 { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 8px; font-family: 'Outfit', sans-serif; }
+            .cm-banner-content p { font-size: 15px; color: #cbd5e1; line-height: 1.6; }
+            .cm-banner-icon { font-size: 140px; color: rgba(255,255,255,0.03); position: absolute; right: 20px; top: 50%; transform: translateY(-50%); z-index: 1; }
+            
+            @keyframes cmFadeUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+          </style>
+
+          <!-- Top Header -->
+          <div class="cm-hub-header">
+            <div class="cm-hub-title-wrap">
+              <div class="cm-hub-icon-box">
+                <i class="ph-fill ph-users-three"></i>
+              </div>
+              <div>
+                <h2 class="cm-hub-title">Community Members</h2>
+                <div class="cm-hub-subtitle">Manage registered community members, memberships, participation, engagement, achievements, neighborhood networks, and outreach.</div>
+              </div>
+            </div>
+            <div class="cm-hub-actions">
+              <button class="cm-btn cm-btn-ghost"><i class="ph-bold ph-faders"></i> Advanced Filters</button>
+              <button class="cm-btn cm-btn-secondary"><i class="ph-bold ph-megaphone"></i> Send Announcement</button>
+              <button class="cm-btn cm-btn-secondary"><i class="ph-bold ph-download-simple"></i> Export</button>
+              <button class="cm-btn cm-btn-primary"><i class="ph-bold ph-user-plus"></i> Add Member</button>
+            </div>
+          </div>
+
+          <!-- KPI Dashboard -->
+          <div class="cm-kpi-grid">
+            <div class="cm-kpi-card" style="--c1: #3b82f6; --c2: #60a5fa;">
+              <div class="cm-kpi-header">
+                <div class="cm-kpi-title">Total Members</div>
+                <div class="cm-kpi-icon" style="background: #eff6ff; color: #3b82f6;"><i class="ph-bold ph-users"></i></div>
+              </div>
+              <div class="cm-kpi-value">12,482</div>
+              <div class="cm-kpi-trend up"><i class="ph-bold ph-trend-up"></i> +4.2% Month</div>
+            </div>
+            <div class="cm-kpi-card" style="--c1: #10b981; --c2: #34d399;">
+              <div class="cm-kpi-header">
+                <div class="cm-kpi-title">Active Members</div>
+                <div class="cm-kpi-icon" style="background: #f0fdf4; color: #10b981;"><i class="ph-bold ph-activity"></i></div>
+              </div>
+              <div class="cm-kpi-value">8,930</div>
+              <div class="cm-kpi-trend up"><i class="ph-bold ph-trend-up"></i> +12% Month</div>
+            </div>
+            <div class="cm-kpi-card" style="--c1: #f59e0b; --c2: #fbbf24;">
+              <div class="cm-kpi-header">
+                <div class="cm-kpi-title">Volunteers</div>
+                <div class="cm-kpi-icon" style="background: #fffbeb; color: #f59e0b;"><i class="ph-bold ph-hand-heart"></i></div>
+              </div>
+              <div class="cm-kpi-value">1,240</div>
+              <div class="cm-kpi-trend up"><i class="ph-bold ph-trend-up"></i> +5.1% Month</div>
+            </div>
+            <div class="cm-kpi-card" style="--c1: #ef4444; --c2: #f87171;">
+              <div class="cm-kpi-header">
+                <div class="cm-kpi-title">Emergency Guardians</div>
+                <div class="cm-kpi-icon" style="background: #fef2f2; color: #ef4444;"><i class="ph-bold ph-shield-plus"></i></div>
+              </div>
+              <div class="cm-kpi-value">345</div>
+              <div class="cm-kpi-trend up"><i class="ph-bold ph-trend-up"></i> Strong Coverage</div>
+            </div>
+            <div class="cm-kpi-card" style="--c1: #10b981; --c2: #059669;">
+              <div class="cm-kpi-header">
+                <div class="cm-kpi-title">Premium Members</div>
+                <div class="cm-kpi-icon" style="background: #ecfdf5; color: #10b981;"><i class="ph-bold ph-crown"></i></div>
+              </div>
+              <div class="cm-kpi-value">890</div>
+              <div class="cm-kpi-trend up"><i class="ph-bold ph-trend-up"></i> +2.3% Month</div>
+            </div>
+          </div>
+
+          <!-- Smart Filter Bar -->
+          <div class="cm-filter-bar">
+            <div style="flex:1; min-width:250px; position:relative;">
+              <i class="ph-bold ph-magnifying-glass" style="position:absolute; left:16px; top:50%; transform:translateY(-50%); color:#94a3b8;"></i>
+              <input type="text" placeholder="Search by name, ID, skills, or location..." style="width:100%; height:44px; border-radius:12px; border:1px solid #e2e8f0; background:#f8fafc; padding:0 16px 0 44px; font-size:14px; outline:none;">
+            </div>
+            <!-- We can use the existing mod-select class we built for user posts -->
+            <select class="mod-select"><option>All Roles</option><option>Citizen</option><option>Volunteer</option><option>Guardian</option></select>
+            <select class="mod-select"><option>Any Location</option><option>Ward 12</option><option>Ward 14</option></select>
+            <select class="mod-select"><option>All Statuses</option><option>Active</option><option>Premium</option></select>
+            <button class="btn-secondary" onclick="return false;" style="height: 40px; border-radius: 20px; padding: 0 16px; background: #fff; border: 1px solid #e2e8f0; color: #ef4444; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer; margin-left: auto;">
+              <i class="ph-bold ph-arrows-clockwise"></i> Reset
+            </button>
+          </div>
+
+          <!-- Main Split Layout -->
+          <div class="cm-layout">
+            <!-- Left 70% Feed -->
+            <div class="cm-feed" id="cm-feed-container">
+              <!-- Rendered via JS -->
+            </div>
+
+            <!-- Right 30% Sidebar -->
+            <div class="cm-sidebar">
+              <div class="cm-sidebar-card">
+                <div class="cm-sidebar-title"><i class="ph-bold ph-chart-donut" style="color: #10b981;"></i> Member Distribution</div>
+                <div class="cm-chart-placeholder">
+                  [ Live Distribution Chart Here ]
+                </div>
+              </div>
+              
+              <div class="cm-sidebar-card">
+                <div class="cm-sidebar-title"><i class="ph-bold ph-chart-line-up" style="color: #10b981;"></i> Community Growth</div>
+                <div class="cm-chart-placeholder" style="height: 140px;">
+                  [ Growth Area Chart Here ]
+                </div>
+              </div>
+
+              <div class="cm-sidebar-card">
+                <div class="cm-sidebar-title"><i class="ph-bold ph-star" style="color: #f59e0b;"></i> Top Active Members</div>
+                <div class="mod-leader-row">
+                  <div class="mod-leader-user">
+                    <img src="https://i.pravatar.cc/150?u=21" alt="Avatar">
+                    <span class="mod-leader-name">Karan Patel</span>
+                  </div>
+                  <div class="mod-leader-score" style="background:#eff6ff; color:#3b82f6;">940 Rep</div>
+                </div>
+                <div class="mod-leader-row">
+                  <div class="mod-leader-user">
+                    <img src="https://i.pravatar.cc/150?u=22" alt="Avatar">
+                    <span class="mod-leader-name">Sita Verma</span>
+                  </div>
+                  <div class="mod-leader-score" style="background:#eff6ff; color:#3b82f6;">820 Rep</div>
+                </div>
+              </div>
+              
+              <div class="cm-sidebar-card">
+                <div class="cm-sidebar-title"><i class="ph-bold ph-heartbeat" style="color: #ef4444;"></i> Community Health</div>
+                <div style="font-size:36px; font-weight:800; color:#0f172a; text-align:center;">92<span style="font-size:16px; color:#64748b;">/100</span></div>
+                <p style="text-align:center; font-size:13px; color:#64748b; margin-top:8px;">Excellent participation & trust index.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Banner -->
+          <div class="cm-banner">
+            <i class="ph-fill ph-users-three cm-banner-icon"></i>
+            <div class="cm-banner-content">
+              <h3>Strong communities are built by active members.</h3>
+              <p>Recognize participation, reward contribution, strengthen neighborhood collaboration, encourage volunteerism, and build a connected, resilient community through meaningful engagement.</p>
+            </div>
+            <div style="position: relative; z-index: 2;">
+              <button class="cm-btn cm-btn-primary" style="background: #fff; color: #1e1b4b;">View Outreach Playbook</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- User Posts Hub -->
+        <div id="admin-view-user-posts" style="display: none; background: #f8fafc; padding: 0 0 40px 0;">
+          <style>
+            .mod-hub-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+            .mod-hub-title-wrap { display: flex; gap: 16px; align-items: flex-start; }
+            .mod-hub-icon-box { width: 56px; height: 56px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; color: #fff; box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4); }
+            .mod-hub-title { font-size: 28px; font-weight: 800; font-family: 'Outfit', sans-serif; color: #0f172a; margin-bottom: 4px; letter-spacing: -0.5px; }
+            .mod-hub-subtitle { font-size: 14px; color: #64748b; max-width: 600px; line-height: 1.5; }
+            
+            .mod-hub-actions { display: flex; gap: 12px; }
+            .mod-btn { height: 44px; padding: 0 20px; border-radius: 12px; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: none; }
+            .mod-btn-primary { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+            .mod-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(16, 185, 129, 0.4); }
+            .mod-btn-secondary { background: #fff; border: 1px solid #e2e8f0; color: #334155; }
+            .mod-btn-secondary:hover { border-color: #cbd5e1; background: #f8fafc; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+            .mod-btn-ghost { background: transparent; color: #475569; }
+            .mod-btn-ghost:hover { background: #f1f5f9; color: #0f172a; }
+            
+            .mod-kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 24px; }
+            .mod-kpi-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 24px; position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+            .mod-kpi-card:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08); border-color: rgba(59, 130, 246, 0.3); }
+            .mod-kpi-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--c1, #10b981), var(--c2, #34d399)); opacity: 0; transition: opacity 0.3s; }
+            .mod-kpi-card:hover::before { opacity: 1; }
+            
+            .mod-kpi-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+            .mod-kpi-title { font-size: 13px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+            .mod-kpi-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+            
+            .mod-kpi-value { font-size: 32px; font-weight: 800; font-family: 'Outfit', sans-serif; color: #0f172a; margin-bottom: 8px; line-height: 1; }
+            .mod-kpi-trend { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
+            .mod-kpi-trend.up { color: #10b981; }
+            .mod-kpi-trend.down { color: #ef4444; }
+            
+            .mod-filter-bar { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(16px); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 16px; padding: 16px; margin-bottom: 24px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+            .mod-search-wrap { flex: 1; min-width: 250px; position: relative; }
+            .mod-search-wrap i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 18px; }
+            .mod-search-wrap input { width: 100%; height: 44px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; padding: 0 16px 0 44px; font-size: 14px; transition: all 0.2s; outline: none; }
+            .mod-search-wrap input:focus { background: #fff; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+            
+            .mod-select { height: 44px; border-radius: 12px; border: 1px solid #e2e8f0; background: #fff; padding: 0 36px 0 16px; font-size: 13px; font-weight: 600; color: #475569; appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 256 256'%3E%3Cpath d='M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; outline: none; transition: all 0.2s; }
+            .mod-select:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+            
+            .mod-layout { display: flex; gap: 24px; align-items: flex-start; }
+            .mod-feed { width: 72%; display: flex; flex-direction: column; gap: 24px; }
+            .mod-sidebar { width: 28%; display: flex; flex-direction: column; gap: 24px; position: sticky; top: 24px; }
+            
+            .mod-post-card { background: #fff; border-radius: 20px; border: 1px solid #e2e8f0; box-shadow: 0 4px 20px rgba(0,0,0,0.03); overflow: hidden; transition: all 0.3s; animation: fadeUpIn 0.5s ease backwards; }
+            .mod-post-card:hover { box-shadow: 0 12px 30px rgba(0,0,0,0.06); }
+            
+            .mod-post-header { padding: 20px 24px; display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #f1f5f9; }
+            .mod-post-author { display: flex; gap: 12px; align-items: center; }
+            .mod-post-avatar { width: 48px; height: 48px; border-radius: 14px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; color: #475569; position: relative; }
+            .mod-post-avatar img { width: 100%; height: 100%; border-radius: 14px; object-fit: cover; }
+            .mod-verified-badge { position: absolute; bottom: -4px; right: -4px; background: #3b82f6; color: #fff; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; border: 2px solid #fff; }
+            
+            .mod-author-info h4 { margin: 0 0 2px 0; font-size: 15px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 6px; }
+            .mod-author-meta { font-size: 12px; color: #64748b; display: flex; align-items: center; gap: 6px; }
+            
+            .mod-post-badges { display: flex; gap: 8px; flex-wrap: wrap; }
+            .mod-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; }
+            .mod-badge-danger { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; }
+            .mod-badge-warning { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+            .mod-badge-success { background: #f0fdf4; color: #10b981; border: 1px solid #bbf7d0; }
+            .mod-badge-info { background: #eff6ff; color: #3b82f6; border: 1px solid #bfdbfe; }
+            .mod-badge-dark { background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
+            
+            .mod-post-body { padding: 24px; }
+            .mod-post-text { font-size: 15px; color: #334155; line-height: 1.6; margin-bottom: 16px; }
+            .mod-post-text .hashtag { color: #3b82f6; font-weight: 500; cursor: pointer; }
+            .mod-post-text .mention { color: #8b5cf6; font-weight: 600; cursor: pointer; }
+            
+            .mod-media-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+            .mod-media-item { aspect-ratio: 16/9; background: #f1f5f9; position: relative; overflow: hidden; cursor: zoom-in; }
+            .mod-media-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+            .mod-media-item:hover img { transform: scale(1.05); }
+            .mod-video-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 24px; transition: all 0.2s; }
+            .mod-media-item:hover .mod-video-play { background: rgba(59,130,246,0.8); transform: translate(-50%, -50%) scale(1.1); }
+            
+            .mod-ai-panel { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+            .mod-ai-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+            .mod-ai-title { font-size: 12px; font-weight: 700; color: #475569; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+            .mod-ai-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+            .mod-ai-metric { display: flex; flex-direction: column; gap: 4px; }
+            .mod-ai-metric-label { font-size: 11px; color: #64748b; font-weight: 600; display: flex; justify-content: space-between; }
+            .mod-ai-bar-bg { width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+            .mod-ai-bar-fill { height: 100%; border-radius: 3px; }
+            
+            .mod-engagement { display: flex; gap: 24px; padding-top: 16px; border-top: 1px solid #f1f5f9; }
+            .mod-eng-item { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: #475569; }
+            .mod-eng-item i { font-size: 18px; color: #94a3b8; }
+            
+            .mod-post-footer { padding: 16px 24px; background: #fafafa; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+            .mod-action-group { display: flex; gap: 8px; }
+            .mod-action-btn { width: 36px; height: 36px; border-radius: 10px; border: 1px solid #e2e8f0; background: #fff; display: flex; align-items: center; justify-content: center; color: #64748b; cursor: pointer; transition: all 0.2s; }
+            .mod-action-btn:hover { background: #f1f5f9; color: #0f172a; transform: translateY(-2px); }
+            .mod-action-btn.success:hover { background: #10b981; color: #fff; border-color: #10b981; }
+            .mod-action-btn.danger:hover { background: #ef4444; color: #fff; border-color: #ef4444; }
+            
+            .mod-sidebar-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 24px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); margin-bottom: 24px; }
+            .mod-sidebar-title { font-size: 14px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+            
+            .mod-report-item { display: flex; gap: 12px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid #f1f5f9; }
+            .mod-report-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+            .mod-report-avatar { width: 32px; height: 32px; border-radius: 8px; background: #e2e8f0; flex-shrink: 0; }
+            .mod-report-content h5 { margin: 0 0 4px 0; font-size: 13px; font-weight: 600; color: #0f172a; }
+            .mod-report-content p { margin: 0 0 6px 0; font-size: 12px; color: #64748b; line-height: 1.4; }
+            
+            .mod-leader-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+            .mod-leader-user { display: flex; align-items: center; gap: 10px; }
+            .mod-leader-user img { width: 28px; height: 28px; border-radius: 50%; }
+            .mod-leader-name { font-size: 13px; font-weight: 600; color: #0f172a; }
+            .mod-leader-score { font-size: 12px; font-weight: 700; color: #10b981; background: #f0fdf4; padding: 2px 8px; border-radius: 99px; }
+            
+            .mod-chart-placeholder { height: 160px; width: 100%; border-radius: 12px; background: repeating-linear-gradient(45deg, #f8fafc, #f8fafc 10px, #f1f5f9 10px, #f1f5f9 20px); display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 13px; font-weight: 600; }
+            
+            .mod-banner { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 20px; padding: 32px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden; margin-top: 16px; box-shadow: 0 10px 30px rgba(15, 23, 42, 0.2); }
+            .mod-banner-content { position: relative; z-index: 2; max-width: 600px; }
+            .mod-banner-content h3 { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 8px; font-family: 'Outfit', sans-serif; }
+            .mod-banner-content p { font-size: 15px; color: #94a3b8; line-height: 1.6; }
+            .mod-banner-icon { font-size: 120px; color: rgba(255,255,255,0.05); position: absolute; right: 20px; top: 50%; transform: translateY(-50%); z-index: 1; }
+            
+            @keyframes fadeUpIn { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+          </style>
+
+          <!-- Top Header -->
+          <div class="mod-hub-header">
+            <div class="mod-hub-title-wrap">
+              <div class="mod-hub-icon-box">
+                <i class="ph-fill ph-shield-star"></i>
+              </div>
+              <div>
+                <h2 class="mod-hub-title">User Posts</h2>
+                <div class="mod-hub-subtitle">Review, moderate, publish, monitor and manage all community-generated posts, discussions, announcements and public updates from one intelligent moderation center.</div>
+              </div>
+            </div>
+            <div class="mod-hub-actions">
+              <button class="mod-btn mod-btn-ghost"><i class="ph-bold ph-faders"></i> Advanced Filters</button>
+              <button class="mod-btn mod-btn-secondary"><i class="ph-bold ph-stack"></i> Bulk Moderation</button>
+              <button class="mod-btn mod-btn-secondary"><i class="ph-bold ph-download-simple"></i> Export</button>
+              <button class="mod-btn mod-btn-primary"><i class="ph-bold ph-plus"></i> Create Post</button>
+            </div>
+          </div>
+
+          <!-- KPI Cards -->
+          <div class="mod-kpi-grid">
+            <div class="mod-kpi-card" style="--c1: #3b82f6; --c2: #60a5fa;">
+              <div class="mod-kpi-header">
+                <div class="mod-kpi-title">Total Posts</div>
+                <div class="mod-kpi-icon" style="background: #eff6ff; color: #3b82f6;"><i class="ph-bold ph-article"></i></div>
+              </div>
+              <div class="mod-kpi-value">24,592</div>
+              <div class="mod-kpi-trend up"><i class="ph-bold ph-trend-up"></i> 12.4% Today</div>
+            </div>
+            <div class="mod-kpi-card" style="--c1: #10b981; --c2: #34d399;">
+              <div class="mod-kpi-header">
+                <div class="mod-kpi-title">Published</div>
+                <div class="mod-kpi-icon" style="background: #f0fdf4; color: #10b981;"><i class="ph-bold ph-check-circle"></i></div>
+              </div>
+              <div class="mod-kpi-value">21,840</div>
+              <div class="mod-kpi-trend up"><i class="ph-bold ph-trend-up"></i> 8.2% Today</div>
+            </div>
+            <div class="mod-kpi-card" style="--c1: #f59e0b; --c2: #fbbf24;">
+              <div class="mod-kpi-header">
+                <div class="mod-kpi-title">Pending Review</div>
+                <div class="mod-kpi-icon" style="background: #fffbeb; color: #f59e0b;"><i class="ph-bold ph-clock"></i></div>
+              </div>
+              <div class="mod-kpi-value">1,432</div>
+              <div class="mod-kpi-trend down"><i class="ph-bold ph-trend-down"></i> Action Needed</div>
+            </div>
+            <div class="mod-kpi-card" style="--c1: #ef4444; --c2: #f87171;">
+              <div class="mod-kpi-header">
+                <div class="mod-kpi-title">Reported Posts</div>
+                <div class="mod-kpi-icon" style="background: #fef2f2; color: #ef4444;"><i class="ph-bold ph-warning"></i></div>
+              </div>
+              <div class="mod-kpi-value">385</div>
+              <div class="mod-kpi-trend up"><i class="ph-bold ph-trend-up"></i> 4.1% Today</div>
+            </div>
+          </div>
+
+          <!-- Smart Filter Bar -->
+          <div class="mod-filter-bar">
+            <div class="mod-search-wrap">
+              <i class="ph-bold ph-magnifying-glass"></i>
+              <input type="text" placeholder="Search posts by keyword, author, or ID...">
+            </div>
+            <select class="mod-select"><option>All Categories</option><option>Emergency</option><option>Discussion</option><option>Lost & Found</option></select>
+            <select class="mod-select"><option>All Statuses</option><option>Pending Review</option><option>Reported</option></select>
+            <select class="mod-select"><option>Any Risk Level</option><option>High Risk (AI)</option></select>
+            <select class="mod-select"><option>Sort: Newest First</option><option>Most Reported</option></select>
+            <button class="btn-secondary" onclick="return false;" style="height: 40px; border-radius: 20px; padding: 0 16px; background: #fff; border: 1px solid #e2e8f0; color: #ef4444; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer; margin-left: auto;">
+              <i class="ph-bold ph-arrows-clockwise"></i> Reset
+            </button>
+          </div>
+
+          <!-- Main Split Layout -->
+          <div class="mod-layout">
+            <!-- Left 72% Feed -->
+            <div class="mod-feed" id="mod-feed-container">
+              <!-- Rendered via JS -->
+            </div>
+
+            <!-- Right 28% Sidebar -->
+            <div class="mod-sidebar">
+              <div class="mod-sidebar-card">
+                <div class="mod-sidebar-title"><i class="ph-bold ph-chart-pie-slice" style="color: #3b82f6;"></i> Post Overview</div>
+                <div class="mod-chart-placeholder">
+                  [ Live Doughnut Chart Rendered Here ]
+                </div>
+              </div>
+              
+              <div class="mod-sidebar-card">
+                <div class="mod-sidebar-title"><i class="ph-bold ph-warning-circle" style="color: #ef4444;"></i> Recent Reports</div>
+                <div class="mod-report-item">
+                  <div class="mod-report-avatar" style="background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; font-weight: 700;">A</div>
+                  <div class="mod-report-content">
+                    <h5>Hate Speech / Harassment</h5>
+                    <p>Reported by @priya_s 10 mins ago.</p>
+                    <div class="mod-badge mod-badge-danger" style="display: inline-flex;">Critical</div>
+                  </div>
+                </div>
+                <div class="mod-report-item">
+                  <div class="mod-report-avatar" style="background: #ffedd5; color: #f97316; display: flex; align-items: center; justify-content: center; font-weight: 700;">R</div>
+                  <div class="mod-report-content">
+                    <h5>Misleading Content</h5>
+                    <p>Reported by @rahul_v 25 mins ago.</p>
+                    <div class="mod-badge mod-badge-warning" style="display: inline-flex;">Medium</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mod-sidebar-card">
+                <div class="mod-sidebar-title"><i class="ph-bold ph-medal" style="color: #f59e0b;"></i> Top Contributors</div>
+                <div class="mod-leader-row">
+                  <div class="mod-leader-user">
+                    <img src="https://i.pravatar.cc/150?u=1" alt="Avatar">
+                    <span class="mod-leader-name">Anjali Desai</span>
+                  </div>
+                  <div class="mod-leader-score">14.2k PTS</div>
+                </div>
+                <div class="mod-leader-row">
+                  <div class="mod-leader-user">
+                    <img src="https://i.pravatar.cc/150?u=2" alt="Avatar">
+                    <span class="mod-leader-name">Vikram Singh</span>
+                  </div>
+                  <div class="mod-leader-score">9.8k PTS</div>
+                </div>
+                <div class="mod-leader-row">
+                  <div class="mod-leader-user">
+                    <img src="https://i.pravatar.cc/150?u=3" alt="Avatar">
+                    <span class="mod-leader-name">Neha Gupta</span>
+                  </div>
+                  <div class="mod-leader-score">7.5k PTS</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Banner -->
+          <div class="mod-banner">
+            <i class="ph-fill ph-shield-check mod-banner-icon"></i>
+            <div class="mod-banner-content">
+              <h3>Healthy discussions create stronger communities.</h3>
+              <p>Review posts fairly, encourage meaningful conversations, detect harmful content quickly, and maintain a safe, respectful environment for every member of SurakshaSetu.</p>
+            </div>
+            <div style="position: relative; z-index: 2;">
+              <button class="mod-btn mod-btn-primary" style="background: #fff; color: #0f172a;">Review Guidelines</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div id="admin-view-volunteers" style="display: none;">
+          <!-- Inline CSS for Volunteers -->
+          <style>
+            .vol-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              margin-bottom: 24px;
+            }
+
+            .vol-header h3 {
+              font-size: 24px;
+              font-weight: 800;
+              color: var(--text);
+              font-family: 'Outfit', sans-serif;
+              margin-bottom: 4px;
+            }
+
+            .vol-header p {
+              font-size: 14px;
+              color: var(--text3);
+              max-width: 600px;
+            }
+
+            .vol-actions {
+              display: flex;
+              gap: 12px;
+            }
+
+            .vol-stats-grid {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+              gap: 16px;
+              margin-bottom: 24px;
+            }
+
+            .vol-stat-card {
+              background: #fff;
+              border-radius: 16px;
+              border: 1px solid var(--border);
+              padding: 16px;
+              box-shadow: var(--shadow2);
+              transition: transform 0.2s, box-shadow 0.2s;
+              position: relative;
+              overflow: hidden;
+            }
+
+            .vol-stat-card:hover {
+              transform: translateY(-3px);
+              box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            }
+
+            .vol-stat-icon {
+              width: 40px;
+              height: 40px;
+              border-radius: 12px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 20px;
+              margin-bottom: 12px;
+            }
+
+            .vol-stat-val {
+              font-size: 28px;
+              font-weight: 800;
+              font-family: 'Outfit', sans-serif;
+              color: var(--text);
+              line-height: 1;
+              margin-bottom: 4px;
+            }
+
+            .vol-stat-label {
+              font-size: 13px;
+              font-weight: 600;
+              color: var(--text2);
+              margin-bottom: 8px;
+            }
+
+            .vol-stat-trend {
+              font-size: 12px;
+              font-weight: 600;
+              display: flex;
+              align-items: center;
+              gap: 4px;
+            }
+
+            .vol-stat-trend.up {
+              color: #16a34a;
+            }
+
+            .vol-stat-trend.down {
+              color: #ef4444;
+            }
+
+            .vol-filters {
+              background: #fff;
+              border-radius: 16px;
+              border: 1px solid var(--border);
+              padding: 16px;
+              margin-bottom: 24px;
+              box-shadow: var(--shadow2);
+              display: flex;
+              flex-wrap: wrap;
+              gap: 12px;
+              align-items: center;
+            }
+
+            .vol-search {
+              flex: 1;
+              min-width: 200px;
+              position: relative;
+            }
+
+            .vol-search input {
+              width: 100%;
+              height: 40px;
+              border-radius: 8px;
+              border: 1px solid var(--border);
+              padding: 0 16px 0 40px;
+              font-size: 14px;
+              outline: none;
+              transition: border-color 0.2s;
+            }
+
+            .vol-search input:focus {
+              border-color: var(--primary);
+            }
+
+            .vol-search i.ph-magnifying-glass {
+              position: absolute;
+              left: 14px;
+              top: 12px;
+              color: var(--text3);
+              font-size: 16px;
+            }
+
+            .vol-select {
+              height: 40px;
+              border-radius: 8px;
+              border: 1px solid var(--border);
+              padding: 0 16px;
+              font-size: 14px;
+              color: var(--text2);
+              background: #f8fafc;
+              outline: none;
+              cursor: pointer;
+            }
+
+            .vol-btn-outline {
+              height: 40px;
+              border-radius: 8px;
+              border: 1px solid var(--border);
+              padding: 0 16px;
+              font-size: 14px;
+              font-weight: 600;
+              color: var(--text2);
+              background: #fff;
+              cursor: pointer;
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              transition: all 0.2s;
+            }
+
+            .vol-btn-outline:hover {
+              background: #f8fafc;
+              border-color: #cbd5e1;
+            }
+
+            .vol-main-grid {
+              display: flex;
+              flex-direction: column;
+              gap: 24px;
+            }
+
+            .vol-bottom-cards-grid {
+              display: grid;
+              grid-template-columns: 1.5fr 1fr 1fr;
+              gap: 24px;
+            }
+
+            @media (max-width: 1024px) {
+              .vol-bottom-cards-grid {
+                grid-template-columns: 1fr;
+              }
+            }
+
+            .vol-table-card {
+              background: #fff;
+              border-radius: 16px;
+              border: 1px solid var(--border);
+              box-shadow: var(--shadow2);
+              overflow: hidden;
+            }
+
+            .vol-table-header {
+              padding: 20px 24px;
+              border-bottom: 1px solid var(--border);
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
+
+            .vol-table-header h4 {
+              font-size: 16px;
+              font-weight: 800;
+              font-family: 'Outfit', sans-serif;
+              color: var(--text);
+              margin-bottom: 0;
+            }
+
+            .vol-table-wrap {
+              overflow-x: auto;
+            }
+
+            .vol-table {
+              width: 100%;
+              border-collapse: collapse;
+              text-align: left;
+            }
+
+            .vol-table th {
+              padding: 16px 24px;
+              font-size: 12px;
+              font-weight: 700;
+              color: var(--text3);
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              border-bottom: 1px solid var(--border);
+              background: #f8fafc;
+            }
+
+            .vol-table td {
+              padding: 16px 24px;
+              font-size: 14px;
+              color: var(--text2);
+              border-bottom: 1px solid var(--border);
+              vertical-align: middle;
+            }
+
+            .vol-table tr:last-child td {
+              border-bottom: none;
+            }
+
+            .vol-table tr:hover td {
+              background: #f8fafc;
+            }
+
+            .vol-user-cell {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+            }
+
+            .vol-avatar {
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              background: #e2e8f0;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-weight: 700;
+              font-family: 'Outfit', sans-serif;
+              color: var(--text);
+              flex-shrink: 0;
+            }
+
+            .vol-user-info .name {
+              font-weight: 700;
+              color: var(--text);
+              font-size: 14px;
+              margin-bottom: 2px;
+            }
+
+            .vol-user-info .contact {
+              font-size: 12px;
+              color: var(--text3);
+            }
+
+            .vol-badge {
+              padding: 4px 10px;
+              border-radius: 99px;
+              font-size: 12px;
+              font-weight: 700;
+              display: inline-flex;
+              align-items: center;
+              gap: 6px;
+            }
+
+            .vol-badge::before {
+              content: '';
+              width: 6px;
+              height: 6px;
+              border-radius: 50%;
+              display: block;
+            }
+
+            .vol-badge.active {
+              background: #dcfce7;
+              color: #16a34a;
+            }
+
+            .vol-badge.active::before {
+              background: #16a34a;
+            }
+
+            .vol-badge.inactive {
+              background: #fee2e2;
+              color: #ef4444;
+            }
+
+            .vol-badge.inactive::before {
+              background: #ef4444;
+            }
+
+            .vol-badge.pending {
+              background: #fef3c7;
+              color: #d97706;
+            }
+
+            .vol-badge.pending::before {
+              background: #d97706;
+            }
+
+            .vol-role {
+              font-size: 13px;
+              font-weight: 600;
+              color: var(--primary);
+              background: #f0fdf4;
+              padding: 4px 12px;
+              border-radius: 99px;
+              display: inline-block;
+            }
+
+            .vol-action-btn {
+              width: 32px;
+              height: 32px;
+              border-radius: 8px;
+              border: 1px solid var(--border);
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              color: var(--text3);
+              background: #fff;
+              cursor: pointer;
+              transition: all 0.2s;
+              margin-right: 4px;
+            }
+
+            .vol-action-btn:hover {
+              background: #f8fafc;
+              color: var(--text);
+            }
+
+            .vol-action-btn.delete:hover {
+              background: #fee2e2;
+              color: #ef4444;
+              border-color: #fca5a5;
+            }
+
+            .vol-table-footer {
+              padding: 16px 24px;
+              border-top: 1px solid var(--border);
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              font-size: 13px;
+              color: var(--text3);
+            }
+
+            .vol-pagination {
+              display: flex;
+              gap: 4px;
+            }
+
+            .vol-page-btn {
+              width: 32px;
+              height: 32px;
+              border-radius: 8px;
+              border: 1px solid var(--border);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+              font-weight: 600;
+              color: var(--text2);
+              background: #fff;
+              transition: all 0.2s;
+            }
+
+            .vol-page-btn:hover {
+              background: #f8fafc;
+            }
+
+            .vol-page-btn.active {
+              background: #f0fdf4;
+              color: #16a34a;
+              border-color: #16a34a;
+              font-weight: 700;
+            }
+
+            .vol-sidebar-card {
+              background: #fff;
+              border-radius: 16px;
+              border: 1px solid var(--border);
+              box-shadow: var(--shadow2);
+              padding: 24px;
+            }
+
+            .vol-sidebar-card h4 {
+              font-size: 16px;
+              font-weight: 800;
+              font-family: 'Outfit', sans-serif;
+              color: var(--text);
+              margin-bottom: 20px;
+            }
+
+            .vol-top-list {
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
+            }
+
+            .vol-top-item {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            }
+
+            .vol-top-count {
+              font-size: 13px;
+              font-weight: 700;
+              color: var(--primary);
+              background: #f0fdf4;
+              padding: 4px 10px;
+              border-radius: 8px;
+            }
+
+            .vol-quick-actions {
+              display: flex;
+              flex-direction: column;
+              gap: 12px;
+            }
+
+            .vol-qa-btn {
+              padding: 12px;
+              border-radius: 12px;
+              border: 1px solid var(--border);
+              background: #f8fafc;
+              font-size: 13px;
+              font-weight: 600;
+              color: var(--text2);
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              cursor: pointer;
+              transition: all 0.2s;
+              justify-content: center;
+            }
+
+            .vol-qa-btn:hover {
+              background: #fff;
+              border-color: var(--primary);
+              color: var(--primary);
+              box-shadow: 0 4px 12px rgba(34, 197, 94, 0.1);
+            }
+
+            .vol-banner {
+              background: linear-gradient(135deg, #147a3d, #16a34a);
+              border-radius: 16px;
+              padding: 24px 32px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              color: #fff;
+              margin-top: 24px;
+              box-shadow: 0 10px 25px rgba(22, 163, 74, 0.2);
+            }
+
+            .vol-banner-content h4 {
+              font-size: 20px;
+              font-weight: 800;
+              font-family: 'Outfit', sans-serif;
+              margin-bottom: 8px;
+              display: flex;
+              align-items: center;
+              gap: 10px;
+            }
+
+            .vol-banner-content p {
+              font-size: 14px;
+              opacity: 0.9;
+              max-width: 600px;
+              line-height: 1.6;
+              margin: 0;
+            }
+
+            .vol-banner-btn {
+              background: #fff;
+              color: #147a3d;
+              border: none;
+              padding: 12px 24px;
+              border-radius: 99px;
+              font-size: 14px;
+              font-weight: 700;
+              font-family: 'Outfit', sans-serif;
+              cursor: pointer;
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              transition: transform 0.2s;
+            }
+
+            .vol-banner-btn:hover {
+              transform: translateY(-2px);
+            }
+
+            @media (max-width: 768px) {
+              .vol-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+              }
+            }
+          </style>
+
+          <!-- Header -->
+          <div class="vol-header">
+            <div>
+              <h3><i class="ph-duotone ph-users-three" style="color: var(--primary); margin-right: 8px;"></i>Volunteers
+              </h3>
+              <p>Manage and monitor all registered volunteers, their activities, verifications, contributions, and
+                community engagement</p>
+            </div>
+            <div class="vol-actions">
+              <button class="btn-secondary" style="height: 44px; display: flex; align-items: center; gap: 8px;" onclick="exportVolunteersCSV()"><i
+                  class="ph-bold ph-download-simple"></i> Export</button>
+              <button class="btn-primary" style="height: 44px; display: flex; align-items: center; gap: 8px;" onclick="document.getElementById('add-vol-modal-overlay').classList.add('open')"><i
+                  class="ph-bold ph-plus"></i> Add Volunteer</button>
+            </div>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="stat-cards" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 24px;">
+            <div class="stat-card">
+              <div class="stat-card-val" id="vol-stat-total" style="color: #16a34a;">1,248</div>
+              <div class="stat-card-label">Total Volunteers</div>
+              <div class="stat-card-trend">12% this month</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-val" id="vol-stat-verified" style="color: #3b82f6;">982</div>
+              <div class="stat-card-label">Verified Volunteers</div>
+              <div class="stat-card-trend">8% this month</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-val" id="vol-stat-active" style="color: #eab308;">415</div>
+              <div class="stat-card-label">Active This Month</div>
+              <div class="stat-card-trend">15% this month</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-val" id="vol-stat-inactive" style="color: #6b7280;">156</div>
+              <div class="stat-card-label">Inactive Volunteers</div>
+              <div class="stat-card-trend">3% this month</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-val" id="vol-stat-tasks" style="color: #0d9488;">2,105</div>
+              <div class="stat-card-label">Tasks Completed</div>
+              <div class="stat-card-trend">24% this month</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-val" id="vol-stat-pending" style="color: #ea580c;">56</div>
+              <div class="stat-card-label">Pending Verification</div>
+              <div class="stat-card-trend">Needs action</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-val" id="vol-stat-contrib" style="color: #9333ea;">3,482</div>
+              <div class="stat-card-label">Contributions</div>
+              <div class="stat-card-trend">Total activities</div>
+            </div>
+          </div>
+
+          <!-- Filters -->
+          <div class="vol-filters">
+            <div class="vol-search">
+              <i class="ph-bold ph-magnifying-glass"></i>
+              <input type="text" id="vol-search-input" placeholder="Search by name, email, phone...">
+              <i class="ph-bold ph-x" id="vol-search-reset" style="display: none; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--text3);"></i>
+            </div>
+            <select class="filter-select" id="vol-filter-status">
+              <option value="">All Status</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+              <option value="Pending">Pending</option>
+            </select>
+            <select class="filter-select" id="vol-filter-role">
+              <option value="">All Roles</option>
+              <option value="Coordinator">Coordinator</option>
+              <option value="Moderator">Moderator</option>
+              <option value="Volunteer">Volunteer</option>
+              <option value="Field Lead">Field Lead</option>
+            </select>
+            <select class="filter-select" id="vol-filter-verify">
+              <option value="">All Verification</option>
+              <option value="Verified">Verified</option>
+              <option value="Pending">Pending</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+            <select class="filter-select" id="vol-filter-location">
+              <option value="">All Locations</option>
+              <option value="New Delhi">New Delhi</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Bengaluru">Bengaluru</option>
+              <option value="Lucknow">Lucknow</option>
+              <option value="Hyderabad">Hyderabad</option>
+              <option value="Pune">Pune</option>
+              <option value="Ahmedabad">Ahmedabad</option>
+              <option value="Jaipur">Jaipur</option>
+              <option value="Indore">Indore</option>
+              <option value="Chennai">Chennai</option>
+            </select>
+            <select class="filter-select" id="vol-filter-date" style="min-width: 140px;">
+              <option value="">Select date range</option>
+              <option value="7">Last 7 days</option>
+              <option value="30">Last 30 days</option>
+            </select>
+            <button class="btn-secondary" id="vol-btn-reset" style="height: 40px; border-radius: 20px; padding: 0 16px; background: #fff; border: 1px solid #e2e8f0; color: #ef4444; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <i class="ph-bold ph-arrows-clockwise"></i> Reset
+            </button>
+          </div>
+          
+          <div id="vol-more-filters-panel" style="display: none; background: #f8fafc; padding: 16px 24px 16px 16px; border-radius: 12px; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; align-items: center; position: relative;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label style="font-size: 13px; font-weight: 600; color: var(--text2);">Min Tasks Completed:</label>
+              <input type="number" id="vol-filter-min-tasks" style="width: 80px; height: 32px; border-radius: 6px; border: 1px solid var(--border); padding: 0 8px;" min="0">
+            </div>
+            <button onclick="document.getElementById('vol-more-filters-panel').style.display='none'" style="position: absolute; right: 8px; top: 8px; background: transparent; border: none; cursor: pointer; color: var(--text3); padding: 4px; display: flex;"><i class="ph-bold ph-x" style="font-size: 16px;"></i></button>
+          </div>
+
+          <!-- Main Grid -->
+          <div class="vol-main-grid">
+            <!-- Table Section -->
+            <div class="vol-table-card">
+              <div class="vol-table-header">
+                <h4>All Volunteers (1,248)</h4>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <span style="font-size: 13px; color: var(--text3); font-weight: 600;">Sort by:</span>
+                  <select class="filter-select" id="vol-sort-select" style="height: 36px; background: #fff;">
+                    <option value="recently_added">Recently Added</option>
+                    <option value="most_active">Most Tasks Completed</option>
+                    <option value="least_active">Least Tasks Completed</option>
+                    <option value="az">A-Z (Alphabetic)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="vol-table-wrap">
+                <table class="vol-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 40px;"><input type="checkbox" id="vol-select-all" style="cursor: pointer;"></th>
+                      <th>Volunteer</th>
+                      <th>Role</th>
+                      <th>Location</th>
+                      <th>Status</th>
+                      <th>Tasks Completed</th>
+                      <th>Verification</th>
+                      <th>Joined On</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="vol-table-body">
+                    <!-- Dynamic rows will be rendered here -->
+                  </tbody>
+                </table>
+              </div>
+              <div class="vol-table-footer">
+                <div id="vol-page-info">Showing 0 to 0 of 0 volunteers</div>
+                <div class="vol-pagination" id="vol-pagination-controls">
+                  <!-- Pagination dynamically generated -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Analytics Bottom row -->
+            <div class="vol-bottom-cards-grid">
+              <div class="vol-sidebar-card">
+                <h4>Volunteer Overview</h4>
+                <div style="display: flex; align-items: center; gap: 24px;">
+                  <div
+                    style="position: relative; height: 140px; width: 140px; flex-shrink: 0; display: flex; justify-content: center;">
+                    <canvas id="volOverviewChart"></canvas>
+                    <div
+                      style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                      <div
+                        style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif; color: var(--text); line-height: 1;">
+                        1,248</div>
+                      <div style="font-size: 10px; color: var(--text3); font-weight: 600;">Total</div>
+                    </div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 12px; flex: 1;">
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600;">
+                      <span style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #16a34a;"></div> Active
+                      </span>
+                      <span>982 (78.8%)</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600;">
+                      <span style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #3b82f6;"></div> Inactive
+                      </span>
+                      <span>156 (12.5%)</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600;">
+                      <span style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b;"></div> Pending
+                        Verification
+                      </span>
+                      <span>56 (4.5%)</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600;">
+                      <span style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #8b5cf6;"></div> Suspended
+                      </span>
+                      <span>24 (1.9%)</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600;">
+                      <span style="display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: #9ca3af;"></div> Others
+                      </span>
+                      <span>30 (2.3%)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="vol-sidebar-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                  <h4 style="margin: 0;">Top Contributors</h4>
+                  <!-- View All removed per user request -->
+                </div>
+                <div class="vol-top-list">
+                  <div class="vol-top-item">
+                    <div class="vol-user-cell">
+                      <div class="vol-avatar"
+                        style="width: 32px; height: 32px; font-size: 12px; background: #dcfce7; color: #16a34a;">RK
+                      </div>
+                      <div class="name">Ravi Kumar</div>
+                    </div>
+                    <div class="vol-top-count">245 contributions</div>
+                  </div>
+                  <div class="vol-top-item">
+                    <div class="vol-user-cell">
+                      <div class="vol-avatar"
+                        style="width: 32px; height: 32px; font-size: 12px; background: #e0e7ff; color: #4f46e5;">SP
+                      </div>
+                      <div class="name">Sneha Patel</div>
+                    </div>
+                    <div class="vol-top-count">198 contributions</div>
+                  </div>
+                  <div class="vol-top-item">
+                    <div class="vol-user-cell">
+                      <div class="vol-avatar"
+                        style="width: 32px; height: 32px; font-size: 12px; background: #fce7f3; color: #db2777;">AM
+                      </div>
+                      <div class="name">Amit Mishra</div>
+                    </div>
+                    <div class="vol-top-count">176 contributions</div>
+                  </div>
+                  <div class="vol-top-item">
+                    <div class="vol-user-cell">
+                      <div class="vol-avatar"
+                        style="width: 32px; height: 32px; font-size: 12px; background: #fef3c7; color: #d97706;">PS
+                      </div>
+                      <div class="name">Priya Sharma</div>
+                    </div>
+                    <div class="vol-top-count">142 contributions</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="vol-sidebar-card">
+                <h4>Quick Actions</h4>
+                <div class="vol-quick-actions">
+                  <button class="vol-qa-btn"><i class="ph-bold ph-shield-check"
+                      style="color: #16a34a; font-size: 18px;"></i> Bulk Verify</button>
+                  <button class="vol-qa-btn"><i class="ph-bold ph-paper-plane-tilt"
+                      style="color: #3b82f6; font-size: 18px;"></i> Send Notice</button>
+                  <button class="vol-qa-btn" onclick="exportVolunteersCSV()"><i class="ph-bold ph-download-simple"
+                      style="color: #f59e0b; font-size: 18px;"></i> Export List</button>
+                  <button class="vol-qa-btn"><i class="ph-bold ph-user-plus"
+                      style="color: #8b5cf6; font-size: 18px;"></i> Invite</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Banner -->
+          <div class="vol-banner">
+            <div class="vol-banner-content">
+              <h4><i class="ph-fill ph-users-three"></i> Volunteers are the backbone of our community.</h4>
+              <p>They help in reporting incidents, monitoring activities, assisting during emergencies, participating in
+                community programs, and creating a safer environment for everyone.</p>
+            </div>
+            <button class="vol-banner-btn"><i class="ph-bold ph-file-text"></i> Volunteer Guidelines</button>
+          </div>
+
+          <script>
+            // Initialize Donut Chart once the view is shown
+            document.addEventListener("DOMContentLoaded", () => {
+              // Note: Chart.js is included in index.html already
+              setTimeout(() => {
+                const ctx = document.getElementById('volOverviewChart');
+                if (ctx && window.Chart) {
+                  new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                      labels: ['Active', 'Inactive', 'Pending', 'Suspended', 'Others'],
+                      datasets: [{
+                        data: [982, 156, 56, 24, 30],
+                        backgroundColor: ['#16a34a', '#3b82f6', '#f59e0b', '#8b5cf6', '#9ca3af'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                      }]
+                    },
+                    options: {
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      cutout: '75%',
+                      plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                          backgroundColor: 'rgba(0,0,0,0.8)',
+                          padding: 12,
+                          titleFont: { family: 'Outfit', size: 13 },
+                          bodyFont: { family: 'Nunito', size: 13 },
+                          displayColors: true,
+                          cornerRadius: 8,
+                        }
+                      }
+                    }
+                  });
+                }
+              }, 1000);
+            });
+          </script>
+        </div>
+
 
         <!-- SETTINGS VIEWS -->
         <div id="admin-view-settings-general" style="display: none;">
@@ -5553,19 +7082,22 @@
                   style="display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color:var(--text);">
                   <div
                     style="background:#16a34a; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center;">
-                    <i class="ph-bold ph-check" style="color:#fff; font-size:14px;"></i></div> SHA-256 Hash Verification
+                    <i class="ph-bold ph-check" style="color:#fff; font-size:14px;"></i>
+                  </div> SHA-256 Hash Verification
                 </div>
                 <div
                   style="display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color:var(--text);">
                   <div
                     style="background:#16a34a; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center;">
-                    <i class="ph-bold ph-check" style="color:#fff; font-size:14px;"></i></div> RSA Digital Signature
+                    <i class="ph-bold ph-check" style="color:#fff; font-size:14px;"></i>
+                  </div> RSA Digital Signature
                 </div>
                 <div
                   style="display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color:var(--text);">
                   <div
                     style="background:#16a34a; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center;">
-                    <i class="ph-bold ph-check" style="color:#fff; font-size:14px;"></i></div> QR Code Verification
+                    <i class="ph-bold ph-check" style="color:#fff; font-size:14px;"></i>
+                  </div> QR Code Verification
                 </div>
               </div>
               <div style="font-size:12px; font-weight:600; color:var(--text2); margin-bottom:8px;">Verification URL
@@ -7032,13 +8564,16 @@ Best regards,
                     <div style="margin-top:32px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
                       <div id="emailset-prev-btn-pdf"
                         style="background:#16a34a; color:#fff; padding:10px 20px; border-radius:6px; font-size:14px; font-weight:600; text-align:center; display:flex; align-items:center; gap:6px;">
-                        <i class="ph-bold ph-download-simple"></i> Download PDF</div>
+                        <i class="ph-bold ph-download-simple"></i> Download PDF
+                      </div>
                       <div id="emailset-prev-btn-qr"
                         style="background:#16a34a; color:#fff; padding:10px 20px; border-radius:6px; font-size:14px; font-weight:600; text-align:center; display:none; align-items:center; gap:6px;">
-                        <i class="ph-bold ph-qr-code"></i> View QR Code</div>
+                        <i class="ph-bold ph-qr-code"></i> View QR Code
+                      </div>
                       <div id="emailset-prev-btn-verify"
                         style="background:#fff; color:#1e293b; border:1px solid #cbd5e1; padding:10px 20px; border-radius:6px; font-size:14px; font-weight:600; text-align:center; display:flex; align-items:center; gap:6px;">
-                        <i class="ph-bold ph-shield-check"></i> Verify Now</div>
+                        <i class="ph-bold ph-shield-check"></i> Verify Now
+                      </div>
                     </div>
 
                     <div id="emailset-prev-footer"
@@ -9716,6 +11251,10 @@ Best regards,
       document.getElementById('admin-view-analytics').style.display = 'none';
       document.getElementById('admin-view-reports').style.display = 'none';
       document.getElementById('admin-view-monitoring').style.display = 'none';
+      if (document.getElementById('admin-view-active-users')) document.getElementById('admin-view-active-users').style.display = 'none';
+      if (document.getElementById('admin-view-user-posts')) document.getElementById('admin-view-user-posts').style.display = 'none';
+      if (document.getElementById('admin-view-community-members')) document.getElementById('admin-view-community-members').style.display = 'none';
+      if (document.getElementById('admin-view-volunteers')) document.getElementById('admin-view-volunteers').style.display = 'none';
       document.getElementById('admin-view-settings-general').style.display = 'none';
       document.getElementById('admin-view-settings-security').style.display = 'none';
       if (document.getElementById('admin-view-notification')) document.getElementById('admin-view-notification').style.display = 'none';
@@ -9757,6 +11296,21 @@ Best regards,
         if (typeof buildHeatmap === 'function') buildHeatmap();
       } else if (viewName === 'reports') {
         title.innerText = 'Reports & Exports';
+        actions.style.display = 'none';
+      } else if (viewName === 'active-users') {
+        title.innerText = '';
+        actions.style.display = 'none';
+        if (typeof renderActiveUsers === 'function') renderActiveUsers();
+      } else if (viewName === 'user-posts') {
+        title.innerText = '';
+        actions.style.display = 'none';
+        if (typeof renderUserPosts === 'function') renderUserPosts();
+      } else if (viewName === 'community-members') {
+        title.innerText = '';
+        actions.style.display = 'none';
+        if (typeof renderCommunityMembers === 'function') renderCommunityMembers();
+      } else if (viewName === 'volunteers') {
+        title.innerText = '';
         actions.style.display = 'none';
       } else if (viewName === 'monitoring') {
         title.innerText = 'Live Monitoring';
@@ -11186,13 +12740,13 @@ Best regards,
     async function qpsetSavePreferences() {
       const settings = {};
       document.querySelectorAll('[id^="qpset-"]').forEach(el => {
-        if (el.id.includes('btn') || el.id.includes('prev')) return; 
+        if (el.id.includes('btn') || el.id.includes('prev')) return;
         if (el.type === 'checkbox') settings[el.id] = el.checked;
         else if (el.value !== undefined) settings[el.id] = el.value;
       });
-      
+
       const payload = [{ key: 'qr_pdf_settings', value: JSON.stringify(settings) }];
-      
+
       try {
         const res = await fetch('/api/v1/settings/', {
           method: 'POST',
@@ -11213,13 +12767,13 @@ Best regards,
     async function emailsetSave() {
       const settings = {};
       document.querySelectorAll('[id^="emailset-"]').forEach(el => {
-        if (el.id.includes('btn') || el.id.includes('prev') || el.id.includes('status') || el.id.includes('count')) return; 
+        if (el.id.includes('btn') || el.id.includes('prev') || el.id.includes('status') || el.id.includes('count')) return;
         if (el.type === 'checkbox') settings[el.id] = el.checked;
         else if (el.value !== undefined) settings[el.id] = el.value;
       });
-      
+
       const payload = [{ key: 'email_settings', value: JSON.stringify(settings) }];
-      
+
       try {
         const res = await fetch('/api/v1/settings/', {
           method: 'POST',
@@ -11244,7 +12798,7 @@ Best regards,
           headers: { 'Authorization': 'Bearer ' + getAuthToken() }
         });
         const data = await res.json();
-        
+
         if (data.success && data.settings) {
           if (data.settings.qr_pdf_settings) {
             const qrPdf = JSON.parse(data.settings.qr_pdf_settings);
@@ -11310,9 +12864,9 @@ Best regards,
           },
           body: JSON.stringify(payload)
         });
-        
+
         const data = await res.json();
-        
+
         if (data.success) {
           const msgEl = document.getElementById('cert-issued-msg');
           if (msgEl) {
@@ -11320,10 +12874,10 @@ Best regards,
             msgEl.style.display = 'flex';
           }
           showToast('Certificate successfully issued!');
-          
+
           // Trigger global event for real-time synchronization
           window.dispatchEvent(new CustomEvent('CERTIFICATE_ISSUED', { detail: data }));
-          
+
         } else {
           showToast('Error: ' + (data.detail || data.error || 'Unknown error'));
         }
@@ -11340,6 +12894,1154 @@ Best regards,
     document.addEventListener('DOMContentLoaded', () => {
       setTimeout(loadSystemSettings, 500); // Wait slightly for token auth logic if any
     });
+  </script>
+  <!-- ADD VOLUNTEER MODAL -->
+  <div class="modal-overlay" id="add-vol-modal-overlay" onclick="document.getElementById('add-vol-modal-overlay').classList.remove('open')">
+    <div class="modal" id="add-vol-modal" onclick="event.stopPropagation()" style="border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: none; padding: 24px 32px; max-width: 550px; background: #fff;">
+      <div class="modal-header" style="border-bottom: none; padding: 0 0 24px 0; align-items: flex-start;">
+        <div>
+          <div style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif; color: #0f172a;">Add New Volunteer</div>
+          <div style="font-size: 13px; color: var(--text3); margin-top: 4px;">Register a new community member</div>
+        </div>
+        <button class="modal-close" style="background: #f8fafc; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; color: #64748b; transition: background 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'" onclick="document.getElementById('add-vol-modal-overlay').classList.remove('open')">
+          <i class="ph-bold ph-x"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 0;">
+        <form id="add-vol-form" onsubmit="handleAddVolunteerSubmit(event)">
+          <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #334155;">Full Name *</label>
+            <input type="text" id="add-vol-name" class="settings-input" style="height: 44px; border-color: #cbd5e1; border-radius: 8px; padding: 0 16px; font-size: 14px; width: 100%;" required placeholder="e.g. Rahul Sharma">
+          </div>
+          <div style="margin-bottom: 20px; display: flex; gap: 20px;">
+            <div style="flex: 1">
+              <label style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #334155;">Email Address *</label>
+              <input type="email" id="add-vol-email" class="settings-input" style="height: 44px; border-color: #cbd5e1; border-radius: 8px; padding: 0 16px; font-size: 14px; width: 100%;" required placeholder="name@example.com">
+            </div>
+            <div style="flex: 1">
+              <label style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #334155;">Phone Number *</label>
+              <input type="text" id="add-vol-phone" class="settings-input" style="height: 44px; border-color: #cbd5e1; border-radius: 8px; padding: 0 16px; font-size: 14px; width: 100%;" required placeholder="+91 xxxxxxxxxx">
+            </div>
+          </div>
+          <div style="margin-bottom: 32px; display: flex; gap: 20px;">
+            <div style="flex: 1">
+              <label style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #334155;">Role</label>
+              <select id="add-vol-role" class="settings-input" style="height: 44px; border-color: #cbd5e1; border-radius: 8px; padding: 0 16px; font-size: 14px; width: 100%;">
+                <option value="Volunteer">Volunteer</option>
+                <option value="Moderator">Moderator</option>
+                <option value="Coordinator">Coordinator</option>
+                <option value="Field Lead">Field Lead</option>
+              </select>
+            </div>
+            <div style="flex: 1">
+              <label style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #334155;">Location</label>
+              <input type="text" id="add-vol-location" class="settings-input" style="height: 44px; border-color: #cbd5e1; border-radius: 8px; padding: 0 16px; font-size: 14px; width: 100%;" required placeholder="e.g. New Delhi, India">
+            </div>
+          </div>
+          <div style="display: flex; justify-content: flex-end; align-items: center; gap: 24px;">
+            <button type="button" style="border: none; background: transparent; color: #16a34a; font-weight: 700; font-size: 15px; cursor: pointer;" onclick="document.getElementById('add-vol-modal-overlay').classList.remove('open')">Cancel</button>
+            <button type="submit" class="btn-primary" style="height: 44px; background: #16a34a; color: #fff; border-radius: 24px; padding: 0 32px; font-weight: 600; font-size: 15px; border: none; box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.2);">Add Volunteer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW VOLUNTEER MODAL -->
+  <div class="modal-overlay" id="view-vol-modal-overlay" onclick="document.getElementById('view-vol-modal-overlay').classList.remove('open')">
+    <div class="modal" id="view-vol-modal" onclick="event.stopPropagation()" style="border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: none; padding: 32px; max-width: 450px; background: #fff; text-align: center;">
+      <div id="view-vol-avatar" style="width: 80px; height: 80px; border-radius: 50%; font-size: 28px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto;"></div>
+      <div id="view-vol-name" style="font-size: 24px; font-weight: 800; font-family: 'Outfit', sans-serif; color: #0f172a; margin-bottom: 4px;"></div>
+      <div id="view-vol-role" style="font-size: 15px; font-weight: 600; color: #4f46e5; margin-bottom: 24px;"></div>
+      
+      <div style="background: #f8fafc; border-radius: 12px; padding: 20px; text-align: left; display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; justify-content: space-between; font-size: 14px;">
+          <span style="color: var(--text3); font-weight: 600;">Email:</span>
+          <span id="view-vol-email" style="color: var(--text); font-weight: 600;"></span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 14px;">
+          <span style="color: var(--text3); font-weight: 600;">Phone:</span>
+          <span id="view-vol-phone" style="color: var(--text); font-weight: 600;"></span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 14px;">
+          <span style="color: var(--text3); font-weight: 600;">Location:</span>
+          <span id="view-vol-location" style="color: var(--text); font-weight: 600;"></span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 14px;">
+          <span style="color: var(--text3); font-weight: 600;">Status:</span>
+          <span id="view-vol-status" style="color: var(--text); font-weight: 600;"></span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 14px;">
+          <span style="color: var(--text3); font-weight: 600;">Tasks Completed:</span>
+          <span id="view-vol-tasks" style="color: var(--text); font-weight: 800;"></span>
+        </div>
+      </div>
+      
+      <button style="margin-top: 24px; background: #f1f5f9; color: #475569; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f1f5f9'" onclick="document.getElementById('view-vol-modal-overlay').classList.remove('open')">Close</button>
+    </div>
+  </div>
+
+  <!-- EDIT VOLUNTEER MODAL -->
+  <div class="modal-overlay" id="edit-vol-modal-overlay" onclick="document.getElementById('edit-vol-modal-overlay').classList.remove('open')">
+    <div class="modal" id="edit-vol-modal" onclick="event.stopPropagation()" style="border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: none; padding: 24px 32px; max-width: 550px; background: #fff;">
+      <div class="modal-header" style="border-bottom: none; padding: 0 0 24px 0; align-items: flex-start;">
+        <div>
+          <div style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif; color: #0f172a;">Edit Volunteer</div>
+          <div style="font-size: 13px; color: var(--text3); margin-top: 4px;">Update community member details</div>
+        </div>
+        <button class="modal-close" style="background: #f8fafc; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; color: #64748b; transition: background 0.2s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='#f8fafc'" onclick="document.getElementById('edit-vol-modal-overlay').classList.remove('open')">
+          <i class="ph-bold ph-x"></i>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 0;">
+        <form id="edit-vol-form" onsubmit="handleEditVolunteerSubmit(event)">
+          <input type="hidden" id="edit-vol-id">
+          <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #334155;">Full Name *</label>
+            <input type="text" id="edit-vol-name" class="settings-input" style="height: 44px; border-color: #cbd5e1; border-radius: 8px; padding: 0 16px; font-size: 14px; width: 100%;" required>
+          </div>
+          <div style="margin-bottom: 20px; display: flex; gap: 20px;">
+            <div style="flex: 1">
+              <label style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #334155;">Email Address *</label>
+              <input type="email" id="edit-vol-email" class="settings-input" style="height: 44px; border-color: #cbd5e1; border-radius: 8px; padding: 0 16px; font-size: 14px; width: 100%;" required>
+            </div>
+            <div style="flex: 1">
+              <label style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #334155;">Phone Number *</label>
+              <input type="text" id="edit-vol-phone" class="settings-input" style="height: 44px; border-color: #cbd5e1; border-radius: 8px; padding: 0 16px; font-size: 14px; width: 100%;" required>
+            </div>
+          </div>
+          <div style="margin-bottom: 32px; display: flex; gap: 20px;">
+            <div style="flex: 1">
+              <label style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #334155;">Role</label>
+              <select id="edit-vol-role" class="settings-input" style="height: 44px; border-color: #cbd5e1; border-radius: 8px; padding: 0 16px; font-size: 14px; width: 100%;">
+                <option value="Volunteer">Volunteer</option>
+                <option value="Moderator">Moderator</option>
+                <option value="Coordinator">Coordinator</option>
+                <option value="Field Lead">Field Lead</option>
+              </select>
+            </div>
+            <div style="flex: 1">
+              <label style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #334155;">Location</label>
+              <input type="text" id="edit-vol-location" class="settings-input" style="height: 44px; border-color: #cbd5e1; border-radius: 8px; padding: 0 16px; font-size: 14px; width: 100%;" required>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: flex-end; align-items: center; gap: 24px;">
+            <button type="button" style="border: none; background: transparent; color: #3b82f6; font-weight: 700; font-size: 15px; cursor: pointer;" onclick="document.getElementById('edit-vol-modal-overlay').classList.remove('open')">Cancel</button>
+            <button type="submit" class="btn-primary" style="height: 44px; background: #3b82f6; color: #fff; border-radius: 24px; padding: 0 32px; font-weight: 600; font-size: 15px; border: none; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE VOLUNTEER MODAL -->
+  <div class="modal-overlay" id="delete-vol-modal-overlay" onclick="document.getElementById('delete-vol-modal-overlay').classList.remove('open')">
+    <div class="modal" id="delete-vol-modal" onclick="event.stopPropagation()" style="border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: none; padding: 40px; max-width: 400px; background: #fff; text-align: center;">
+      <div style="width: 72px; height: 72px; border-radius: 50%; background: #fee2e2; color: #ef4444; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; font-size: 36px;">
+        <i class="ph-bold ph-warning"></i>
+      </div>
+      <h3 style="font-size: 24px; font-weight: 800; font-family: 'Outfit', sans-serif; color: #0f172a; margin-bottom: 12px;">Delete Volunteer?</h3>
+      <p style="font-size: 15px; color: #64748b; line-height: 1.5; margin-bottom: 32px;">Are you sure you want to permanently delete this volunteer? This action cannot be undone.</p>
+      <input type="hidden" id="delete-vol-id">
+      <div style="display: flex; gap: 12px; align-items: center; justify-content: center;">
+        <button type="button" onclick="document.getElementById('delete-vol-modal-overlay').classList.remove('open')" style="height: 44px; flex: 1; background: #f8fafc; color: #475569; border-radius: 12px; font-weight: 700; font-size: 15px; border: none; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#e2e8f0'" onmouseout="this.style.background='#f8fafc'">Cancel</button>
+        <button type="button" onclick="confirmDeleteVolunteer()" style="height: 44px; flex: 1; background: #ef4444; color: #fff; border-radius: 12px; font-weight: 700; font-size: 15px; border: none; cursor: pointer; transition: background 0.2s; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2);" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIVE USERS MODALS -->
+  <!-- 1. Moderation Modal (Ban/Suspend) -->
+  <div class="modal-overlay" id="moderation-modal-overlay" onclick="document.getElementById('moderation-modal-overlay').classList.remove('open')">
+    <div class="modal" id="moderation-modal" onclick="event.stopPropagation()" style="border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: none; padding: 24px 32px; max-width: 450px; background: #fff;">
+      <h3 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif; color: #0f172a; margin-bottom: 8px;">Moderate User</h3>
+      <p style="font-size: 14px; color: #64748b; margin-bottom: 24px;">Select an action to apply to this user's account.</p>
+      <input type="hidden" id="mod-user-id">
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px;">
+        <button onclick="applyModeration('Suspend')" style="height: 44px; background: #fef08a; color: #ca8a04; border-radius: 12px; font-weight: 700; font-size: 15px; border: none; cursor: pointer;">Suspend Account (7 Days)</button>
+        <button onclick="applyModeration('Ban')" style="height: 44px; background: #fee2e2; color: #ef4444; border-radius: 12px; font-weight: 700; font-size: 15px; border: none; cursor: pointer;">Permanently Ban</button>
+        <button onclick="applyModeration('Verify')" style="height: 44px; background: #dcfce7; color: #16a34a; border-radius: 12px; font-weight: 700; font-size: 15px; border: none; cursor: pointer;">Verify Account</button>
+      </div>
+      <button onclick="document.getElementById('moderation-modal-overlay').classList.remove('open')" style="height: 44px; width: 100%; background: #f1f5f9; color: #475569; border-radius: 12px; font-weight: 700; font-size: 15px; border: none; cursor: pointer;">Cancel</button>
+    </div>
+  </div>
+
+  <!-- 2. Role Assignment Modal -->
+  <div class="modal-overlay" id="role-modal-overlay" onclick="document.getElementById('role-modal-overlay').classList.remove('open')">
+    <div class="modal" id="role-modal" onclick="event.stopPropagation()" style="border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: none; padding: 24px 32px; max-width: 450px; background: #fff;">
+      <h3 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif; color: #0f172a; margin-bottom: 8px;">Assign Role</h3>
+      <p style="font-size: 14px; color: #64748b; margin-bottom: 24px;">Promote or demote this user.</p>
+      <input type="hidden" id="role-user-id">
+      <select id="role-select" class="settings-input" style="height: 44px; border-color: #cbd5e1; border-radius: 8px; padding: 0 16px; font-size: 14px; width: 100%; margin-bottom: 32px;">
+        <option value="Admin">Admin</option>
+        <option value="Moderator">Moderator</option>
+        <option value="Volunteer">Volunteer</option>
+        <option value="User">User</option>
+      </select>
+      <div style="display: flex; gap: 12px;">
+        <button onclick="document.getElementById('role-modal-overlay').classList.remove('open')" style="flex: 1; height: 44px; background: #f1f5f9; color: #475569; border-radius: 12px; font-weight: 700; font-size: 15px; border: none; cursor: pointer;">Cancel</button>
+        <button onclick="applyRole()" style="flex: 1; height: 44px; background: #3b82f6; color: #fff; border-radius: 12px; font-weight: 700; font-size: 15px; border: none; cursor: pointer;">Save Role</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Direct Message Modal -->
+  <div class="modal-overlay" id="message-modal-overlay" onclick="document.getElementById('message-modal-overlay').classList.remove('open')">
+    <div class="modal" id="message-modal" onclick="event.stopPropagation()" style="border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: none; padding: 24px 32px; max-width: 450px; background: #fff;">
+      <h3 style="font-size: 20px; font-weight: 800; font-family: 'Outfit', sans-serif; color: #0f172a; margin-bottom: 8px;">Direct Message</h3>
+      <p style="font-size: 14px; color: #64748b; margin-bottom: 24px;">Send a direct email/notification to this user.</p>
+      <input type="hidden" id="msg-user-id">
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #334155;">Message Type</label>
+        <select id="msg-type" class="settings-input" style="height: 44px; border-color: #cbd5e1; border-radius: 8px; padding: 0 16px; font-size: 14px; width: 100%;">
+          <option value="Email">Email</option>
+          <option value="Push Notification">Push Notification</option>
+          <option value="Official Warning">Official Warning</option>
+        </select>
+      </div>
+      <div style="margin-bottom: 32px;">
+        <label style="display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #334155;">Message Body</label>
+        <textarea id="msg-body" class="settings-input" style="height: 100px; border-color: #cbd5e1; border-radius: 8px; padding: 12px 16px; font-size: 14px; width: 100%; resize: vertical;" placeholder="Type your message here..."></textarea>
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <button onclick="document.getElementById('message-modal-overlay').classList.remove('open')" style="flex: 1; height: 44px; background: #f1f5f9; color: #475569; border-radius: 12px; font-weight: 700; font-size: 15px; border: none; cursor: pointer;">Cancel</button>
+        <button onclick="sendMessage()" style="flex: 1; height: 44px; background: #8b5cf6; color: #fff; border-radius: 12px; font-weight: 700; font-size: 15px; border: none; cursor: pointer;">Send <i class="ph-bold ph-paper-plane-tilt" style="margin-left: 4px;"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. Mock Data
+    let mockVolunteers = [
+      { id: 1, name: 'Ravi Kumar', initials: 'RK', email: 'ravi.kumar@example.com', phone: '+91 98765 43210', role: 'Coordinator', location: 'New Delhi, India', status: 'Active', tasks: 24, verification: 'Verified', joined: '12 May 2026', color: '#16a34a', bg: '#dcfce7' },
+      { id: 2, name: 'Priya Sharma', initials: 'PS', email: 'priya.sharma@email.com', phone: '+91 87654 32109', role: 'Moderator', location: 'Mumbai, India', status: 'Active', tasks: 18, verification: 'Verified', joined: '08 May 2026', color: '#4f46e5', bg: '#e0e7ff' },
+      { id: 3, name: 'Amit Mishra', initials: 'AM', email: 'amit.mishra@email.com', phone: '+91 76543 21098', role: 'Volunteer', location: 'Bengaluru, India', status: 'Inactive', tasks: 5, verification: 'Verified', joined: '20 Apr 2026', color: '#db2777', bg: '#fce7f3' },
+      { id: 4, name: 'Neha Singh', initials: 'NS', email: 'neha.singh@email.com', phone: '+91 65432 10987', role: 'Volunteer', location: 'Lucknow, India', status: 'Active', tasks: 12, verification: 'Pending', joined: '18 Apr 2026', color: '#d97706', bg: '#fef3c7' },
+      { id: 5, name: 'Deepak Sahu', initials: 'DS', email: 'deepak.sahu@email.com', phone: '+91 54321 09876', role: 'Field Lead', location: 'Hyderabad, India', status: 'Pending', tasks: 0, verification: 'Rejected', joined: '15 May 2026', color: '#0284c7', bg: '#e0f2fe' },
+      { id: 6, name: 'Anjali Verma', initials: 'AV', email: 'anjali.v@example.com', phone: '+91 91234 56789', role: 'Volunteer', location: 'Pune, India', status: 'Active', tasks: 32, verification: 'Verified', joined: '10 Feb 2026', color: '#ea580c', bg: '#fff7ed' },
+      { id: 7, name: 'Karan Patel', initials: 'KP', email: 'karan.p@example.com', phone: '+91 99887 76655', role: 'Coordinator', location: 'Ahmedabad, India', status: 'Active', tasks: 15, verification: 'Pending', joined: '01 Mar 2026', color: '#9333ea', bg: '#faf5ff' },
+      { id: 8, name: 'Sneha Gupta', initials: 'SG', email: 'sneha.g@example.com', phone: '+91 98765 11223', role: 'Volunteer', location: 'Jaipur, India', status: 'Inactive', tasks: 2, verification: 'Verified', joined: '22 May 2026', color: '#0d9488', bg: '#ccfbf1' },
+      { id: 9, name: 'Vikas Singh', initials: 'VS', email: 'vikas.s@example.com', phone: '+91 91111 22222', role: 'Moderator', location: 'Indore, India', status: 'Active', tasks: 45, verification: 'Verified', joined: '05 Jan 2026', color: '#dc2626', bg: '#fee2e2' },
+      { id: 10, name: 'Pooja Reddy', initials: 'PR', email: 'pooja.r@example.com', phone: '+91 88888 99999', role: 'Volunteer', location: 'Chennai, India', status: 'Pending', tasks: 0, verification: 'Pending', joined: '25 May 2026', color: '#ca8a04', bg: '#fef08a' }
+    ];
+
+    // Active Users Mock Data & Logic
+    let mockActiveUsers = [
+      { id: 1, name: 'Ravi Kumar', initials: 'RK', email: 'ravi.kumar@email.com', phone: '+91 98765 43210', joined: '12 May 2024', role: 'Volunteer', status: 'Active', location: 'New Delhi, India', reportsFiled: 28, issuesResolved: 15, lastLoginDate: '12 May 2026', lastLoginTime: '10:30 AM', isOnline: true, points: '2,450', tier: 'Gold Member', avatarBg: '#dcfce7', avatarColor: '#16a34a' },
+      { id: 2, name: 'Priya Sharma', initials: 'PS', email: 'priya.sharma@email.com', phone: '+91 87654 32109', joined: '08 May 2024', role: 'Moderator', status: 'Active', location: 'Mumbai, India', reportsFiled: 42, issuesResolved: 31, lastLoginDate: '12 May 2026', lastLoginTime: '09:15 AM', isOnline: true, points: '4,180', tier: 'Platinum Member', avatarBg: '#e0e7ff', avatarColor: '#4f46e5' },
+      { id: 3, name: 'Amit Mishra', initials: 'AM', email: 'amit.mishra@email.com', phone: '+91 76543 21098', joined: '20 Apr 2024', role: 'User', status: 'Active', location: 'Bengaluru, India', reportsFiled: 12, issuesResolved: 5, lastLoginDate: '11 May 2026', lastLoginTime: '07:45 PM', isOnline: false, points: '1,120', tier: 'Silver Member', avatarBg: '#f3e8ff', avatarColor: '#9333ea' },
+      { id: 4, name: 'Neha Singh', initials: 'NS', email: 'neha.singh@email.com', phone: '+91 65432 10987', joined: '18 Apr 2024', role: 'Volunteer', status: 'Active', location: 'Lucknow, India', reportsFiled: 19, issuesResolved: 9, lastLoginDate: '11 May 2026', lastLoginTime: '06:20 PM', isOnline: true, points: '1,950', tier: 'Gold Member', avatarBg: '#ffedd5', avatarColor: '#f97316' },
+      { id: 5, name: 'Deepak Sahu', initials: 'DS', email: 'deepak.sahu@email.com', phone: '+91 54321 09876', joined: '15 May 2024', role: 'User', status: 'Suspended', location: 'Hyderabad, India', reportsFiled: 3, issuesResolved: 1, lastLoginDate: '10 May 2026', lastLoginTime: '11:10 PM', isOnline: false, points: '320', tier: 'Bronze Member', avatarBg: '#dcfce7', avatarColor: '#16a34a' }
+    ];
+
+    let activeUserSearchQuery = '';
+    let activeUserRoleFilter = '';
+    let activeUserStatusFilter = '';
+    let activeUserLocFilter = '';
+    let activeUserCurrentPage = 1;
+    let activeUserItemsPerPage = 5;
+
+    function resetActiveUserFilters() {
+      document.getElementById('active-user-search').value = '';
+      document.getElementById('active-user-role-filter').value = '';
+      document.getElementById('active-user-status-filter').value = '';
+      document.getElementById('active-user-loc-filter').value = '';
+      renderActiveUsers();
+    }
+
+    function renderActiveUsers() {
+      const tbody = document.getElementById('active-users-tbody');
+      if (!tbody) return;
+
+      activeUserSearchQuery = document.getElementById('active-user-search').value.toLowerCase();
+      activeUserRoleFilter = document.getElementById('active-user-role-filter').value;
+      activeUserStatusFilter = document.getElementById('active-user-status-filter').value;
+      activeUserLocFilter = document.getElementById('active-user-loc-filter').value;
+      
+      const clearIcon = document.getElementById('active-user-search-clear');
+      if (clearIcon) {
+        clearIcon.style.display = activeUserSearchQuery.length > 0 ? 'block' : 'none';
+      }
+
+      let filtered = mockActiveUsers.filter(u => {
+        const matchesSearch = u.name.toLowerCase().includes(activeUserSearchQuery) || u.email.toLowerCase().includes(activeUserSearchQuery) || u.phone.includes(activeUserSearchQuery);
+        const matchesRole = activeUserRoleFilter === '' || u.role === activeUserRoleFilter;
+        const matchesStatus = activeUserStatusFilter === '' || u.status === activeUserStatusFilter;
+        const matchesLoc = activeUserLocFilter === '' || u.location.includes(activeUserLocFilter);
+        return matchesSearch && matchesRole && matchesStatus && matchesLoc;
+      });
+      
+      const totalPages = Math.ceil(filtered.length / activeUserItemsPerPage) || 1;
+      if(activeUserCurrentPage > totalPages) activeUserCurrentPage = totalPages;
+      if(activeUserCurrentPage < 1) activeUserCurrentPage = 1;
+
+      const startIndex = (activeUserCurrentPage - 1) * activeUserItemsPerPage;
+      const endIndex = Math.min(startIndex + activeUserItemsPerPage, filtered.length);
+      const paginated = filtered.slice(startIndex, endIndex);
+
+      document.getElementById('active-user-count-display').innerText = `Showing ${filtered.length > 0 ? startIndex + 1 : 0} to ${endIndex} of ${filtered.length} users`;
+
+      tbody.innerHTML = '';
+      if(paginated.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:32px; color:#64748b;">No users found matching your criteria.</td></tr>';
+      }
+
+      paginated.forEach(u => {
+        // Role Style
+        let roleColor = '#64748b'; // User
+        if(u.role === 'Admin') roleColor = '#9333ea';
+        if(u.role === 'Moderator') roleColor = '#3b82f6';
+        if(u.role === 'Volunteer') roleColor = '#10b981';
+
+        // Status Style
+        let statusColor = '#10b981';
+        let statusDot = '#10b981';
+        if(u.status === 'Suspended') { statusColor = '#ef4444'; statusDot = '#ef4444'; }
+        if(u.status === 'Inactive') { statusColor = '#64748b'; statusDot = '#64748b'; }
+
+        // Online dot
+        let onlineDot = u.isOnline ? '#10b981' : '#cbd5e1';
+        let onlineText = u.isOnline ? 'Online' : 'Offline';
+
+        // Tier Color
+        let tierColor = '#64748b';
+        if(u.tier === 'Platinum Member') tierColor = '#8b5cf6';
+        if(u.tier === 'Gold Member') tierColor = '#ca8a04';
+        if(u.tier === 'Silver Member') tierColor = '#94a3b8';
+        if(u.tier === 'Bronze Member') tierColor = '#d97706';
+
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid #f1f5f9';
+        tr.innerHTML = `
+          <td style="padding: 16px; text-align: center;"><input type="checkbox" style="cursor: pointer; width: 16px; height: 16px; border-radius: 4px; border: 1px solid #cbd5e1;"></td>
+          <td style="padding: 16px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 40px; height: 40px; border-radius: 50%; background: ${u.avatarBg}; color: ${u.avatarColor}; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0;">${u.initials}</div>
+              <div>
+                <div style="font-weight: 600; font-size: 14px; color: #0f172a; margin-bottom: 2px;">${u.name}</div>
+                <div style="font-size: 12px; color: #64748b; margin-bottom: 2px;">${u.email}</div>
+                <div style="font-size: 12px; color: #64748b; margin-bottom: 2px;">${u.phone}</div>
+                <div style="font-size: 11px; color: #94a3b8;">Joined ${u.joined}</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 16px;">
+            <div style="font-weight: 700; font-size: 13px; color: ${roleColor}; margin-bottom: 2px;">${u.role}</div>
+          </td>
+          <td style="padding: 16px;">
+            <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 12px; background: ${u.status === 'Suspended' ? '#fef2f2' : '#f0fdf4'}; border: 1px solid ${u.status === 'Suspended' ? '#fecaca' : '#bbf7d0'}; font-size: 12px; font-weight: 600; color: ${statusColor};">
+              <div style="width: 6px; height: 6px; border-radius: 50%; background: ${statusDot};"></div>
+              ${u.status}
+            </div>
+          </td>
+          <td style="padding: 16px;">
+            <div style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #475569;">
+              <i class="ph-bold ph-map-pin" style="color: #94a3b8; font-size: 16px;"></i>
+              ${u.location}
+            </div>
+          </td>
+          <td style="padding: 16px; font-size: 13px; color: #0f172a;">
+            <div style="font-weight: 600; margin-bottom: 4px;">${u.reportsFiled} Reports</div>
+            <div style="color: #64748b; font-weight: 500;">${u.issuesResolved} Resolved</div>
+          </td>
+          <td style="padding: 16px;">
+            <div style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">${u.points}</div>
+            <div style="font-size: 11px; font-style: italic; color: ${tierColor};">${u.tier}</div>
+          </td>
+          <td style="padding: 16px; text-align: center;">
+            <div style="display: flex; gap: 8px; justify-content: center;">
+              <button onclick="openModModal(${u.id})" title="View Details" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #e2e8f0; background: #fff; color: #10b981; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i class="ph-bold ph-eye"></i></button>
+              <button onclick="openRoleModal(${u.id})" title="Edit User" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #e2e8f0; background: #fff; color: #10b981; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i class="ph-bold ph-pencil-simple"></i></button>
+              <button onclick="openMessageModal(${u.id})" title="More Actions" style="width: 32px; height: 32px; border-radius: 6px; border: 1px solid #e2e8f0; background: #fff; color: #94a3b8; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i class="ph-bold ph-dots-three-vertical"></i></button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+      
+      const pgNums = document.getElementById('active-users-pagination-nums');
+      if (pgNums) {
+        let btnHTML = '';
+        for(let i=1; i<=totalPages; i++) {
+          btnHTML += `<button style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid ${activeUserCurrentPage===i ? '#10b981' : '#e2e8f0'}; background: ${activeUserCurrentPage===i ? '#f0fdf4' : '#fff'}; color: ${activeUserCurrentPage===i ? '#10b981' : '#0f172a'}; font-weight: ${activeUserCurrentPage===i ? '800' : '600'}; font-size: 13px; cursor: pointer;" onclick="activeUserCurrentPage=${i}; renderActiveUsers();">${i}</button>`;
+        }
+        pgNums.innerHTML = btnHTML;
+      }
+    }
+
+    function prevActiveUserPage() {
+      if (activeUserCurrentPage > 1) {
+        activeUserCurrentPage--;
+        renderActiveUsers();
+      }
+    }
+
+    function nextActiveUserPage() {
+      activeUserCurrentPage++;
+      renderActiveUsers();
+    }
+
+    function toggleActiveUsersSelectAll(checkbox) {
+      const tbody = document.getElementById('active-users-tbody');
+      if (tbody) {
+        const checkboxes = tbody.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => cb.checked = checkbox.checked);
+      }
+    }
+
+    function exportActiveUsersExcel() {
+      // Export as dummy CSV file
+      const csvContent = "data:text/csv;charset=utf-8,ID,Name,Email,Role,Status,Location\\n" 
+          + mockActiveUsers.map(e => `${e.id},${e.name},${e.email},${e.role},${e.status},"${e.location}"`).join("\\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "active_users_export.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function openActiveUsersMoreFilters() {
+      const panel = document.getElementById('active-user-loc-filter');
+      if (panel) {
+        panel.focus();
+      }
+    }
+
+    // Modal Handlers
+    function openModModal(id) {
+      document.getElementById('mod-user-id').value = id;
+      document.getElementById('moderation-modal-overlay').classList.add('open');
+    }
+    
+    function applyModeration(action) {
+      const id = parseInt(document.getElementById('mod-user-id').value);
+      const user = mockActiveUsers.find(u => u.id === id);
+      if(user) {
+        if(action === 'Suspend') user.status = 'Suspended';
+        if(action === 'Ban') user.status = 'Banned';
+        if(action === 'Verify') user.status = 'Active';
+        renderActiveUsers();
+        document.getElementById('moderation-modal-overlay').classList.remove('open');
+      }
+    }
+
+    function openRoleModal(id) {
+      const user = mockActiveUsers.find(u => u.id === id);
+      if(user) {
+        document.getElementById('role-user-id').value = id;
+        document.getElementById('role-select').value = user.role;
+        document.getElementById('role-modal-overlay').classList.add('open');
+      }
+    }
+
+    function applyRole() {
+      const id = parseInt(document.getElementById('role-user-id').value);
+      const user = mockActiveUsers.find(u => u.id === id);
+      if(user) {
+        user.role = document.getElementById('role-select').value;
+        renderActiveUsers();
+        document.getElementById('role-modal-overlay').classList.remove('open');
+      }
+    }
+
+    function openMessageModal(id) {
+      document.getElementById('msg-user-id').value = id;
+      document.getElementById('msg-type').value = 'Email';
+      document.getElementById('msg-body').value = '';
+      document.getElementById('message-modal-overlay').classList.add('open');
+    }
+
+    function sendMessage() {
+      const id = parseInt(document.getElementById('msg-user-id').value);
+      const type = document.getElementById('msg-type').value;
+      const user = mockActiveUsers.find(u => u.id === id);
+      if(user) {
+        alert(`${type} sent to ${user.name} successfully!`);
+        document.getElementById('message-modal-overlay').classList.remove('open');
+      }
+    }
+
+    // State
+    let volCurrentPage = 1;
+    let volItemsPerPage = 5;
+    let volSearchQuery = '';
+    
+    // Filters
+    let volFilterStatus = '';
+    let volFilterRole = '';
+    let volFilterVerify = '';
+    let volFilterLocation = '';
+    let volFilterDate = '';
+    let volFilterMinTasks = 0;
+    let volSortBy = 'recently_added';
+
+    // Initialize
+    function initVolunteers() {
+      // Setup Search Listener
+      const searchInput = document.getElementById('vol-search-input');
+      const searchReset = document.getElementById('vol-search-reset');
+      if(searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          volSearchQuery = e.target.value.toLowerCase();
+          if (searchReset) searchReset.style.display = volSearchQuery.length > 0 ? 'block' : 'none';
+          volCurrentPage = 1;
+          renderVolunteers();
+        });
+      }
+      if(searchReset) {
+        searchReset.addEventListener('click', () => {
+          if(searchInput) searchInput.value = '';
+          volSearchQuery = '';
+          searchReset.style.display = 'none';
+          volCurrentPage = 1;
+          renderVolunteers();
+        });
+      }
+
+      // Setup Dropdown Listeners
+      const filterIds = ['vol-filter-status', 'vol-filter-role', 'vol-filter-verify', 'vol-filter-location', 'vol-filter-date'];
+      filterIds.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) {
+          el.addEventListener('change', (e) => {
+            if (id === 'vol-filter-status') volFilterStatus = e.target.value;
+            if (id === 'vol-filter-role') volFilterRole = e.target.value;
+            if (id === 'vol-filter-verify') volFilterVerify = e.target.value;
+            if (id === 'vol-filter-location') volFilterLocation = e.target.value;
+            if (id === 'vol-filter-date') volFilterDate = e.target.value;
+            volCurrentPage = 1;
+            renderVolunteers();
+          });
+        }
+      });
+
+      // Setup More Filters Listeners
+      const minTasks = document.getElementById('vol-filter-min-tasks');
+      if(minTasks) {
+        minTasks.addEventListener('input', (e) => {
+          volFilterMinTasks = parseInt(e.target.value) || 0;
+          volCurrentPage = 1;
+          renderVolunteers();
+        });
+      }
+
+      // Setup Sort Listener
+      const sortSelect = document.getElementById('vol-sort-select');
+      if(sortSelect) {
+        sortSelect.addEventListener('change', (e) => {
+          volSortBy = e.target.value;
+          volCurrentPage = 1;
+          renderVolunteers();
+        });
+      }
+
+      // Setup Reset Button
+      const btnReset = document.getElementById('vol-btn-reset');
+      if(btnReset) {
+        btnReset.addEventListener('click', () => {
+          // Reset UI
+          if(searchInput) { searchInput.value = ''; if(searchReset) searchReset.style.display = 'none'; }
+          filterIds.forEach(id => { if(document.getElementById(id)) document.getElementById(id).value = ''; });
+          if(minTasks) minTasks.value = '';
+          if(sortSelect) sortSelect.value = 'recently_added';
+          
+          // Reset State
+          volSearchQuery = '';
+          volFilterStatus = '';
+          volFilterRole = '';
+          volFilterVerify = '';
+          volFilterLocation = '';
+          volFilterDate = '';
+          volFilterMinTasks = 0;
+          volSortBy = 'recently_added';
+          volCurrentPage = 1;
+          
+          renderVolunteers();
+        });
+      }
+
+      // Setup Select All
+      const selectAll = document.getElementById('vol-select-all');
+      if(selectAll) {
+        selectAll.addEventListener('change', (e) => {
+          const checkboxes = document.querySelectorAll('.vol-row-checkbox');
+          checkboxes.forEach(cb => cb.checked = e.target.checked);
+        });
+      }
+
+      renderVolunteers();
+    }
+
+    // Main Render Function
+    function renderVolunteers() {
+      let filtered = mockVolunteers.filter(v => {
+        // Search
+        const searchMatch = v.name.toLowerCase().includes(volSearchQuery) || 
+                            v.email.toLowerCase().includes(volSearchQuery) || 
+                            v.phone.includes(volSearchQuery) ||
+                            v.role.toLowerCase().includes(volSearchQuery) ||
+                            v.location.toLowerCase().includes(volSearchQuery);
+        
+        // Filters
+        const statusMatch = volFilterStatus === '' || v.status === volFilterStatus;
+        const roleMatch = volFilterRole === '' || v.role === volFilterRole;
+        const verifyMatch = volFilterVerify === '' || v.verification === volFilterVerify;
+        const locMatch = volFilterLocation === '' || v.location.includes(volFilterLocation);
+        
+        let dateMatch = true;
+        const minTaskMatch = v.tasks >= volFilterMinTasks;
+
+        return searchMatch && statusMatch && roleMatch && verifyMatch && locMatch && dateMatch && minTaskMatch;
+      });
+
+      // Sort
+      if (volSortBy === 'most_active') {
+        filtered.sort((a, b) => b.tasks - a.tasks);
+      } else if (volSortBy === 'least_active') {
+        filtered.sort((a, b) => a.tasks - b.tasks);
+      } else if (volSortBy === 'az') {
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+      } else {
+        filtered.sort((a, b) => b.id - a.id); // higher ID = newer
+      }
+
+      // Pagination
+      const totalItems = filtered.length;
+      const totalPages = Math.ceil(totalItems / volItemsPerPage) || 1;
+      if (volCurrentPage > totalPages) volCurrentPage = totalPages;
+
+      const startIndex = (volCurrentPage - 1) * volItemsPerPage;
+      const endIndex = Math.min(startIndex + volItemsPerPage, totalItems);
+      const pageData = filtered.slice(startIndex, endIndex);
+
+      // Render Rows
+      const tbody = document.getElementById('vol-table-body');
+      if(tbody) {
+        if(pageData.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:32px; color:var(--text3)">No volunteers found matching your criteria.</td></tr>';
+        } else {
+          tbody.innerHTML = pageData.map(v => {
+            let roleStyle = '';
+            if(v.role === 'Moderator') roleStyle = 'background: #e0e7ff; color: #4f46e5;';
+            else if(v.role === 'Volunteer' && v.bg) roleStyle = `background: ${v.bg}; color: ${v.color};`;
+            else if(v.role === 'Field Lead') roleStyle = 'background: #e0f2fe; color: #0284c7;';
+            
+            let statusClass = 'pending';
+            if(v.status === 'Active') statusClass = 'active';
+            if(v.status === 'Inactive') statusClass = 'inactive';
+
+            let verifyIcon = 'ph-clock';
+            let verifyColor = '#d97706';
+            if(v.verification === 'Verified') { verifyIcon = 'ph-check-circle'; verifyColor = '#16a34a'; }
+            if(v.verification === 'Rejected') { verifyIcon = 'ph-x-circle'; verifyColor = '#ef4444'; }
+
+            return `
+              <tr>
+                <td><input type="checkbox" class="vol-row-checkbox" style="cursor: pointer;"></td>
+                <td>
+                  <div class="vol-user-cell">
+                    <div class="vol-avatar" style="background: ${v.bg}; color: ${v.color};">${v.initials}</div>
+                    <div class="vol-user-info">
+                      <div class="name">${v.name}</div>
+                      <div class="contact">${v.email} <br> ${v.phone}</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="vol-role" style="${roleStyle}">${v.role}</span></td>
+                <td><div style="display: flex; align-items: center; gap: 6px;"><i class="ph-fill ph-map-pin" style="color: var(--text3);"></i> ${v.location}</div></td>
+                <td><span class="vol-badge ${statusClass}">${v.status}</span></td>
+                <td style="font-weight: 700;">${v.tasks}</td>
+                <td><span style="color: ${verifyColor}; font-weight: 700; font-size: 13px; display: flex; align-items: center; gap: 4px;"><i class="ph-bold ${verifyIcon}"></i> ${v.verification}</span></td>
+                <td>${v.joined}</td>
+                <td>
+                  <button class="vol-action-btn" title="View" onclick="viewVolunteer(${v.id})"><i class="ph-bold ph-eye"></i></button>
+                  <button class="vol-action-btn" title="Edit" onclick="editVolunteer(${v.id})"><i class="ph-bold ph-pencil-simple"></i></button>
+                  <button class="vol-action-btn delete" title="Delete" onclick="deleteVolunteer(${v.id})"><i class="ph-bold ph-trash"></i></button>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+      }
+
+      // Update Pagination UI
+      const pageInfo = document.getElementById('vol-page-info');
+      if(pageInfo) {
+        pageInfo.innerText = totalItems === 0 ? 'Showing 0 volunteers' : `Showing ${startIndex + 1} to ${endIndex} of ${totalItems} volunteers`;
+      }
+      
+      const pageControls = document.getElementById('vol-pagination-controls');
+      if(pageControls) {
+        let btnHTML = `<button class="vol-page-btn" onclick="volChangePage(${volCurrentPage - 1})" ${volCurrentPage === 1 ? 'disabled style="opacity:0.5;cursor:not-allowed"' : ''}><i class="ph-bold ph-caret-left"></i></button>`;
+        
+        for(let i=1; i<=totalPages; i++) {
+          btnHTML += `<button class="vol-page-btn ${volCurrentPage === i ? 'active' : ''}" onclick="volChangePage(${i})">${i}</button>`;
+        }
+        
+        btnHTML += `<button class="vol-page-btn" onclick="volChangePage(${volCurrentPage + 1})" ${volCurrentPage === totalPages || totalPages === 0 ? 'disabled style="opacity:0.5;cursor:not-allowed"' : ''}><i class="ph-bold ph-caret-right"></i></button>`;
+        
+        pageControls.innerHTML = btnHTML;
+      }
+
+      // Reset select all checkbox
+      const selectAll = document.getElementById('vol-select-all');
+      if(selectAll) selectAll.checked = false;
+
+      // Calculate and Update Stats
+      const totalCount = mockVolunteers.length;
+      const verifiedCount = mockVolunteers.filter(v => v.verification === 'Verified').length;
+      const activeCount = mockVolunteers.filter(v => v.status === 'Active').length;
+      const inactiveCount = mockVolunteers.filter(v => v.status === 'Inactive').length;
+      const tasksCount = mockVolunteers.reduce((sum, v) => sum + v.tasks, 0);
+      const pendingCount = mockVolunteers.filter(v => v.verification === 'Pending').length;
+      
+      if(document.getElementById('vol-stat-total')) document.getElementById('vol-stat-total').innerText = totalCount;
+      if(document.getElementById('vol-stat-verified')) document.getElementById('vol-stat-verified').innerText = verifiedCount;
+      if(document.getElementById('vol-stat-active')) document.getElementById('vol-stat-active').innerText = activeCount;
+      if(document.getElementById('vol-stat-inactive')) document.getElementById('vol-stat-inactive').innerText = inactiveCount;
+      if(document.getElementById('vol-stat-tasks')) document.getElementById('vol-stat-tasks').innerText = tasksCount;
+      if(document.getElementById('vol-stat-pending')) document.getElementById('vol-stat-pending').innerText = pendingCount;
+      if(document.getElementById('vol-stat-contrib')) document.getElementById('vol-stat-contrib').innerText = tasksCount * 4 + 112; 
+    }
+
+    function volChangePage(newPage) {
+      let filtered = mockVolunteers.filter(v => {
+        const searchMatch = v.name.toLowerCase().includes(volSearchQuery) || 
+                            v.email.toLowerCase().includes(volSearchQuery) || 
+                            v.phone.includes(volSearchQuery) ||
+                            v.role.toLowerCase().includes(volSearchQuery) ||
+                            v.location.toLowerCase().includes(volSearchQuery);
+        
+        const statusMatch = volFilterStatus === '' || v.status === volFilterStatus;
+        const roleMatch = volFilterRole === '' || v.role === volFilterRole;
+        const verifyMatch = volFilterVerify === '' || v.verification === volFilterVerify;
+        const locMatch = volFilterLocation === '' || v.location.includes(volFilterLocation);
+        let dateMatch = true;
+        const minTaskMatch = v.tasks >= volFilterMinTasks;
+
+        return searchMatch && statusMatch && roleMatch && verifyMatch && locMatch && dateMatch && minTaskMatch;
+      });
+      const totalPages = Math.ceil(filtered.length / volItemsPerPage) || 1;
+      
+      if(newPage >= 1 && newPage <= totalPages) {
+        volCurrentPage = newPage;
+        renderVolunteers();
+      }
+    }
+
+    // Actions
+    function viewVolunteer(id) {
+      const v = mockVolunteers.find(v => v.id === id);
+      if(v) {
+        document.getElementById('view-vol-avatar').style.background = v.bg;
+        document.getElementById('view-vol-avatar').style.color = v.color;
+        document.getElementById('view-vol-avatar').innerText = v.initials;
+        document.getElementById('view-vol-name').innerText = v.name;
+        document.getElementById('view-vol-role').innerText = v.role;
+        document.getElementById('view-vol-email').innerText = v.email;
+        document.getElementById('view-vol-phone').innerText = v.phone;
+        document.getElementById('view-vol-location').innerText = v.location;
+        document.getElementById('view-vol-status').innerText = v.status;
+        document.getElementById('view-vol-tasks').innerText = v.tasks;
+        document.getElementById('view-vol-modal-overlay').classList.add('open');
+      }
+    }
+    
+    function editVolunteer(id) {
+      const v = mockVolunteers.find(v => v.id === id);
+      if(v) {
+        document.getElementById('edit-vol-id').value = v.id;
+        document.getElementById('edit-vol-name').value = v.name;
+        document.getElementById('edit-vol-email').value = v.email;
+        document.getElementById('edit-vol-phone').value = v.phone;
+        document.getElementById('edit-vol-role').value = v.role;
+        document.getElementById('edit-vol-location').value = v.location;
+        document.getElementById('edit-vol-modal-overlay').classList.add('open');
+      }
+    }
+
+    function handleEditVolunteerSubmit(e) {
+      e.preventDefault();
+      const id = parseInt(document.getElementById('edit-vol-id').value);
+      const v = mockVolunteers.find(v => v.id === id);
+      if(v) {
+        const newName = document.getElementById('edit-vol-name').value;
+        v.name = newName;
+        v.email = document.getElementById('edit-vol-email').value;
+        v.phone = document.getElementById('edit-vol-phone').value;
+        v.role = document.getElementById('edit-vol-role').value;
+        v.location = document.getElementById('edit-vol-location').value;
+        v.initials = newName.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+        
+        renderVolunteers();
+        document.getElementById('edit-vol-modal-overlay').classList.remove('open');
+      }
+    }
+
+    function deleteVolunteer(id) {
+      document.getElementById('delete-vol-id').value = id;
+      document.getElementById('delete-vol-modal-overlay').classList.add('open');
+    }
+
+    function confirmDeleteVolunteer() {
+      const id = parseInt(document.getElementById('delete-vol-id').value);
+      mockVolunteers = mockVolunteers.filter(v => v.id !== id);
+      renderVolunteers();
+      document.getElementById('delete-vol-modal-overlay').classList.remove('open');
+    }
+
+    function handleAddVolunteerSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('add-vol-name').value;
+      const email = document.getElementById('add-vol-email').value;
+      const phone = document.getElementById('add-vol-phone').value;
+      const role = document.getElementById('add-vol-role').value;
+      const location = document.getElementById('add-vol-location').value;
+      
+      const initials = name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+      const colors = [
+        {bg: '#dcfce7', color: '#16a34a'}, {bg: '#e0e7ff', color: '#4f46e5'}, 
+        {bg: '#fce7f3', color: '#db2777'}, {bg: '#fef3c7', color: '#d97706'},
+        {bg: '#e0f2fe', color: '#0284c7'}
+      ];
+      const colorScheme = colors[Math.floor(Math.random() * colors.length)];
+      
+      const date = new Date();
+      const joined = date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+      
+      const newVol = {
+        id: Date.now(),
+        name, email, phone, role, location,
+        status: 'Active',
+        tasks: 0,
+        verification: 'Pending',
+        joined,
+        color: colorScheme.color,
+        bg: colorScheme.bg,
+        initials
+      };
+      
+      mockVolunteers.unshift(newVol);
+      
+      // close modal and reset form
+      document.getElementById('add-vol-modal-overlay').classList.remove('open');
+      e.target.reset();
+      
+      // refresh view
+      renderVolunteers();
+    }
+
+    function exportVolunteersCSV() {
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += "Name,Email,Phone,Role,Location,Status,Tasks,Verification,Joined\n";
+      mockVolunteers.forEach(v => {
+        let row = `${v.name},${v.email},${v.phone},${v.role},"${v.location}",${v.status},${v.tasks},${v.verification},"${v.joined}"`;
+        csvContent += row + "\n";
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "volunteers_export.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // --- COMMUNITY MEMBERS HUB ---
+    const mockCommunityMembers = [
+      {
+        id: "CM-9942",
+        name: "Vikram Malhotra",
+        username: "@vikram_m",
+        avatar: "https://i.pravatar.cc/150?u=41",
+        online: true,
+        badges: [
+          { type: 'primary', icon: 'ph-shield-star', text: 'Community Leader' },
+          { type: 'danger', icon: 'ph-first-aid', text: 'Medical Volunteer' },
+          { type: 'success', icon: 'ph-check-circle', text: 'Verified' }
+        ],
+        location: "Ward 12, South Zone",
+        bio: "Local business owner and certified first responder. Organizing weekly neighborhood watch and blood donation drives.",
+        skills: ["First Aid", "Event Planning", "Disaster Management", "Hindi", "English"],
+        metrics: {
+          posts: 142,
+          volunteerHours: 350,
+          events: 28
+        },
+        achievements: ["🏆", "🌟", "🛡️", "🏅"]
+      },
+      {
+        id: "CM-8831",
+        name: "Anjali Desai",
+        username: "@anjali_d",
+        avatar: "https://i.pravatar.cc/150?u=42",
+        online: false,
+        badges: [
+          { type: 'warning', icon: 'ph-crown', text: 'Premium Member' },
+          { type: 'success', icon: 'ph-check-circle', text: 'Verified' }
+        ],
+        location: "Neighborhood Block C, North Zone",
+        bio: "Environmental activist. Coordinating the weekend plastic cleanup and plantation drives across the city.",
+        skills: ["Environmental Science", "Public Speaking", "Marathi"],
+        metrics: {
+          posts: 84,
+          volunteerHours: 120,
+          events: 15
+        },
+        achievements: ["🌱", "🌟", "🤝"]
+      }
+    ];
+
+    function renderCommunityMembers() {
+      const container = document.getElementById('cm-feed-container');
+      if (!container) return;
+      
+      let html = '';
+      mockCommunityMembers.forEach(member => {
+        let badgesHtml = member.badges.map(b => 
+          `<div class="cm-badge" style="background:var(--bg-${b.type}, #f1f5f9); color:var(--text-${b.type}, #475569);"><i class="ph-bold ${b.icon}"></i> ${b.text}</div>`
+        ).join('');
+        
+        // Define some quick css vars for inline badge colors
+        let styleInject = `
+          --bg-primary: #eff6ff; --text-primary: #3b82f6;
+          --bg-danger: #fef2f2; --text-danger: #ef4444;
+          --bg-success: #f0fdf4; --text-success: #10b981;
+          --bg-warning: #fffbeb; --text-warning: #f59e0b;
+        `;
+
+        let skillsHtml = member.skills.map(s => `<div class="cm-skill-tag">${s}</div>`).join('');
+        let achHtml = member.achievements.map(a => `<div class="cm-ach-badge">${a}</div>`).join('');
+
+        html += `
+          <div class="cm-member-card" style="${styleInject}">
+            <div class="cm-card-header">
+              <div class="cm-avatar-wrapper">
+                <img src="${member.avatar}" alt="Avatar" class="cm-avatar">
+                ${member.online ? '<div class="cm-online-dot"></div>' : ''}
+              </div>
+              <div class="cm-user-info">
+                <h4 class="cm-user-name">${member.name} <span class="cm-username">${member.username}</span></h4>
+                <div class="cm-user-meta">
+                  <span><i class="ph-bold ph-identification-card"></i> ${member.id}</span> &bull; 
+                  <span><i class="ph-bold ph-map-pin"></i> ${member.location}</span>
+                </div>
+                <div class="cm-badges">${badgesHtml}</div>
+              </div>
+            </div>
+            
+            <div class="cm-card-body">
+              <div>
+                <div class="cm-section-title">Profile & Skills</div>
+                <div class="cm-bio">"${member.bio}"</div>
+                <div class="cm-skills">${skillsHtml}</div>
+                <div class="cm-achievements" style="margin-top:20px;">${achHtml}</div>
+              </div>
+              
+              <div>
+                <div class="cm-section-title">Engagement Metrics</div>
+                <div class="cm-metrics-grid">
+                  <div class="cm-metric">
+                    <div class="cm-metric-val">${member.metrics.posts}</div>
+                    <div class="cm-metric-label">Posts & Replies</div>
+                  </div>
+                  <div class="cm-metric">
+                    <div class="cm-metric-val">${member.metrics.volunteerHours}</div>
+                    <div class="cm-metric-label">Volunteer Hrs</div>
+                  </div>
+                  <div class="cm-metric">
+                    <div class="cm-metric-val">${member.metrics.events}</div>
+                    <div class="cm-metric-label">Events Joined</div>
+                  </div>
+                </div>
+                
+                <div class="cm-section-title" style="margin-top:20px;">Emergency Readiness</div>
+                <div style="font-size:13px; color:#475569; display:flex; flex-direction:column; gap:8px;">
+                  <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px dashed #e2e8f0;">
+                    <span style="font-weight:600;"><i class="ph-bold ph-first-aid" style="color:#ef4444; margin-right:4px;"></i> Medical Responder</span>
+                    <span style="color:#10b981; font-weight:700;">Available Now</span>
+                  </div>
+                  <div style="display:flex; justify-content:space-between;">
+                    <span style="font-weight:600;"><i class="ph-bold ph-drop" style="color:#ef4444; margin-right:4px;"></i> Blood Donor (O+)</span>
+                    <span>Last donation: 4 mos ago</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="cm-card-footer">
+              <div style="font-size:12px; color:#94a3b8; font-weight:600;"><i class="ph-bold ph-calendar-blank"></i> Joined Aug 2025</div>
+              <div class="cm-action-group">
+                <button class="cm-action-btn primary"><i class="ph-bold ph-chat-circle"></i> Message</button>
+                <button class="cm-action-btn"><i class="ph-bold ph-star"></i> Award Badge</button>
+                <button class="cm-action-btn"><i class="ph-bold ph-user-gear"></i> Manage Role</button>
+                <button class="cm-action-btn"><i class="ph-bold ph-dots-three-vertical"></i></button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    // --- USER POSTS MODERATION HUB ---
+    const mockUserPosts = [
+      {
+        id: 10492,
+        author: { name: 'Priya Sharma', username: '@priya_s', avatar: 'https://i.pravatar.cc/150?u=10', verified: true, role: 'Verified Resident' },
+        time: '12 mins ago',
+        category: 'Emergency',
+        visibility: 'Public',
+        status: 'Reported',
+        badges: [{ type: 'danger', text: 'Reported' }, { type: 'warning', text: 'High Risk' }],
+        content: `Major water logging near <span class="mention">@SouthExMarket</span>. Avoid taking the underpass, it is completely blocked. Several cars are stuck! <span class="hashtag">#DelhiRains</span> <span class="hashtag">#TrafficAlert</span>`,
+        location: 'South Extension, Delhi',
+        media: [
+          { type: 'image', url: 'https://images.unsplash.com/photo-1542317148-8b4bdccb33ea?w=500&q=80' }
+        ],
+        ai: { spam: 2, toxicity: 5, sentiment: 'Negative', nsfw: 0, fake: 8, severity: 'High' },
+        eng: { likes: 142, comments: 38, shares: 56, views: '1.2k' }
+      },
+      {
+        id: 10491,
+        author: { name: 'Rahul Verma', username: '@rahul_v', avatar: 'https://i.pravatar.cc/150?u=11', verified: false, role: 'New Member' },
+        time: '45 mins ago',
+        category: 'Discussion',
+        visibility: 'Public',
+        status: 'Pending Review',
+        badges: [{ type: 'warning', text: 'Pending' }],
+        content: `Is anyone else experiencing frequent power cuts in Sector 14 since yesterday? It's been going out for 2 hours at a time.`,
+        location: 'Sector 14, Gurgaon',
+        media: [],
+        ai: { spam: 12, toxicity: 2, sentiment: 'Neutral', nsfw: 0, fake: 15, severity: 'Low' },
+        eng: { likes: 12, comments: 8, shares: 1, views: '145' }
+      },
+      {
+        id: 10490,
+        author: { name: 'Dr. Amit Singh', username: '@dramit', avatar: 'https://i.pravatar.cc/150?u=12', verified: true, role: 'Community Doctor' },
+        time: '2 hours ago',
+        category: 'General Update',
+        visibility: 'Neighborhood',
+        status: 'Published',
+        badges: [{ type: 'success', text: 'Published' }, { type: 'info', text: 'Neighborhood' }],
+        content: `Free health checkup camp organized at the Community Center this Sunday from 9 AM to 2 PM. Please bring your IDs. Blood pressure and sugar testing available for all seniors.`,
+        location: 'Community Center, Vasant Kunj',
+        media: [
+          { type: 'image', url: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=500&q=80' },
+          { type: 'image', url: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=500&q=80' }
+        ],
+        ai: { spam: 1, toxicity: 0, sentiment: 'Positive', nsfw: 0, fake: 2, severity: 'Safe' },
+        eng: { likes: 345, comments: 42, shares: 120, views: '4.5k' }
+      }
+    ];
+
+    function renderUserPosts() {
+      const container = document.getElementById('mod-feed-container');
+      if (!container) return;
+      
+      let html = '';
+      mockUserPosts.forEach(post => {
+        let mediaHtml = '';
+        if (post.media && post.media.length > 0) {
+          mediaHtml = `<div class="mod-media-grid" style="grid-template-columns: repeat(${post.media.length > 1 ? 2 : 1}, 1fr);">`;
+          post.media.forEach(m => {
+            mediaHtml += `<div class="mod-media-item"><img src="${m.url}" alt="Post media"></div>`;
+          });
+          mediaHtml += `</div>`;
+        }
+        
+        let badgesHtml = post.badges.map(b => `<div class="mod-badge mod-badge-${b.type}">${b.text}</div>`).join('');
+        
+        html += `
+          <div class="mod-post-card" id="post-${post.id}">
+            <div class="mod-post-header">
+              <div class="mod-post-author">
+                <div class="mod-post-avatar">
+                  <img src="${post.author.avatar}" alt="Avatar">
+                  ${post.author.verified ? '<div class="mod-verified-badge"><i class="ph-bold ph-check"></i></div>' : ''}
+                </div>
+                <div class="mod-author-info">
+                  <h4>${post.author.name} <span style="font-size:13px; color:#64748b; font-weight:500;">${post.author.username}</span></h4>
+                  <div class="mod-author-meta">
+                    <span>${post.author.role}</span> &bull; <span>${post.time}</span> &bull; 
+                    <span><i class="ph-bold ph-globe-hemisphere-west" style="margin-right:2px;"></i> ${post.visibility}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mod-post-badges">
+                <div class="mod-badge mod-badge-dark">${post.category}</div>
+                ${badgesHtml}
+              </div>
+            </div>
+            
+            <div class="mod-post-body">
+              <div class="mod-post-text">${post.content}</div>
+              ${post.location ? `<div style="font-size:13px; color:#64748b; margin-bottom:16px; font-weight:600;"><i class="ph-bold ph-map-pin" style="color:#ef4444; margin-right:4px;"></i> ${post.location}</div>` : ''}
+              ${mediaHtml}
+              
+              <!-- AI Panel -->
+              <div class="mod-ai-panel">
+                <div class="mod-ai-header">
+                  <div class="mod-ai-title"><i class="ph-bold ph-robot" style="color:#10b981;"></i> AI Moderation Analysis</div>
+                  <div class="mod-badge ${post.ai.severity === 'High' ? 'mod-badge-danger' : post.ai.severity === 'Safe' ? 'mod-badge-success' : 'mod-badge-warning'}">AI Risk: ${post.ai.severity}</div>
+                </div>
+                <div class="mod-ai-metrics">
+                  <div class="mod-ai-metric">
+                    <div class="mod-ai-metric-label"><span>Spam</span> <span>${post.ai.spam}%</span></div>
+                    <div class="mod-ai-bar-bg"><div class="mod-ai-bar-fill" style="width:${post.ai.spam}%; background:${post.ai.spam > 50 ? '#ef4444' : '#10b981'};"></div></div>
+                  </div>
+                  <div class="mod-ai-metric">
+                    <div class="mod-ai-metric-label"><span>Toxicity</span> <span>${post.ai.toxicity}%</span></div>
+                    <div class="mod-ai-bar-bg"><div class="mod-ai-bar-fill" style="width:${post.ai.toxicity}%; background:${post.ai.toxicity > 50 ? '#ef4444' : '#10b981'};"></div></div>
+                  </div>
+                  <div class="mod-ai-metric">
+                    <div class="mod-ai-metric-label"><span>Fake News</span> <span>${post.ai.fake}%</span></div>
+                    <div class="mod-ai-bar-bg"><div class="mod-ai-bar-fill" style="width:${post.ai.fake}%; background:${post.ai.fake > 50 ? '#ef4444' : '#10b981'};"></div></div>
+                  </div>
+                  <div class="mod-ai-metric">
+                    <div class="mod-ai-metric-label"><span>Sentiment</span> <span>${post.ai.sentiment}</span></div>
+                    <div class="mod-ai-bar-bg"><div class="mod-ai-bar-fill" style="width:100%; background:${post.ai.sentiment === 'Negative' ? '#ef4444' : post.ai.sentiment === 'Positive' ? '#10b981' : '#f59e0b'};"></div></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mod-engagement">
+                <div class="mod-eng-item"><i class="ph-fill ph-heart" style="color:#ef4444;"></i> ${post.eng.likes}</div>
+                <div class="mod-eng-item"><i class="ph-fill ph-chat-circle"></i> ${post.eng.comments}</div>
+                <div class="mod-eng-item"><i class="ph-bold ph-share-network"></i> ${post.eng.shares}</div>
+                <div class="mod-eng-item"><i class="ph-bold ph-eye"></i> ${post.eng.views}</div>
+              </div>
+            </div>
+            
+            <div class="mod-post-footer">
+              <div style="font-size:12px; color:#94a3b8; font-weight:600;">ID: PST-${post.id}</div>
+              <div class="mod-action-group">
+                <button class="mod-action-btn success" title="Approve" onclick="document.getElementById('post-${post.id}').style.display='none'"><i class="ph-bold ph-check"></i></button>
+                <button class="mod-action-btn danger" title="Reject / Delete" onclick="document.getElementById('post-${post.id}').style.display='none'"><i class="ph-bold ph-trash"></i></button>
+                <button class="mod-action-btn" title="Edit Post"><i class="ph-bold ph-pencil-simple"></i></button>
+                <button class="mod-action-btn" title="More Actions"><i class="ph-bold ph-dots-three-vertical"></i></button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    // Call init on load
+    window.addEventListener('DOMContentLoaded', () => {
+      initVolunteers();
+      if(typeof renderActiveUsers === 'function') renderActiveUsers();
+    });
+    // In case DOMContentLoaded already fired:
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(() => {
+        initVolunteers();
+        if(typeof renderActiveUsers === 'function') renderActiveUsers();
+      }, 100);
+    }
   </script>
 </body>
 
